@@ -1,26 +1,247 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* -------------------------------------------------------------------------- */
+/* Brand + semantic tokens                                                     */
+/* -------------------------------------------------------------------------- */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand */
+  --brand-forest: #2f5d3a;
+  --brand-deep: #254b2e;
+  --brand-sage: #dde7d8;
+  --brand-cream: #f8f7f2;
+  --brand-earth: #b9784f;
+
+  /* Semantic */
+  --background: var(--brand-cream);
+  --foreground: #243127;
+  --card: #ffffff;
+  --card-foreground: var(--foreground);
+  --popover: #ffffff;
+  --popover-foreground: var(--foreground);
+  --primary: var(--brand-forest);
+  --primary-foreground: var(--brand-cream);
+  --secondary: var(--brand-sage);
+  --secondary-foreground: var(--foreground);
+  --muted: #eef1eb;
+  --muted-foreground: #687268;
+  --accent: var(--brand-earth);
+  --accent-foreground: var(--brand-cream);
+  --border: #dce2d8;
+  --input: #dce2d8;
+  --ring: var(--brand-forest);
+  --success: #4f7a52;
+  --success-foreground: var(--brand-cream);
+  --warning: #b8873a;
+  --warning-foreground: var(--brand-cream);
+  --destructive: #b94a48;
+  --destructive-foreground: var(--brand-cream);
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius: var(--radius-md);
+
+  /* Shadow (subtle) */
+  --shadow-subtle: 0 1px 2px rgb(36 49 39 / 0.04);
+  --shadow-elevated: 0 4px 12px rgb(36 49 39 / 0.06);
+
+  /* Layout */
+  --container-max: 1280px;
+  --page-padding: 24px;
+  --section-spacing: 64px;
+
+  /* Charts / sidebar (aligned to brand for shadcn compatibility) */
+  --chart-1: var(--brand-forest);
+  --chart-2: var(--brand-sage);
+  --chart-3: var(--brand-earth);
+  --chart-4: var(--success);
+  --chart-5: var(--brand-deep);
+  --sidebar: var(--brand-cream);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--secondary);
+  --sidebar-accent-foreground: var(--secondary-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@media (min-width: 768px) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --page-padding: 32px;
+    --section-spacing: 96px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (min-width: 1024px) {
+  :root {
+    --page-padding: 48px;
+    --section-spacing: 128px;
+  }
+}
+
+@theme inline {
+  /* Colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-brand-forest: var(--brand-forest);
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-sage: var(--brand-sage);
+  --color-brand-cream: var(--brand-cream);
+  --color-brand-earth: var(--brand-earth);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Typography */
+  --font-sans: var(--font-be-vietnam-pro), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-lora), ui-serif, Georgia, serif;
+  --font-display: var(--font-lora), ui-serif, Georgia, serif;
+
+  --text-display: clamp(4rem, 3.5rem + 1.5vw, 5rem);
+  --text-display--line-height: 1.05;
+  --text-h1: clamp(3rem, 2.75rem + 0.75vw, 3.5rem);
+  --text-h1--line-height: 1.1;
+  --text-h2: clamp(2.25rem, 2rem + 0.75vw, 2.75rem);
+  --text-h2--line-height: 1.15;
+  --text-h3: clamp(1.75rem, 1.65rem + 0.4vw, 2rem);
+  --text-h3--line-height: 1.2;
+  --text-body: 1rem;
+  --text-body--line-height: 1.6;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 24px;
+  --radius-3xl: 28px;
+  --radius-4xl: 32px;
+
+  /* Shadow */
+  --shadow-sm: 0 1px 2px rgb(36 49 39 / 0.04);
+  --shadow-md: 0 4px 12px rgb(36 49 39 / 0.06);
+
+  /* Layout */
+  --spacing-page: var(--page-padding);
+  --spacing-section: var(--section-spacing);
+  --container-max-width: var(--container-max);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply font-sans;
+  }
+
+  body {
+    @apply bg-background text-foreground text-body antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading text-foreground;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+
+  .text-display {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    line-height: var(--text-display--line-height);
+  }
+
+  .text-h1 {
+    font-family: var(--font-heading);
+    font-size: var(--text-h1);
+    line-height: var(--text-h1--line-height);
+  }
+
+  .text-h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-h2);
+    line-height: var(--text-h2--line-height);
+  }
+
+  .text-h3 {
+    font-family: var(--font-heading);
+    font-size: var(--text-h3);
+    line-height: var(--text-h3--line-height);
+  }
+
+  .text-body {
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+  }
+
+  .text-small,
+  .text-caption {
+    font-size: var(--text-small);
+    line-height: var(--text-small--line-height);
+  }
+
+  .shadow-subtle {
+    box-shadow: var(--shadow-subtle);
+  }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
 }
