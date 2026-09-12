@@ -1,6 +1,11 @@
 export const NAV_LINKS = [
-  { href: "/plants", label: "Shop" },
-  { href: "/blog", label: "Care Guide" },
-  { href: "/#about", label: "About" },
-  { href: "/#community", label: "Community" },
+  { href: "/plants", labelKey: "shop" },
+  { href: "/blog", labelKey: "careGuide" },
+  { href: "/#about", labelKey: "about" },
+  { href: "/#community", labelKey: "community" },
 ] as const;
+
+export const LOCALE_LABELS = {
+  vi: "VI",
+  en: "EN",
+} as const;

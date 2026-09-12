@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { MenuIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,10 +11,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Logo } from "./logo";
 import { NAV_LINKS } from "@/config/navigation";
+import { Link } from "@/i18n/navigation";
+import { Logo } from "./logo";
 
 function MobileMenu() {
+  const tNav = useTranslations("nav");
+  const tCommon = useTranslations("common");
+
   return (
     <Sheet>
       <SheetTrigger
@@ -23,7 +27,7 @@ function MobileMenu() {
             variant="ghost"
             size="icon"
             className="size-10 text-foreground hover:bg-muted md:hidden"
-            aria-label="Open menu"
+            aria-label={tCommon("openMenu")}
           />
         }
       >
@@ -35,7 +39,7 @@ function MobileMenu() {
         className="w-[min(100%,20rem)] bg-background p-0"
       >
         <SheetHeader className="border-b border-border px-5 py-4">
-          <SheetTitle className="sr-only">Menu</SheetTitle>
+          <SheetTitle className="sr-only">{tCommon("menu")}</SheetTitle>
           <Logo />
         </SheetHeader>
 
@@ -51,7 +55,7 @@ function MobileMenu() {
                     />
                   }
                 >
-                  {link.label}
+                  {tNav(link.labelKey)}
                 </SheetClose>
               </li>
             ))}
@@ -65,11 +69,11 @@ function MobileMenu() {
                 variant="ghost"
                 className="h-10 w-full justify-start px-3 font-medium"
                 type="button"
-                aria-label="Account"
+                aria-label={tCommon("account")}
               />
             }
           >
-            Account
+            {tCommon("account")}
           </SheetClose>
         </div>
       </SheetContent>

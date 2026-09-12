@@ -1,7 +1,10 @@
+import { getTranslations } from "next-intl/server";
 import { SearchIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-function HeaderSearch({ className }: { className?: string }) {
+async function HeaderSearch({ className }: { className?: string }) {
+  const t = await getTranslations("common");
+
   return (
     <div
       role="search"
@@ -12,13 +15,13 @@ function HeaderSearch({ className }: { className?: string }) {
         className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
       />
       <label htmlFor="header-search" className="sr-only">
-        Search plants
+        {t("searchLabel")}
       </label>
       <input
         id="header-search"
         type="search"
         name="q"
-        placeholder="Search plants..."
+        placeholder={t("search")}
         autoComplete="off"
         className={cn(
           "h-10 w-full rounded-full border-0 bg-muted py-2 pr-3 pl-9 font-sans text-sm text-foreground outline-none placeholder:text-muted-foreground",

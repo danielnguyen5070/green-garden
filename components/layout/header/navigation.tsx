@@ -1,14 +1,17 @@
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { cn } from "@/lib/utils";
 import { NAV_LINKS } from "@/config/navigation";
+import { Link } from "@/i18n/navigation";
 
-function Navigation({
+async function Navigation({
   className,
   orientation = "horizontal",
 }: {
   className?: string;
   orientation?: "horizontal" | "vertical";
 }) {
+  const t = await getTranslations("nav");
+
   return (
     <nav
       aria-label="Primary"
@@ -33,7 +36,7 @@ function Navigation({
                   "block px-3 py-2.5 text-base hover:bg-muted"
               )}
             >
-              {link.label}
+              {t(link.labelKey)}
             </Link>
           </li>
         ))}

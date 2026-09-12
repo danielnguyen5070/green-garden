@@ -1,0 +1,19 @@
+{
+  "nav": {
+    "shop": "Shop",
+    "careGuide": "Care Guide",
+    "about": "About",
+    "community": "Community"
+  },
+  "common": {
+    "search": "Search plants...",
+    "searchLabel": "Search plants",
+    "cart": "Cart",
+    "account": "Account",
+    "language": "Language",
+    "openMenu": "Open menu",
+    "menu": "Menu",
+    "viewAll": "View all",
+    "addToCart": "Add to cart"
+  }
+}

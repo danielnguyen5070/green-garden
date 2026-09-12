@@ -1,0 +1,19 @@
+{
+  "nav": {
+    "shop": "Cửa hàng",
+    "careGuide": "Chăm sóc",
+    "about": "Giới thiệu",
+    "community": "Cộng đồng"
+  },
+  "common": {
+    "search": "Tìm cây...",
+    "searchLabel": "Tìm kiếm cây",
+    "cart": "Giỏ hàng",
+    "account": "Tài khoản",
+    "language": "Ngôn ngữ",
+    "openMenu": "Mở menu",
+    "menu": "Menu",
+    "viewAll": "Xem tất cả",
+    "addToCart": "Thêm vào giỏ"
+  }
+}
