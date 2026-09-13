@@ -41,5 +41,23 @@
       "facebook": "Facebook"
     },
     "copyright": "© {year} Green Garden. All rights reserved."
+  },
+  "home": {
+    "hero": {
+      "badge": "New Seasonal Collection",
+      "titleLine1": "Bring the",
+      "titleAccent": "outdoors",
+      "titleSuffix": " in.",
+      "description": "Transform your living space into a sanctuary with our curated collection of easy-care indoor plants. Earthy tones, lush greens, and peace of mind delivered to your door.",
+      "primaryCta": "Shop Collection",
+      "secondaryCta": "Take Plant Quiz",
+      "socialProof": "Trusted by over 2,000 happy plant parents.",
+      "socialProofCount": "+2k",
+      "imageAlt": "A curated arrangement of indoor plants in ceramic and terracotta pots by a bright window",
+      "wateringTip": {
+        "title": "Watering Tip",
+        "description": "Most indoor plants prefer a dry-out between waterings."
+      }
+    }
   }
 }

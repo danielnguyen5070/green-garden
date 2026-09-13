@@ -41,5 +41,23 @@
       "facebook": "Facebook"
     },
     "copyright": "© {year} Green Garden. Bảo lưu mọi quyền."
+  },
+  "home": {
+    "hero": {
+      "badge": "Bộ sưu tập theo mùa mới",
+      "titleLine1": "Mang",
+      "titleAccent": "thiên nhiên",
+      "titleSuffix": " vào nhà.",
+      "description": "Biến không gian sống thành nơi thư thái với bộ sưu tập cây nội thất dễ chăm. Sắc đất ấm, xanh mướt, và sự an tâm được giao đến tận cửa.",
+      "primaryCta": "Mua bộ sưu tập",
+      "secondaryCta": "Làm quiz chọn cây",
+      "socialProof": "Được tin tưởng bởi hơn 2.000 người yêu cây.",
+      "socialProofCount": "+2k",
+      "imageAlt": "Bộ sưu tập cây nội thất trong chậu gốm và đất nung bên cửa sổ sáng",
+      "wateringTip": {
+        "title": "Mẹo tưới nước",
+        "description": "Hầu hết cây nội thất thích để đất khô nhẹ giữa các lần tưới."
+      }
+    }
   }
 }
