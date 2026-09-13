@@ -1,8 +1,9 @@
-import { Be_Vietnam_Pro, Lora } from "next/font/google";
+import { Be_Vietnam_Pro, Plus_Jakarta_Sans } from "next/font/google";
 
-export const lora = Lora({
+export const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin", "vietnamese"],
-  variable: "--font-lora",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-plus-jakarta-sans",
   display: "swap",
 });
 
@@ -13,4 +14,4 @@ export const beVietnamPro = Be_Vietnam_Pro({
   display: "swap",
 });
 
-export const fontVariables = `${lora.variable} ${beVietnamPro.variable}`;
+export const fontVariables = `${plusJakartaSans.variable} ${beVietnamPro.variable}`;

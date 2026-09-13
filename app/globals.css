@@ -135,8 +135,8 @@
 
   /* Typography */
   --font-sans: var(--font-be-vietnam-pro), ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-lora), ui-serif, Georgia, serif;
-  --font-display: var(--font-lora), ui-serif, Georgia, serif;
+  --font-heading: var(--font-plus-jakarta-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-plus-jakarta-sans), ui-sans-serif, system-ui, sans-serif;
 
   --text-display: clamp(4rem, 3.5rem + 1.5vw, 5rem);
   --text-display--line-height: 1.05;
