@@ -1,4 +1,5 @@
 import { Hero } from "@/components/home/hero";
+import { NewsletterSection } from "@/components/home/newsletter-section";
 import { PlantList } from "@/components/plant/plant-list";
 import {
   getPlantCategories,
@@ -15,6 +16,7 @@ export default async function HomePage() {
     <>
       <Hero />
       <PlantList plants={plants} categories={categories} />
+      <NewsletterSection />
     </>
   );
 }

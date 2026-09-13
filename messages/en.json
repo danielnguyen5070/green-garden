@@ -85,6 +85,16 @@
         "Pet Friendly": "Pet Friendly",
         "Easy Care": "Easy Care"
       }
+    },
+    "newsletter": {
+      "title": "Join the Green Club",
+      "description": "Get 10% off your first order, plus weekly plant care tips and exclusive access to new arrivals.",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "Enter your email",
+      "subscribe": "Subscribe",
+      "privacy": "We respect your privacy. Unsubscribe at any time.",
+      "success": "Thanks for joining the Green Club!",
+      "invalidEmail": "Please enter a valid email address."
     }
   }
 }

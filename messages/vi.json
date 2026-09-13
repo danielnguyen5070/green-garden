@@ -85,6 +85,16 @@
         "Pet Friendly": "An toàn thú cưng",
         "Easy Care": "Dễ chăm"
       }
+    },
+    "newsletter": {
+      "title": "Tham gia Green Club",
+      "description": "Nhận giảm 10% cho đơn đầu tiên, cùng mẹo chăm cây hàng tuần và quyền ưu tiên với hàng mới.",
+      "emailLabel": "Địa chỉ email",
+      "emailPlaceholder": "Nhập email của bạn",
+      "subscribe": "Đăng ký",
+      "privacy": "Chúng tôi tôn trọng quyền riêng tư của bạn. Hủy đăng ký bất cứ lúc nào.",
+      "success": "Cảm ơn bạn đã tham gia Green Club!",
+      "invalidEmail": "Vui lòng nhập địa chỉ email hợp lệ."
     }
   }
 }
