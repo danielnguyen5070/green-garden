@@ -10,7 +10,7 @@ type Props = {
 export default async function BlogPage({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations("blog");
-  const posts = getAllPosts();
+  const posts = getAllPosts(locale);
 
   return (
     <section

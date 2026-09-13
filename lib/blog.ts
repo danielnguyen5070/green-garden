@@ -1,31 +1,41 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import { hasLocale } from "next-intl";
+import { routing } from "@/i18n/routing";
 import type { BlogPost, BlogPostMeta } from "@/types/blog";
 
-const BLOG_DIR = path.join(process.cwd(), "content/blog");
+const BLOG_ROOT = path.join(process.cwd(), "content/blog");
 
-function ensureBlogDir() {
-  if (!fs.existsSync(BLOG_DIR)) {
-    return false;
+function getBlogDir(locale: string) {
+  if (!hasLocale(routing.locales, locale)) {
+    return null;
   }
-  return true;
+
+  const dir = path.join(BLOG_ROOT, locale);
+  if (!fs.existsSync(dir)) {
+    return null;
+  }
+
+  return dir;
 }
 
-function getMdxFileNames(): string[] {
-  if (!ensureBlogDir()) return [];
+function getMdxFileNames(locale: string): string[] {
+  const dir = getBlogDir(locale);
+  if (!dir) return [];
 
-  return fs
-    .readdirSync(BLOG_DIR)
-    .filter((file) => file.endsWith(".mdx"));
+  return fs.readdirSync(dir).filter((file) => file.endsWith(".mdx"));
 }
 
 function toSlug(fileName: string) {
   return fileName.replace(/\.mdx$/, "");
 }
 
-function parsePost(fileName: string): BlogPost | null {
-  const fullPath = path.join(BLOG_DIR, fileName);
+function parsePost(locale: string, fileName: string): BlogPost | null {
+  const dir = getBlogDir(locale);
+  if (!dir) return null;
+
+  const fullPath = path.join(dir, fileName);
 
   if (!fs.existsSync(fullPath)) {
     return null;
@@ -49,14 +59,14 @@ function parsePost(fileName: string): BlogPost | null {
   };
 }
 
-export function getAllSlugs(): string[] {
-  return getMdxFileNames().map(toSlug);
+export function getAllSlugs(locale: string): string[] {
+  return getMdxFileNames(locale).map(toSlug);
 }
 
-export function getAllPosts(): BlogPostMeta[] {
-  return getMdxFileNames()
+export function getAllPosts(locale: string): BlogPostMeta[] {
+  return getMdxFileNames(locale)
     .map((fileName) => {
-      const post = parsePost(fileName);
+      const post = parsePost(locale, fileName);
       if (!post) return null;
 
       const { content: _content, ...meta } = post;
@@ -70,10 +80,10 @@ export function getAllPosts(): BlogPostMeta[] {
     });
 }
 
-export function getPostBySlug(slug: string): BlogPost | null {
+export function getPostBySlug(locale: string, slug: string): BlogPost | null {
   if (!slug || slug.includes("/") || slug.includes("..")) {
     return null;
   }
 
-  return parsePost(`${slug}.mdx`);
+  return parsePost(locale, `${slug}.mdx`);
 }

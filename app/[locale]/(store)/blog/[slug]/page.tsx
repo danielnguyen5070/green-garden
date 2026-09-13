@@ -6,6 +6,7 @@ import { Container } from "@/components/layout/container";
 import { formatDate } from "@/components/blog/blog-card";
 import { MdxContent } from "@/components/blog/mdx-content";
 import { Link } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 import { getAllSlugs, getPostBySlug } from "@/services/blog.service";
 
 type Props = {
@@ -13,12 +14,14 @@ type Props = {
 };
 
 export function generateStaticParams() {
-  return getAllSlugs().map((slug) => ({ slug }));
+  return routing.locales.flatMap((locale) =>
+    getAllSlugs(locale).map((slug) => ({ locale, slug })),
+  );
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const { locale, slug } = await params;
+  const post = getPostBySlug(locale, slug);
 
   if (!post) {
     return {};
@@ -32,7 +35,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { locale, slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = getPostBySlug(locale, slug);
+
   if (!post) {
     notFound();
   }

@@ -1,0 +1,35 @@
+---
+title: "ChromaDB for local RAG experiments"
+description: "A practical overview of ChromaDB for embedding storage and similarity search."
+date: "2026-09-08"
+author: "Daniel"
+category: "AI"
+tags:
+  - AI
+  - ChromaDB
+  - Embeddings
+cover: "/images/blog/placeholder.svg"
+---
+
+# ChromaDB for local RAG experiments
+
+ChromaDB is a lightweight **embedding database** that works well for prototypes and local RAG workflows.
+
+## Core idea
+
+You store documents as vectors, then query by similarity instead of exact keywords.
+
+```ts
+const results = await collection.query({
+  queryTexts: ["low light indoor plants"],
+  nResults: 3,
+});
+```
+
+## When it shines
+
+- quick local experiments
+- small knowledge bases
+- early-stage semantic search
+
+> Start simple with ChromaDB, then graduate to a managed vector store when traffic and scale demand it.
