@@ -1,9 +1,7 @@
 {
   "nav": {
-    "shop": "Shop",
     "careGuide": "Care Guide",
-    "about": "About",
-    "community": "Community"
+    "about": "About"
   },
   "common": {
     "search": "Search plants...",

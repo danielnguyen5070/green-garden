@@ -1,9 +1,7 @@
 {
   "nav": {
-    "shop": "Cửa hàng",
     "careGuide": "Chăm sóc",
-    "about": "Giới thiệu",
-    "community": "Cộng đồng"
+    "about": "Giới thiệu"
   },
   "common": {
     "search": "Tìm cây...",
