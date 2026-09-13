@@ -15,5 +15,31 @@
     "menu": "Menu",
     "viewAll": "Xem tất cả",
     "addToCart": "Thêm vào giỏ"
+  },
+  "footer": {
+    "brand": {
+      "name": "Green Garden",
+      "description": "Mang sự sống vào không gian của bạn với cây trồng bền vững và chậu thân thiện với môi trường."
+    },
+    "shop": {
+      "title": "Cửa hàng",
+      "newArrivals": "Hàng mới",
+      "bestSellers": "Bán chạy",
+      "categories": "Danh mục",
+      "plants": "Cây trồng"
+    },
+    "support": {
+      "title": "Hỗ trợ",
+      "careGuide": "Chăm sóc",
+      "faq": "Câu hỏi thường gặp",
+      "shipping": "Vận chuyển & Đổi trả",
+      "contact": "Liên hệ"
+    },
+    "social": {
+      "title": "Theo dõi",
+      "instagram": "Instagram",
+      "facebook": "Facebook"
+    },
+    "copyright": "© {year} Green Garden. Bảo lưu mọi quyền."
   }
 }

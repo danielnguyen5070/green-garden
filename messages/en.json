@@ -15,5 +15,31 @@
     "menu": "Menu",
     "viewAll": "View all",
     "addToCart": "Add to cart"
+  },
+  "footer": {
+    "brand": {
+      "name": "Green Garden",
+      "description": "Bringing life to your spaces with sustainably grown plants and eco-friendly pots."
+    },
+    "shop": {
+      "title": "Shop",
+      "newArrivals": "New Arrivals",
+      "bestSellers": "Best Sellers",
+      "categories": "Categories",
+      "plants": "Plants"
+    },
+    "support": {
+      "title": "Support",
+      "careGuide": "Care Guide",
+      "faq": "FAQ",
+      "shipping": "Shipping & Returns",
+      "contact": "Contact Us"
+    },
+    "social": {
+      "title": "Follow Us",
+      "instagram": "Instagram",
+      "facebook": "Facebook"
+    },
+    "copyright": "© {year} Green Garden. All rights reserved."
   }
 }
