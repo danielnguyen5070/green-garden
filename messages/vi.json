@@ -151,5 +151,54 @@
       "title": "Bạn có thể cũng thích",
       "viewAll": "Xem tất cả"
     }
+  },
+  "checkout": {
+    "title": "Thanh toán",
+    "description": "Hoàn tất đơn hàng để mang cây mới về nhà.",
+    "continueToPayment": "Tiếp tục thanh toán",
+    "progress": {
+      "label": "Tiến trình thanh toán",
+      "shipping": "Giao hàng",
+      "payment": "Thanh toán",
+      "review": "Xác nhận"
+    },
+    "shippingDetails": {
+      "title": "Thông tin giao hàng",
+      "firstName": "Tên",
+      "lastName": "Họ",
+      "address": "Địa chỉ dòng 1",
+      "city": "Thành phố",
+      "postalCode": "Mã bưu điện",
+      "email": "Địa chỉ email"
+    },
+    "shippingMethod": {
+      "title": "Phương thức giao hàng",
+      "standard": "Giao hàng tiêu chuẩn",
+      "standardEta": "3–5 ngày làm việc",
+      "express": "Giao hàng nhanh",
+      "expressEta": "Ngày làm việc tiếp theo",
+      "free": "Miễn phí"
+    },
+    "orderSummary": {
+      "title": "Tóm tắt đơn hàng",
+      "qty": "SL: {count}",
+      "subtotal": "Tạm tính",
+      "shipping": "Vận chuyển",
+      "tax": "Thuế (ước tính)",
+      "free": "Miễn phí",
+      "total": "Tổng cộng",
+      "secureNotice": "Dữ liệu của bạn được bảo vệ bằng mã hóa chuẩn ngành. Thanh toán an toàn bởi Green Garden."
+    },
+    "secure": {
+      "title": "Thanh toán an toàn",
+      "description": "Thông tin của bạn được bảo vệ."
+    },
+    "footer": {
+      "navLabel": "Thông tin pháp lý thanh toán",
+      "privacy": "Chính sách bảo mật",
+      "terms": "Điều khoản dịch vụ",
+      "help": "Trung tâm trợ giúp",
+      "copyright": "© {year} Green Garden Plant Store. Bảo lưu mọi quyền."
+    }
   }
 }

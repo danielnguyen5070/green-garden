@@ -151,5 +151,54 @@
       "title": "You Might Also Like",
       "viewAll": "View all"
     }
+  },
+  "checkout": {
+    "title": "Checkout",
+    "description": "Complete your order to bring home your new plants.",
+    "continueToPayment": "Continue to Payment",
+    "progress": {
+      "label": "Checkout progress",
+      "shipping": "Shipping",
+      "payment": "Payment",
+      "review": "Review"
+    },
+    "shippingDetails": {
+      "title": "Shipping Details",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "address": "Address line 1",
+      "city": "City",
+      "postalCode": "Postal Code",
+      "email": "Email Address"
+    },
+    "shippingMethod": {
+      "title": "Shipping Method",
+      "standard": "Standard Delivery",
+      "standardEta": "3–5 business days",
+      "express": "Express Shipping",
+      "expressEta": "Next business day",
+      "free": "Free"
+    },
+    "orderSummary": {
+      "title": "Order Summary",
+      "qty": "Qty: {count}",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "tax": "Tax (Estimated)",
+      "free": "Free",
+      "total": "Total",
+      "secureNotice": "Your data is protected by industry standard encryption. Guaranteed secure checkout by Green Garden."
+    },
+    "secure": {
+      "title": "Secure checkout",
+      "description": "Your information is protected."
+    },
+    "footer": {
+      "navLabel": "Checkout legal",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "help": "Help Center",
+      "copyright": "© {year} Green Garden Plant Store. All rights reserved."
+    }
   }
 }
