@@ -96,5 +96,12 @@
       "success": "Cảm ơn bạn đã tham gia Green Club!",
       "invalidEmail": "Vui lòng nhập địa chỉ email hợp lệ."
     }
+  },
+  "blog": {
+    "title": "Ghi chú vườn",
+    "description": "Mẹo chăm cây, câu chuyện sản phẩm và chia sẻ từ đội ngũ Green Garden.",
+    "readMore": "Đọc bài viết",
+    "backToBlog": "Quay lại blog",
+    "empty": "Chưa có bài viết nào."
   }
 }

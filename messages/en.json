@@ -96,5 +96,12 @@
       "success": "Thanks for joining the Green Club!",
       "invalidEmail": "Please enter a valid email address."
     }
+  },
+  "blog": {
+    "title": "Garden Notes",
+    "description": "Care tips, product stories, and notes from the Green Garden team.",
+    "readMore": "Read article",
+    "backToBlog": "Back to blog",
+    "empty": "No posts yet."
   }
 }
