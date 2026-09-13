@@ -14,7 +14,31 @@
     "openMenu": "Mở menu",
     "menu": "Menu",
     "viewAll": "Xem tất cả",
-    "addToCart": "Thêm vào giỏ"
+    "addToCart": "Thêm vào giỏ",
+    "cartWithCount": "Giỏ hàng, {count, plural, =0 {trống} other {# sản phẩm}}"
+  },
+  "cart": {
+    "title": "Giỏ hàng của bạn",
+    "description": "Xem lại cây trong giỏ và tiếp tục thanh toán.",
+    "items": "{count, plural, =0 {0 sản phẩm} other {# sản phẩm}}",
+    "close": "Đóng giỏ hàng",
+    "empty": "Giỏ hàng trống",
+    "emptyDescription": "Khám phá cây của chúng tôi và mang thêm sắc xanh vào không gian của bạn.",
+    "shopPlants": "Mua cây",
+    "remove": "Xóa {name} khỏi giỏ",
+    "quantity": "Số lượng",
+    "increaseQuantity": "Tăng số lượng {name}",
+    "decreaseQuantity": "Giảm số lượng {name}",
+    "freeShipping": "Sắp được miễn phí ship",
+    "freeShippingUnlocked": "Đã mở khóa miễn phí vận chuyển!",
+    "freeShippingDescription": "Đơn hàng của bạn được miễn phí giao hàng nội thành.",
+    "addMoreForFreeShipping": "Thêm {amount} nữa để được miễn phí vận chuyển.",
+    "subtotal": "Tạm tính",
+    "shipping": "Vận chuyển",
+    "free": "Miễn phí",
+    "total": "Tổng cộng",
+    "checkout": "Thanh toán ngay →",
+    "secureCheckout": "Thanh toán an toàn bởi Green Garden"
   },
   "footer": {
     "brand": {

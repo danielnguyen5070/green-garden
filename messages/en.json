@@ -14,7 +14,31 @@
     "openMenu": "Open menu",
     "menu": "Menu",
     "viewAll": "View all",
-    "addToCart": "Add to cart"
+    "addToCart": "Add to cart",
+    "cartWithCount": "Cart, {count, plural, =0 {empty} one {# item} other {# items}}"
+  },
+  "cart": {
+    "title": "Your Cart",
+    "description": "Review the plants in your cart and continue to checkout.",
+    "items": "{count, plural, =0 {0 Items} one {# Item} other {# Items}}",
+    "close": "Close cart",
+    "empty": "Your cart is empty",
+    "emptyDescription": "Explore our plants and bring a little more green into your space.",
+    "shopPlants": "Shop Plants",
+    "remove": "Remove {name} from cart",
+    "quantity": "Quantity",
+    "increaseQuantity": "Increase quantity of {name}",
+    "decreaseQuantity": "Decrease quantity of {name}",
+    "freeShipping": "Almost there",
+    "freeShippingUnlocked": "Free shipping unlocked!",
+    "freeShippingDescription": "Your order qualifies for free local delivery.",
+    "addMoreForFreeShipping": "Add {amount} more for free shipping.",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "free": "Free",
+    "total": "Total",
+    "checkout": "Checkout Now →",
+    "secureCheckout": "Secure checkout powered by Green Garden"
   },
   "footer": {
     "brand": {

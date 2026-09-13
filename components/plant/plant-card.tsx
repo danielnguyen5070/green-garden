@@ -6,6 +6,7 @@ import { HeartIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Plant } from "@/types/plant";
 import { cn } from "@/lib/utils";
+import { useCartStore } from "@/store/cart.store";
 
 const priceFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -14,6 +15,12 @@ const priceFormatter = new Intl.NumberFormat("en-US", {
 
 function PlantCard({ plant, className }: { plant: Plant; className?: string }) {
   const t = useTranslations("home.products");
+  const tCommon = useTranslations("common");
+  const addItem = useCartStore((state) => state.addItem);
+
+  function handleAddToCart() {
+    addItem(plant);
+  }
 
   return (
     <article
@@ -55,9 +62,19 @@ function PlantCard({ plant, className }: { plant: Plant; className?: string }) {
         <p className="font-sans text-small text-muted-foreground">
           {plant.description}
         </p>
-        <p className="mt-auto pt-2 font-sans text-base font-semibold text-primary">
-          {priceFormatter.format(plant.price)}
-        </p>
+        <div className="mt-auto flex items-center justify-between gap-3 pt-3">
+          <p className="font-sans text-base font-semibold text-primary">
+            {priceFormatter.format(plant.price)}
+          </p>
+          <Button
+            type="button"
+            size="sm"
+            className="h-8 rounded-lg px-3 font-sans text-xs font-semibold"
+            onClick={handleAddToCart}
+          >
+            {tCommon("addToCart")}
+          </Button>
+        </div>
       </div>
     </article>
   );
