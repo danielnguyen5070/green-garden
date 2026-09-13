@@ -1,6 +1,6 @@
 ---
-title: "ChromaDB for local RAG experiments"
-description: "A practical overview of ChromaDB for embedding storage and similarity search."
+title: "ChromaDB cho thử nghiệm RAG tại máy local"
+description: "Tổng quan thực tế về ChromaDB để lưu embeddings và tìm kiếm tương đồng."
 date: "2026-09-08"
 author: "Daniel"
 category: "AI"
@@ -11,25 +11,25 @@ tags:
 cover: "/images/blog/placeholder.svg"
 ---
 
-# ChromaDB for local RAG experiments
+# ChromaDB cho thử nghiệm RAG tại máy local
 
-ChromaDB is a lightweight **embedding database** that works well for prototypes and local RAG workflows.
+ChromaDB là **cơ sở dữ liệu embedding** nhẹ, phù hợp cho prototype và quy trình RAG chạy local.
 
-## Core idea
+## Ý tưởng cốt lõi
 
-You store documents as vectors, then query by similarity instead of exact keywords.
+Bạn lưu tài liệu dưới dạng vector, rồi truy vấn theo độ tương đồng thay vì khớp từ khóa chính xác.
 
 ```ts
 const results = await collection.query({
-  queryTexts: ["low light indoor plants"],
+  queryTexts: ["cây nội thất ưa bóng"],
   nResults: 3,
 });
 ```
 
-## When it shines
+## Khi nào nên dùng
 
-- quick local experiments
-- small knowledge bases
-- early-stage semantic search
+- thử nghiệm nhanh trên máy local
+- kho tri thức nhỏ
+- tìm kiếm ngữ nghĩa giai đoạn đầu
 
-> Start simple with ChromaDB, then graduate to a managed vector store when traffic and scale demand it.
+> Hãy bắt đầu đơn giản với ChromaDB, rồi chuyển sang vector store quản trị khi lưu lượng và quy mô tăng lên.

@@ -1,6 +1,6 @@
 ---
-title: "Getting started with next-intl"
-description: "How to add multilingual routing and messages to a Next.js App Router storefront."
+title: "Bắt đầu với next-intl"
+description: "Cách thêm định tuyến đa ngôn ngữ và file messages cho storefront Next.js App Router."
 date: "2026-09-11"
 author: "Daniel"
 category: "Next.js"
@@ -11,19 +11,19 @@ tags:
 cover: "/images/blog/placeholder.svg"
 ---
 
-# Getting started with next-intl
+# Bắt đầu với next-intl
 
-`next-intl` makes it straightforward to ship locale-aware routes like `/en` and `/vi` in the App Router.
+`next-intl` giúp bạn dễ dàng triển khai các route theo locale như `/en` và `/vi` trên App Router.
 
-## Why next-intl?
+## Vì sao dùng next-intl?
 
-It handles:
+Thư viện hỗ trợ:
 
-- locale-prefixed routing
-- translation messages
-- shared navigation helpers for `Link` and `useRouter`
+- định tuyến có tiền tố locale
+- file messages cho bản dịch
+- helper điều hướng dùng chung cho `Link` và `useRouter`
 
-## Example
+## Ví dụ
 
 ```ts
 import {useTranslations} from 'next-intl';
@@ -34,6 +34,6 @@ export function Hero() {
 }
 ```
 
-> Keep UI copy in message files, and keep business data language-neutral when possible.
+> Giữ copy giao diện trong file messages, còn dữ liệu nghiệp vụ nên giữ trung lập về ngôn ngữ khi có thể.
 
-With a clean message structure, the same components can power every locale without duplicated pages.
+Với cấu trúc messages rõ ràng, cùng một bộ component có thể phục vụ mọi locale mà không cần nhân đôi trang.
