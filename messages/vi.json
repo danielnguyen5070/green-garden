@@ -58,6 +58,33 @@
         "title": "Mẹo tưới nước",
         "description": "Hầu hết cây nội thất thích để đất khô nhẹ giữa các lần tưới."
       }
+    },
+    "products": {
+      "title": "Sản phẩm",
+      "search": "Tìm cây...",
+      "sortLabel": "Sắp xếp",
+      "resultsCount": "{count, plural, =0 {0 cây} other {# cây}}",
+      "loadMore": "Xem thêm",
+      "empty": "Không tìm thấy cây nào.",
+      "clearFilters": "Xóa bộ lọc",
+      "bestseller": "Bán chạy",
+      "favorite": "Lưu cây",
+      "sort": {
+        "featured": "Nổi bật",
+        "newest": "Mới nhất",
+        "price-asc": "Giá: Thấp đến cao",
+        "price-desc": "Giá: Cao đến thấp",
+        "best-selling": "Bán chạy nhất"
+      },
+      "categories": {
+        "label": "Danh mục",
+        "all": "Tất cả",
+        "Indoor": "Trong nhà",
+        "Outdoor": "Ngoài trời",
+        "Low Light": "Ít sáng",
+        "Pet Friendly": "An toàn thú cưng",
+        "Easy Care": "Dễ chăm"
+      }
     }
   }
 }

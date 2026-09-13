@@ -58,6 +58,33 @@
         "title": "Watering Tip",
         "description": "Most indoor plants prefer a dry-out between waterings."
       }
+    },
+    "products": {
+      "title": "Trending Products",
+      "search": "Search plants...",
+      "sortLabel": "Sort by",
+      "resultsCount": "{count, plural, =0 {0 plants} one {# plant} other {# plants}}",
+      "loadMore": "Load More",
+      "empty": "No plants found.",
+      "clearFilters": "Clear filters",
+      "bestseller": "Bestseller",
+      "favorite": "Save plant",
+      "sort": {
+        "featured": "Featured",
+        "newest": "Newest",
+        "price-asc": "Price: Low to High",
+        "price-desc": "Price: High to Low",
+        "best-selling": "Best Selling"
+      },
+      "categories": {
+        "label": "Categories",
+        "all": "All",
+        "Indoor": "Indoor",
+        "Outdoor": "Outdoor",
+        "Low Light": "Low Light",
+        "Pet Friendly": "Pet Friendly",
+        "Easy Care": "Easy Care"
+      }
     }
   }
 }
