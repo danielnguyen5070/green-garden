@@ -18,7 +18,7 @@ export const FOOTER_SUPPORT = {
   titleKey: "support.title",
   links: [
     { href: "/blog", labelKey: "support.careGuide" },
-    { href: "/#faq", labelKey: "support.faq" },
+    { href: "/faq", labelKey: "support.faq" },
     { href: "/#shipping", labelKey: "support.shipping" },
     { href: "/#contact", labelKey: "support.contact" },
   ],

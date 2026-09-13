@@ -255,5 +255,117 @@
       "shop": "Mua cây",
       "careGuide": "Khám phá chăm sóc cây"
     }
+  },
+  "faq": {
+    "metadata": {
+      "title": "Câu hỏi thường gặp | Green Garden",
+      "description": "Tìm câu trả lời về cây trồng, giao hàng, đơn hàng, chăm sóc, đổi trả và nhiều hơn nữa tại Green Garden."
+    },
+    "hero": {
+      "eyebrow": "Trung tâm hỗ trợ",
+      "title": "Câu hỏi thường gặp",
+      "description": "Tìm câu trả lời về cây trồng, giao hàng, đơn hàng, chăm sóc và mọi điều liên quan.",
+      "searchPlaceholder": "Tìm câu hỏi..."
+    },
+    "categories": {
+      "navLabel": "Danh mục câu hỏi",
+      "all": "Tất cả",
+      "orders": "Đơn hàng",
+      "delivery": "Giao hàng",
+      "care": "Chăm sóc cây",
+      "pots": "Chậu & Sản phẩm",
+      "returns": "Đổi trả",
+      "general": "Chung"
+    },
+    "empty": "Không tìm thấy câu hỏi nào.",
+    "clearSearch": "Xóa tìm kiếm",
+    "contact": {
+      "title": "Bạn vẫn còn thắc mắc?",
+      "description": "Chúng tôi sẵn sàng giúp bạn chọn cây phù hợp và giải đáp mọi câu hỏi.",
+      "contactUs": "Liên hệ",
+      "shopPlants": "Mua cây"
+    },
+    "items": {
+      "placeOrder": {
+        "question": "Làm sao để đặt hàng?",
+        "answer": "Duyệt cây của chúng tôi, chọn kích thước và màu chậu nếu có, thêm vào giỏ hàng, rồi tiếp tục thanh toán để hoàn tất đơn."
+      },
+      "changeOrder": {
+        "question": "Tôi có thể thay đổi đơn sau khi đặt không?",
+        "answer": "Nếu đơn chưa được chuẩn bị giao, hãy liên hệ sớm nhất có thể — chúng tôi sẽ cố gắng hỗ trợ cập nhật."
+      },
+      "multiplePlants": {
+        "question": "Tôi có thể đặt nhiều cây cùng lúc không?",
+        "answer": "Có. Bạn có thể thêm nhiều cây vào giỏ và thanh toán trong một đơn hàng duy nhất."
+      },
+      "deliveryTime": {
+        "question": "Giao hàng mất bao lâu?",
+        "answer": "Hầu hết đơn nội thành đến trong 3–5 ngày làm việc. Tùy khu vực, bạn có thể thấy tùy chọn giao nhanh khi thanh toán."
+      },
+      "sameDay": {
+        "question": "Có giao trong ngày không?",
+        "answer": "Giao trong ngày chỉ áp dụng ở một số khu vực và khung giờ. Nếu khả dụng với địa chỉ của bạn, tùy chọn sẽ hiện khi thanh toán."
+      },
+      "packaging": {
+        "question": "Cây được đóng gói thế nào khi giao?",
+        "answer": "Mỗi cây được cố định cẩn thận để bảo vệ thân, lá và đất, giúp cây đến nơi khỏe mạnh và sẵn sàng về nhà mới."
+      },
+      "outsideCity": {
+        "question": "Các bạn có giao ngoài thành phố không?",
+        "answer": "Có, chúng tôi giao đến nhiều khu vực lân cận. Khả năng giao và thời gian sẽ được xác nhận khi thanh toán theo địa chỉ của bạn."
+      },
+      "watering": {
+        "question": "Tôi nên tưới cây bao lâu một lần?",
+        "answer": "Tùy loại cây, ánh sáng và mùa. Cách bắt đầu tốt là tưới khi lớp đất mặt khô, và luôn xem hướng dẫn chăm sóc của từng cây."
+      },
+      "sunlight": {
+        "question": "Cây cần bao nhiêu ánh sáng?",
+        "answer": "Hầu hết cây nội thất của chúng tôi thích ánh sáng gián tiếp sáng. Mỗi trang sản phẩm có hướng dẫn ánh sáng riêng cho cây đó."
+      },
+      "losingLeaves": {
+        "question": "Nếu cây bắt đầu rụng lá thì sao?",
+        "answer": "Một số lá rụng sau khi di chuyển là bình thường. Hãy kiểm tra tưới nước, ánh sáng và nhiệt độ trước. Nếu chưa chắc, hãy liên hệ để chúng tôi hỗ trợ."
+      },
+      "petSafety": {
+        "question": "Cây của các bạn có an toàn với thú cưng không?",
+        "answer": "Không phải cây nào cũng an toàn với thú cưng. Hãy tìm nhãn thân thiện thú cưng, hoặc liên hệ để chúng tôi giúp chọn lựa phù hợp hơn."
+      },
+      "potSize": {
+        "question": "Tôi có thể chọn kích thước chậu không?",
+        "answer": "Có. Khi có tùy chọn kích thước, bạn có thể chọn cỡ chậu trên trang sản phẩm trước khi thêm vào giỏ."
+      },
+      "potColor": {
+        "question": "Tôi có thể chọn màu chậu không?",
+        "answer": "Nhiều cây có tùy chọn màu chậu. Hãy chọn màu bạn thích trên trang sản phẩm khi chọn cây."
+      },
+      "plantsWithPots": {
+        "question": "Cây có kèm chậu không?",
+        "answer": "Hầu hết cây được bán kèm chậu ươm hoặc chậu trang trí như trên trang sản phẩm. Chi tiết được ghi rõ cho từng món."
+      },
+      "returnPolicy": {
+        "question": "Chính sách đổi trả của các bạn là gì?",
+        "answer": "Vì cây là sản phẩm sống, việc đổi trả có giới hạn. Vui lòng liên hệ trong vòng 48 giờ nếu đơn hàng có vấn đề — chúng tôi sẽ hỗ trợ giải pháp phù hợp."
+      },
+      "damagedPlant": {
+        "question": "Nếu cây đến nơi bị hư thì sao?",
+        "answer": "Hãy gửi ảnh cho chúng tôi trong vòng 48 giờ kể từ khi nhận hàng. Nếu cây bị hư khi giao, chúng tôi sẽ hỗ trợ đổi cây hoặc giải pháp phù hợp khác."
+      },
+      "exchangePlant": {
+        "question": "Tôi có thể đổi cây không?",
+        "answer": "Việc đổi có thể được xem xét với sản phẩm chưa sử dụng, tùy tình trạng cây và hàng sẵn có. Hãy liên hệ để chúng tôi kiểm tra yêu cầu của bạn."
+      },
+      "whereGrown": {
+        "question": "Cây của các bạn được trồng ở đâu?",
+        "answer": "Chúng tôi chọn lọc cây từ các nhà vườn và đối tác tin cậy tại địa phương để cây khỏe mạnh, thích nghi tốt và sẵn sàng cho không gian của bạn."
+      },
+      "payment": {
+        "question": "Các bạn chấp nhận phương thức thanh toán nào?",
+        "answer": "Chúng tôi chấp nhận thẻ phổ biến và các tùy chọn thanh toán an toàn hiện khi checkout. Thông tin thanh toán được xử lý an toàn khi hoàn tất đơn."
+      },
+      "contactUs": {
+        "question": "Làm sao để liên hệ Green Garden?",
+        "answer": "Xem thông tin liên hệ ở chân trang hoặc dùng liên kết Liên hệ. Chúng tôi sẵn sàng hỗ trợ chọn cây, đơn hàng và chăm sóc."
+      }
+    }
   }
 }

@@ -255,5 +255,117 @@
       "shop": "Shop Plants",
       "careGuide": "Explore Plant Care"
     }
+  },
+  "faq": {
+    "metadata": {
+      "title": "FAQ | Green Garden",
+      "description": "Find answers about plants, delivery, orders, care, returns, and everything in between at Green Garden."
+    },
+    "hero": {
+      "eyebrow": "Help Center",
+      "title": "Frequently Asked Questions",
+      "description": "Find answers about plants, delivery, orders, care, and everything in between.",
+      "searchPlaceholder": "Search questions..."
+    },
+    "categories": {
+      "navLabel": "FAQ categories",
+      "all": "All",
+      "orders": "Orders",
+      "delivery": "Delivery",
+      "care": "Plant Care",
+      "pots": "Pots & Products",
+      "returns": "Returns",
+      "general": "General"
+    },
+    "empty": "No questions found.",
+    "clearSearch": "Clear search",
+    "contact": {
+      "title": "Still have questions?",
+      "description": "We're happy to help you find the right plant and answer any questions you may have.",
+      "contactUs": "Contact Us",
+      "shopPlants": "Shop Plants"
+    },
+    "items": {
+      "placeOrder": {
+        "question": "How do I place an order?",
+        "answer": "Browse our plants, choose your pot size and color if available, add items to your cart, and continue to checkout to complete your order."
+      },
+      "changeOrder": {
+        "question": "Can I change my order after placing it?",
+        "answer": "If your order has not yet been prepared for delivery, contact us as soon as possible and we will do our best to update it."
+      },
+      "multiplePlants": {
+        "question": "Can I order multiple plants at once?",
+        "answer": "Yes. You can add as many plants as you like to your cart and check out in a single order."
+      },
+      "deliveryTime": {
+        "question": "How long does delivery take?",
+        "answer": "Most local orders arrive within 3–5 business days. Express options may be available at checkout depending on your area."
+      },
+      "sameDay": {
+        "question": "Do you offer same-day delivery?",
+        "answer": "Same-day delivery is limited to select areas and order times. If it is available for your location, you will see it during checkout."
+      },
+      "packaging": {
+        "question": "How are plants packaged for delivery?",
+        "answer": "Each plant is carefully secured to protect the stems, leaves, and soil so it arrives healthy and ready for its new home."
+      },
+      "outsideCity": {
+        "question": "Do you deliver outside the city?",
+        "answer": "Yes, we deliver to many nearby areas. Shipping availability and timing are confirmed at checkout based on your address."
+      },
+      "watering": {
+        "question": "How often should I water my plant?",
+        "answer": "It depends on the plant, light, and season. As a starting point, water when the top layer of soil feels dry, and always check your plant’s care guide."
+      },
+      "sunlight": {
+        "question": "How much sunlight does my plant need?",
+        "answer": "Most of our indoor plants prefer bright, indirect light. Each product page includes specific light guidance for that plant."
+      },
+      "losingLeaves": {
+        "question": "What happens if my plant starts losing leaves?",
+        "answer": "Some leaf drop is normal after moving. Check watering, light, and temperature first. If you are unsure, reach out and we can help you troubleshoot."
+      },
+      "petSafety": {
+        "question": "Are your plants safe for pets?",
+        "answer": "Not all plants are pet-safe. Look for our pet-friendly labels, or contact us and we will help you choose a safer option for your home."
+      },
+      "potSize": {
+        "question": "Can I choose the pot size?",
+        "answer": "Yes. Where size options are available, you can select your preferred pot size on the product page before adding the plant to your cart."
+      },
+      "potColor": {
+        "question": "Can I choose the pot color?",
+        "answer": "Many plants offer pot color options. Choose your preferred color on the product page when selecting your plant."
+      },
+      "plantsWithPots": {
+        "question": "Do plants come with pots?",
+        "answer": "Most plants are sold with a nursery or decorative pot as shown on the product page. Details are listed for each item."
+      },
+      "returnPolicy": {
+        "question": "What is your return policy?",
+        "answer": "Because plants are living products, returns are limited. Please contact us within 48 hours if there is an issue with your order and we will help find a fair solution."
+      },
+      "damagedPlant": {
+        "question": "What if my plant arrives damaged?",
+        "answer": "Please send us photos within 48 hours of delivery. If a plant arrives damaged, we will arrange a replacement or another suitable resolution."
+      },
+      "exchangePlant": {
+        "question": "Can I exchange a plant?",
+        "answer": "Exchanges may be possible for unopened or unused items, depending on plant condition and availability. Contact us and we will review your request."
+      },
+      "whereGrown": {
+        "question": "Where are your plants grown?",
+        "answer": "Our plants are carefully selected from trusted local growers and nurseries so they are healthy, well-adapted, and ready for your space."
+      },
+      "payment": {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept major cards and other secure payment options shown at checkout. Your payment details are processed safely during order completion."
+      },
+      "contactUs": {
+        "question": "How can I contact Green Garden?",
+        "answer": "Use the contact details in our footer or reach out through the Contact Us link. We are happy to help with plant selection, orders, and care questions."
+      }
+    }
   }
 }
