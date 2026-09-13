@@ -127,5 +127,31 @@
     "readMore": "Đọc bài viết",
     "backToBlog": "Quay lại blog",
     "empty": "Chưa có bài viết nào."
+  },
+  "plantDetail": {
+    "home": "Trang chủ",
+    "breadcrumb": "Đường dẫn",
+    "bestseller": "Bán chạy",
+    "ratingLabel": "{rating} trên 5 sao",
+    "potSize": "Cỡ chậu",
+    "potColor": "Màu chậu",
+    "sizeGuide": "Hướng dẫn kích thước",
+    "quantity": "Số lượng",
+    "increaseQuantity": "Tăng số lượng",
+    "decreaseQuantity": "Giảm số lượng",
+    "addToCart": "Thêm vào giỏ — {price}",
+    "favorite": "Lưu cây",
+    "unfavorite": "Bỏ lưu cây",
+    "plantCare": "Chăm sóc cây",
+    "light": "Ánh sáng",
+    "water": "Tưới nước",
+    "pets": "Thú cưng",
+    "selectImage": "Xem ảnh {index} của {name}",
+    "selectVideo": "Xem xem trước video của {name}",
+    "videoPreview": "Xem trước video",
+    "related": {
+      "title": "Bạn có thể cũng thích",
+      "viewAll": "Xem tất cả"
+    }
   }
 }

@@ -134,13 +134,22 @@
     "name": "Bird of Paradise",
     "slug": "bird-of-paradise",
     "description": "Tropical drama • Bright light",
+    "longDescription": "Bring the tropics indoors with this dramatic statement plant. Broad, paddle-shaped leaves and an upright habit make Bird of Paradise a favorite for bright rooms and sunlit corners.",
+    "scientificName": "Strelitzia nicolai",
     "price": 58,
     "image": "/images/plants/placeholder.svg",
     "category": "Outdoor",
     "tags": ["Tropical", "Bright Light", "Statement"],
     "createdAt": "2026-09-09",
     "soldCount": 74,
-    "bestseller": false
+    "bestseller": true,
+    "rating": 5,
+    "reviewCount": 142,
+    "care": {
+      "light": "Thrives in bright, indirect to direct sunlight.",
+      "water": "Water every 1–2 weeks, allowing soil to dry out.",
+      "pets": "Toxic to pets if ingested. Keep away."
+    }
   },
   {
     "id": "plant-012",

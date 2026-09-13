@@ -1,5 +1,5 @@
 export const NAV_LINKS = [
-  { href: "/plants", labelKey: "shop" },
+  { href: "/#products", labelKey: "shop" },
   { href: "/blog", labelKey: "careGuide" },
   { href: "/#about", labelKey: "about" },
   { href: "/#community", labelKey: "community" },

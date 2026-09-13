@@ -38,11 +38,18 @@ function CartItem({ item }: { item: CartItemType }) {
             <h3 className="truncate font-sans text-sm font-semibold tracking-tight text-foreground">
               {item.name}
             </h3>
-            {item.description ? (
-              <p className="mt-0.5 line-clamp-1 font-sans text-small text-muted-foreground">
-                {item.description}
-              </p>
-            ) : null}
+            {(() => {
+              const meta = [item.potSizeLabel, item.potColorLabel]
+                .filter(Boolean)
+                .join(" • ");
+              const line = meta || item.description;
+              if (!line) return null;
+              return (
+                <p className="mt-0.5 line-clamp-1 font-sans text-small text-muted-foreground">
+                  {line}
+                </p>
+              );
+            })()}
           </div>
 
           <Button
@@ -51,7 +58,7 @@ function CartItem({ item }: { item: CartItemType }) {
             size="icon-xs"
             className="size-7 shrink-0 text-muted-foreground hover:bg-transparent hover:text-foreground"
             aria-label={t("remove", { name: item.name })}
-            onClick={() => removeItem(item.plantId)}
+            onClick={() => removeItem(item.id)}
           >
             <Trash2Icon className="size-3.5 stroke-[1.5]" />
           </Button>
@@ -70,7 +77,7 @@ function CartItem({ item }: { item: CartItemType }) {
               className="size-6 rounded-full text-foreground hover:bg-background"
               aria-label={t("decreaseQuantity", { name: item.name })}
               disabled={item.quantity <= 1}
-              onClick={() => decreaseQuantity(item.plantId)}
+              onClick={() => decreaseQuantity(item.id)}
             >
               <MinusIcon className="size-3.5 stroke-[1.75]" />
             </Button>
@@ -86,7 +93,7 @@ function CartItem({ item }: { item: CartItemType }) {
               size="icon-xs"
               className="size-6 rounded-full text-foreground hover:bg-background"
               aria-label={t("increaseQuantity", { name: item.name })}
-              onClick={() => increaseQuantity(item.plantId)}
+              onClick={() => increaseQuantity(item.id)}
             >
               <PlusIcon className="size-3.5 stroke-[1.75]" />
             </Button>

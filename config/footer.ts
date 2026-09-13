@@ -7,10 +7,10 @@ export const FOOTER_BRAND = {
 export const FOOTER_SHOP = {
   titleKey: "shop.title",
   links: [
-    { href: "/plants", labelKey: "shop.newArrivals" },
-    { href: "/plants", labelKey: "shop.bestSellers" },
-    { href: "/plants", labelKey: "shop.categories" },
-    { href: "/plants", labelKey: "shop.plants" },
+    { href: "/#products", labelKey: "shop.newArrivals" },
+    { href: "/#products", labelKey: "shop.bestSellers" },
+    { href: "/#products", labelKey: "shop.categories" },
+    { href: "/#products", labelKey: "shop.plants" },
   ],
 } as const;
 

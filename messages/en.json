@@ -127,5 +127,31 @@
     "readMore": "Read article",
     "backToBlog": "Back to blog",
     "empty": "No posts yet."
+  },
+  "plantDetail": {
+    "home": "Home",
+    "breadcrumb": "Breadcrumb",
+    "bestseller": "Best seller",
+    "ratingLabel": "{rating} out of 5 stars",
+    "potSize": "Pot size",
+    "potColor": "Pot color",
+    "sizeGuide": "Size Guide",
+    "quantity": "Quantity",
+    "increaseQuantity": "Increase quantity",
+    "decreaseQuantity": "Decrease quantity",
+    "addToCart": "Add to Cart — {price}",
+    "favorite": "Save plant",
+    "unfavorite": "Remove from saved",
+    "plantCare": "Plant Care",
+    "light": "Light",
+    "water": "Water",
+    "pets": "Pets",
+    "selectImage": "View image {index} of {name}",
+    "selectVideo": "View video preview of {name}",
+    "videoPreview": "Video preview",
+    "related": {
+      "title": "You Might Also Like",
+      "viewAll": "View all"
+    }
   }
 }

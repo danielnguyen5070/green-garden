@@ -76,6 +76,7 @@ function PlantList({
 
   return (
     <section
+      id="products"
       data-slot="plant-list"
       aria-labelledby="plant-list-heading"
       className={cn("bg-background py-8", className)}

@@ -3,6 +3,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { CartItem, CartPlantInput } from "@/types/cart";
+import { getCartLineId } from "@/types/cart";
 import {
   getAmountToFreeShipping,
   getCartShipping,
@@ -17,10 +18,10 @@ type CartState = {
   isOpen: boolean;
   hasHydrated: boolean;
   addItem: (plant: CartPlantInput) => void;
-  removeItem: (plantId: string) => void;
-  increaseQuantity: (plantId: string) => void;
-  decreaseQuantity: (plantId: string) => void;
-  updateQuantity: (plantId: string, quantity: number) => void;
+  removeItem: (lineId: string) => void;
+  increaseQuantity: (lineId: string) => void;
+  decreaseQuantity: (lineId: string) => void;
+  updateQuantity: (lineId: string, quantity: number) => void;
   clearCart: () => void;
   openCart: () => void;
   closeCart: () => void;
@@ -41,31 +42,36 @@ export const useCartStore = create<CartState>()(
       hasHydrated: false,
 
       addItem: (plant) => {
+        const quantity = Math.max(1, Math.floor(plant.quantity ?? 1));
+        const lineId = getCartLineId(plant);
+
         set((state) => {
-          const existing = state.items.find(
-            (item) => item.plantId === plant.id,
-          );
+          const existing = state.items.find((item) => item.id === lineId);
 
           if (existing) {
             return {
               isOpen: true,
               items: state.items.map((item) =>
-                item.plantId === plant.id
-                  ? { ...item, quantity: item.quantity + 1 }
+                item.id === lineId
+                  ? { ...item, quantity: item.quantity + quantity }
                   : item,
               ),
             };
           }
 
           const nextItem: CartItem = {
-            id: plant.id,
+            id: lineId,
             plantId: plant.id,
             name: plant.name,
             slug: plant.slug,
             image: plant.image,
             price: plant.price,
-            quantity: 1,
+            quantity,
             description: plant.description,
+            potSizeId: plant.potSizeId,
+            potSizeLabel: plant.potSizeLabel,
+            potColorId: plant.potColorId,
+            potColorLabel: plant.potColorLabel,
           };
 
           return {
@@ -75,44 +81,42 @@ export const useCartStore = create<CartState>()(
         });
       },
 
-      removeItem: (plantId) => {
+      removeItem: (lineId) => {
         set((state) => ({
-          items: state.items.filter((item) => item.plantId !== plantId),
+          items: state.items.filter((item) => item.id !== lineId),
         }));
       },
 
-      increaseQuantity: (plantId) => {
+      increaseQuantity: (lineId) => {
         set((state) => ({
           items: state.items.map((item) =>
-            item.plantId === plantId
+            item.id === lineId
               ? { ...item, quantity: item.quantity + 1 }
               : item,
           ),
         }));
       },
 
-      decreaseQuantity: (plantId) => {
+      decreaseQuantity: (lineId) => {
         set((state) => ({
           items: state.items.map((item) => {
-            if (item.plantId !== plantId) return item;
+            if (item.id !== lineId) return item;
             return { ...item, quantity: Math.max(1, item.quantity - 1) };
           }),
         }));
       },
 
-      updateQuantity: (plantId, quantity) => {
+      updateQuantity: (lineId, quantity) => {
         const nextQuantity = Math.floor(quantity);
 
         if (nextQuantity < 1) {
-          get().removeItem(plantId);
+          get().removeItem(lineId);
           return;
         }
 
         set((state) => ({
           items: state.items.map((item) =>
-            item.plantId === plantId
-              ? { ...item, quantity: nextQuantity }
-              : item,
+            item.id === lineId ? { ...item, quantity: nextQuantity } : item,
           ),
         }));
       },

@@ -48,7 +48,7 @@ async function Hero({ className }: { className?: string }) {
               <Button
                 size="lg"
                 className="h-12 rounded-xl px-5 text-sm shadow-elevated sm:min-w-[10.5rem]"
-                render={<Link href="/plants" />}
+                render={<Link href="/#products" />}
                 nativeButton={false}
               >
                 {t("primaryCta")}

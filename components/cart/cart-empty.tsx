@@ -12,7 +12,7 @@ function CartEmpty() {
 
   function handleShopPlants() {
     closeCart();
-    router.push("/plants");
+    router.push("/#products");
   }
 
   return (
