@@ -367,5 +367,10 @@
         "answer": "Use the contact details in our footer or reach out through the Contact Us link. We are happy to help with plant selection, orders, and care questions."
       }
     }
+  },
+  "contact": {
+    "navLabel": "Quick contact",
+    "call": "Call us",
+    "zalo": "Chat on Zalo"
   }
 }

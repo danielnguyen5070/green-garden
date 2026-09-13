@@ -367,5 +367,10 @@
         "answer": "Xem thông tin liên hệ ở chân trang hoặc dùng liên kết Liên hệ. Chúng tôi sẵn sàng hỗ trợ chọn cây, đơn hàng và chăm sóc."
       }
     }
+  },
+  "contact": {
+    "navLabel": "Liên hệ nhanh",
+    "call": "Gọi chúng tôi",
+    "zalo": "Chat Zalo"
   }
 }
