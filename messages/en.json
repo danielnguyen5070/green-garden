@@ -200,5 +200,60 @@
       "help": "Help Center",
       "copyright": "© {year} Green Garden Plant Store. All rights reserved."
     }
+  },
+  "about": {
+    "metadata": {
+      "title": "Meet the Founder | Green Garden",
+      "description": "Meet the person behind Green Garden — a personal story of growing, caring for, and sharing plants with others."
+    },
+    "ownerHero": {
+      "eyebrow": "Meet the Founder",
+      "title": "Plants have always been part of my story.",
+      "description": "Green Garden started from a simple love for growing, caring for, and sharing plants with others.",
+      "primaryCta": "Explore Our Plants",
+      "secondaryCta": "Read Our Care Guide",
+      "imageAlt": "Portrait of the Green Garden founder among indoor plants"
+    },
+    "ownerStory": {
+      "introTitle": "Meet the person behind Green Garden.",
+      "introDescription": "I first fell in love with plants by watching them grow — slowly, patiently, and full of quiet wonder. That curiosity grew into a habit of learning what each plant needs, and a joy in helping friends find the right green companion for their homes.",
+      "introImageAlt": "A calm plant corner with warm natural light",
+      "journeyTitle": "From a love of plants to Green Garden.",
+      "journeyParagraph1": "Green Garden began when I realized how many people wanted plants in their lives, but felt unsure where to start. Choosing a plant should feel inspiring, not overwhelming.",
+      "journeyParagraph2": "I started carefully selecting healthy plants, learning their habits, and sharing practical guidance — so every home could feel a little more alive.",
+      "journeyParagraph3": "Today, Green Garden is still guided by that same intention: help you find a plant that fits your space, your routine, and the way you want to live.",
+      "journeyImageAlt": "Healthy nursery plants arranged in soft natural light"
+    },
+    "ownerPhilosophy": {
+      "title": "Every plant has a place where it can thrive.",
+      "description": "I believe the best plant is not always the rarest or most beautiful one. It is the one that fits your space, your lifestyle, and the way you want to live."
+    },
+    "ownerValues": {
+      "title": "What matters to us",
+      "healthyPlants": {
+        "title": "Healthy Plants",
+        "description": "Every plant should arrive healthy, carefully prepared, and ready to settle into its new home."
+      },
+      "honestGuidance": {
+        "title": "Honest Guidance",
+        "description": "We recommend plants based on your space and routine, not simply what is trending."
+      },
+      "growingTogether": {
+        "title": "Growing Together",
+        "description": "Green Garden is here to help you become more confident in caring for your plants."
+      }
+    },
+    "ownerNote": {
+      "title": "Thank you for growing with us.",
+      "description": "Every order from Green Garden is more than a sale. It is another plant finding a new home and another person beginning or continuing their plant journey.",
+      "name": "The Founder",
+      "role": "Owner, Green Garden",
+      "imageAlt": "Small portrait of the Green Garden founder"
+    },
+    "ownerCta": {
+      "title": "Let's find the right plant for your space.",
+      "shop": "Shop Plants",
+      "careGuide": "Explore Plant Care"
+    }
   }
 }

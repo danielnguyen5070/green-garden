@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="plants-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#eef3ea"/>
+      <stop offset="55%" stop-color="#dce8d6"/>
+      <stop offset="100%" stop-color="#c5d4c0"/>
+    </linearGradient>
+    <linearGradient id="plants-pot" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d89a6a"/>
+      <stop offset="100%" stop-color="#b9784f"/>
+    </linearGradient>
+    <linearGradient id="plants-leaf" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4f7a52"/>
+      <stop offset="100%" stop-color="#2f5d3a"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#plants-bg)"/>
+  <ellipse cx="560" cy="140" rx="220" ry="88" fill="#fff8ef" opacity="0.5"/>
+  <rect x="0" y="820" width="800" height="180" fill="#d7e0d2"/>
+  <ellipse cx="400" cy="860" rx="280" ry="24" fill="#243127" opacity="0.06"/>
+  <rect x="118" y="668" width="86" height="108" rx="10" fill="url(#plants-pot)"/>
+  <path d="M161 668c-18-96-62-150-96-172 58 28 96 96 110 172Z" fill="url(#plants-leaf)"/>
+  <path d="M161 668c22-98 72-154 112-176-64 36-92 102-112 176Z" fill="#3f6b45"/>
+  <rect x="248" y="628" width="110" height="148" rx="12" fill="#c4b7a6"/>
+  <ellipse cx="303" cy="500" rx="72" ry="98" fill="url(#plants-leaf)"/>
+  <ellipse cx="254" cy="528" rx="46" ry="76" fill="#3f6b45" transform="rotate(-22 254 528)"/>
+  <ellipse cx="354" cy="530" rx="46" ry="76" fill="#4f7a52" transform="rotate(24 354 530)"/>
+  <ellipse cx="303" cy="454" rx="34" ry="56" fill="#254b2e"/>
+  <rect x="402" y="652" width="92" height="124" rx="11" fill="url(#plants-pot)"/>
+  <path d="M448 652c-28-112 8-184 52-210-68 46-74 128-52 210Z" fill="url(#plants-leaf)"/>
+  <path d="M448 652c32-104 6-180-32-210 54 40 68 120 32 210Z" fill="#3f6b45"/>
+  <rect x="536" y="678" width="78" height="98" rx="10" fill="#c4b7a6"/>
+  <path d="M575 678c-10-78-46-128-76-150 48 24 84 84 90 150Z" fill="url(#plants-leaf)"/>
+  <path d="M575 678c16-80 54-132 90-152-54 32-80 92-90 152Z" fill="#3f6b45"/>
+  <rect x="648" y="702" width="64" height="80" rx="8" fill="url(#plants-pot)"/>
+  <ellipse cx="680" cy="652" rx="28" ry="48" fill="#254b2e"/>
+</svg>
