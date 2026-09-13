@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { fontVariables } from "@/lib/fonts";
@@ -21,13 +21,13 @@ export function generateStaticParams() {
 }
 
 export default async function LocaleLayout({ children, params }: Props) {
-  const { locale: localeParam } = await params;
+  const { locale } = await params;
 
-  if (!hasLocale(routing.locales, localeParam)) {
+  if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
 
-  const locale = await getLocale();
+  setRequestLocale(locale);
   const messages = await getMessages();
 
   return (
