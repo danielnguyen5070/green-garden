@@ -59,8 +59,8 @@
     },
     "social": {
       "title": "Theo dõi",
-      "instagram": "Instagram",
-      "facebook": "Facebook"
+      "facebook": "Facebook",
+      "youtube": "YouTube"
     },
     "copyright": "© {year} Green Garden. Bảo lưu mọi quyền."
   },
@@ -76,9 +76,9 @@
       "socialProof": "Được tin tưởng bởi hơn 2.000 người yêu cây.",
       "socialProofCount": "+2k",
       "imageAlt": "Bộ sưu tập cây nội thất trong chậu gốm và đất nung bên cửa sổ sáng",
-      "wateringTip": {
-        "title": "Mẹo tưới nước",
-        "description": "Hầu hết cây nội thất thích để đất khô nhẹ giữa các lần tưới."
+      "contactCta": {
+        "title": "Cần tư vấn, đặt hàng?",
+        "description": "Hãy nhắn tin qua Zalo hoặc SMS {phone}."
       }
     },
     "products": {
@@ -370,7 +370,7 @@
   },
   "contact": {
     "navLabel": "Liên hệ nhanh",
-    "call": "Gọi chúng tôi",
+    "sms": "Nhắn tin SMS",
     "zalo": "Chat Zalo"
   }
 }

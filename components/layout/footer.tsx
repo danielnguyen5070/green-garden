@@ -23,30 +23,6 @@ const linkClassName =
 const headingClassName =
   "font-heading text-[0.9375rem] font-medium tracking-tight text-primary-foreground";
 
-function InstagramIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-    >
-      <rect
-        x="3"
-        y="3"
-        width="18"
-        height="18"
-        rx="5"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-      <circle cx="12" cy="12" r="3.75" stroke="currentColor" strokeWidth="1.5" />
-      <circle cx="17.35" cy="6.65" r="1" fill="currentColor" />
-    </svg>
-  );
-}
-
 function FacebookIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -61,12 +37,26 @@ function FacebookIcon({ className }: { className?: string }) {
   );
 }
 
+function YoutubeIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
+      <path d="M22.5 7.2a2.9 2.9 0 0 0-2-2.1C18.7 4.7 12 4.7 12 4.7s-6.7 0-8.5.4a2.9 2.9 0 0 0-2 2.1A30 30 0 0 0 1.2 12a30 30 0 0 0 .3 4.8 2.9 2.9 0 0 0 2 2.1c1.8.4 8.5.4 8.5.4s6.7 0 8.5-.4a2.9 2.9 0 0 0 2-2.1 30 30 0 0 0 .3-4.8 30 30 0 0 0-.3-4.8ZM10 15.2V8.8l5.5 3.2L10 15.2Z" />
+    </svg>
+  );
+}
+
 const SOCIAL_ICONS: Record<
   FooterSocialIcon,
   (props: { className?: string }) => ReactNode
 > = {
-  instagram: InstagramIcon,
   facebook: FacebookIcon,
+  youtube: YoutubeIcon,
 };
 
 async function FooterBrand() {

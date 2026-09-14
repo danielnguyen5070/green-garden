@@ -1,8 +1,8 @@
 import { getTranslations } from "next-intl/server";
-import { PhoneIcon } from "lucide-react";
+import { MessageSquareIcon } from "lucide-react";
 import {
   CONTACT_CONFIG,
-  CONTACT_PHONE_HREF,
+  CONTACT_SMS_HREF,
 } from "@/config/contact";
 import { cn } from "@/lib/utils";
 
@@ -32,21 +32,6 @@ async function FloatingContact({ className }: { className?: string }) {
       )}
     >
       <a
-        href={CONTACT_PHONE_HREF}
-        aria-label={t("call")}
-        className={cn(
-          actionClassName,
-          "bg-primary text-primary-foreground hover:bg-primary/90"
-        )}
-      >
-        <span className={tooltipClassName}>{t("call")}</span>
-        <PhoneIcon
-          className="size-5 stroke-[1.75] md:size-[1.35rem]"
-          aria-hidden="true"
-        />
-      </a>
-
-      <a
         href={CONTACT_CONFIG.zaloUrl}
         target="_blank"
         rel="noopener noreferrer"
@@ -63,6 +48,21 @@ async function FloatingContact({ className }: { className?: string }) {
         >
           Zalo
         </span>
+      </a>
+
+      <a
+        href={CONTACT_SMS_HREF}
+        aria-label={t("sms")}
+        className={cn(
+          actionClassName,
+          "bg-primary text-primary-foreground hover:bg-primary/90"
+        )}
+      >
+        <span className={tooltipClassName}>{t("sms")}</span>
+        <MessageSquareIcon
+          className="size-5 stroke-[1.75] md:size-[1.35rem]"
+          aria-hidden="true"
+        />
       </a>
     </nav>
   );

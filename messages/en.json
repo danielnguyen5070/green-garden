@@ -59,8 +59,8 @@
     },
     "social": {
       "title": "Follow Us",
-      "instagram": "Instagram",
-      "facebook": "Facebook"
+      "facebook": "Facebook",
+      "youtube": "YouTube"
     },
     "copyright": "© {year} Green Garden. All rights reserved."
   },
@@ -76,9 +76,9 @@
       "socialProof": "Trusted by over 2,000 happy plant parents.",
       "socialProofCount": "+2k",
       "imageAlt": "A curated arrangement of indoor plants in ceramic and terracotta pots by a bright window",
-      "wateringTip": {
-        "title": "Watering Tip",
-        "description": "Most indoor plants prefer a dry-out between waterings."
+      "contactCta": {
+        "title": "Need advice or to order?",
+        "description": "Message us on Zalo or SMS {phone}, and the shop will get back to you as soon as possible."
       }
     },
     "products": {
@@ -370,7 +370,7 @@
   },
   "contact": {
     "navLabel": "Quick contact",
-    "call": "Call us",
+    "sms": "Send a message",
     "zalo": "Chat on Zalo"
   }
 }

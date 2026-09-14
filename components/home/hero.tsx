@@ -1,8 +1,9 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
-import { ArrowRightIcon, DropletsIcon, LeafIcon, SunIcon } from "lucide-react";
+import { ArrowRightIcon, LeafIcon, MessageCircleIcon, SunIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
+import { CONTACT_CONFIG } from "@/config/contact";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
@@ -114,10 +115,10 @@ async function Hero({ className }: { className?: string }) {
                 className="pointer-events-none absolute inset-[4%] -z-0 bg-[radial-gradient(ellipse_at_70%_28%,color-mix(in_oklab,var(--brand-earth),transparent_78%)_0%,transparent_55%),radial-gradient(ellipse_at_28%_78%,color-mix(in_oklab,var(--brand-sage),transparent_28%)_0%,transparent_60%),radial-gradient(ellipse_at_55%_48%,color-mix(in_oklab,var(--primary),transparent_90%)_0%,transparent_68%)] blur-3xl"
               />
 
-              <div className="absolute inset-[1.5%] [filter:drop-shadow(0_20px_40px_rgb(36_49_39_/_0.11))_drop-shadow(0_6px_14px_rgb(36_49_39_/_0.06))] md:inset-[2%]">
+              <div className="absolute inset-[1.5%] [filter:drop-shadow(0_24px_48px_rgb(36_49_39_/_0.18))_drop-shadow(0_10px_20px_rgb(36_49_39_/_0.1))_drop-shadow(0_2px_6px_rgb(36_49_39_/_0.08))] md:inset-[2%]">
                 <div className="relative h-full w-full overflow-hidden [clip-path:url(#gg-hero-organic-clip)]">
                   <Image
-                    src="/images/hero-plants.svg"
+                    src="/images/hero-plants.avif"
                     alt={t("imageAlt")}
                     fill
                     priority
@@ -127,20 +128,30 @@ async function Hero({ className }: { className?: string }) {
                 </div>
               </div>
 
-              <aside className="absolute bottom-[6%] left-0 z-10 w-[min(100%,16.5rem)] rounded-2xl border border-border/70 bg-card p-3.5 shadow-elevated sm:bottom-[8%] sm:left-0 sm:w-[17.5rem] sm:p-4">
-                <div className="flex gap-3">
+              <aside className="absolute bottom-[6%] left-0 z-10 w-[min(100%,16.5rem)] sm:bottom-[8%] sm:left-0 sm:w-[17.5rem]">
+                <a
+                  href={CONTACT_CONFIG.zaloUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex gap-3 rounded-2xl border border-border/70 bg-card p-3.5 shadow-elevated outline-none transition-colors hover:border-primary/30 hover:bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:p-4"
+                >
                   <span className="mt-0.5 inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                    <DropletsIcon className="size-4 stroke-[1.75]" aria-hidden="true" />
+                    <MessageCircleIcon
+                      className="size-4 stroke-[1.75]"
+                      aria-hidden="true"
+                    />
                   </span>
                   <div className="min-w-0">
-                    <p className="font-sans text-[0.6875rem] font-semibold tracking-[0.12em] text-foreground uppercase">
-                      {t("wateringTip.title")}
+                    <p className="font-sans text-sm font-semibold tracking-tight text-foreground">
+                      {t("contactCta.title")}
                     </p>
                     <p className="mt-1.5 font-sans text-small leading-snug text-muted-foreground">
-                      {t("wateringTip.description")}
+                      {t("contactCta.description", {
+                        phone: CONTACT_CONFIG.phone,
+                      })}
                     </p>
                   </div>
-                </div>
+                </a>
               </aside>
             </div>
           </div>

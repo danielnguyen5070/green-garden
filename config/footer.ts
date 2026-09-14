@@ -1,3 +1,5 @@
+import { CONTACT_CONFIG } from "@/config/contact";
+
 export const FOOTER_BRAND = {
   href: "/",
   nameKey: "brand.name",
@@ -28,14 +30,14 @@ export const FOOTER_SOCIAL = {
   titleKey: "social.title",
   links: [
     {
-      href: "https://www.instagram.com",
-      labelKey: "social.instagram",
-      icon: "instagram",
-    },
-    {
-      href: "https://www.facebook.com",
+      href: CONTACT_CONFIG.facebookUrl,
       labelKey: "social.facebook",
       icon: "facebook",
+    },
+    {
+      href: CONTACT_CONFIG.youtubeUrl,
+      labelKey: "social.youtube",
+      icon: "youtube",
     },
   ],
 } as const;
