@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const metadata: Metadata = {
-  title: "Green Garden",
+  title: "NGOC NGAN",
   description: "Seedling and plant nursery",
   robots: {
     index: false,

@@ -68,7 +68,7 @@ async function FooterBrand() {
         href={FOOTER_BRAND.href}
         className="inline-flex items-center gap-2.5 rounded-md outline-none transition-opacity duration-200 hover:opacity-80 focus-visible:ring-2 focus-visible:ring-brand-sage/60 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-deep"
       >
-        <LogoMark className="text-primary-foreground" />
+        <LogoMark className="brightness-0 invert" />
         <span className="font-sans text-base font-semibold tracking-tight text-primary-foreground sm:text-[1.05rem]">
           {t(FOOTER_BRAND.nameKey)}
         </span>

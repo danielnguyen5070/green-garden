@@ -16,10 +16,9 @@ function Header({ className }: { className?: string }) {
       )}
     >
       <Container className="flex h-[4.75rem] items-center gap-4 md:h-20 md:gap-6 lg:gap-10">
-        <div className="flex min-w-0 items-center gap-6 lg:gap-10">
-          <Logo />
-          <Navigation className="hidden md:block" />
-        </div>
+        <Logo />
+
+        <Navigation className="hidden md:block" />
 
         <div className="ml-auto flex min-w-0 items-center gap-1.5 sm:gap-2.5 md:gap-3">
           <HeaderSearch className="max-w-[9.5rem] sm:max-w-[11rem] md:max-w-[13rem] lg:max-w-56" />

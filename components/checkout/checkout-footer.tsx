@@ -21,7 +21,7 @@ async function CheckoutFooter({ className }: { className?: string }) {
     >
       <Container className="flex flex-col gap-4 py-6 sm:flex-row sm:items-center sm:justify-between sm:gap-6 md:py-7">
         <div className="flex items-center gap-2.5">
-          <LogoMark className="size-5 text-muted-foreground" />
+          <LogoMark className="size-5 opacity-60" />
           <p className="font-sans text-small text-muted-foreground">
             {t("copyright", { year })}
           </p>
