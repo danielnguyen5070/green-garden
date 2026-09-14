@@ -14,6 +14,10 @@ type Props = {
 export const metadata: Metadata = {
   title: "Green Garden",
   description: "Seedling and plant nursery",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export function generateStaticParams() {

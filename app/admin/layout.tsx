@@ -5,6 +5,10 @@ import "../globals.css";
 export const metadata: Metadata = {
   title: "Green Garden Admin",
   description: "Green Garden administration",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function AdminRootLayout({
