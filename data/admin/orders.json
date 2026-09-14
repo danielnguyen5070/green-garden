@@ -1,0 +1,62 @@
+[
+  {
+    "id": "ORD-1042",
+    "customer": "Lan Nguyen",
+    "email": "lan.nguyen@email.com",
+    "items": 3,
+    "total": 890000,
+    "payment": "paid",
+    "status": "processing",
+    "date": "2026-09-12"
+  },
+  {
+    "id": "ORD-1041",
+    "customer": "Minh Tran",
+    "email": "minh.tran@email.com",
+    "items": 1,
+    "total": 320000,
+    "payment": "paid",
+    "status": "shipped",
+    "date": "2026-09-11"
+  },
+  {
+    "id": "ORD-1040",
+    "customer": "Hoa Pham",
+    "email": "hoa.pham@email.com",
+    "items": 5,
+    "total": 1450000,
+    "payment": "pending",
+    "status": "pending",
+    "date": "2026-09-11"
+  },
+  {
+    "id": "ORD-1039",
+    "customer": "David Lee",
+    "email": "david.lee@email.com",
+    "items": 2,
+    "total": 560000,
+    "payment": "paid",
+    "status": "delivered",
+    "date": "2026-09-10"
+  },
+  {
+    "id": "ORD-1038",
+    "customer": "Thu Vo",
+    "email": "thu.vo@email.com",
+    "items": 4,
+    "total": 980000,
+    "payment": "refunded",
+    "status": "cancelled",
+    "date": "2026-09-09"
+  },
+  {
+    "id": "ORD-1037",
+    "customer": "James Park",
+    "email": "james.park@email.com",
+    "items": 2,
+    "total": 450000,
+    "payment": "paid",
+    "status": "delivered",
+    "date": "2026-09-08"
+  }
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "id": "plants",
+    "value": 128,
+    "changeKey": "plantsChange",
+    "trend": "up",
+    "icon": "leaf"
+  },
+  {
+    "id": "orders",
+    "value": 324,
+    "changeKey": "ordersChange",
+    "trend": "up",
+    "icon": "shopping-bag"
+  },
+  {
+    "id": "revenue",
+    "value": 12480,
+    "changeKey": "revenueChange",
+    "trend": "up",
+    "icon": "banknote",
+    "format": "currency"
+  },
+  {
+    "id": "customers",
+    "value": 1248,
+    "changeKey": "customersChange",
+    "trend": "up",
+    "icon": "users"
+  }
+]

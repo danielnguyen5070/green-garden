@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { adminCopy } from "@/lib/admin-copy";
 import { fontVariables } from "@/lib/fonts";
 import "../globals.css";
 
 export const metadata: Metadata = {
-  title: "Green Garden Admin",
-  description: "Green Garden administration",
+  title: `${adminCopy.brand} ${adminCopy.brandSubtitle}`,
+  description: adminCopy.dashboard.description,
   robots: {
     index: false,
     follow: false,
