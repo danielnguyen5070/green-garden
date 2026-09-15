@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Toaster } from "@/components/ui/toaster";
 import { adminCopy } from "@/lib/admin-copy";
 import { fontVariables } from "@/lib/fonts";
 import "../globals.css";
@@ -18,8 +19,11 @@ export default function AdminRootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={`${fontVariables} h-full antialiased`}>
-      <body className="flex min-h-full flex-col font-sans">{children}</body>
+    <html lang="en" className={`${fontVariables} h-full antialiased`}>
+      <body className="flex min-h-full flex-col font-sans">
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

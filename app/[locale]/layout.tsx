@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { Toaster } from "@/components/ui/toaster";
 import { routing } from "@/i18n/routing";
 import { fontVariables } from "@/lib/fonts";
 import "../globals.css";
@@ -39,6 +40,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         <NextIntlClientProvider locale={locale} messages={messages}>
           {children}
         </NextIntlClientProvider>
+        <Toaster />
       </body>
     </html>
   );

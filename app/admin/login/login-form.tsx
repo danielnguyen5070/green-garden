@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { login } from "@/lib/api/auth";
 import { ApiError, getErrorMessage } from "@/lib/api/errors";
 import { adminCopy } from "@/lib/admin-copy";
+import { toast } from "@/lib/toast";
 
 type AdminLoginFormProps = {
   redirectTo: string;
@@ -15,19 +16,17 @@ type AdminLoginFormProps = {
 
 function AdminLoginForm({ redirectTo }: AdminLoginFormProps) {
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
-    setError(null);
 
     const formData = new FormData(event.currentTarget);
     const email = String(formData.get("email") ?? "").trim();
     const password = String(formData.get("password") ?? "");
 
     if (!email || !password) {
-      setError(adminCopy.login.error);
+      toast.error(adminCopy.login.error);
       return;
     }
 
@@ -38,11 +37,11 @@ function AdminLoginForm({ redirectTo }: AdminLoginFormProps) {
       router.refresh();
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) {
-        setError(adminCopy.login.error);
+        toast.error(adminCopy.login.error);
       } else if (err instanceof ApiError && err.status === 422) {
-        setError(getErrorMessage(err, adminCopy.login.validationError));
+        toast.error(getErrorMessage(err, adminCopy.login.validationError));
       } else {
-        setError(getErrorMessage(err, adminCopy.login.networkError));
+        toast.error(getErrorMessage(err, adminCopy.login.networkError));
       }
     } finally {
       setPending(false);
@@ -78,12 +77,6 @@ function AdminLoginForm({ redirectTo }: AdminLoginFormProps) {
           />
         </div>
       </div>
-
-      {error ? (
-        <p className="text-sm text-destructive" role="alert">
-          {error}
-        </p>
-      ) : null}
 
       <Button
         type="submit"

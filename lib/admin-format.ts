@@ -1,5 +1,5 @@
 /** Admin uses a single locale for number/date formatting. */
-const ADMIN_LOCALE = "vi-VN";
+const ADMIN_LOCALE = "en-US";
 
 export function formatAdminCurrency(value: number): string {
   return new Intl.NumberFormat(ADMIN_LOCALE, {

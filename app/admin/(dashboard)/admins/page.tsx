@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type SubmitEvent } from "react";
 import { MoreHorizontal, Plus } from "lucide-react";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminSection } from "@/components/admin/admin-section";
@@ -41,14 +41,10 @@ import {
 import { getErrorMessage } from "@/lib/api/errors";
 import { adminCopy } from "@/lib/admin-copy";
 import { formatAdminDate } from "@/lib/admin-format";
+import { toast } from "@/lib/toast";
 import type { Admin } from "@/types/admin";
 
 const PAGE_SIZE = 20;
-
-type Feedback = {
-  type: "success" | "error";
-  message: string;
-} | null;
 
 type DialogMode = "create" | "edit" | "password" | null;
 
@@ -58,11 +54,9 @@ export default function AdminAdminsPage() {
   const [reloadToken, setReloadToken] = useState(0);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [feedback, setFeedback] = useState<Feedback>(null);
   const [dialogMode, setDialogMode] = useState<DialogMode>(null);
   const [selected, setSelected] = useState<Admin | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
 
   const totalPages = useMemo(
     () => Math.max(1, Math.ceil(total / PAGE_SIZE)),
@@ -83,10 +77,7 @@ export default function AdminAdminsPage() {
         setTotal(response.total);
       } catch (err) {
         if (controller.signal.aborted) return;
-        setFeedback({
-          type: "error",
-          message: getErrorMessage(err),
-        });
+        toast.error(getErrorMessage(err));
       } finally {
         if (!controller.signal.aborted) {
           setLoading(false);
@@ -99,7 +90,6 @@ export default function AdminAdminsPage() {
   }, [page, reloadToken]);
 
   function refresh(nextPage = page) {
-    setFeedback(null);
     setLoading(true);
     setPage(nextPage);
     setReloadToken((token) => token + 1);
@@ -107,19 +97,16 @@ export default function AdminAdminsPage() {
 
   function openCreate() {
     setSelected(null);
-    setFormError(null);
     setDialogMode("create");
   }
 
   function openEdit(admin: Admin) {
     setSelected(admin);
-    setFormError(null);
     setDialogMode("edit");
   }
 
   function openPassword(admin: Admin) {
     setSelected(admin);
-    setFormError(null);
     setDialogMode("password");
   }
 
@@ -127,14 +114,12 @@ export default function AdminAdminsPage() {
     if (submitting) return;
     setDialogMode(null);
     setSelected(null);
-    setFormError(null);
   }
 
-  async function handleCreate(event: FormEvent<HTMLFormElement>) {
+  async function handleCreate(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     setSubmitting(true);
-    setFormError(null);
     try {
       await createAdmin({
         name: String(formData.get("name") ?? "").trim(),
@@ -142,69 +127,60 @@ export default function AdminAdminsPage() {
         password: String(formData.get("password") ?? ""),
       });
       setDialogMode(null);
-      setFeedback({ type: "success", message: adminCopy.admins.createdSuccess });
+      toast.success(adminCopy.admins.createdSuccess);
       refresh(1);
     } catch (err) {
-      setFormError(getErrorMessage(err));
+      toast.error(getErrorMessage(err));
     } finally {
       setSubmitting(false);
     }
   }
 
-  async function handleEdit(event: FormEvent<HTMLFormElement>) {
+  async function handleEdit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!selected) return;
     const formData = new FormData(event.currentTarget);
     setSubmitting(true);
-    setFormError(null);
     try {
       await updateAdmin(selected.id, {
         name: String(formData.get("name") ?? "").trim(),
         email: String(formData.get("email") ?? "").trim(),
       });
       setDialogMode(null);
-      setFeedback({ type: "success", message: adminCopy.admins.updatedSuccess });
+      toast.success(adminCopy.admins.updatedSuccess);
       refresh(page);
     } catch (err) {
-      setFormError(getErrorMessage(err));
+      toast.error(getErrorMessage(err));
     } finally {
       setSubmitting(false);
     }
   }
 
-  async function handlePassword(event: FormEvent<HTMLFormElement>) {
+  async function handlePassword(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!selected) return;
     const formData = new FormData(event.currentTarget);
     setSubmitting(true);
-    setFormError(null);
     try {
-      await updateAdminPassword(selected.id, {
+      const result = await updateAdminPassword(selected.id, {
         password: String(formData.get("password") ?? ""),
       });
       setDialogMode(null);
-      setFeedback({
-        type: "success",
-        message: adminCopy.admins.passwordSuccess,
-      });
+      toast.success(result.message || adminCopy.admins.passwordSuccess);
     } catch (err) {
-      setFormError(getErrorMessage(err));
+      toast.error(getErrorMessage(err));
     } finally {
       setSubmitting(false);
     }
   }
 
   async function handleToggleStatus(admin: Admin) {
-    setFeedback(null);
     try {
       await updateAdminStatus(admin.id, { is_active: !admin.is_active });
-      setFeedback({ type: "success", message: adminCopy.admins.statusSuccess });
+      toast.success(adminCopy.admins.statusSuccess);
       refresh(page);
     } catch (err) {
-      setFeedback({
-        type: "error",
-        message: getErrorMessage(err),
-      });
+      toast.error(getErrorMessage(err));
     }
   }
 
@@ -222,19 +198,6 @@ export default function AdminAdminsPage() {
       />
 
       <AdminSection title={adminCopy.admins.title} contentClassName="space-y-4">
-        {feedback ? (
-          <p
-            className={
-              feedback.type === "success"
-                ? "text-sm text-success"
-                : "text-sm text-destructive"
-            }
-            role="status"
-          >
-            {feedback.message}
-          </p>
-        ) : null}
-
         {loading ? (
           <p className="text-sm text-muted-foreground">{adminCopy.common.loading}</p>
         ) : admins.length === 0 ? (
@@ -362,7 +325,13 @@ export default function AdminAdminsPage() {
           <form onSubmit={handleCreate} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="create-name">{adminCopy.admins.name}</Label>
-              <Input id="create-name" name="name" required disabled={submitting} />
+              <Input
+                id="create-name"
+                name="name"
+                required
+                disabled={submitting}
+                className="h-11 rounded"
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="create-email">{adminCopy.admins.email}</Label>
@@ -372,6 +341,7 @@ export default function AdminAdminsPage() {
                 type="email"
                 required
                 disabled={submitting}
+                className="h-11 rounded"
               />
             </div>
             <div className="space-y-2">
@@ -383,23 +353,20 @@ export default function AdminAdminsPage() {
                 required
                 minLength={8}
                 disabled={submitting}
+                className="h-11 rounded"
               />
             </div>
-            {formError ? (
-              <p className="text-sm text-destructive" role="alert">
-                {formError}
-              </p>
-            ) : null}
             <DialogFooter>
               <Button
                 type="button"
                 variant="outline"
+                className="rounded"
                 disabled={submitting}
                 onClick={closeDialog}
               >
                 {adminCopy.common.cancel}
               </Button>
-              <Button type="submit" disabled={submitting}>
+              <Button type="submit" disabled={submitting} className="rounded">
                 {submitting ? adminCopy.common.saving : adminCopy.common.create}
               </Button>
             </DialogFooter>
@@ -426,6 +393,7 @@ export default function AdminAdminsPage() {
                 required
                 defaultValue={selected?.name}
                 disabled={submitting}
+                className="h-11 rounded"
               />
             </div>
             <div className="space-y-2">
@@ -437,23 +405,20 @@ export default function AdminAdminsPage() {
                 required
                 defaultValue={selected?.email}
                 disabled={submitting}
+                className="h-11 rounded"
               />
             </div>
-            {formError ? (
-              <p className="text-sm text-destructive" role="alert">
-                {formError}
-              </p>
-            ) : null}
             <DialogFooter>
               <Button
                 type="button"
                 variant="outline"
+                className="rounded"
                 disabled={submitting}
                 onClick={closeDialog}
               >
                 {adminCopy.common.cancel}
               </Button>
-              <Button type="submit" disabled={submitting}>
+              <Button type="submit" disabled={submitting} className="rounded">
                 {submitting ? adminCopy.common.saving : adminCopy.common.save}
               </Button>
             </DialogFooter>
@@ -469,7 +434,9 @@ export default function AdminAdminsPage() {
       >
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{adminCopy.admins.passwordTitle}</DialogTitle>
+            <DialogTitle className="mt-2">
+              {adminCopy.admins.passwordTitle}
+            </DialogTitle>
             <DialogDescription>
               {selected ? selected.email : null}
             </DialogDescription>
@@ -484,23 +451,20 @@ export default function AdminAdminsPage() {
                 required
                 minLength={8}
                 disabled={submitting}
+                className="h-11 rounded"
               />
             </div>
-            {formError ? (
-              <p className="text-sm text-destructive" role="alert">
-                {formError}
-              </p>
-            ) : null}
             <DialogFooter>
               <Button
                 type="button"
                 variant="outline"
+                className="rounded"
                 disabled={submitting}
                 onClick={closeDialog}
               >
                 {adminCopy.common.cancel}
               </Button>
-              <Button type="submit" disabled={submitting}>
+              <Button type="submit" disabled={submitting} className="rounded">
                 {submitting ? adminCopy.common.saving : adminCopy.common.save}
               </Button>
             </DialogFooter>

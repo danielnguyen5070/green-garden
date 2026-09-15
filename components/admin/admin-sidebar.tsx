@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { LogoMark } from "@/components/layout/header/logo";
 import { AdminNav } from "@/components/admin/admin-nav";
-import { Button } from "@/components/ui/button";
 import { adminCopy } from "@/lib/admin-copy";
 import { cn } from "@/lib/utils";
 
@@ -41,26 +40,6 @@ function AdminSidebar({ onNavigate, className }: AdminSidebarProps) {
 
       <div className="flex-1 overflow-y-auto px-3 py-4">
         <AdminNav onNavigate={onNavigate} />
-      </div>
-
-      <div className="border-t border-sidebar-border p-3">
-        <div className="rounded bg-brand-deep px-4 py-4 text-brand-cream">
-          <p className="font-heading text-sm font-semibold">
-            {adminCopy.navigation.help}
-          </p>
-          <p className="mt-1 text-xs text-brand-cream/75">
-            {adminCopy.navigation.helpDescription}
-          </p>
-          <Button
-            variant="secondary"
-            size="sm"
-            className="mt-3 w-full bg-brand-cream text-brand-deep hover:bg-brand-cream/90"
-            nativeButton={false}
-            render={<a href="mailto:support@greengarden.vn" />}
-          >
-            {adminCopy.navigation.helpCta}
-          </Button>
-        </div>
       </div>
     </aside>
   );
