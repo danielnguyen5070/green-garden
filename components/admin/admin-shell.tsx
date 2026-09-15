@@ -1,16 +1,27 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { AdminAuthProvider, useAdminAuth } from "@/components/admin/admin-auth-provider";
 import { AdminMobileNav } from "@/components/admin/admin-mobile-nav";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { AdminTopbar } from "@/components/admin/admin-topbar";
+import { adminCopy } from "@/lib/admin-copy";
 
 type AdminShellProps = {
   children: ReactNode;
 };
 
-function AdminShell({ children }: AdminShellProps) {
+function AdminShellFrame({ children }: AdminShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { loading, admin } = useAdminAuth();
+
+  if (loading || !admin) {
+    return (
+      <div className="flex min-h-dvh flex-1 items-center justify-center bg-background text-sm text-muted-foreground">
+        {adminCopy.common.loading}
+      </div>
+    );
+  }
 
   return (
     <div
@@ -32,6 +43,14 @@ function AdminShell({ children }: AdminShellProps) {
         </main>
       </div>
     </div>
+  );
+}
+
+function AdminShell({ children }: AdminShellProps) {
+  return (
+    <AdminAuthProvider>
+      <AdminShellFrame>{children}</AdminShellFrame>
+    </AdminAuthProvider>
   );
 }
 

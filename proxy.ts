@@ -1,19 +1,15 @@
 import createMiddleware from "next-intl/middleware";
 import { type NextRequest, NextResponse } from "next/server";
 import { routing } from "./i18n/routing";
-import {
-  ADMIN_SESSION_COOKIE,
-  verifyAdminSessionToken,
-} from "./lib/auth-session";
+import { hasAuthCookies } from "./lib/auth-cookies";
 
 const intlMiddleware = createMiddleware(routing);
 
-async function handleAdminAuth(request: NextRequest) {
+function handleAdminAuth(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isLoginPage = pathname === "/admin/login";
-  const token = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
-  const admin = await verifyAdminSessionToken(token);
-  const authenticated = admin !== null;
+  // UX-only gate: FastAPI remains the real security boundary.
+  const authenticated = hasAuthCookies(request.cookies);
 
   if (!authenticated && !isLoginPage) {
     const loginUrl = request.nextUrl.clone();

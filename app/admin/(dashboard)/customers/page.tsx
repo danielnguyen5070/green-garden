@@ -1,5 +1,5 @@
+import { AdminApiUnavailable } from "@/components/admin/admin-api-unavailable";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { AdminSection } from "@/components/admin/admin-section";
 import { adminCopy } from "@/lib/admin-copy";
 
 export default function AdminCustomersPage() {
@@ -9,11 +9,7 @@ export default function AdminCustomersPage() {
         title={adminCopy.customers.title}
         description={adminCopy.customers.description}
       />
-      <AdminSection title={adminCopy.common.comingSoon}>
-        <p className="text-sm text-muted-foreground">
-          {adminCopy.common.placeholderDescription}
-        </p>
-      </AdminSection>
+      <AdminApiUnavailable endpoint="GET /api/v1/customers" />
     </>
   );
 }

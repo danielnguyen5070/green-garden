@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 
 const statusStyles: Record<string, string> = {
   active: "bg-success/15 text-success border-transparent",
+  inactive: "bg-muted text-muted-foreground border-transparent",
   published: "bg-success/15 text-success border-transparent",
   delivered: "bg-success/15 text-success border-transparent",
   paid: "bg-success/15 text-success border-transparent",

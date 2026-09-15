@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   Leaf,
   Settings,
+  Shield,
   ShoppingBag,
   Users,
   type LucideIcon,
@@ -46,6 +47,11 @@ const managementNav: NavItem[] = [
     href: "/admin/customers",
     label: adminCopy.navigation.customers,
     icon: Users,
+  },
+  {
+    href: "/admin/admins",
+    label: adminCopy.navigation.admins,
+    icon: Shield,
   },
   {
     href: "/admin/settings",

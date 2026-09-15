@@ -1,29 +1,56 @@
 "use client";
 
-import { useActionState } from "react";
+import { useState, type SubmitEvent } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { login } from "@/lib/api/auth";
+import { ApiError, getErrorMessage } from "@/lib/api/errors";
 import { adminCopy } from "@/lib/admin-copy";
-import {
-  loginAdminAction,
-  type AdminLoginState,
-} from "@/app/admin/login/actions";
 
 type AdminLoginFormProps = {
   redirectTo: string;
 };
 
 function AdminLoginForm({ redirectTo }: AdminLoginFormProps) {
-  const [state, formAction, pending] = useActionState<
-    AdminLoginState,
-    FormData
-  >(loginAdminAction, null);
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError(null);
+
+    const formData = new FormData(event.currentTarget);
+    const email = String(formData.get("email") ?? "").trim();
+    const password = String(formData.get("password") ?? "");
+
+    if (!email || !password) {
+      setError(adminCopy.login.error);
+      return;
+    }
+
+    setPending(true);
+    try {
+      await login(email, password);
+      router.replace(redirectTo);
+      router.refresh();
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 401) {
+        setError(adminCopy.login.error);
+      } else if (err instanceof ApiError && err.status === 422) {
+        setError(getErrorMessage(err, adminCopy.login.validationError));
+      } else {
+        setError(getErrorMessage(err, adminCopy.login.networkError));
+      }
+    } finally {
+      setPending(false);
+    }
+  }
 
   return (
-    <form action={formAction} className="space-y-5">
-      <input type="hidden" name="redirect" value={redirectTo} />
-
+    <form onSubmit={handleSubmit} className="space-y-5">
       <div className="space-y-5">
         <div className="space-y-2">
           <Label htmlFor="email">{adminCopy.login.email}</Label>
@@ -52,9 +79,9 @@ function AdminLoginForm({ redirectTo }: AdminLoginFormProps) {
         </div>
       </div>
 
-      {state?.error ? (
+      {error ? (
         <p className="text-sm text-destructive" role="alert">
-          {state.error}
+          {error}
         </p>
       ) : null}
 

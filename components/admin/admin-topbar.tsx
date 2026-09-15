@@ -2,11 +2,12 @@
 
 import { Bell, Menu } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { logoutAdminAction } from "@/app/admin/login/actions";
+import { useAdminAuth } from "@/components/admin/admin-auth-provider";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -23,6 +24,7 @@ const titleByPath: Record<string, string> = {
   "/admin/orders": adminCopy.orders.title,
   "/admin/blog": adminCopy.blog.title,
   "/admin/customers": adminCopy.customers.title,
+  "/admin/admins": adminCopy.admins.title,
   "/admin/settings": adminCopy.settings.title,
 };
 
@@ -31,9 +33,17 @@ type AdminTopbarProps = {
   className?: string;
 };
 
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "GG";
+  if (parts.length === 1) return parts[0]!.slice(0, 2).toUpperCase();
+  return `${parts[0]![0] ?? ""}${parts[1]![0] ?? ""}`.toUpperCase();
+}
+
 function AdminTopbar({ onMenuClick, className }: AdminTopbarProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const { admin, logout } = useAdminAuth();
 
   const matchedPath =
     Object.keys(titleByPath)
@@ -45,6 +55,8 @@ function AdminTopbar({ onMenuClick, className }: AdminTopbarProps) {
       ) ?? "/admin";
 
   const title = titleByPath[matchedPath] ?? adminCopy.dashboard.title;
+  const profileName = admin?.name ?? adminCopy.topbar.profileName;
+  const profileEmail = admin?.email ?? adminCopy.topbar.profileEmail;
 
   return (
     <header
@@ -96,18 +108,20 @@ function AdminTopbar({ onMenuClick, className }: AdminTopbarProps) {
               className="flex size-8 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground"
               aria-hidden="true"
             >
-              GG
+              {getInitials(profileName)}
             </span>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel className="font-normal">
-              <span className="block text-sm font-medium text-foreground">
-                {adminCopy.topbar.profileName}
-              </span>
-              <span className="block text-xs text-muted-foreground">
-                {adminCopy.topbar.profileEmail}
-              </span>
-            </DropdownMenuLabel>
+            <DropdownMenuGroup>
+              <DropdownMenuLabel className="font-normal">
+                <span className="block text-sm font-medium text-foreground">
+                  {profileName}
+                </span>
+                <span className="block text-xs text-muted-foreground">
+                  {profileEmail}
+                </span>
+              </DropdownMenuLabel>
+            </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="cursor-pointer"
@@ -118,7 +132,7 @@ function AdminTopbar({ onMenuClick, className }: AdminTopbarProps) {
             <DropdownMenuItem
               className="cursor-pointer"
               onClick={() => {
-                void logoutAdminAction();
+                void logout();
               }}
             >
               {adminCopy.topbar.signOut}

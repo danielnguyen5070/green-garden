@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { adminCopy } from "@/lib/admin-copy";
-import { getSafeAdminRedirect } from "@/lib/auth";
+import { getSafeAdminRedirect } from "@/lib/auth-cookies";
 import { AdminLoginForm } from "./login-form";
 
 type Props = {
