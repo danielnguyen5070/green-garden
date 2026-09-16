@@ -45,17 +45,6 @@ export type AdminStat = {
   format?: "currency" | "number";
 };
 
-export type AdminOrder = {
-  id: string;
-  customer: string;
-  email: string;
-  items: number;
-  total: number;
-  payment: "paid" | "pending" | "refunded";
-  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
-  date: string;
-};
-
 export type AdminBlogPost = {
   id: string;
   title: string;
