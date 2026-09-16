@@ -11,7 +11,6 @@ export const adminCopy = {
     plants: "Plants",
     categories: "Categories",
     orders: "Orders",
-    blog: "Blog",
     management: "Management",
     customers: "Customers",
     admins: "Admins",
@@ -329,20 +328,6 @@ export const adminCopy = {
       status: "Status",
       date: "Date",
     },
-  },
-  blog: {
-    title: "Blog",
-    description: "Manage care guides and nursery stories.",
-    add: "Add post",
-    searchPlaceholder: "Search posts...",
-    table: {
-      title: "Title",
-      status: "Status",
-      author: "Author",
-      published: "Published",
-      updated: "Updated",
-    },
-    unpublished: "—",
   },
   customers: {
     title: "Customers",

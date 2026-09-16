@@ -45,15 +45,6 @@ export type AdminStat = {
   format?: "currency" | "number";
 };
 
-export type AdminBlogPost = {
-  id: string;
-  title: string;
-  status: "published" | "draft" | "scheduled";
-  author: string;
-  published: string | null;
-  updated: string;
-};
-
 export type AdminSalesPoint = {
   label: string;
   value: number;

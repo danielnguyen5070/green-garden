@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  FileText,
   FolderTree,
   LayoutDashboard,
   Leaf,
@@ -39,7 +38,6 @@ const primaryNav: NavItem[] = [
     label: adminCopy.navigation.orders,
     icon: ShoppingBag,
   },
-  { href: "/admin/blog", label: adminCopy.navigation.blog, icon: FileText },
 ];
 
 const managementNav: NavItem[] = [

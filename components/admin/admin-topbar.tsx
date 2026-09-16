@@ -22,7 +22,6 @@ const titleByPath: Record<string, string> = {
   "/admin/plants": adminCopy.plants.title,
   "/admin/categories": adminCopy.categories.title,
   "/admin/orders": adminCopy.orders.title,
-  "/admin/blog": adminCopy.blog.title,
   "/admin/customers": adminCopy.customers.title,
   "/admin/admins": adminCopy.admins.title,
   "/admin/settings": adminCopy.settings.title,
