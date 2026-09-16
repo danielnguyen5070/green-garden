@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 
 type AdminSectionProps = {
-  title: string;
+  title?: string;
   description?: string;
   action?: ReactNode;
   children: ReactNode;
@@ -26,15 +26,21 @@ function AdminSection({
   className,
   contentClassName,
 }: AdminSectionProps) {
+  const hasHeader = Boolean(title || description || action);
+
   return (
     <Card data-slot="admin-section" className={cn("shadow-none", className)}>
-      <CardHeader className="border-b">
-        <CardTitle className="text-base font-semibold md:text-lg">
-          {title}
-        </CardTitle>
-        {description ? <CardDescription>{description}</CardDescription> : null}
-        {action ? <CardAction>{action}</CardAction> : null}
-      </CardHeader>
+      {hasHeader ? (
+        <CardHeader className="border-b">
+          {title ? (
+            <CardTitle className="text-base font-semibold md:text-lg">
+              {title}
+            </CardTitle>
+          ) : null}
+          {description ? <CardDescription>{description}</CardDescription> : null}
+          {action ? <CardAction>{action}</CardAction> : null}
+        </CardHeader>
+      ) : null}
       <CardContent className={cn("pt-(--card-spacing)", contentClassName)}>
         {children}
       </CardContent>

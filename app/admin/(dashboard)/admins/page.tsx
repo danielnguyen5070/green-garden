@@ -187,7 +187,6 @@ export default function AdminAdminsPage() {
   return (
     <>
       <AdminPageHeader
-        title={adminCopy.admins.title}
         description={adminCopy.admins.description}
         actions={
           <Button type="button" onClick={openCreate}>
@@ -197,7 +196,7 @@ export default function AdminAdminsPage() {
         }
       />
 
-      <AdminSection title={adminCopy.admins.title} contentClassName="space-y-4">
+      <AdminSection contentClassName="space-y-4">
         {loading ? (
           <p className="text-sm text-muted-foreground">{adminCopy.common.loading}</p>
         ) : admins.length === 0 ? (
@@ -318,9 +317,6 @@ export default function AdminAdminsPage() {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{adminCopy.admins.createTitle}</DialogTitle>
-            <DialogDescription>
-              {adminCopy.admins.description}
-            </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleCreate} className="space-y-4">
             <div className="space-y-2">
@@ -330,7 +326,7 @@ export default function AdminAdminsPage() {
                 name="name"
                 required
                 disabled={submitting}
-                className="h-11 rounded"
+                className="h-11 rounded-full"
               />
             </div>
             <div className="space-y-2">
@@ -341,7 +337,7 @@ export default function AdminAdminsPage() {
                 type="email"
                 required
                 disabled={submitting}
-                className="h-11 rounded"
+                className="h-11 rounded-full"
               />
             </div>
             <div className="space-y-2">
@@ -353,20 +349,20 @@ export default function AdminAdminsPage() {
                 required
                 minLength={8}
                 disabled={submitting}
-                className="h-11 rounded"
+                className="h-11 rounded-full"
               />
             </div>
             <DialogFooter>
               <Button
                 type="button"
                 variant="outline"
-                className="rounded"
+                className="rounded-full"
                 disabled={submitting}
                 onClick={closeDialog}
               >
                 {adminCopy.common.cancel}
               </Button>
-              <Button type="submit" disabled={submitting} className="rounded">
+              <Button type="submit" disabled={submitting} className="rounded-full w-24">
                 {submitting ? adminCopy.common.saving : adminCopy.common.create}
               </Button>
             </DialogFooter>
@@ -393,7 +389,7 @@ export default function AdminAdminsPage() {
                 required
                 defaultValue={selected?.name}
                 disabled={submitting}
-                className="h-11 rounded"
+                className="h-11 rounded-full"
               />
             </div>
             <div className="space-y-2">
@@ -405,20 +401,20 @@ export default function AdminAdminsPage() {
                 required
                 defaultValue={selected?.email}
                 disabled={submitting}
-                className="h-11 rounded"
+                className="h-11 rounded-full"
               />
             </div>
             <DialogFooter>
               <Button
                 type="button"
                 variant="outline"
-                className="rounded"
+                className="rounded-full"
                 disabled={submitting}
                 onClick={closeDialog}
               >
                 {adminCopy.common.cancel}
               </Button>
-              <Button type="submit" disabled={submitting} className="rounded">
+              <Button type="submit" disabled={submitting} className="rounded-full w-24">
                 {submitting ? adminCopy.common.saving : adminCopy.common.save}
               </Button>
             </DialogFooter>
@@ -451,20 +447,20 @@ export default function AdminAdminsPage() {
                 required
                 minLength={8}
                 disabled={submitting}
-                className="h-11 rounded"
+                className="h-11 rounded-full"
               />
             </div>
             <DialogFooter>
               <Button
                 type="button"
                 variant="outline"
-                className="rounded"
+                className="rounded-full"
                 disabled={submitting}
                 onClick={closeDialog}
               >
                 {adminCopy.common.cancel}
               </Button>
-              <Button type="submit" disabled={submitting} className="rounded">
+              <Button type="submit" disabled={submitting} className="rounded-full w-24">
                 {submitting ? adminCopy.common.saving : adminCopy.common.save}
               </Button>
             </DialogFooter>

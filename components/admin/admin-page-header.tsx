@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 type AdminPageHeaderProps = {
-  title: string;
+  title?: string;
   description?: string;
   actions?: ReactNode;
   className?: string;
@@ -23,9 +23,11 @@ function AdminPageHeader({
       )}
     >
       <div className="min-w-0 space-y-1">
-        <h1 className="font-heading text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-          {title}
-        </h1>
+        {title ? (
+          <h1 className="font-heading text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+            {title}
+          </h1>
+        ) : null}
         {description ? (
           <p className="max-w-2xl text-sm text-muted-foreground md:text-base">
             {description}
