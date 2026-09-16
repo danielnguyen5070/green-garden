@@ -56,16 +56,6 @@ export type AdminOrder = {
   date: string;
 };
 
-export type AdminPlant = {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  stock: number;
-  status: "active" | "draft" | "low_stock" | "out_of_stock";
-  updated: string;
-};
-
 export type AdminBlogPost = {
   id: string;
   title: string;

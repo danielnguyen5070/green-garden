@@ -1,12 +1,44 @@
 /** Admin uses a single locale for number/date formatting. */
 const ADMIN_LOCALE = "en-US";
 
-export function formatAdminCurrency(value: number): string {
+/** English/default prices are USD; the `*_vi` fields are VND. */
+export type AdminCurrency = "USD" | "VND";
+
+/**
+ * Accepts the exact decimal strings the API returns for money. Parsing happens
+ * here, at the display boundary, so amounts are never carried as floats.
+ */
+export function formatAdminCurrency(
+  value: number | string,
+  currency: AdminCurrency = "VND"
+): string {
+  const amount = typeof value === "number" ? value : Number(value);
+  if (!Number.isFinite(amount)) return "—";
+
   return new Intl.NumberFormat(ADMIN_LOCALE, {
     style: "currency",
-    currency: "VND",
-    maximumFractionDigits: 0,
-  }).format(value);
+    currency,
+    maximumFractionDigits: currency === "VND" ? 0 : 2,
+  }).format(amount);
+}
+
+/** Strips padding so "5.00", "5." and "05" all compare equal to "5". */
+export function normalizeDecimal(value: string): string {
+  const trimmed = value.trim();
+  if (trimmed === "") return "";
+
+  const [whole = "", fraction = ""] = trimmed.split(".");
+  const sign = whole.startsWith("-") ? "-" : "";
+  const digits = whole.replace(/^[+-]/, "").replace(/^0+(?=\d)/, "") || "0";
+  const decimals = fraction.replace(/0+$/, "");
+
+  return decimals ? `${sign}${digits}.${decimals}` : `${sign}${digits}`;
+}
+
+/** Value equality for decimal strings, without going through floating point. */
+export function isSameDecimal(a: string | null, b: string | null): boolean {
+  if (a === null || b === null) return a === b;
+  return normalizeDecimal(a) === normalizeDecimal(b);
 }
 
 export function formatAdminNumber(value: number): string {
