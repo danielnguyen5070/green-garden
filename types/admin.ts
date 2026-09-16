@@ -34,18 +34,3 @@ export type AdminStatusUpdateRequest = {
 export type AdminPasswordUpdateRequest = {
   password: string;
 };
-
-/** Legacy UI shapes retained for pages without a backend API yet. */
-export type AdminStat = {
-  id: "plants" | "orders" | "revenue" | "customers";
-  value: number;
-  changeKey: string;
-  trend: "up" | "down" | "neutral";
-  icon: "leaf" | "shopping-bag" | "banknote" | "users";
-  format?: "currency" | "number";
-};
-
-export type AdminSalesPoint = {
-  label: string;
-  value: number;
-};

@@ -6,7 +6,9 @@ import { Card, CardContent } from "@/components/ui/card";
 type AdminStatCardProps = {
   label: string;
   value: string;
-  change: string;
+  /** Secondary line under the value, such as a related total or a delta. */
+  change?: string;
+  /** Omit when the figure has no direction to report; no arrow is drawn. */
   trend?: "up" | "down" | "neutral";
   icon: LucideIcon;
   className?: string;
@@ -16,7 +18,7 @@ function AdminStatCard({
   label,
   value,
   change,
-  trend = "up",
+  trend,
   icon: Icon,
   className,
 }: AdminStatCardProps) {
@@ -37,17 +39,21 @@ function AdminStatCard({
           <p className="font-heading text-2xl font-semibold tracking-tight text-foreground">
             {value}
           </p>
-          <p
-            className={cn(
-              "inline-flex items-center gap-1 text-xs font-medium",
-              trend === "up" && "text-success",
-              trend === "down" && "text-destructive",
-              trend === "neutral" && "text-muted-foreground"
-            )}
-          >
-            <TrendIcon className="size-3.5" aria-hidden="true" />
-            <span>{change}</span>
-          </p>
+          {change ? (
+            <p
+              className={cn(
+                "inline-flex items-center gap-1 text-xs font-medium",
+                trend === "up" && "text-success",
+                trend === "down" && "text-destructive",
+                (trend === "neutral" || !trend) && "text-muted-foreground"
+              )}
+            >
+              {trend ? (
+                <TrendIcon className="size-3.5" aria-hidden="true" />
+              ) : null}
+              <span>{change}</span>
+            </p>
+          ) : null}
         </div>
         <div
           className="flex size-10 shrink-0 items-center justify-center rounded bg-primary/10 text-primary"
