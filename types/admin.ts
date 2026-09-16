@@ -66,14 +66,6 @@ export type AdminPlant = {
   updated: string;
 };
 
-export type AdminCategory = {
-  id: string;
-  name: string;
-  plantCount: number;
-  status: "active" | "draft";
-  updated: string;
-};
-
 export type AdminBlogPost = {
   id: string;
   title: string;
