@@ -36,7 +36,7 @@
     "free": "Miễn phí",
     "total": "Tổng cộng",
     "checkout": "Thanh toán ngay →",
-    "secureCheckout": "Thanh toán an toàn bởi Green Garden"
+    "secureCheckout": "Thanh toán an toàn bởi Ngoc Ngan Ben Tre"
   },
   "footer": {
     "brand": {
@@ -60,19 +60,20 @@
     "social": {
       "title": "Theo dõi",
       "facebook": "Facebook",
+      "tiktok": "TikTok",
       "youtube": "YouTube"
     },
-    "copyright": "© {year} Green Garden. Bảo lưu mọi quyền."
+    "copyright": "© {year} Ngoc Ngan Ben Tre. Bảo lưu mọi quyền."
   },
   "home": {
     "hero": {
-      "badge": "Bộ sưu tập theo mùa mới",
-      "titleLine1": "Mang",
-      "titleAccent": "thiên nhiên",
-      "titleSuffix": " vào nhà.",
-      "description": "Biến không gian sống thành nơi thư thái với bộ sưu tập cây nội thất dễ chăm. Sắc đất ấm, xanh mướt, và sự an tâm được giao đến tận cửa.",
-      "primaryCta": "Mua bộ sưu tập",
-      "secondaryCta": "Làm quiz chọn cây",
+      "badge": "Cây giống Cái Mơn · Giao toàn quốc",
+      "titleLine1": "Cây giống từ Cái Mơn,",
+      "titleAccent": "xanh mát",
+      "titleSuffix": " mọi khu vườn.",
+      "description": "Cây giống, cây ăn trái và hoa kiểng được tuyển chọn từ vùng đất Cái Mơn – Chợ Lách. Cây khỏe, dễ trồng, đóng gói cẩn thận và giao tận nơi.",
+      "primaryCta": "Xem cây giống",
+      "secondaryCta": "Tìm hiểu về chúng tôi",
       "socialProof": "Được tin tưởng bởi hơn 2.000 người yêu cây.",
       "socialProofCount": "+2k",
       "imageAlt": "Bộ sưu tập cây nội thất trong chậu gốm và đất nung bên cửa sổ sáng",
@@ -106,19 +107,15 @@
       }
     },
     "newsletter": {
-      "title": "Tham gia Green Club",
-      "description": "Nhận giảm 10% cho đơn đầu tiên, cùng mẹo chăm cây hàng tuần và quyền ưu tiên với hàng mới.",
-      "emailLabel": "Địa chỉ email",
-      "emailPlaceholder": "Nhập email của bạn",
-      "subscribe": "Đăng ký",
-      "privacy": "Chúng tôi tôn trọng quyền riêng tư của bạn. Hủy đăng ký bất cứ lúc nào.",
-      "success": "Cảm ơn bạn đã tham gia Green Club!",
-      "invalidEmail": "Vui lòng nhập địa chỉ email hợp lệ."
+      "title": "Tham gia cộng đồng Zalo",
+      "description": "Kết nối cùng những người yêu hoa kiểng, cây giống và nhà vườn Cái Mơn. Cập nhật cây mới, chia sẻ kinh nghiệm chăm sóc và những giống cây đẹp.",
+      "cta": "Tham gia nhóm Zalo",
+      "note": "Cộng đồng dành cho người yêu cây và hoa kiểng"
     }
   },
   "blog": {
     "title": "Ghi chú vườn",
-    "description": "Mẹo chăm cây, câu chuyện sản phẩm và chia sẻ từ đội ngũ Green Garden.",
+    "description": "Mẹo chăm cây, câu chuyện sản phẩm và chia sẻ từ đội ngũ Ngoc Ngan Ben Tre.",
     "readMore": "Đọc bài viết",
     "backToBlog": "Quay lại blog",
     "empty": "Chưa có bài viết nào."
@@ -179,7 +176,7 @@
       "tax": "Thuế (ước tính)",
       "free": "Miễn phí",
       "total": "Tổng cộng",
-      "secureNotice": "Dữ liệu của bạn được bảo vệ bằng mã hóa chuẩn ngành. Thanh toán an toàn bởi Green Garden."
+      "secureNotice": "Dữ liệu của bạn được bảo vệ bằng mã hóa chuẩn ngành. Thanh toán an toàn bởi Ngoc Ngan Ben Tre."
     },
     "secure": {
       "title": "Thanh toán an toàn",
@@ -190,30 +187,30 @@
       "privacy": "Chính sách bảo mật",
       "terms": "Điều khoản dịch vụ",
       "help": "Trung tâm trợ giúp",
-      "copyright": "© {year} Green Garden Plant Store. Bảo lưu mọi quyền."
+      "copyright": "© {year} Ngoc Ngan Ben Tre Plant Store. Bảo lưu mọi quyền."
     }
   },
   "about": {
     "metadata": {
-      "title": "Gặp gỡ người sáng lập | Green Garden",
-      "description": "Gặp người đứng sau Green Garden — câu chuyện cá nhân về trồng, chăm sóc và chia sẻ cây xanh với mọi người."
+      "title": "Gặp gỡ người sáng lập | Ngoc Ngan Ben Tre",
+      "description": "Gặp người đứng sau Ngoc Ngan Ben Tre — câu chuyện cá nhân về trồng, chăm sóc và chia sẻ cây xanh với mọi người."
     },
     "ownerHero": {
       "eyebrow": "Gặp gỡ người sáng lập",
       "title": "Cây xanh luôn là một phần trong câu chuyện của tôi.",
-      "description": "Green Garden bắt đầu từ tình yêu giản dị với việc trồng, chăm sóc và chia sẻ cây với mọi người.",
+      "description": "Ngoc Ngan Ben Tre bắt đầu từ tình yêu giản dị với việc trồng, chăm sóc và chia sẻ cây với mọi người.",
       "primaryCta": "Khám phá cây của chúng tôi",
       "secondaryCta": "Đọc hướng dẫn chăm sóc",
-      "imageAlt": "Chân dung người sáng lập Green Garden giữa những cây nội thất"
+      "imageAlt": "Chân dung người sáng lập Ngoc Ngan Ben Tre giữa những cây nội thất"
     },
     "ownerStory": {
-      "introTitle": "Gặp người đứng sau Green Garden.",
+      "introTitle": "Gặp người đứng sau Ngoc Ngan Ben Tre.",
       "introDescription": "Tôi bắt đầu yêu cây khi quan sát chúng lớn lên — chậm rãi, kiên nhẫn, và đầy sự kỳ diệu dịu dàng. Sự tò mò ấy trở thành thói quen tìm hiểu nhu cầu của từng cây, và niềm vui khi giúp bạn bè chọn đúng người bạn xanh cho ngôi nhà của họ.",
       "introImageAlt": "Góc cây yên tĩnh dưới ánh sáng tự nhiên ấm áp",
-      "journeyTitle": "Từ tình yêu với cây đến Green Garden.",
-      "journeyParagraph1": "Green Garden ra đời khi tôi nhận ra nhiều người muốn có cây trong cuộc sống, nhưng chưa biết bắt đầu từ đâu. Chọn một cây nên mang lại cảm hứng, chứ không phải sự choáng ngợp.",
+      "journeyTitle": "Từ tình yêu với cây đến Ngoc Ngan Ben Tre.",
+      "journeyParagraph1": "Ngoc Ngan Ben Tre ra đời khi tôi nhận ra nhiều người muốn có cây trong cuộc sống, nhưng chưa biết bắt đầu từ đâu. Chọn một cây nên mang lại cảm hứng, chứ không phải sự choáng ngợp.",
       "journeyParagraph2": "Tôi bắt đầu chọn lọc những cây khỏe mạnh, tìm hiểu thói quen của chúng, và chia sẻ hướng dẫn thực tế — để mỗi ngôi nhà đều có thể trở nên sống động hơn một chút.",
-      "journeyParagraph3": "Hôm nay, Green Garden vẫn được dẫn dắt bởi ý nguyện ấy: giúp bạn tìm một cây phù hợp với không gian, nhịp sống, và cách bạn muốn sống.",
+      "journeyParagraph3": "Hôm nay, Ngoc Ngan Ben Tre vẫn được dẫn dắt bởi ý nguyện ấy: giúp bạn tìm một cây phù hợp với không gian, nhịp sống, và cách bạn muốn sống.",
       "journeyImageAlt": "Những cây khỏe mạnh trong ánh sáng tự nhiên dịu nhẹ"
     },
     "ownerPhilosophy": {
@@ -232,15 +229,15 @@
       },
       "growingTogether": {
         "title": "Cùng nhau lớn lên",
-        "description": "Green Garden ở đây để giúp bạn tự tin hơn trong việc chăm sóc cây."
+        "description": "Ngoc Ngan Ben Tre ở đây để giúp bạn tự tin hơn trong việc chăm sóc cây."
       }
     },
     "ownerNote": {
       "title": "Cảm ơn bạn đã cùng chúng tôi trồng xanh.",
-      "description": "Mỗi đơn hàng từ Green Garden không chỉ là một giao dịch. Đó là một cây tìm được ngôi nhà mới, và một người bắt đầu hoặc tiếp tục hành trình với cây xanh.",
+      "description": "Mỗi đơn hàng từ Ngoc Ngan Ben Tre không chỉ là một giao dịch. Đó là một cây tìm được ngôi nhà mới, và một người bắt đầu hoặc tiếp tục hành trình với cây xanh.",
       "name": "Người sáng lập",
-      "role": "Chủ cửa hàng, Green Garden",
-      "imageAlt": "Ảnh chân dung nhỏ của người sáng lập Green Garden"
+      "role": "Chủ cửa hàng, Ngoc Ngan Ben Tre",
+      "imageAlt": "Ảnh chân dung nhỏ của người sáng lập Ngoc Ngan Ben Tre"
     },
     "ownerCta": {
       "title": "Cùng tìm cây phù hợp với không gian của bạn.",
@@ -250,8 +247,8 @@
   },
   "faq": {
     "metadata": {
-      "title": "Câu hỏi thường gặp | Green Garden",
-      "description": "Tìm câu trả lời về cây trồng, giao hàng, đơn hàng, chăm sóc, đổi trả và nhiều hơn nữa tại Green Garden."
+      "title": "Câu hỏi thường gặp | Ngoc Ngan Ben Tre",
+      "description": "Tìm câu trả lời về cây trồng, giao hàng, đơn hàng, chăm sóc, đổi trả và nhiều hơn nữa tại Ngoc Ngan Ben Tre."
     },
     "hero": {
       "eyebrow": "Trung tâm hỗ trợ",
@@ -355,7 +352,7 @@
         "answer": "Chúng tôi chấp nhận thẻ phổ biến và các tùy chọn thanh toán an toàn hiện khi checkout. Thông tin thanh toán được xử lý an toàn khi hoàn tất đơn."
       },
       "contactUs": {
-        "question": "Làm sao để liên hệ Green Garden?",
+        "question": "Làm sao để liên hệ Ngoc Ngan Ben Tre?",
         "answer": "Xem thông tin liên hệ ở chân trang hoặc dùng liên kết Liên hệ. Chúng tôi sẵn sàng hỗ trợ chọn cây, đơn hàng và chăm sóc."
       }
     }

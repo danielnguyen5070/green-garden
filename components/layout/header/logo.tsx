@@ -25,8 +25,13 @@ function Logo({ className }: { className?: string }) {
       )}
     >
       <LogoMark className="size-10 sm:size-11 md:size-12" />
-      <span className="font-sans text-base font-semibold tracking-tight text-foreground sm:text-lg">
-        NGOC NGAN
+      <span className="flex flex-col">
+        <span className="font-sans text-base font-semibold leading-tight tracking-tight text-foreground sm:text-lg">
+          NGOC NGAN
+        </span>
+        <span className="font-sans text-[0.625rem] font-medium leading-tight tracking-[0.18em] text-muted-foreground uppercase sm:text-[0.6875rem]">
+          BEN TRE
+        </span>
       </span>
     </Link>
   );

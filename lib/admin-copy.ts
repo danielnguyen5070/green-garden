@@ -4,7 +4,7 @@
  */
 
 export const adminCopy = {
-  brand: "Green Garden",
+  brand: "Ngoc Ngan Ben Tre",
   brandSubtitle: "Admin",
   navigation: {
     overview: "Overview",
@@ -75,7 +75,7 @@ export const adminCopy = {
   },
   dashboard: {
     title: "Overview",
-    description: "Overview of your Green Garden store.",
+    description: "Overview of your Ngoc Ngan Ben Tre store.",
     loadError: "Unable to load the dashboard statistics.",
     retry: "Retry",
     stats: {
@@ -138,7 +138,7 @@ export const adminCopy = {
   },
   plants: {
     title: "Plants",
-    description: "Manage the Green Garden plant catalog.",
+    description: "Manage the Ngoc Ngan Ben Tre plant catalog.",
     add: "Add plant",
     searchPlaceholder: "Search name or SKU...",
     empty: "No plants yet.",
@@ -400,7 +400,7 @@ export const adminCopy = {
   },
   admins: {
     title: "Admins",
-    description: "Manage Green Garden admin accounts.",
+    description: "Manage Ngoc Ngan Ben Tre admin accounts.",
     add: "Add admin",
     empty: "No admins yet.",
     createTitle: "Create admin",
@@ -436,7 +436,7 @@ export const adminCopy = {
   },
   login: {
     title: "Admin sign in",
-    description: "Sign in to manage the Green Garden store.",
+    description: "Sign in to manage the Ngoc Ngan Ben Tre store.",
     email: "Email",
     password: "Password",
     submit: "Sign in",

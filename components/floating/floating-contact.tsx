@@ -1,5 +1,5 @@
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
-import { MessageSquareIcon } from "lucide-react";
 import {
   CONTACT_CONFIG,
   CONTACT_SMS_HREF,
@@ -7,10 +7,13 @@ import {
 import { cn } from "@/lib/utils";
 
 const actionClassName = cn(
-  "group relative inline-flex size-12 items-center justify-center rounded-full shadow-elevated outline-none transition-transform duration-200",
-  "hover:scale-105 hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+  "group relative inline-flex size-12 items-center justify-center rounded-full outline-none transition-transform duration-200",
+  "hover:scale-105 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
   "md:size-14"
 );
+
+const actionIconClassName =
+  "size-12 [filter:drop-shadow(0_2px_4px_rgb(36_49_39_/_0.28))] md:size-14";
 
 const tooltipClassName = cn(
   "pointer-events-none absolute top-1/2 left-[calc(100%+0.75rem)] -translate-y-1/2 whitespace-nowrap rounded-md bg-foreground px-2.5 py-1.5",
@@ -36,32 +39,32 @@ async function FloatingContact({ className }: { className?: string }) {
         target="_blank"
         rel="noopener noreferrer"
         aria-label={t("zalo")}
-        className={cn(
-          actionClassName,
-          "bg-[#0068ff] text-white hover:bg-[#0068ff]/90"
-        )}
+        className={actionClassName}
       >
         <span className={tooltipClassName}>{t("zalo")}</span>
-        <span
+        <Image
+          src="/icons/zalo.png"
+          alt=""
+          width={96}
+          height={96}
           aria-hidden="true"
-          className="font-sans text-[0.625rem] font-bold tracking-tight md:text-xs"
-        >
-          Zalo
-        </span>
+          className={actionIconClassName}
+        />
       </a>
 
       <a
         href={CONTACT_SMS_HREF}
         aria-label={t("sms")}
-        className={cn(
-          actionClassName,
-          "bg-primary text-primary-foreground hover:bg-primary/90"
-        )}
+        className={actionClassName}
       >
         <span className={tooltipClassName}>{t("sms")}</span>
-        <MessageSquareIcon
-          className="size-5 stroke-[1.75] md:size-[1.35rem]"
+        <Image
+          src="/icons/messages.png"
+          alt=""
+          width={96}
+          height={96}
           aria-hidden="true"
+          className={actionIconClassName}
         />
       </a>
     </nav>

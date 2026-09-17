@@ -21,8 +21,16 @@ export const FOOTER_SUPPORT = {
   links: [
     { href: "/blog", labelKey: "support.careGuide" },
     { href: "/faq", labelKey: "support.faq" },
-    { href: "/#shipping", labelKey: "support.shipping" },
-    { href: "/#contact", labelKey: "support.contact" },
+    {
+      href: CONTACT_CONFIG.zaloUrl,
+      labelKey: "support.shipping",
+      external: true,
+    },
+    {
+      href: CONTACT_CONFIG.zaloUrl,
+      labelKey: "support.contact",
+      external: true,
+    },
   ],
 } as const;
 
@@ -33,6 +41,11 @@ export const FOOTER_SOCIAL = {
       href: CONTACT_CONFIG.facebookUrl,
       labelKey: "social.facebook",
       icon: "facebook",
+    },
+    {
+      href: CONTACT_CONFIG.tiktokUrl,
+      labelKey: "social.tiktok",
+      icon: "tiktok",
     },
     {
       href: CONTACT_CONFIG.youtubeUrl,

@@ -36,7 +36,7 @@
     "free": "Free",
     "total": "Total",
     "checkout": "Checkout Now →",
-    "secureCheckout": "Secure checkout powered by Green Garden"
+    "secureCheckout": "Secure checkout powered by Ngoc Ngan Ben Tre"
   },
   "footer": {
     "brand": {
@@ -60,19 +60,20 @@
     "social": {
       "title": "Follow Us",
       "facebook": "Facebook",
+      "tiktok": "TikTok",
       "youtube": "YouTube"
     },
-    "copyright": "© {year} Green Garden. All rights reserved."
+    "copyright": "© {year} Ngoc Ngan Ben Tre. All rights reserved."
   },
   "home": {
     "hero": {
-      "badge": "New Seasonal Collection",
-      "titleLine1": "Bring the",
-      "titleAccent": "outdoors",
-      "titleSuffix": " in.",
-      "description": "Transform your living space into a sanctuary with our curated collection of easy-care indoor plants. Earthy tones, lush greens, and peace of mind delivered to your door.",
-      "primaryCta": "Shop Collection",
-      "secondaryCta": "Take Plant Quiz",
+      "badge": "Cai Mon seedlings · Ships nationwide",
+      "titleLine1": "Seedlings from Cai Mon,",
+      "titleAccent": "greener",
+      "titleSuffix": " gardens everywhere.",
+      "description": "Seedlings, fruit trees, and ornamental plants selected from the Cai Mon – Cho Lach region. Healthy, easy to grow, carefully packed, and delivered to your door.",
+      "primaryCta": "Browse seedlings",
+      "secondaryCta": "Learn about us",
       "socialProof": "Trusted by over 2,000 happy plant parents.",
       "socialProofCount": "+2k",
       "imageAlt": "A curated arrangement of indoor plants in ceramic and terracotta pots by a bright window",
@@ -106,19 +107,15 @@
       }
     },
     "newsletter": {
-      "title": "Join the Green Club",
-      "description": "Get 10% off your first order, plus weekly plant care tips and exclusive access to new arrivals.",
-      "emailLabel": "Email address",
-      "emailPlaceholder": "Enter your email",
-      "subscribe": "Subscribe",
-      "privacy": "We respect your privacy. Unsubscribe at any time.",
-      "success": "Thanks for joining the Green Club!",
-      "invalidEmail": "Please enter a valid email address."
+      "title": "Join the Zalo community",
+      "description": "Connect with fellow lovers of ornamental plants, seedlings, and the Cai Mon nurseries. Get updates on new arrivals, plus care tips and beautiful varieties.",
+      "cta": "Join the Zalo group",
+      "note": "A community for plant and flower lovers"
     }
   },
   "blog": {
     "title": "Garden Notes",
-    "description": "Care tips, product stories, and notes from the Green Garden team.",
+    "description": "Care tips, product stories, and notes from the Ngoc Ngan Ben Tre team.",
     "readMore": "Read article",
     "backToBlog": "Back to blog",
     "empty": "No posts yet."
@@ -179,7 +176,7 @@
       "tax": "Tax (Estimated)",
       "free": "Free",
       "total": "Total",
-      "secureNotice": "Your data is protected by industry standard encryption. Guaranteed secure checkout by Green Garden."
+      "secureNotice": "Your data is protected by industry standard encryption. Guaranteed secure checkout by Ngoc Ngan Ben Tre."
     },
     "secure": {
       "title": "Secure checkout",
@@ -190,30 +187,30 @@
       "privacy": "Privacy Policy",
       "terms": "Terms of Service",
       "help": "Help Center",
-      "copyright": "© {year} Green Garden Plant Store. All rights reserved."
+      "copyright": "© {year} Ngoc Ngan Ben Tre Plant Store. All rights reserved."
     }
   },
   "about": {
     "metadata": {
-      "title": "Meet the Founder | Green Garden",
-      "description": "Meet the person behind Green Garden — a personal story of growing, caring for, and sharing plants with others."
+      "title": "Meet the Founder | Ngoc Ngan Ben Tre",
+      "description": "Meet the person behind Ngoc Ngan Ben Tre — a personal story of growing, caring for, and sharing plants with others."
     },
     "ownerHero": {
       "eyebrow": "Meet the Founder",
       "title": "Plants have always been part of my story.",
-      "description": "Green Garden started from a simple love for growing, caring for, and sharing plants with others.",
+      "description": "Ngoc Ngan Ben Tre started from a simple love for growing, caring for, and sharing plants with others.",
       "primaryCta": "Explore Our Plants",
       "secondaryCta": "Read Our Care Guide",
-      "imageAlt": "Portrait of the Green Garden founder among indoor plants"
+      "imageAlt": "Portrait of the Ngoc Ngan Ben Tre founder among indoor plants"
     },
     "ownerStory": {
-      "introTitle": "Meet the person behind Green Garden.",
+      "introTitle": "Meet the person behind Ngoc Ngan Ben Tre.",
       "introDescription": "I first fell in love with plants by watching them grow — slowly, patiently, and full of quiet wonder. That curiosity grew into a habit of learning what each plant needs, and a joy in helping friends find the right green companion for their homes.",
       "introImageAlt": "A calm plant corner with warm natural light",
-      "journeyTitle": "From a love of plants to Green Garden.",
-      "journeyParagraph1": "Green Garden began when I realized how many people wanted plants in their lives, but felt unsure where to start. Choosing a plant should feel inspiring, not overwhelming.",
+      "journeyTitle": "From a love of plants to Ngoc Ngan Ben Tre.",
+      "journeyParagraph1": "Ngoc Ngan Ben Tre began when I realized how many people wanted plants in their lives, but felt unsure where to start. Choosing a plant should feel inspiring, not overwhelming.",
       "journeyParagraph2": "I started carefully selecting healthy plants, learning their habits, and sharing practical guidance — so every home could feel a little more alive.",
-      "journeyParagraph3": "Today, Green Garden is still guided by that same intention: help you find a plant that fits your space, your routine, and the way you want to live.",
+      "journeyParagraph3": "Today, Ngoc Ngan Ben Tre is still guided by that same intention: help you find a plant that fits your space, your routine, and the way you want to live.",
       "journeyImageAlt": "Healthy nursery plants arranged in soft natural light"
     },
     "ownerPhilosophy": {
@@ -232,15 +229,15 @@
       },
       "growingTogether": {
         "title": "Growing Together",
-        "description": "Green Garden is here to help you become more confident in caring for your plants."
+        "description": "Ngoc Ngan Ben Tre is here to help you become more confident in caring for your plants."
       }
     },
     "ownerNote": {
       "title": "Thank you for growing with us.",
-      "description": "Every order from Green Garden is more than a sale. It is another plant finding a new home and another person beginning or continuing their plant journey.",
+      "description": "Every order from Ngoc Ngan Ben Tre is more than a sale. It is another plant finding a new home and another person beginning or continuing their plant journey.",
       "name": "The Founder",
-      "role": "Owner, Green Garden",
-      "imageAlt": "Small portrait of the Green Garden founder"
+      "role": "Owner, Ngoc Ngan Ben Tre",
+      "imageAlt": "Small portrait of the Ngoc Ngan Ben Tre founder"
     },
     "ownerCta": {
       "title": "Let's find the right plant for your space.",
@@ -250,8 +247,8 @@
   },
   "faq": {
     "metadata": {
-      "title": "FAQ | Green Garden",
-      "description": "Find answers about plants, delivery, orders, care, returns, and everything in between at Green Garden."
+      "title": "FAQ | Ngoc Ngan Ben Tre",
+      "description": "Find answers about plants, delivery, orders, care, returns, and everything in between at Ngoc Ngan Ben Tre."
     },
     "hero": {
       "eyebrow": "Help Center",
@@ -355,7 +352,7 @@
         "answer": "We accept major cards and other secure payment options shown at checkout. Your payment details are processed safely during order completion."
       },
       "contactUs": {
-        "question": "How can I contact Green Garden?",
+        "question": "How can I contact Ngoc Ngan Ben Tre?",
         "answer": "Use the contact details in our footer or reach out through the Contact Us link. We are happy to help with plant selection, orders, and care questions."
       }
     }

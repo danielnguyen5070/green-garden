@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
-import { ArrowRightIcon, LeafIcon, MessageCircleIcon, SunIcon } from "lucide-react";
+import { ArrowRightIcon, LeafIcon, MessageCircleIcon, SproutIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
 import { CONTACT_CONFIG } from "@/config/contact";
@@ -26,19 +26,20 @@ async function Hero({ className }: { className?: string }) {
         <div className="grid items-center gap-10 md:grid-cols-2 md:gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12 xl:gap-16">
           <div className="flex flex-col items-start">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-3 py-1.5 font-sans text-[0.6875rem] font-semibold tracking-[0.14em] text-accent uppercase">
-              <SunIcon className="size-3.5 stroke-[1.75]" aria-hidden="true" />
+              <SproutIcon
+                className="size-3.5 shrink-0 stroke-[1.75]"
+                aria-hidden="true"
+              />
               {t("badge")}
             </span>
 
             <h1
               id="home-hero-heading"
-              className="mt-5 max-w-[11ch] font-display text-[clamp(2.6rem,1.7rem+3.2vw,4.75rem)] font-bold leading-[1.02] tracking-tight text-foreground md:mt-6"
+              className="mt-5 max-w-[18ch] text-balance font-display text-[clamp(2.1rem,1.5rem+2.2vw,3.5rem)] font-bold leading-[1.06] tracking-tight text-foreground md:mt-6"
             >
-              <span className="block">{t("titleLine1")}</span>
-              <span className="block">
-                <span className="text-primary">{t("titleAccent")}</span>
-                {t("titleSuffix")}
-              </span>
+              {t("titleLine1")}{" "}
+              <span className="text-primary">{t("titleAccent")}</span>
+              {t("titleSuffix")}
             </h1>
 
             <p className="mt-6 max-w-[32.5rem] font-sans text-body text-muted-foreground">
@@ -53,18 +54,18 @@ async function Hero({ className }: { className?: string }) {
                 nativeButton={false}
               >
                 {t("primaryCta")}
-                <ArrowRightIcon data-icon="inline-end" className="size-4" />
+                <LeafIcon data-icon="inline-end" className="size-4" />
               </Button>
 
               <Button
                 variant="outline"
                 size="lg"
                 className="h-12 rounded-xl border-border bg-card px-5 text-sm text-foreground shadow-subtle hover:bg-card hover:text-foreground sm:min-w-[10.5rem]"
-                render={<Link href="/#quiz" />}
+                render={<Link href="/about" />}
                 nativeButton={false}
               >
                 {t("secondaryCta")}
-                <LeafIcon data-icon="inline-end" className="size-4" />
+                <ArrowRightIcon data-icon="inline-end" className="size-4" />
               </Button>
             </div>
 

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import {
   FOOTER_SECTIONS,
@@ -23,42 +23,6 @@ const linkClassName =
 const headingClassName =
   "font-heading text-[0.9375rem] font-medium tracking-tight text-primary-foreground";
 
-function FacebookIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-    >
-      <path d="M14.2 8.5h2.8V5.4h-2.8c-2.3 0-3.9 1.5-3.9 3.9v2.2H8.2v3.1h2.1V21h3.2v-6.4h2.6l.5-3.1h-3.1V9.4c0-.6.4-.9 1-.9Z" />
-    </svg>
-  );
-}
-
-function YoutubeIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-    >
-      <path d="M22.5 7.2a2.9 2.9 0 0 0-2-2.1C18.7 4.7 12 4.7 12 4.7s-6.7 0-8.5.4a2.9 2.9 0 0 0-2 2.1A30 30 0 0 0 1.2 12a30 30 0 0 0 .3 4.8 2.9 2.9 0 0 0 2 2.1c1.8.4 8.5.4 8.5.4s6.7 0 8.5-.4a2.9 2.9 0 0 0 2-2.1 30 30 0 0 0 .3-4.8 30 30 0 0 0-.3-4.8ZM10 15.2V8.8l5.5 3.2L10 15.2Z" />
-    </svg>
-  );
-}
-
-const SOCIAL_ICONS: Record<
-  FooterSocialIcon,
-  (props: { className?: string }) => ReactNode
-> = {
-  facebook: FacebookIcon,
-  youtube: YoutubeIcon,
-};
-
 async function FooterBrand() {
   const t = await getTranslations("footer");
 
@@ -69,8 +33,13 @@ async function FooterBrand() {
         className="inline-flex items-center gap-2.5 rounded-md outline-none transition-opacity duration-200 hover:opacity-80 focus-visible:ring-2 focus-visible:ring-brand-sage/60 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-deep"
       >
         <LogoMark className="brightness-0 invert" />
-        <span className="font-sans text-base font-semibold tracking-tight text-primary-foreground sm:text-[1.05rem]">
-          {t(FOOTER_BRAND.nameKey)}
+        <span className="flex flex-col">
+          <span className="font-sans text-base font-semibold leading-tight tracking-tight text-primary-foreground sm:text-[1.05rem]">
+            {t(FOOTER_BRAND.nameKey)}
+          </span>
+          <span className="font-sans text-[0.625rem] font-medium leading-tight tracking-[0.18em] text-primary-foreground/50 uppercase sm:text-[0.6875rem]">
+            BEN TRE
+          </span>
         </span>
       </Link>
       <p className="mt-4 max-w-[16.25rem] text-small leading-relaxed text-primary-foreground/50">
@@ -92,9 +61,20 @@ async function FooterNavColumn({ section }: { section: FooterNavSection }) {
       <ul className="mt-6 flex flex-col gap-3">
         {section.links.map((link) => (
           <li key={link.labelKey}>
-            <Link href={link.href} className={linkClassName}>
-              {t(link.labelKey)}
-            </Link>
+            {"external" in link && link.external ? (
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={linkClassName}
+              >
+                {t(link.labelKey)}
+              </a>
+            ) : (
+              <Link href={link.href} className={linkClassName}>
+                {t(link.labelKey)}
+              </Link>
+            )}
           </li>
         ))}
       </ul>
@@ -112,23 +92,26 @@ async function FooterSocial() {
         {t(FOOTER_SOCIAL.titleKey)}
       </h2>
       <ul className="mt-6 flex items-center gap-2.5">
-        {FOOTER_SOCIAL.links.map((link) => {
-          const Icon = SOCIAL_ICONS[link.icon];
-
-          return (
-            <li key={link.icon}>
-              <a
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={t(link.labelKey)}
-                className="inline-flex size-9 items-center justify-center rounded-full border border-primary-foreground/20 bg-primary-foreground/8 text-primary-foreground/75 outline-none transition-colors duration-200 hover:border-primary-foreground/35 hover:bg-primary-foreground/12 hover:text-primary-foreground focus-visible:ring-2 focus-visible:ring-brand-sage/60 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-deep"
-              >
-                <Icon className="size-4" />
-              </a>
-            </li>
-          );
-        })}
+        {FOOTER_SOCIAL.links.map((link) => (
+          <li key={link.icon}>
+            <a
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={t(link.labelKey)}
+              className="inline-flex rounded-lg outline-none transition-opacity duration-200 hover:opacity-80 focus-visible:ring-2 focus-visible:ring-brand-sage/60 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-deep"
+            >
+              <Image
+                src={`/icons/${link.icon}.png`}
+                alt=""
+                width={96}
+                height={96}
+                aria-hidden="true"
+                className="size-9 [filter:drop-shadow(0_2px_3px_rgb(0_0_0_/_0.35))]"
+              />
+            </a>
+          </li>
+        ))}
       </ul>
     </nav>
   );
