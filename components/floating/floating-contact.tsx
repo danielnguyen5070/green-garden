@@ -30,7 +30,7 @@ async function FloatingContact({ className }: { className?: string }) {
       data-slot="floating-contact"
       aria-label={t("navLabel")}
       className={cn(
-        "fixed bottom-4 left-4 z-[45] flex flex-col gap-2.5 md:bottom-6 md:left-6",
+        "fixed bottom-4 left-4 z-[45] flex flex-col gap-0.5 md:bottom-6 md:left-6",
         className
       )}
     >

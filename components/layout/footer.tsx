@@ -91,7 +91,7 @@ async function FooterSocial() {
       <h2 id={headingId} className={headingClassName}>
         {t(FOOTER_SOCIAL.titleKey)}
       </h2>
-      <ul className="mt-6 flex items-center gap-2.5">
+      <ul className="mt-6 flex items-center gap-0.5">
         {FOOTER_SOCIAL.links.map((link) => (
           <li key={link.icon}>
             <a

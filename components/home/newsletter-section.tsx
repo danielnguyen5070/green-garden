@@ -19,7 +19,7 @@ async function NewsletterSection({ className }: { className?: string }) {
         <div className="rounded-xl bg-secondary px-6 py-12 text-center md:rounded-2xl md:px-10 md:py-16 lg:px-16 lg:py-20">
           <LeafIcon
             aria-hidden="true"
-            className="mx-auto size-8 stroke-[1.5] text-primary md:size-9"
+            className="mx-auto size-8 stroke-[1.5] text-primary md:size-12"
           />
 
           <h2
