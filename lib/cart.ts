@@ -1,10 +1,32 @@
 import type { CartItem } from "@/types/cart";
 
-/** Subtotal at or above this amount unlocks free shipping. */
-export const FREE_SHIPPING_THRESHOLD = 50;
+export type CartCurrency = "USD" | "VND";
 
-/** Flat shipping fee when the free-shipping threshold is not met. */
-export const SHIPPING_FEE = 8;
+/**
+ * Cart amounts are already in the locale's currency (see `formatCartMoney`),
+ * so the free-shipping rule has to be expressed per currency rather than as a
+ * single number.
+ */
+export const SHIPPING_RULES: Record<
+  CartCurrency,
+  {
+    /** Subtotal at or above this unlocks free shipping. */
+    threshold: number;
+    /** Flat fee charged below the threshold. */
+    fee: number;
+  }
+> = {
+  USD: { threshold: 20, fee: 8 },
+  VND: { threshold: 500_000, fee: 50_000 },
+};
+
+export function getCartCurrency(locale = "en-US"): CartCurrency {
+  return locale.startsWith("vi") ? "VND" : "USD";
+}
+
+export function getFreeShippingThreshold(locale?: string) {
+  return SHIPPING_RULES[getCartCurrency(locale)].threshold;
+}
 
 export function getCartTotalItems(items: CartItem[]) {
   return items.reduce((sum, item) => sum + item.quantity, 0);
@@ -14,21 +36,22 @@ export function getCartSubtotal(items: CartItem[]) {
   return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 }
 
-export function getCartShipping(subtotal: number) {
+export function getCartShipping(subtotal: number, locale?: string) {
   if (subtotal <= 0) return 0;
-  return subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
+  const { threshold, fee } = SHIPPING_RULES[getCartCurrency(locale)];
+  return subtotal >= threshold ? 0 : fee;
 }
 
 export function getCartTotal(subtotal: number, shipping: number) {
   return subtotal + shipping;
 }
 
-export function getAmountToFreeShipping(subtotal: number) {
-  return Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
+export function getAmountToFreeShipping(subtotal: number, locale?: string) {
+  return Math.max(0, getFreeShippingThreshold(locale) - subtotal);
 }
 
-export function hasFreeShipping(subtotal: number) {
-  return subtotal > 0 && subtotal >= FREE_SHIPPING_THRESHOLD;
+export function hasFreeShipping(subtotal: number, locale?: string) {
+  return subtotal > 0 && subtotal >= getFreeShippingThreshold(locale);
 }
 
 /**
@@ -37,7 +60,7 @@ export function hasFreeShipping(subtotal: number) {
  * rather than being converted here.
  */
 export function formatCartMoney(amount: number, locale = "en-US") {
-  const currency = locale.startsWith("vi") ? "VND" : "USD";
+  const currency = getCartCurrency(locale);
 
   return new Intl.NumberFormat(locale, {
     style: "currency",

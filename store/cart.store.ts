@@ -28,10 +28,10 @@ type CartState = {
   setHasHydrated: (value: boolean) => void;
   totalItems: () => number;
   subtotal: () => number;
-  shipping: () => number;
-  total: () => number;
-  freeShippingUnlocked: () => boolean;
-  amountToFreeShipping: () => number;
+  shipping: (locale?: string) => number;
+  total: (locale?: string) => number;
+  freeShippingUnlocked: (locale?: string) => boolean;
+  amountToFreeShipping: (locale?: string) => number;
 };
 
 export const useCartStore = create<CartState>()(
@@ -129,14 +129,15 @@ export const useCartStore = create<CartState>()(
 
       totalItems: () => getCartTotalItems(get().items),
       subtotal: () => getCartSubtotal(get().items),
-      shipping: () => getCartShipping(getCartSubtotal(get().items)),
-      total: () => {
+      shipping: (locale) => getCartShipping(getCartSubtotal(get().items), locale),
+      total: (locale) => {
         const subtotal = getCartSubtotal(get().items);
-        return getCartTotal(subtotal, getCartShipping(subtotal));
+        return getCartTotal(subtotal, getCartShipping(subtotal, locale));
       },
-      freeShippingUnlocked: () => hasFreeShipping(getCartSubtotal(get().items)),
-      amountToFreeShipping: () =>
-        getAmountToFreeShipping(getCartSubtotal(get().items)),
+      freeShippingUnlocked: (locale) =>
+        hasFreeShipping(getCartSubtotal(get().items), locale),
+      amountToFreeShipping: (locale) =>
+        getAmountToFreeShipping(getCartSubtotal(get().items), locale),
     }),
     {
       name: "green-garden-cart",

@@ -13,17 +13,17 @@ function CartSummary() {
   const router = useRouter();
   const closeCart = useCartStore((state) => state.closeCart);
   const items = useCartStore((state) => state.items);
+  const moneyLocale = locale === "vi" ? "vi-VN" : "en-US";
+
   const subtotal = useCartStore((state) => state.subtotal());
-  const shipping = useCartStore((state) => state.shipping());
-  const total = useCartStore((state) => state.total());
+  const shipping = useCartStore((state) => state.shipping(moneyLocale));
+  const total = useCartStore((state) => state.total(moneyLocale));
   const freeShippingUnlocked = useCartStore((state) =>
-    state.freeShippingUnlocked(),
+    state.freeShippingUnlocked(moneyLocale),
   );
   const amountToFreeShipping = useCartStore((state) =>
-    state.amountToFreeShipping(),
+    state.amountToFreeShipping(moneyLocale),
   );
-
-  const moneyLocale = locale === "vi" ? "vi-VN" : "en-US";
 
   function handleCheckout() {
     closeCart();
