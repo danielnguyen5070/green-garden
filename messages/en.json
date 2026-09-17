@@ -281,12 +281,12 @@
   "faq": {
     "metadata": {
       "title": "FAQ | Ngoc Ngan Ben Tre",
-      "description": "Find answers about plants, delivery, orders, care, returns, and everything in between at Ngoc Ngan Ben Tre."
+      "description": "Answers about Cai Mon seedlings, ordering, nationwide delivery, cash on delivery, planting, and plant care at Ngoc Ngan Ben Tre."
     },
     "hero": {
       "eyebrow": "Help Center",
       "title": "Frequently Asked Questions",
-      "description": "Find answers about plants, delivery, orders, care, and everything in between.",
+      "description": "Answers about our Cai Mon seedlings, ordering, delivery, payment, and caring for your plants once they arrive.",
       "searchPlaceholder": "Search questions..."
     },
     "categories": {
@@ -294,99 +294,106 @@
       "all": "All",
       "orders": "Orders",
       "delivery": "Delivery",
-      "care": "Plant Care",
-      "pots": "Pots & Products",
-      "returns": "Returns",
-      "general": "General"
+      "care": "Planting & Care",
+      "plants": "Seedlings",
+      "returns": "Returns"
     },
     "empty": "No questions found.",
     "clearSearch": "Clear search",
     "contact": {
       "title": "Still have questions?",
-      "description": "We're happy to help you find the right plant and answer any questions you may have.",
-      "contactUs": "Contact Us",
-      "shopPlants": "Shop Plants"
+      "description": "Message us on Zalo and we will help you pick the variety that suits your soil and your garden.",
+      "contactUs": "Chat on Zalo",
+      "shopPlants": "Shop Seedlings"
     },
     "items": {
       "placeOrder": {
         "question": "How do I place an order?",
-        "answer": "Browse our plants, choose your pot size and color if available, add items to your cart, and continue to checkout to complete your order."
+        "answer": "Pick a plant on the homepage, choose a size if options are offered, add it to your cart, and go to checkout. All we need is your phone number, name, and delivery address. You can also order directly through Zalo at 0386569374."
+      },
+      "noAccount": {
+        "question": "Do I need an account to order?",
+        "answer": "No. You can order without signing up — just your phone number, name, and address so we can confirm the order and deliver your plants."
+      },
+      "orderConfirmation": {
+        "question": "How do I know my order went through?",
+        "answer": "You will see your order number on the confirmation screen right after checkout. We then call or message you on Zalo to confirm the varieties, quantity, and address before shipping."
       },
       "changeOrder": {
-        "question": "Can I change my order after placing it?",
-        "answer": "If your order has not yet been prepared for delivery, contact us as soon as possible and we will do our best to update it."
+        "question": "Can I change or cancel my order?",
+        "answer": "Yes, as long as the order has not been packed and shipped. Message us on Zalo at 0386569374 with your order number as soon as possible and we will update it."
       },
       "multiplePlants": {
-        "question": "Can I order multiple plants at once?",
-        "answer": "Yes. You can add as many plants as you like to your cart and check out in a single order."
+        "question": "Can I order several plants at once?",
+        "answer": "Yes. Add as many plants as you like and check out in a single order. Combining plants into one order also keeps shipping costs down."
       },
       "deliveryTime": {
         "question": "How long does delivery take?",
-        "answer": "Most local orders arrive within 3–5 business days. Express options may be available at checkout depending on your area."
+        "answer": "Plants ship with Vietnam Post or J&T Express and usually arrive within 3–5 business days. Northern provinces and remote areas may take one or two days longer."
       },
-      "sameDay": {
-        "question": "Do you offer same-day delivery?",
-        "answer": "Same-day delivery is limited to select areas and order times. If it is available for your location, you will see it during checkout."
+      "shippingCost": {
+        "question": "How much is shipping?",
+        "answer": "Orders of $20 or more ship free. Below that there is a flat $8 fee, shown in the order summary before you place the order."
+      },
+      "nationwide": {
+        "question": "Do you ship nationwide?",
+        "answer": "Yes. We ship to every province in Vietnam through Vietnam Post and J&T Express. Just give us a full address including street, ward, district, and province."
       },
       "packaging": {
-        "question": "How are plants packaged for delivery?",
-        "answer": "Each plant is carefully secured to protect the stems, leaves, and soil so it arrives healthy and ready for its new home."
+        "question": "How are plants packed for shipping?",
+        "answer": "The root ball is wrapped to hold moisture and keep the soil intact, the branches are tied, and everything travels in a ventilated box. This keeps the plant healthy through 3–5 days in transit."
       },
-      "outsideCity": {
-        "question": "Do you deliver outside the city?",
-        "answer": "Yes, we deliver to many nearby areas. Shipping availability and timing are confirmed at checkout based on your address."
+      "trackOrder": {
+        "question": "How can I track my order?",
+        "answer": "Once your order ships we send the tracking number on Zalo so you can follow it on the Vietnam Post or J&T Express website."
+      },
+      "afterDelivery": {
+        "question": "What should I do when the plant arrives?",
+        "answer": "Unbox it right away, remove the ties, place it somewhere shaded with gentle sun, and water the root ball. Let the plant rest for 3–5 days to adjust before planting it out or repotting."
       },
       "watering": {
-        "question": "How often should I water my plant?",
-        "answer": "It depends on the plant, light, and season. As a starting point, water when the top layer of soil feels dry, and always check your plant’s care guide."
+        "question": "How often should I water?",
+        "answer": "Water when the top of the root ball feels dry — usually once a day in the early morning or late afternoon, and less in the rainy season. Good drainage matters most: young plants are far more likely to die from waterlogging than from thirst."
       },
-      "sunlight": {
-        "question": "How much sunlight does my plant need?",
-        "answer": "Most of our indoor plants prefer bright, indirect light. Each product page includes specific light guidance for that plant."
+      "planting": {
+        "question": "Should I plant in the ground or in a pot?",
+        "answer": "Fruit trees do best planted in the ground, but a large, well-draining pot works too. Mix the soil with well-rotted compost and choose a spot that gets at least 5–6 hours of sun a day."
       },
       "losingLeaves": {
-        "question": "What happens if my plant starts losing leaves?",
-        "answer": "Some leaf drop is normal after moving. Check watering, light, and temperature first. If you are unsure, reach out and we can help you troubleshoot."
+        "question": "Is it normal for leaves to drop after delivery?",
+        "answer": "Yes, some leaf drop after transit is expected, and new shoots usually appear within one or two weeks as the roots settle. Keep the soil evenly moist, shade the plant from harsh sun, and hold off on fertiliser. If the plant wilts fast or the stem darkens, send us photos on Zalo."
       },
-      "petSafety": {
-        "question": "Are your plants safe for pets?",
-        "answer": "Not all plants are pet-safe. Look for our pet-friendly labels, or contact us and we will help you choose a safer option for your home."
+      "fruiting": {
+        "question": "How long until the tree bears fruit?",
+        "answer": "It depends on the variety and how it is cared for. Grafted trees usually fruit within one to two years, much sooner than seed-grown trees. Message us on Zalo for the timeline of a specific variety."
+      },
+      "graftedSeedlings": {
+        "question": "Are the plants true to variety?",
+        "answer": "Yes. We source from nurseries we know in Cai Mon – Cho Lach, mostly grafted plants, so they keep the parent tree's fruit quality, yield, and time to harvest."
+      },
+      "plantSize": {
+        "question": "How tall are the seedlings?",
+        "answer": "It varies by variety, but most seedlings are around 40–80cm tall when they ship. Exact height and details are listed in each plant's description."
       },
       "potSize": {
-        "question": "Can I choose the pot size?",
-        "answer": "Yes. Where size options are available, you can select your preferred pot size on the product page before adding the plant to your cart."
-      },
-      "potColor": {
-        "question": "Can I choose the pot color?",
-        "answer": "Many plants offer pot color options. Choose your preferred color on the product page when selecting your plant."
+        "question": "Can I choose the plant size?",
+        "answer": "Yes. Where size options are offered, you can choose one on the product page before adding the plant to your cart. The price updates to match the size you pick."
       },
       "plantsWithPots": {
-        "question": "Do plants come with pots?",
-        "answer": "Most plants are sold with a nursery or decorative pot as shown on the product page. Details are listed for each item."
+        "question": "Do plants come with a pot?",
+        "answer": "Seedlings ship in their nursery root ball rather than a decorative pot, which keeps them light and safe in transit. You can plant them straight into the ground or pot them up yourself."
       },
       "returnPolicy": {
         "question": "What is your return policy?",
-        "answer": "Because plants are living products, returns are limited. Please contact us within 48 hours if there is an issue with your order and we will help find a fair solution."
+        "answer": "Because plants are living products, we cannot take back healthy plants. If something is wrong with your order, message us on Zalo within 48 hours of delivery and we will sort it out."
       },
       "damagedPlant": {
-        "question": "What if my plant arrives damaged?",
-        "answer": "Please send us photos within 48 hours of delivery. If a plant arrives damaged, we will arrange a replacement or another suitable resolution."
+        "question": "What if my plant arrives broken or damaged?",
+        "answer": "Photograph the plant and the box as soon as you open it and send the photos on Zalo within 48 hours. If the damage happened in transit, we will send a replacement or refund that plant."
       },
       "exchangePlant": {
-        "question": "Can I exchange a plant?",
-        "answer": "Exchanges may be possible for unopened or unused items, depending on plant condition and availability. Contact us and we will review your request."
-      },
-      "whereGrown": {
-        "question": "Where are your plants grown?",
-        "answer": "Our plants are carefully selected from trusted local growers and nurseries so they are healthy, well-adapted, and ready for your space."
-      },
-      "payment": {
-        "question": "What payment methods do you accept?",
-        "answer": "We accept major cards and other secure payment options shown at checkout. Your payment details are processed safely during order completion."
-      },
-      "contactUs": {
-        "question": "How can I contact Ngoc Ngan Ben Tre?",
-        "answer": "Use the contact details in our footer or reach out through the Contact Us link. We are happy to help with plant selection, orders, and care questions."
+        "question": "Can I swap for a different variety?",
+        "answer": "We can swap varieties while the order is still with us. After delivery it depends on the condition of the plant and what is in stock — message us on Zalo and we will check."
       }
     }
   },

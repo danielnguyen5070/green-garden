@@ -281,12 +281,12 @@
   "faq": {
     "metadata": {
       "title": "Câu hỏi thường gặp | Ngoc Ngan Ben Tre",
-      "description": "Tìm câu trả lời về cây trồng, giao hàng, đơn hàng, chăm sóc, đổi trả và nhiều hơn nữa tại Ngoc Ngan Ben Tre."
+      "description": "Giải đáp về cây giống Cái Mơn, cách đặt hàng, giao hàng toàn quốc, thanh toán khi nhận hàng, cách trồng và chăm sóc cây."
     },
     "hero": {
       "eyebrow": "Trung tâm hỗ trợ",
       "title": "Câu hỏi thường gặp",
-      "description": "Tìm câu trả lời về cây trồng, giao hàng, đơn hàng, chăm sóc và mọi điều liên quan.",
+      "description": "Giải đáp về cây giống Cái Mơn, cách đặt hàng, giao hàng, thanh toán và cách chăm cây sau khi nhận.",
       "searchPlaceholder": "Tìm câu hỏi..."
     },
     "categories": {
@@ -294,99 +294,106 @@
       "all": "Tất cả",
       "orders": "Đơn hàng",
       "delivery": "Giao hàng",
-      "care": "Chăm sóc cây",
-      "pots": "Chậu & Sản phẩm",
-      "returns": "Đổi trả",
-      "general": "Chung"
+      "care": "Trồng & chăm sóc",
+      "plants": "Cây giống",
+      "returns": "Đổi trả"
     },
     "empty": "Không tìm thấy câu hỏi nào.",
     "clearSearch": "Xóa tìm kiếm",
     "contact": {
       "title": "Bạn vẫn còn thắc mắc?",
-      "description": "Chúng tôi sẵn sàng giúp bạn chọn cây phù hợp và giải đáp mọi câu hỏi.",
-      "contactUs": "Liên hệ",
-      "shopPlants": "Mua cây"
+      "description": "Nhắn Zalo cho shop, chúng tôi sẽ tư vấn giống cây phù hợp với vùng đất và nhu cầu của bạn.",
+      "contactUs": "Nhắn Zalo",
+      "shopPlants": "Xem cây giống"
     },
     "items": {
       "placeOrder": {
         "question": "Làm sao để đặt hàng?",
-        "answer": "Duyệt cây của chúng tôi, chọn kích thước và màu chậu nếu có, thêm vào giỏ hàng, rồi tiếp tục thanh toán để hoàn tất đơn."
+        "answer": "Chọn cây trên trang chủ, chọn cỡ cây nếu có, thêm vào giỏ rồi bấm Thanh toán. Bạn chỉ cần điền số điện thoại, họ tên và địa chỉ nhận hàng. Nếu muốn, bạn cũng có thể đặt trực tiếp qua Zalo 0386569374."
+      },
+      "noAccount": {
+        "question": "Tôi có cần tạo tài khoản không?",
+        "answer": "Không cần. Bạn đặt hàng ngay mà không phải đăng ký, chỉ cần số điện thoại, họ tên và địa chỉ để shop liên hệ và giao cây."
+      },
+      "orderConfirmation": {
+        "question": "Làm sao biết đơn hàng đã được nhận?",
+        "answer": "Sau khi đặt, bạn sẽ thấy mã đơn hàng ngay trên màn hình xác nhận. Shop sẽ gọi hoặc nhắn Zalo theo số điện thoại bạn để lại để xác nhận giống cây, số lượng và địa chỉ trước khi gửi hàng."
       },
       "changeOrder": {
-        "question": "Tôi có thể thay đổi đơn sau khi đặt không?",
-        "answer": "Nếu đơn chưa được chuẩn bị giao, hãy liên hệ sớm nhất có thể — chúng tôi sẽ cố gắng hỗ trợ cập nhật."
+        "question": "Tôi có thể thay đổi hoặc hủy đơn không?",
+        "answer": "Được, nếu đơn chưa được đóng gói gửi đi. Hãy nhắn Zalo 0386569374 kèm mã đơn hàng càng sớm càng tốt, shop sẽ cập nhật giúp bạn."
       },
       "multiplePlants": {
         "question": "Tôi có thể đặt nhiều cây cùng lúc không?",
-        "answer": "Có. Bạn có thể thêm nhiều cây vào giỏ và thanh toán trong một đơn hàng duy nhất."
+        "answer": "Có. Bạn thêm bao nhiêu cây tùy ý vào giỏ và thanh toán trong một đơn. Gộp nhiều cây vào một đơn cũng giúp tiết kiệm phí vận chuyển."
       },
       "deliveryTime": {
         "question": "Giao hàng mất bao lâu?",
-        "answer": "Hầu hết đơn nội thành đến trong 3–5 ngày làm việc. Tùy khu vực, bạn có thể thấy tùy chọn giao nhanh khi thanh toán."
+        "answer": "Cây được gửi qua Bưu điện hoặc J&T Express, thường nhận sau 3–5 ngày làm việc. Khu vực miền Bắc hoặc vùng xa có thể lâu hơn 1–2 ngày."
       },
-      "sameDay": {
-        "question": "Có giao trong ngày không?",
-        "answer": "Giao trong ngày chỉ áp dụng ở một số khu vực và khung giờ. Nếu khả dụng với địa chỉ của bạn, tùy chọn sẽ hiện khi thanh toán."
+      "shippingCost": {
+        "question": "Phí vận chuyển bao nhiêu?",
+        "answer": "Đơn từ 500.000₫ trở lên được miễn phí vận chuyển. Đơn dưới mức này có phí cố định 50.000₫, hiển thị rõ ở phần Tóm tắt đơn hàng trước khi bạn đặt."
+      },
+      "nationwide": {
+        "question": "Shop có giao toàn quốc không?",
+        "answer": "Có. Shop gửi cây đi khắp các tỉnh thành qua Bưu điện và J&T Express. Bạn chỉ cần nhập địa chỉ đầy đủ gồm số nhà, đường, xã/phường, huyện và tỉnh."
       },
       "packaging": {
-        "question": "Cây được đóng gói thế nào khi giao?",
-        "answer": "Mỗi cây được cố định cẩn thận để bảo vệ thân, lá và đất, giúp cây đến nơi khỏe mạnh và sẵn sàng về nhà mới."
+        "question": "Cây được đóng gói thế nào khi gửi đi?",
+        "answer": "Bầu đất được bọc kín để giữ ẩm và không bị vỡ, cành lá được buộc gọn, cả cây đặt trong thùng có lỗ thoáng. Cách đóng gói này giúp cây chịu được 3–5 ngày vận chuyển."
       },
-      "outsideCity": {
-        "question": "Các bạn có giao ngoài thành phố không?",
-        "answer": "Có, chúng tôi giao đến nhiều khu vực lân cận. Khả năng giao và thời gian sẽ được xác nhận khi thanh toán theo địa chỉ của bạn."
+      "trackOrder": {
+        "question": "Tôi theo dõi đơn hàng bằng cách nào?",
+        "answer": "Khi gửi hàng, shop sẽ nhắn mã vận đơn qua Zalo để bạn tra cứu trên website của Bưu điện hoặc J&T Express."
+      },
+      "afterDelivery": {
+        "question": "Nhận cây về thì làm gì đầu tiên?",
+        "answer": "Mở thùng ngay, tháo dây buộc, đặt cây nơi mát có nắng nhẹ và tưới ẩm bầu đất. Để cây nghỉ 3–5 ngày cho quen khí hậu rồi hãy trồng xuống đất hoặc sang chậu."
       },
       "watering": {
-        "question": "Tôi nên tưới cây bao lâu một lần?",
-        "answer": "Tùy loại cây, ánh sáng và mùa. Cách bắt đầu tốt là tưới khi lớp đất mặt khô, và luôn xem hướng dẫn chăm sóc của từng cây."
+        "question": "Tưới nước bao nhiêu là đủ?",
+        "answer": "Tưới khi mặt bầu se khô, thường 1 lần mỗi ngày vào sáng sớm hoặc chiều mát, mùa mưa thì thưa hơn. Quan trọng nhất là đất thoát nước tốt, vì cây giống chết vì úng nhiều hơn vì thiếu nước."
       },
-      "sunlight": {
-        "question": "Cây cần bao nhiêu ánh sáng?",
-        "answer": "Hầu hết cây nội thất của chúng tôi thích ánh sáng gián tiếp sáng. Mỗi trang sản phẩm có hướng dẫn ánh sáng riêng cho cây đó."
+      "planting": {
+        "question": "Nên trồng xuống đất hay trồng chậu?",
+        "answer": "Cây ăn trái phát triển tốt nhất khi trồng xuống đất, nhưng vẫn trồng chậu được nếu chậu đủ lớn và thoát nước tốt. Trộn đất với phân hữu cơ hoai mục, trồng nơi có nắng ít nhất 5–6 giờ mỗi ngày."
       },
       "losingLeaves": {
-        "question": "Nếu cây bắt đầu rụng lá thì sao?",
-        "answer": "Một số lá rụng sau khi di chuyển là bình thường. Hãy kiểm tra tưới nước, ánh sáng và nhiệt độ trước. Nếu chưa chắc, hãy liên hệ để chúng tôi hỗ trợ."
+        "question": "Cây rụng lá sau khi nhận có sao không?",
+        "answer": "Rụng bớt lá sau vận chuyển là bình thường, cây sẽ ra đọt mới sau 1–2 tuần khi đã bén rễ. Hãy giữ ẩm vừa phải, che nắng gắt và chưa bón phân ngay. Nếu cây héo nhanh hoặc thân thâm đen, hãy nhắn Zalo kèm ảnh để shop hỗ trợ."
       },
-      "petSafety": {
-        "question": "Cây của các bạn có an toàn với thú cưng không?",
-        "answer": "Không phải cây nào cũng an toàn với thú cưng. Hãy tìm nhãn thân thiện thú cưng, hoặc liên hệ để chúng tôi giúp chọn lựa phù hợp hơn."
+      "fruiting": {
+        "question": "Bao lâu thì cây cho trái?",
+        "answer": "Tùy giống và cách chăm. Cây ghép thường cho trái sau 1–2 năm, sớm hơn nhiều so với cây trồng từ hạt. Bạn có thể nhắn Zalo để shop tư vấn thời gian cụ thể cho từng giống."
+      },
+      "graftedSeedlings": {
+        "question": "Cây có đúng giống không?",
+        "answer": "Có. Cây được chọn từ nhà vườn quen tại Cái Mơn – Chợ Lách, chủ yếu là cây ghép nên giữ đúng đặc tính của cây mẹ về trái, năng suất và thời gian cho trái."
+      },
+      "plantSize": {
+        "question": "Cây giống cao khoảng bao nhiêu?",
+        "answer": "Tùy giống, phần lớn cây giống cao khoảng 40–80cm khi gửi đi. Chiều cao và đặc điểm cụ thể được ghi trong phần mô tả của từng cây."
       },
       "potSize": {
-        "question": "Tôi có thể chọn kích thước chậu không?",
-        "answer": "Có. Khi có tùy chọn kích thước, bạn có thể chọn cỡ chậu trên trang sản phẩm trước khi thêm vào giỏ."
-      },
-      "potColor": {
-        "question": "Tôi có thể chọn màu chậu không?",
-        "answer": "Nhiều cây có tùy chọn màu chậu. Hãy chọn màu bạn thích trên trang sản phẩm khi chọn cây."
+        "question": "Tôi có chọn được cỡ cây không?",
+        "answer": "Có. Với những cây có nhiều lựa chọn, bạn chọn cỡ ngay trên trang sản phẩm trước khi thêm vào giỏ. Giá hiển thị theo đúng cỡ bạn chọn."
       },
       "plantsWithPots": {
         "question": "Cây có kèm chậu không?",
-        "answer": "Hầu hết cây được bán kèm chậu ươm hoặc chậu trang trí như trên trang sản phẩm. Chi tiết được ghi rõ cho từng món."
+        "answer": "Cây giống được gửi nguyên bầu đất, không kèm chậu trang trí, để nhẹ và an toàn khi vận chuyển. Bạn có thể trồng thẳng xuống đất hoặc sang chậu tùy ý."
       },
       "returnPolicy": {
-        "question": "Chính sách đổi trả của các bạn là gì?",
-        "answer": "Vì cây là sản phẩm sống, việc đổi trả có giới hạn. Vui lòng liên hệ trong vòng 48 giờ nếu đơn hàng có vấn đề — chúng tôi sẽ hỗ trợ giải pháp phù hợp."
+        "question": "Chính sách đổi trả thế nào?",
+        "answer": "Vì cây là sản phẩm sống nên shop không nhận trả hàng khi cây vẫn khỏe. Nếu đơn hàng có vấn đề, hãy nhắn Zalo trong vòng 48 giờ kể từ khi nhận cây để shop hỗ trợ."
       },
       "damagedPlant": {
-        "question": "Nếu cây đến nơi bị hư thì sao?",
-        "answer": "Hãy gửi ảnh cho chúng tôi trong vòng 48 giờ kể từ khi nhận hàng. Nếu cây bị hư khi giao, chúng tôi sẽ hỗ trợ đổi cây hoặc giải pháp phù hợp khác."
+        "question": "Nếu cây đến nơi bị gãy hoặc hư thì sao?",
+        "answer": "Hãy chụp ảnh cây và thùng hàng ngay khi mở, gửi qua Zalo trong vòng 48 giờ. Nếu cây hư hỏng do vận chuyển, shop sẽ gửi cây thay thế hoặc hoàn tiền phần cây đó."
       },
       "exchangePlant": {
-        "question": "Tôi có thể đổi cây không?",
-        "answer": "Việc đổi có thể được xem xét với sản phẩm chưa sử dụng, tùy tình trạng cây và hàng sẵn có. Hãy liên hệ để chúng tôi kiểm tra yêu cầu của bạn."
-      },
-      "whereGrown": {
-        "question": "Cây của các bạn được trồng ở đâu?",
-        "answer": "Chúng tôi chọn lọc cây từ các nhà vườn và đối tác tin cậy tại địa phương để cây khỏe mạnh, thích nghi tốt và sẵn sàng cho không gian của bạn."
-      },
-      "payment": {
-        "question": "Các bạn chấp nhận phương thức thanh toán nào?",
-        "answer": "Chúng tôi chấp nhận thẻ phổ biến và các tùy chọn thanh toán an toàn hiện khi checkout. Thông tin thanh toán được xử lý an toàn khi hoàn tất đơn."
-      },
-      "contactUs": {
-        "question": "Làm sao để liên hệ Ngoc Ngan Ben Tre?",
-        "answer": "Xem thông tin liên hệ ở chân trang hoặc dùng liên kết Liên hệ. Chúng tôi sẵn sàng hỗ trợ chọn cây, đơn hàng và chăm sóc."
+        "question": "Tôi có thể đổi sang giống khác không?",
+        "answer": "Shop có thể đổi giống nếu đơn chưa gửi đi. Khi cây đã giao, việc đổi sẽ tùy tình trạng cây và giống còn hàng — hãy nhắn Zalo để shop kiểm tra giúp bạn."
       }
     }
   },
