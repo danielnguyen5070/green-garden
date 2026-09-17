@@ -1,21 +1,24 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { PackageIcon } from "lucide-react";
-import { CHECKOUT_SHIPPING_METHODS, type CheckoutShippingMethodId } from "@/lib/checkout";
+import { useLocale, useTranslations } from "next-intl";
+import { PackageIcon, TruckIcon } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { formatCartMoney } from "@/lib/cart";
+import { useCartStore } from "@/store/cart.store";
 import { cn } from "@/lib/utils";
 
-function ShippingMethod({
-  value,
-  onChange,
-  className,
-}: {
-  value: CheckoutShippingMethodId;
-  onChange: (id: CheckoutShippingMethodId) => void;
-  className?: string;
-}) {
+function ShippingMethod({ className }: { className?: string }) {
   const t = useTranslations("checkout.shippingMethod");
+  const locale = useLocale();
+  const moneyLocale = locale === "vi" ? "vi-VN" : "en-US";
+
+  const hasHydrated = useCartStore((state) => state.hasHydrated);
+  const shipping = useCartStore((state) => state.shipping(moneyLocale));
+  const amountToFreeShipping = useCartStore((state) =>
+    state.amountToFreeShipping(moneyLocale),
+  );
+
+  const isFree = shipping === 0;
 
   return (
     <section
@@ -36,64 +39,46 @@ function ShippingMethod({
         </h2>
       </div>
 
-      <div
-        className="space-y-3"
-        role="radiogroup"
-        aria-labelledby="shipping-method-heading"
-      >
-        {CHECKOUT_SHIPPING_METHODS.map((method) => {
-          const selected = method.id === value;
+      <div className="flex items-start gap-3.5 rounded-xl border border-primary/30 bg-secondary/50 px-4 py-4">
+        <span
+          className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10"
+          aria-hidden="true"
+        >
+          <TruckIcon className="size-4 text-primary stroke-[1.5]" />
+        </span>
 
-          return (
-            <button
-              key={method.id}
-              type="button"
-              role="radio"
-              aria-checked={selected}
-              onClick={() => onChange(method.id)}
-              className={cn(
-                "flex w-full items-center gap-3.5 rounded-xl border px-4 py-4 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                selected
-                  ? "border-primary bg-secondary/50"
-                  : "border-border bg-card hover:border-border",
-              )}
-            >
-              <span
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+            <p className="font-sans text-sm font-semibold text-foreground">
+              {t("standard")}
+            </p>
+            {hasHydrated ? (
+              <p
                 className={cn(
-                  "flex size-4 shrink-0 items-center justify-center rounded-full border",
-                  selected
-                    ? "border-primary"
-                    : "border-muted-foreground/40",
-                )}
-                aria-hidden="true"
-              >
-                {selected ? (
-                  <span className="size-2 rounded-full bg-primary" />
-                ) : null}
-              </span>
-
-              <span className="min-w-0 flex-1">
-                <span className="block font-sans text-sm font-semibold text-foreground">
-                  {t(method.nameKey)}
-                </span>
-                <span className="mt-0.5 block font-sans text-small text-muted-foreground">
-                  {t(method.etaKey)}
-                </span>
-              </span>
-
-              <span
-                className={cn(
-                  "shrink-0 font-sans text-sm font-semibold",
-                  method.price === 0 ? "text-primary" : "text-foreground",
+                  "font-sans text-sm font-semibold",
+                  isFree ? "text-primary" : "tabular-nums text-foreground",
                 )}
               >
-                {method.price === 0
-                  ? t("free")
-                  : formatCartMoney(method.price)}
-              </span>
-            </button>
-          );
-        })}
+                {isFree ? t("free") : formatCartMoney(shipping, moneyLocale)}
+              </p>
+            ) : (
+              <Skeleton className="h-4 w-24" />
+            )}
+          </div>
+          <p className="mt-1 font-sans text-small text-muted-foreground">
+            {t("carrier")}
+          </p>
+          <p className="mt-0.5 font-sans text-small text-muted-foreground">
+            {t("eta")}
+          </p>
+          {hasHydrated && !isFree ? (
+            <p className="mt-1.5 font-sans text-small font-medium text-primary">
+              {t("freeShippingHint", {
+                amount: formatCartMoney(amountToFreeShipping, moneyLocale),
+              })}
+            </p>
+          ) : null}
+        </div>
       </div>
     </section>
   );

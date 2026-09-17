@@ -1,18 +1,13 @@
 import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/layout/container";
 import { LogoMark } from "@/components/layout/header/logo";
-import { Link } from "@/i18n/navigation";
+import { CONTACT_CONFIG } from "@/config/contact";
 import { cn } from "@/lib/utils";
 
 async function CheckoutFooter({ className }: { className?: string }) {
   const t = await getTranslations("checkout.footer");
-  const year = new Date().getFullYear();
 
-  const links = [
-    { href: "/#privacy", labelKey: "privacy" as const },
-    { href: "/#terms", labelKey: "terms" as const },
-    { href: "/#help", labelKey: "help" as const },
-  ];
+  const links = [{ href: CONTACT_CONFIG.zaloUrl, labelKey: "help" as const }];
 
   return (
     <footer
@@ -23,7 +18,7 @@ async function CheckoutFooter({ className }: { className?: string }) {
         <div className="flex items-center gap-2.5">
           <LogoMark className="size-5 opacity-60" />
           <p className="font-sans text-small text-muted-foreground">
-            {t("copyright", { year })}
+            {t("copyright")}
           </p>
         </div>
 
@@ -31,12 +26,14 @@ async function CheckoutFooter({ className }: { className?: string }) {
           <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 sm:justify-end">
             {links.map((link) => (
               <li key={link.labelKey}>
-                <Link
+                <a
                   href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="font-sans text-small text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   {t(link.labelKey)}
-                </Link>
+                </a>
               </li>
             ))}
           </ul>

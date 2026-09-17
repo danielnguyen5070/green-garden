@@ -153,41 +153,43 @@
     },
     "shippingDetails": {
       "title": "Thông tin giao hàng",
-      "firstName": "Tên",
-      "lastName": "Họ",
-      "address": "Địa chỉ dòng 1",
-      "city": "Thành phố",
-      "postalCode": "Mã bưu điện",
-      "email": "Địa chỉ email"
+      "phone": "Số điện thoại",
+      "name": "Họ và tên",
+      "address": "Địa chỉ",
+      "errors": {
+        "phoneRequired": "Vui lòng nhập số điện thoại.",
+        "phoneInvalid": "Số điện thoại không hợp lệ. Ví dụ: 0386569374.",
+        "nameTooShort": "Họ và tên quá ngắn.",
+        "addressTooShort": "Địa chỉ quá ngắn. Vui lòng nhập số nhà, đường, xã/phường, huyện, tỉnh."
+      }
     },
     "shippingMethod": {
       "title": "Phương thức giao hàng",
       "standard": "Giao hàng tiêu chuẩn",
-      "standardEta": "3–5 ngày làm việc",
-      "express": "Giao hàng nhanh",
-      "expressEta": "Ngày làm việc tiếp theo",
-      "free": "Miễn phí"
+      "carrier": "Bưu điện hoặc J&T Express",
+      "eta": "Dự kiến nhận hàng: 3–5 ngày làm việc",
+      "free": "Miễn phí vận chuyển",
+      "freeShippingHint": "Thêm {amount} nữa để được miễn phí vận chuyển."
     },
     "orderSummary": {
       "title": "Tóm tắt đơn hàng",
       "qty": "SL: {count}",
       "subtotal": "Tạm tính",
       "shipping": "Vận chuyển",
-      "tax": "Thuế (ước tính)",
       "free": "Miễn phí",
       "total": "Tổng cộng",
-      "secureNotice": "Dữ liệu của bạn được bảo vệ bằng mã hóa chuẩn ngành. Thanh toán an toàn bởi Ngoc Ngan Ben Tre."
+      "empty": "Giỏ hàng trống",
+      "shopPlants": "Xem cây giống →",
+      "secureNotice": "Bạn chỉ thanh toán khi nhận được cây. Không cần trả trước."
     },
     "secure": {
-      "title": "Thanh toán an toàn",
-      "description": "Thông tin của bạn được bảo vệ."
+      "title": "Thanh toán khi nhận hàng",
+      "description": "Bạn chỉ thanh toán khi nhận được cây."
     },
     "footer": {
       "navLabel": "Thông tin pháp lý thanh toán",
-      "privacy": "Chính sách bảo mật",
-      "terms": "Điều khoản dịch vụ",
       "help": "Trung tâm trợ giúp",
-      "copyright": "© {year} Ngoc Ngan Ben Tre Plant Store. Bảo lưu mọi quyền."
+      "copyright": "Ngoc Ngan Ben Tre"
     }
   },
   "about": {

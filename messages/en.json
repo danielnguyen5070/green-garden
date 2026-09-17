@@ -152,42 +152,44 @@
       "review": "Review"
     },
     "shippingDetails": {
-      "title": "Shipping Details",
-      "firstName": "First Name",
-      "lastName": "Last Name",
-      "address": "Address line 1",
-      "city": "City",
-      "postalCode": "Postal Code",
-      "email": "Email Address"
+      "title": "Delivery details",
+      "phone": "Phone number",
+      "name": "Full name",
+      "address": "Address",
+      "errors": {
+        "phoneRequired": "Please enter your phone number.",
+        "phoneInvalid": "That phone number is not valid. Example: 0386569374.",
+        "nameTooShort": "That name is too short.",
+        "addressTooShort": "That address is too short. Include street, ward, district and province."
+      }
     },
     "shippingMethod": {
       "title": "Shipping Method",
       "standard": "Standard Delivery",
-      "standardEta": "3–5 business days",
-      "express": "Express Shipping",
-      "expressEta": "Next business day",
-      "free": "Free"
+      "carrier": "Vietnam Post or J&T Express",
+      "eta": "Estimated delivery: 3–5 business days",
+      "free": "Free shipping",
+      "freeShippingHint": "Add {amount} more to get free shipping."
     },
     "orderSummary": {
       "title": "Order Summary",
       "qty": "Qty: {count}",
       "subtotal": "Subtotal",
       "shipping": "Shipping",
-      "tax": "Tax (Estimated)",
       "free": "Free",
       "total": "Total",
-      "secureNotice": "Your data is protected by industry standard encryption. Guaranteed secure checkout by Ngoc Ngan Ben Tre."
+      "empty": "Your cart is empty",
+      "shopPlants": "Shop plants →",
+      "secureNotice": "You only pay when your plants arrive. No payment up front."
     },
     "secure": {
-      "title": "Secure checkout",
-      "description": "Your information is protected."
+      "title": "Cash on delivery",
+      "description": "You only pay when your plants arrive."
     },
     "footer": {
       "navLabel": "Checkout legal",
-      "privacy": "Privacy Policy",
-      "terms": "Terms of Service",
       "help": "Help Center",
-      "copyright": "© {year} Ngoc Ngan Ben Tre Plant Store. All rights reserved."
+      "copyright": "Ngoc Ngan Ben Tre"
     }
   },
   "about": {

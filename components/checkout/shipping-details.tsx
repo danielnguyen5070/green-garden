@@ -4,12 +4,39 @@ import { useTranslations } from "next-intl";
 import { TruckIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  CHECKOUT_FORM_FIELDS,
+  type CheckoutFormErrors,
+  type CheckoutFormField,
+  type CheckoutFormValues,
+} from "@/lib/checkout-form";
 import { cn } from "@/lib/utils";
 
 const FIELD_CLASS =
   "h-[3.25rem] rounded-[10px] border-border bg-card px-4 text-sm text-foreground shadow-none md:text-sm";
 
-function ShippingDetails({ className }: { className?: string }) {
+const FIELD_PROPS: Record<
+  CheckoutFormField,
+  { autoComplete: string; type?: string; inputMode?: "tel" }
+> = {
+  name: { autoComplete: "name" },
+  phone: { autoComplete: "tel", type: "tel", inputMode: "tel" },
+  address: { autoComplete: "street-address" },
+};
+
+function ShippingDetails({
+  values,
+  errors,
+  onChange,
+  onBlur,
+  className,
+}: {
+  values: CheckoutFormValues;
+  errors: CheckoutFormErrors;
+  onChange: (field: CheckoutFormField, value: string) => void;
+  onBlur: (field: CheckoutFormField) => void;
+  className?: string;
+}) {
   const t = useTranslations("checkout.shippingDetails");
 
   return (
@@ -32,86 +59,42 @@ function ShippingDetails({ className }: { className?: string }) {
       </div>
 
       <div className="space-y-4">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="checkout-first-name" className="text-sm font-medium text-foreground">
-              {t("firstName")}
-            </Label>
-            <Input
-              id="checkout-first-name"
-              name="firstName"
-              autoComplete="given-name"
-              defaultValue="MD.ABDUL"
-              className={FIELD_CLASS}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="checkout-last-name" className="text-sm font-medium text-foreground">
-              {t("lastName")}
-            </Label>
-            <Input
-              id="checkout-last-name"
-              name="lastName"
-              autoComplete="family-name"
-              defaultValue="ASIF"
-              className={FIELD_CLASS}
-            />
-          </div>
-        </div>
+        {CHECKOUT_FORM_FIELDS.map((field) => {
+          const error = errors[field];
+          const fieldId = `checkout-${field}`;
+          const errorId = `${fieldId}-error`;
 
-        <div className="space-y-2">
-          <Label htmlFor="checkout-address" className="text-sm font-medium text-foreground">
-            {t("address")}
-          </Label>
-          <Input
-            id="checkout-address"
-            name="address1"
-            autoComplete="address-line1"
-            defaultValue="123 Plant Lane"
-            className={FIELD_CLASS}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="checkout-city" className="text-sm font-medium text-foreground">
-              {t("city")}
-            </Label>
-            <Input
-              id="checkout-city"
-              name="city"
-              autoComplete="address-level2"
-              defaultValue="Greenwich"
-              className={FIELD_CLASS}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="checkout-postal" className="text-sm font-medium text-foreground">
-              {t("postalCode")}
-            </Label>
-            <Input
-              id="checkout-postal"
-              name="postalCode"
-              autoComplete="postal-code"
-              defaultValue="SW1A 1AA"
-              className={FIELD_CLASS}
-            />
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="checkout-email" className="text-sm font-medium text-foreground">
-            {t("email")}
-          </Label>
-          <Input
-            id="checkout-email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            defaultValue="john@example.com"
-            className={FIELD_CLASS}
-          />
-        </div>
+          return (
+            <div key={field} className="space-y-2">
+              <Label
+                htmlFor={fieldId}
+                className="text-sm font-medium text-foreground"
+              >
+                {t(field)}
+              </Label>
+              <Input
+                id={fieldId}
+                name={field}
+                value={values[field]}
+                onChange={(event) => onChange(field, event.target.value)}
+                onBlur={() => onBlur(field)}
+                aria-invalid={error ? true : undefined}
+                aria-describedby={error ? errorId : undefined}
+                className={FIELD_CLASS}
+                {...FIELD_PROPS[field]}
+              />
+              {error ? (
+                <p
+                  id={errorId}
+                  role="alert"
+                  className="font-sans text-small text-destructive"
+                >
+                  {t(`errors.${error}`)}
+                </p>
+              ) : null}
+            </div>
+          );
+        })}
       </div>
     </section>
   );
