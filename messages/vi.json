@@ -89,23 +89,20 @@
       "loadMore": "Xem thêm",
       "empty": "Không tìm thấy cây nào.",
       "clearFilters": "Xóa bộ lọc",
-      "bestseller": "Bán chạy",
+      "loadError": "Hiện chưa tải được danh sách cây.",
+      "retry": "Thử lại",
+      "featured": "Nổi bật",
+      "outOfStock": "Hết hàng",
       "favorite": "Lưu cây",
       "sort": {
         "featured": "Nổi bật",
         "newest": "Mới nhất",
         "price-asc": "Giá: Thấp đến cao",
-        "price-desc": "Giá: Cao đến thấp",
-        "best-selling": "Bán chạy nhất"
+        "price-desc": "Giá: Cao đến thấp"
       },
       "categories": {
         "label": "Danh mục",
-        "all": "Tất cả",
-        "Indoor": "Trong nhà",
-        "Outdoor": "Ngoài trời",
-        "Low Light": "Ít sáng",
-        "Pet Friendly": "An toàn thú cưng",
-        "Easy Care": "Dễ chăm"
+        "all": "Tất cả"
       }
     },
     "newsletter": {
@@ -129,21 +126,16 @@
   "plantDetail": {
     "home": "Trang chủ",
     "breadcrumb": "Đường dẫn",
-    "bestseller": "Bán chạy",
-    "ratingLabel": "{rating} trên 5 sao",
+    "featured": "Nổi bật",
     "potSize": "Cỡ chậu",
-    "potColor": "Màu chậu",
     "sizeGuide": "Hướng dẫn kích thước",
     "quantity": "Số lượng",
     "increaseQuantity": "Tăng số lượng",
     "decreaseQuantity": "Giảm số lượng",
     "addToCart": "Thêm vào giỏ — {price}",
+    "outOfStock": "Hết hàng",
     "favorite": "Lưu cây",
     "unfavorite": "Bỏ lưu cây",
-    "plantCare": "Chăm sóc cây",
-    "light": "Ánh sáng",
-    "water": "Tưới nước",
-    "pets": "Thú cưng",
     "selectImage": "Xem ảnh {index} của {name}",
     "selectVideo": "Xem xem trước video của {name}",
     "videoPreview": "Xem trước video",

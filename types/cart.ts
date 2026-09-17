@@ -1,5 +1,3 @@
-import type { Plant } from "@/types/plant";
-
 export type CartItem = {
   id: string;
   plantId: string;
@@ -37,15 +35,4 @@ export function getCartLineId(input: {
   const size = input.potSizeId ?? "default";
   const color = input.potColorId ?? "default";
   return `${input.id}__${size}__${color}`;
-}
-
-export function toCartPlantInput(plant: Plant): CartPlantInput {
-  return {
-    id: plant.id,
-    name: plant.name,
-    slug: plant.slug,
-    image: plant.image,
-    price: plant.price,
-    description: plant.description,
-  };
 }

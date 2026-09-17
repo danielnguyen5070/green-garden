@@ -1,21 +1,18 @@
+import { Suspense } from "react";
 import { Hero } from "@/components/home/hero";
 import { NewsletterSection } from "@/components/home/newsletter-section";
-import { PlantList } from "@/components/plant/plant-list";
 import {
-  getPlantCategories,
-  getPlants,
-} from "@/services/plant.service";
+  PlantListSection,
+  PlantListSkeleton,
+} from "@/components/plant/plant-list-section";
 
-export default async function HomePage() {
-  const [plants, categories] = await Promise.all([
-    getPlants(),
-    getPlantCategories(),
-  ]);
-
+export default function HomePage() {
   return (
     <>
       <Hero />
-      <PlantList plants={plants} categories={categories} />
+      <Suspense fallback={<PlantListSkeleton />}>
+        <PlantListSection />
+      </Suspense>
       <NewsletterSection />
     </>
   );

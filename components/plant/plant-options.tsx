@@ -3,26 +3,30 @@
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { PlantPotColor, PlantPotSize } from "@/types/plant";
+
+export type PotSizeOption = {
+  id: string;
+  label: string;
+  /** Formatted price adjustment, omitted when the backend sends zero. */
+  adjustmentLabel: string | null;
+};
 
 function PlantOptions({
   potSizes,
-  potColors,
   selectedSizeId,
-  selectedColorId,
   onSizeChange,
-  onColorChange,
   className,
 }: {
-  potSizes: PlantPotSize[];
-  potColors: PlantPotColor[];
+  potSizes: PotSizeOption[];
   selectedSizeId: string;
-  selectedColorId: string;
   onSizeChange: (id: string) => void;
-  onColorChange: (id: string) => void;
   className?: string;
 }) {
   const t = useTranslations("plantDetail");
+
+  if (potSizes.length === 0) {
+    return null;
+  }
 
   return (
     <div data-slot="plant-options" className={cn("space-y-6", className)}>
@@ -57,42 +61,16 @@ function PlantOptions({
                   "h-10 rounded-xl border px-3.5 font-sans text-sm",
                   selected
                     ? "border-primary bg-transparent text-primary hover:bg-transparent hover:text-primary"
-                    : "border-border bg-card text-foreground hover:bg-muted",
+                    : "border-border bg-card text-foreground hover:bg-muted"
                 )}
               >
                 {size.label}
+                {size.adjustmentLabel ? (
+                  <span className="text-muted-foreground">
+                    {size.adjustmentLabel}
+                  </span>
+                ) : null}
               </Button>
-            );
-          })}
-        </div>
-      </div>
-
-      <div>
-        <p className="mb-3 font-sans text-[0.6875rem] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
-          {t("potColor")}
-        </p>
-        <div
-          className="flex flex-wrap items-center gap-3"
-          role="group"
-          aria-label={t("potColor")}
-        >
-          {potColors.map((color) => {
-            const selected = color.id === selectedColorId;
-            return (
-              <button
-                key={color.id}
-                type="button"
-                aria-label={color.label}
-                aria-pressed={selected}
-                onClick={() => onColorChange(color.id)}
-                className={cn(
-                  "size-9 rounded-full outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                  selected
-                    ? "ring-2 ring-foreground ring-offset-2 ring-offset-background"
-                    : "ring-1 ring-border/80",
-                )}
-                style={{ backgroundColor: color.hex }}
-              />
             );
           })}
         </div>

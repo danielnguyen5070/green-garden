@@ -8,15 +8,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { PlantSortOption } from "@/types/plant";
+import type { StorefrontPlantSortOption } from "@/types/storefront";
 import { cn } from "@/lib/utils";
 
-const SORT_OPTIONS: PlantSortOption[] = [
+/** Mirrors what `GET /storefront/plants` can actually sort by. */
+const SORT_OPTIONS: StorefrontPlantSortOption[] = [
   "featured",
   "newest",
   "price-asc",
   "price-desc",
-  "best-selling",
 ];
 
 function PlantSort({
@@ -24,8 +24,8 @@ function PlantSort({
   onChange,
   className,
 }: {
-  value: PlantSortOption;
-  onChange: (value: PlantSortOption) => void;
+  value: StorefrontPlantSortOption;
+  onChange: (value: StorefrontPlantSortOption) => void;
   className?: string;
 }) {
   const t = useTranslations("home.products");
@@ -41,7 +41,7 @@ function PlantSort({
       <Select
         value={value}
         onValueChange={(next) => {
-          if (next != null) onChange(next as PlantSortOption);
+          if (next != null) onChange(next as StorefrontPlantSortOption);
         }}
       >
         <SelectTrigger

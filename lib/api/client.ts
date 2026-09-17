@@ -12,6 +12,8 @@ type RequestOptions = {
   skipAuthRefresh?: boolean;
   /** When true, 401 after failed refresh will not trigger a redirect. */
   skipAuthRedirect?: boolean;
+  /** Data Cache lifetime in seconds when the call runs on the server. */
+  revalidate?: number | false;
 };
 
 let refreshPromise: Promise<boolean> | null = null;
@@ -105,6 +107,7 @@ async function request<T>(
     signal,
     skipAuthRefresh = false,
     skipAuthRedirect = false,
+    revalidate,
   } = options;
 
   const headers: HeadersInit = {
@@ -121,6 +124,7 @@ async function request<T>(
     headers,
     body: body === undefined ? undefined : JSON.stringify(body),
     signal,
+    next: revalidate === undefined ? undefined : { revalidate },
   });
 
   if (

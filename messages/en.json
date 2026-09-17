@@ -89,23 +89,20 @@
       "loadMore": "Load More",
       "empty": "No plants found.",
       "clearFilters": "Clear filters",
-      "bestseller": "Bestseller",
+      "loadError": "We couldn't load plants right now.",
+      "retry": "Try again",
+      "featured": "Featured",
+      "outOfStock": "Out of stock",
       "favorite": "Save plant",
       "sort": {
         "featured": "Featured",
         "newest": "Newest",
         "price-asc": "Price: Low to High",
-        "price-desc": "Price: High to Low",
-        "best-selling": "Best Selling"
+        "price-desc": "Price: High to Low"
       },
       "categories": {
         "label": "Categories",
-        "all": "All",
-        "Indoor": "Indoor",
-        "Outdoor": "Outdoor",
-        "Low Light": "Low Light",
-        "Pet Friendly": "Pet Friendly",
-        "Easy Care": "Easy Care"
+        "all": "All"
       }
     },
     "newsletter": {
@@ -129,21 +126,16 @@
   "plantDetail": {
     "home": "Home",
     "breadcrumb": "Breadcrumb",
-    "bestseller": "Best seller",
-    "ratingLabel": "{rating} out of 5 stars",
+    "featured": "Featured",
     "potSize": "Pot size",
-    "potColor": "Pot color",
     "sizeGuide": "Size Guide",
     "quantity": "Quantity",
     "increaseQuantity": "Increase quantity",
     "decreaseQuantity": "Decrease quantity",
     "addToCart": "Add to Cart — {price}",
+    "outOfStock": "Out of stock",
     "favorite": "Save plant",
     "unfavorite": "Remove from saved",
-    "plantCare": "Plant Care",
-    "light": "Light",
-    "water": "Water",
-    "pets": "Pets",
     "selectImage": "View image {index} of {name}",
     "selectVideo": "View video preview of {name}",
     "videoPreview": "Video preview",

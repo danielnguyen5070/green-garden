@@ -2,63 +2,103 @@
 
 import { useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { ChevronRightIcon, HeartIcon, MinusIcon, PlusIcon, ShoppingBagIcon } from "lucide-react";
+import {
+  ChevronRightIcon,
+  HeartIcon,
+  MinusIcon,
+  PlusIcon,
+  ShoppingBagIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
-import { PlantCare } from "@/components/plant/plant-care";
 import { PlantGallery } from "@/components/plant/plant-gallery";
 import { PlantInfo } from "@/components/plant/plant-info";
-import { PlantOptions } from "@/components/plant/plant-options";
+import {
+  PlantOptions,
+  type PotSizeOption,
+} from "@/components/plant/plant-options";
 import { Link } from "@/i18n/navigation";
-import { formatCartMoney } from "@/lib/cart";
-import { DEFAULT_POT_COLORS, DEFAULT_POT_SIZES } from "@/lib/plant-detail";
+import {
+  PLANT_IMAGE_PLACEHOLDER,
+  formatStorefrontPrice,
+  getActivePotSizes,
+  getLocalizedPlant,
+  getPrimaryPlantImage,
+  localizePrice,
+  localizeText,
+  sortPlantImages,
+} from "@/lib/storefront";
 import { useCartStore } from "@/store/cart.store";
-import type { Plant } from "@/types/plant";
+import type { StorefrontPlantDetail } from "@/types/storefront";
 import { cn } from "@/lib/utils";
 
-function PlantDetail({ plant }: { plant: Plant }) {
+/** Signed label such as `+$5.00`; zero adjustments are not worth the noise. */
+function formatAdjustment(amount: number, locale: string): string | null {
+  if (amount === 0) return null;
+  const sign = amount > 0 ? "+" : "−";
+  return `${sign}${formatStorefrontPrice(Math.abs(amount), locale)}`;
+}
+
+function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
   const t = useTranslations("plantDetail");
   const locale = useLocale();
   const addItem = useCartStore((state) => state.addItem);
 
-  const potSizes = plant.potSizes ?? DEFAULT_POT_SIZES;
-  const potColors = plant.potColors ?? DEFAULT_POT_COLORS;
+  const {
+    name,
+    description,
+    price: basePrice,
+  } = getLocalizedPlant(plant, locale);
+  const categoryName = plant.category
+    ? localizeText(plant.category.name, plant.category.name_vi, locale)
+    : null;
 
-  const [selectedSizeId, setSelectedSizeId] = useState(
-    potSizes[1]?.id ?? potSizes[0]?.id ?? "medium",
+  const images = useMemo(() => sortPlantImages(plant.images), [plant.images]);
+
+  const potSizes = useMemo(
+    () => getActivePotSizes(plant.pot_sizes),
+    [plant.pot_sizes]
   );
-  const [selectedColorId, setSelectedColorId] = useState(
-    potColors[1]?.id ?? potColors[0]?.id ?? "stone",
-  );
+
+  const [selectedSizeId, setSelectedSizeId] = useState(potSizes[0]?.id ?? "");
   const [quantity, setQuantity] = useState(1);
   const [favorited, setFavorited] = useState(false);
 
-  const selectedSize = useMemo(
-    () => potSizes.find((size) => size.id === selectedSizeId) ?? potSizes[0],
-    [potSizes, selectedSizeId],
-  );
-  const selectedColor = useMemo(
-    () =>
-      potColors.find((color) => color.id === selectedColorId) ?? potColors[0],
-    [potColors, selectedColorId],
-  );
+  const selectedSize =
+    potSizes.find((size) => size.id === selectedSizeId) ?? potSizes[0] ?? null;
 
-  const moneyLocale = locale === "vi" ? "vi-VN" : "en-US";
-  const lineTotal = plant.price * quantity;
+  const sizeOptions: PotSizeOption[] = potSizes.map((size) => ({
+    id: size.id,
+    label: size.name,
+    adjustmentLabel: formatAdjustment(
+      localizePrice(size.price_adjustment, size.price_adjustment_vi, locale),
+      locale
+    ),
+  }));
+
+  // Both the base price and the adjustment come from the backend; the only
+  // arithmetic here is adding the two amounts it already decided on.
+  const adjustment = selectedSize
+    ? localizePrice(
+        selectedSize.price_adjustment,
+        selectedSize.price_adjustment_vi,
+        locale
+      )
+    : 0;
+  const unitPrice = basePrice + adjustment;
+  const lineTotal = unitPrice * quantity;
 
   function handleAddToCart() {
     addItem({
       id: plant.id,
-      name: plant.name,
+      name,
       slug: plant.slug,
-      image: plant.image,
-      price: plant.price,
-      description: plant.description,
+      image: getPrimaryPlantImage(plant.images)?.url ?? PLANT_IMAGE_PLACEHOLDER,
+      price: unitPrice,
+      description: description ?? categoryName ?? "",
       quantity,
       potSizeId: selectedSize?.id,
-      potSizeLabel: selectedSize?.label,
-      potColorId: selectedColor?.id,
-      potColorLabel: selectedColor?.label,
+      potSizeLabel: selectedSize?.name,
     });
   }
 
@@ -78,39 +118,51 @@ function PlantDetail({ plant }: { plant: Plant }) {
                 {t("home")}
               </Link>
             </li>
-            <li aria-hidden="true" className="text-muted-foreground/70">
-              <ChevronRightIcon className="size-3.5" />
-            </li>
-            <li>
-              <span className="text-muted-foreground">{plant.category}</span>
-            </li>
+            {categoryName ? (
+              <>
+                <li aria-hidden="true" className="text-muted-foreground/70">
+                  <ChevronRightIcon className="size-3.5" />
+                </li>
+                <li>
+                  <span className="text-muted-foreground">{categoryName}</span>
+                </li>
+              </>
+            ) : null}
             <li aria-hidden="true" className="text-muted-foreground/70">
               <ChevronRightIcon className="size-3.5" />
             </li>
             <li>
               <span className="font-medium text-foreground" aria-current="page">
-                {plant.name}
+                {name}
               </span>
             </li>
           </ol>
         </nav>
 
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14 xl:gap-16">
-          <PlantGallery plant={plant} />
+          <PlantGallery
+            images={images}
+            name={name}
+            featured={plant.is_featured}
+          />
 
           <div className="flex min-w-0 flex-col">
-            <PlantInfo plant={plant} />
-
-            <div className="my-7 border-t border-border" />
-
-            <PlantOptions
-              potSizes={potSizes}
-              potColors={potColors}
-              selectedSizeId={selectedSizeId}
-              selectedColorId={selectedColorId}
-              onSizeChange={setSelectedSizeId}
-              onColorChange={setSelectedColorId}
+            <PlantInfo
+              name={name}
+              priceLabel={formatStorefrontPrice(unitPrice, locale)}
+              description={description}
             />
+
+            {sizeOptions.length > 0 ? (
+              <>
+                <div className="my-7 border-t border-border" />
+                <PlantOptions
+                  potSizes={sizeOptions}
+                  selectedSizeId={selectedSize?.id ?? ""}
+                  onSizeChange={setSelectedSizeId}
+                />
+              </>
+            ) : null}
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
               <div
@@ -151,12 +203,18 @@ function PlantDetail({ plant }: { plant: Plant }) {
                 type="button"
                 size="lg"
                 className="h-11 flex-1 rounded-xl font-sans text-sm font-semibold"
+                disabled={!plant.in_stock}
                 onClick={handleAddToCart}
               >
-                <ShoppingBagIcon className="size-4 stroke-[1.5]" data-icon="inline-start" />
-                {t("addToCart", {
-                  price: formatCartMoney(lineTotal, moneyLocale),
-                })}
+                <ShoppingBagIcon
+                  className="size-4 stroke-[1.5]"
+                  data-icon="inline-start"
+                />
+                {plant.in_stock
+                  ? t("addToCart", {
+                      price: formatStorefrontPrice(lineTotal, locale),
+                    })
+                  : t("outOfStock")}
               </Button>
 
               <Button
@@ -165,7 +223,7 @@ function PlantDetail({ plant }: { plant: Plant }) {
                 size="icon-lg"
                 className={cn(
                   "size-11 shrink-0 rounded-xl border-border",
-                  favorited && "border-primary/40 text-primary",
+                  favorited && "border-primary/40 text-primary"
                 )}
                 aria-label={favorited ? t("unfavorite") : t("favorite")}
                 aria-pressed={favorited}
@@ -174,15 +232,11 @@ function PlantDetail({ plant }: { plant: Plant }) {
                 <HeartIcon
                   className={cn(
                     "size-4 stroke-[1.5]",
-                    favorited && "fill-primary text-primary",
+                    favorited && "fill-primary text-primary"
                   )}
                 />
               </Button>
             </div>
-
-            {plant.care ? (
-              <PlantCare care={plant.care} className="mt-10" />
-            ) : null}
           </div>
         </div>
       </Container>

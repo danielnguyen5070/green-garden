@@ -1,7 +1,10 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
+import { ALL_CATEGORIES } from "@/hooks/use-storefront-plants";
+import { localizeText } from "@/lib/storefront";
+import type { StorefrontCategory } from "@/types/storefront";
 import { cn } from "@/lib/utils";
 
 function PlantFilters({
@@ -10,14 +13,22 @@ function PlantFilters({
   onSelect,
   className,
 }: {
-  categories: string[];
+  categories: StorefrontCategory[];
+  /** Category `slug`, or `all`. Ids never surface on the public site. */
   selected: string;
-  onSelect: (category: string) => void;
+  onSelect: (slug: string) => void;
   className?: string;
 }) {
   const t = useTranslations("home.products.categories");
+  const locale = useLocale();
 
-  const options = ["all", ...categories];
+  const options = [
+    { slug: ALL_CATEGORIES, label: t("all") },
+    ...categories.map((category) => ({
+      slug: category.slug,
+      label: localizeText(category.name, category.name_vi, locale),
+    })),
+  ];
 
   return (
     <div
@@ -26,13 +37,12 @@ function PlantFilters({
       role="group"
       aria-label={t("label")}
     >
-      {options.map((category) => {
-        const isActive = selected === category;
-        const label = t.has(category) ? t(category) : category;
+      {options.map((option) => {
+        const isActive = selected === option.slug;
 
         return (
           <Button
-            key={category}
+            key={option.slug}
             type="button"
             size="sm"
             variant={isActive ? "default" : "outline"}
@@ -41,9 +51,9 @@ function PlantFilters({
               !isActive && "bg-card text-foreground hover:bg-muted"
             )}
             aria-pressed={isActive}
-            onClick={() => onSelect(category)}
+            onClick={() => onSelect(option.slug)}
           >
-            {label}
+            {option.label}
           </Button>
         );
       })}

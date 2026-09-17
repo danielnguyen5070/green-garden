@@ -1,6 +1,7 @@
 /**
  * Plant shapes from the FastAPI admin API.
- * Kept separate from `types/plant.ts`, which is the storefront's camelCase model.
+ * Kept separate from `types/storefront.ts`, whose responses omit SKU, stock
+ * bookkeeping and audit fields.
  */
 
 /**

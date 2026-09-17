@@ -31,9 +31,17 @@ export function hasFreeShipping(subtotal: number) {
   return subtotal > 0 && subtotal >= FREE_SHIPPING_THRESHOLD;
 }
 
+/**
+ * Prices are stored in the currency the backend sends for the active locale
+ * (`price` is USD, `price_vi` is VND), so the currency follows the locale
+ * rather than being converted here.
+ */
 export function formatCartMoney(amount: number, locale = "en-US") {
+  const currency = locale.startsWith("vi") ? "VND" : "USD";
+
   return new Intl.NumberFormat(locale, {
     style: "currency",
-    currency: "USD",
+    currency,
+    maximumFractionDigits: currency === "VND" ? 0 : 2,
   }).format(amount);
 }
