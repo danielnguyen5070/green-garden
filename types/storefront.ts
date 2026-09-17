@@ -7,6 +7,8 @@
  * sent to the public site.
  */
 
+import type { OrderStatus } from "@/types/order";
+
 /** Money arrives as a decimal string so no precision is lost in transport. */
 type Decimal = string;
 
@@ -105,6 +107,38 @@ export type StorefrontPlantDetail = {
   category?: StorefrontCategorySummary | null;
   images?: StorefrontPlantDetailImage[];
   pot_sizes?: StorefrontPlantPotSize[];
+};
+
+/**
+ * Public checkout payload for `POST /api/v1/storefront/orders`.
+ *
+ * Only the selection is sent: the backend prices every line from the catalogue
+ * and ignores any amount in the body, so no unit price or total belongs here.
+ */
+export type StorefrontOrderItemRequest = {
+  plant_id: string;
+  quantity: number;
+  /** Pot size *name*, matching what the catalogue returned. */
+  pot_size?: string | null;
+};
+
+export type CreateStorefrontOrderRequest = {
+  customer: {
+    name: string;
+    phone: string;
+  };
+  shipping_address: string;
+  note?: string | null;
+  items: StorefrontOrderItemRequest[];
+};
+
+/** Confirmation returned on 201 — the source of truth for the order total. */
+export type StorefrontOrderResponse = {
+  id: string;
+  order_number: string;
+  status: OrderStatus;
+  total_amount: Decimal;
+  created_at: string;
 };
 
 export type StorefrontPlantSort = "created_at" | "name" | "price" | "stock";

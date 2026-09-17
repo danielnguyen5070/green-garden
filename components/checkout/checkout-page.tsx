@@ -1,26 +1,67 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { CheckoutProgress } from "@/components/checkout/checkout-progress";
 import { OrderSummary } from "@/components/checkout/order-summary";
 import { ShippingDetails } from "@/components/checkout/shipping-details";
 import { ShippingMethod } from "@/components/checkout/shipping-method";
+import { useRouter } from "@/i18n/navigation";
+import { createStorefrontOrder } from "@/lib/api/storefront";
+import { ApiError } from "@/lib/api/errors";
 import {
   CHECKOUT_FORM_FIELDS,
   EMPTY_CHECKOUT_FORM,
+  isCheckoutFormValid,
+  toStorefrontOrderPayload,
   validateCheckoutField,
   validateCheckoutForm,
   type CheckoutFormErrors,
   type CheckoutFormField,
   type CheckoutFormValues,
 } from "@/lib/checkout-form";
+import { toast } from "@/lib/toast";
+import { useCartStore } from "@/store/cart.store";
+import { useLastOrderStore } from "@/store/order.store";
+
+/** Backend failures the customer can act on; everything else is generic. */
+function getErrorKey(error: unknown) {
+  if (!(error instanceof ApiError)) return "generic";
+
+  switch (error.status) {
+    case 404:
+      return "unavailable";
+    case 409:
+      return "outOfStock";
+    case 422:
+      return "invalidDetails";
+    default:
+      return "generic";
+  }
+}
 
 function CheckoutPageView() {
   const t = useTranslations("checkout");
+  const router = useRouter();
+  const locale = useLocale();
+  const moneyLocale = locale === "vi" ? "vi-VN" : "en-US";
+
   const [values, setValues] = useState<CheckoutFormValues>(EMPTY_CHECKOUT_FORM);
   const [errors, setErrors] = useState<CheckoutFormErrors>({});
+  const [submitting, setSubmitting] = useState(false);
+
+  const items = useCartStore((state) => state.items);
+  const hasHydrated = useCartStore((state) => state.hasHydrated);
+  const clearCart = useCartStore((state) => state.clearCart);
+  const total = useCartStore((state) => state.total(moneyLocale));
+  const setLastOrder = useLastOrderStore((state) => state.setOrder);
+
+  const canSubmit =
+    hasHydrated &&
+    !submitting &&
+    items.length > 0 &&
+    isCheckoutFormValid(values);
 
   const handleChange = useCallback(
     (field: CheckoutFormField, value: string) => {
@@ -43,8 +84,10 @@ function CheckoutPageView() {
     [values],
   );
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (submitting) return;
 
     const nextErrors = validateCheckoutForm(values);
     setErrors(nextErrors);
@@ -55,6 +98,30 @@ function CheckoutPageView() {
 
     if (firstInvalid) {
       document.getElementById(`checkout-${firstInvalid}`)?.focus();
+      return;
+    }
+
+    if (items.length === 0) {
+      toast.error(t("errors.emptyCart"));
+      return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      const order = await createStorefrontOrder(
+        toStorefrontOrderPayload(values, items),
+      );
+
+      // Carry the checkout total across: the backend prices in USD, so its own
+      // total would not match what the customer just agreed to.
+      setLastOrder({ order, total, moneyLocale });
+      // Only now is the order safely on the backend.
+      clearCart();
+      router.push("/order-success");
+    } catch (error) {
+      toast.error(t(`errors.${getErrorKey(error)}`));
+      setSubmitting(false);
     }
   }
 
@@ -77,6 +144,7 @@ function CheckoutPageView() {
             className="mt-9 md:mt-10"
             values={values}
             errors={errors}
+            disabled={submitting}
             onChange={handleChange}
             onBlur={handleBlur}
           />
@@ -85,9 +153,10 @@ function CheckoutPageView() {
           <Button
             type="submit"
             size="lg"
+            disabled={!canSubmit}
             className="mt-8 h-12 w-full rounded-xl font-sans text-sm font-semibold md:mt-10"
           >
-            {t("continueToPayment")}
+            {submitting ? t("placingOrder") : t("placeOrder")}
           </Button>
         </form>
 

@@ -144,7 +144,6 @@
   "checkout": {
     "title": "Checkout",
     "description": "Complete your order to bring home your new plants.",
-    "continueToPayment": "Continue to Payment",
     "progress": {
       "label": "Checkout progress",
       "shipping": "Shipping",
@@ -156,10 +155,14 @@
       "phone": "Phone number",
       "name": "Full name",
       "address": "Address",
+      "note": "Note (optional)",
+      "notePlaceholder": "e.g. deliver during office hours, call before arriving...",
       "errors": {
         "phoneRequired": "Please enter your phone number.",
         "phoneInvalid": "That phone number is not valid. Example: 0386569374.",
+        "nameRequired": "Please enter your full name.",
         "nameTooShort": "That name is too short.",
+        "addressRequired": "Please enter your delivery address.",
         "addressTooShort": "That address is too short. Include street, ward, district and province."
       }
     },
@@ -190,6 +193,34 @@
       "navLabel": "Checkout legal",
       "help": "Help Center",
       "copyright": "Ngoc Ngan Ben Tre"
+    },
+    "placeOrder": "Complete checkout",
+    "placingOrder": "Placing order...",
+    "errors": {
+      "emptyCart": "Your cart is empty.",
+      "outOfStock": "Some plants in your cart are no longer in stock.",
+      "unavailable": "Some plants in your cart are no longer available.",
+      "invalidDetails": "Please check your order details.",
+      "generic": "We could not place your order. Please try again."
+    }
+  },
+  "orderSuccess": {
+    "title": "Order placed successfully",
+    "description": "We have received your order and will contact you shortly.",
+    "orderNumber": "Order number",
+    "status": "Status",
+    "total": "Total",
+    "codNotice": "You pay when your plants arrive. No payment up front.",
+    "continueShopping": "Continue shopping",
+    "missingTitle": "No recent order found",
+    "missingDescription": "We could not find a recent order on this device. If you just placed one, we will call you on the number you gave us.",
+    "statuses": {
+      "pending": "Pending confirmation",
+      "confirmed": "Confirmed",
+      "processing": "Preparing",
+      "shipping": "On the way",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
     }
   },
   "about": {

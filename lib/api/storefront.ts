@@ -1,6 +1,8 @@
 import { api } from "@/lib/api/client";
 import type {
+  CreateStorefrontOrderRequest,
   StorefrontCategoryListResponse,
+  StorefrontOrderResponse,
   StorefrontPlantDetail,
   StorefrontPlantListResponse,
   StorefrontPlantSort,
@@ -74,6 +76,20 @@ export async function getStorefrontPlants(
       sort: params.sort,
       order: params.order,
     },
+  });
+}
+
+/**
+ * Places a cash-on-delivery order. No account, no token: the phone number in
+ * the payload is the only identity the backend needs.
+ */
+export async function createStorefrontOrder(
+  payload: CreateStorefrontOrderRequest,
+  context: RequestContext = {}
+): Promise<StorefrontOrderResponse> {
+  return api.post<StorefrontOrderResponse>("/storefront/orders", payload, {
+    ...PUBLIC_REQUEST,
+    signal: context.signal,
   });
 }
 

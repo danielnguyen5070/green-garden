@@ -144,7 +144,6 @@
   "checkout": {
     "title": "Thanh toán",
     "description": "Hoàn tất đơn hàng để mang cây mới về nhà.",
-    "continueToPayment": "Tiếp tục thanh toán",
     "progress": {
       "label": "Tiến trình thanh toán",
       "shipping": "Giao hàng",
@@ -156,10 +155,14 @@
       "phone": "Số điện thoại",
       "name": "Họ và tên",
       "address": "Địa chỉ",
+      "note": "Ghi chú (không bắt buộc)",
+      "notePlaceholder": "Ví dụ: giao giờ hành chính, gọi trước khi giao...",
       "errors": {
         "phoneRequired": "Vui lòng nhập số điện thoại.",
         "phoneInvalid": "Số điện thoại không hợp lệ. Ví dụ: 0386569374.",
+        "nameRequired": "Vui lòng nhập họ và tên.",
         "nameTooShort": "Họ và tên quá ngắn.",
+        "addressRequired": "Vui lòng nhập địa chỉ nhận hàng.",
         "addressTooShort": "Địa chỉ quá ngắn. Vui lòng nhập số nhà, đường, xã/phường, huyện, tỉnh."
       }
     },
@@ -190,6 +193,34 @@
       "navLabel": "Thông tin pháp lý thanh toán",
       "help": "Trung tâm trợ giúp",
       "copyright": "Ngoc Ngan Ben Tre"
+    },
+    "placeOrder": "Hoàn tất thanh toán",
+    "placingOrder": "Đang đặt hàng...",
+    "errors": {
+      "emptyCart": "Giỏ hàng của bạn đang trống.",
+      "outOfStock": "Sản phẩm trong giỏ hàng không còn đủ số lượng.",
+      "unavailable": "Sản phẩm trong giỏ hàng không còn được bán.",
+      "invalidDetails": "Vui lòng kiểm tra lại thông tin đặt hàng.",
+      "generic": "Không thể đặt hàng. Vui lòng thử lại."
+    }
+  },
+  "orderSuccess": {
+    "title": "Đặt hàng thành công!",
+    "description": "Shop đã nhận được đơn hàng và sẽ liên hệ với bạn sớm nhất.",
+    "orderNumber": "Mã đơn hàng",
+    "status": "Trạng thái",
+    "total": "Tổng cộng",
+    "codNotice": "Bạn sẽ thanh toán khi nhận được cây. Không cần trả trước.",
+    "continueShopping": "Tiếp tục mua cây",
+    "missingTitle": "Không tìm thấy đơn hàng",
+    "missingDescription": "Chúng tôi không tìm thấy thông tin đơn hàng gần đây. Nếu bạn vừa đặt hàng, shop sẽ liên hệ với bạn qua số điện thoại đã cung cấp.",
+    "statuses": {
+      "pending": "Chờ xác nhận",
+      "confirmed": "Đã xác nhận",
+      "processing": "Đang chuẩn bị",
+      "shipping": "Đang giao",
+      "completed": "Hoàn tất",
+      "cancelled": "Đã hủy"
     }
   },
   "about": {
