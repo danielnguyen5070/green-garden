@@ -3,6 +3,7 @@ import { ArrowRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
+import { CONTACT_CONFIG } from "@/config/contact";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
@@ -32,7 +33,13 @@ async function FaqContact({ className }: { className?: string }) {
             <Button
               size="lg"
               className="h-12 w-full rounded-xl px-5 text-sm shadow-elevated sm:w-auto sm:min-w-[10.5rem]"
-              render={<Link href="/#contact" />}
+              render={
+                <a
+                  href={CONTACT_CONFIG.zaloUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                />
+              }
               nativeButton={false}
             >
               {t("contactUs")}
