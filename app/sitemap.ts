@@ -8,8 +8,15 @@ const baseUrl = "https://ngocnganbentre.vn";
 /** Matches the storefront API `page_size` cap. */
 const PLANT_PAGE_SIZE = 100;
 
-/** Public static routes that exist under `app/[locale]/(store)/`. */
-const STATIC_PATHS = ["", "/about", "/blog"] as const;
+/**
+ * Public static routes that exist under `app/[locale]/(store)/`.
+ * `/plants` and `/categories` listing pages are not present, so they are omitted.
+ */
+const STATIC_PAGES = [
+  { path: "", priority: 1.0 },
+  { path: "/blog", priority: 0.8 },
+  { path: "/about", priority: 0.6 },
+] as const;
 
 function localeUrl(locale: AppLocale, path: string): string {
   return path === "" ? `${baseUrl}/${locale}` : `${baseUrl}/${locale}${path}`;
@@ -21,11 +28,21 @@ function languageAlternates(path: string): Record<string, string> {
   );
 }
 
-function toLastModified(date: string): Date | undefined {
-  if (!date) return undefined;
+function pushLocalizedEntries(
+  entries: MetadataRoute.Sitemap,
+  languages: Record<string, string>,
+  priority: number
+) {
+  for (const locale of routing.locales) {
+    const url = languages[locale];
+    if (!url) continue;
 
-  const parsed = new Date(date);
-  return Number.isNaN(parsed.getTime()) ? undefined : parsed;
+    entries.push({
+      url,
+      priority,
+      alternates: { languages },
+    });
+  }
 }
 
 async function getAllPlantSlugs(): Promise<string[]> {
@@ -65,22 +82,18 @@ async function getAllPlantSlugs(): Promise<string[]> {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
 
-  for (const path of STATIC_PATHS) {
-    const languages = languageAlternates(path);
-    entries.push({
-      url: languages[routing.defaultLocale],
-      alternates: { languages },
-    });
+  for (const page of STATIC_PAGES) {
+    pushLocalizedEntries(entries, languageAlternates(page.path), page.priority);
   }
 
   const plantSlugs = await getAllPlantSlugs();
   for (const slug of plantSlugs) {
-    const path = `/plants/${slug}`;
-    const languages = languageAlternates(path);
-    entries.push({
-      url: languages[routing.defaultLocale],
-      alternates: { languages },
-    });
+    // Storefront list items have no reliable updatedAt; omit lastModified.
+    pushLocalizedEntries(
+      entries,
+      languageAlternates(`/plants/${slug}`),
+      0.8
+    );
   }
 
   const postsByLocale = Object.fromEntries(
@@ -95,33 +108,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   for (const slug of blogSlugs) {
     const languages: Record<string, string> = {};
-    let lastModified: Date | undefined;
 
     for (const locale of routing.locales) {
       const post = postsByLocale[locale].find((item) => item.slug === slug);
       if (!post) continue;
-
       languages[locale] = localeUrl(locale, `/blog/${slug}`);
-
-      const postModified = toLastModified(post.date);
-      if (
-        postModified &&
-        (!lastModified || postModified.getTime() > lastModified.getTime())
-      ) {
-        lastModified = postModified;
-      }
     }
 
-    const url =
-      languages[routing.defaultLocale] ?? Object.values(languages)[0];
-
-    if (!url) continue;
-
-    entries.push({
-      url,
-      ...(lastModified ? { lastModified } : {}),
-      alternates: { languages },
-    });
+    // Blog frontmatter only has publication `date`, not dateModified/updatedAt.
+    pushLocalizedEntries(entries, languages, 0.7);
   }
 
   return entries;
