@@ -40,6 +40,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
+import { notifyPlantToIndexNow } from "@/app/admin/actions/indexnow";
 import { adminCopy } from "@/lib/admin-copy";
 import {
   formatAdminCurrency,
@@ -379,11 +380,14 @@ export default function AdminPlantsPage() {
     setFormError(null);
     setSubmitting(true);
     try {
-      await createPlant(payload);
+      const plant = await createPlant(payload);
       setDialogMode(null);
       setSelected(null);
       toast.success(copy.createdSuccess);
       refresh(1);
+      if (plant.is_active) {
+        void notifyPlantToIndexNow(plant.slug);
+      }
     } catch (err) {
       setFormError(getErrorMessage(err));
     } finally {
@@ -440,11 +444,14 @@ export default function AdminPlantsPage() {
     setFormError(null);
     setSubmitting(true);
     try {
-      await updatePlant(selected.id, changes);
+      const plant = await updatePlant(selected.id, changes);
       setDialogMode(null);
       setSelected(null);
       toast.success(copy.updatedSuccess);
       refresh(page);
+      if (plant.is_active) {
+        void notifyPlantToIndexNow(plant.slug);
+      }
     } catch (err) {
       setFormError(getErrorMessage(err));
     } finally {
@@ -455,11 +462,16 @@ export default function AdminPlantsPage() {
   async function handleToggleStatus(plant: AdminPlantListItem) {
     setStatusPendingId(plant.id);
     try {
-      await updatePlantStatus(plant.id, { is_active: !plant.is_active });
+      const updated = await updatePlantStatus(plant.id, {
+        is_active: !plant.is_active,
+      });
       toast.success(
         plant.is_active ? copy.deactivatedSuccess : copy.activatedSuccess
       );
       refresh(page);
+      if (updated.is_active) {
+        void notifyPlantToIndexNow(updated.slug);
+      }
     } catch (err) {
       toast.error(getErrorMessage(err));
     } finally {

@@ -36,6 +36,11 @@ function handleAdminAuth(request: NextRequest) {
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Keep metadata endpoints outside locale rewriting.
+  if (pathname === "/sitemap.xml" || pathname === "/robots.txt") {
+    return NextResponse.next();
+  }
+
   if (pathname.startsWith("/admin")) {
     return handleAdminAuth(request);
   }
@@ -44,6 +49,8 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Skip API, Next internals, and static files
-  matcher: ["/((?!api|trpc|_next|_vercel|.*\\..*).*)"],
+  // Skip API, Next internals, metadata endpoints, and static files with extensions
+  matcher: [
+    "/((?!api|trpc|_next|_vercel|sitemap\\.xml|robots\\.txt|.*\\..*).*)",
+  ],
 };
