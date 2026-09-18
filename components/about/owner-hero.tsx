@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
-import { ArrowRightIcon, BookOpenIcon, LeafIcon } from "lucide-react";
+import { ArrowRightIcon, LeafIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
 import { ABOUT_IMAGES } from "@/components/about/images";
@@ -54,12 +54,11 @@ async function OwnerHero({ className }: { className?: string }) {
                 nativeButton={false}
               >
                 {t("secondaryCta")}
-                <BookOpenIcon data-icon="inline-end" className="size-4" />
               </Button>
             </div>
           </div>
 
-          <div className="relative mx-auto w-full max-w-[22rem] sm:max-w-[26rem] md:max-w-none md:justify-self-end">
+          <div className="relative mx-auto hidden w-full max-w-[22rem] sm:max-w-[26rem] md:block md:max-w-none md:justify-self-end">
             <div className="relative aspect-[4/5] w-full">
               <svg
                 aria-hidden="true"

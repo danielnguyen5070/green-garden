@@ -225,57 +225,30 @@
   },
   "about": {
     "metadata": {
-      "title": "Meet the Founder | Ngoc Ngan Ben Tre",
-      "description": "Meet the person behind Ngoc Ngan Ben Tre — a personal story of growing, caring for, and sharing plants with others."
+      "title": "About Ngoc Ngan Ben Tre | Ngoc Ngan Ben Tre",
+      "description": "Ngoc Ngan Ben Tre — a seedling grower from Ben Tre, bringing healthy plant varieties and practical growing know-how to gardeners and plant lovers."
     },
     "ownerHero": {
-      "eyebrow": "Meet the Founder",
-      "title": "Plants have always been part of my story.",
-      "description": "Ngoc Ngan Ben Tre started from a simple love for growing, caring for, and sharing plants with others.",
-      "primaryCta": "Explore Our Plants",
+      "eyebrow": "About Ngoc Ngan Ben Tre",
+      "title": "Seedlings from Ben Tre, grown for growers.",
+      "description": "Ngoc Ngan Ben Tre supplies quality seedlings — selecting healthy, true-to-type plants and sharing planting know-how rooted in Ben Tre’s farming tradition.",
+      "primaryCta": "Explore Our Seedlings",
       "secondaryCta": "Read Our Care Guide",
-      "imageAlt": "Portrait of the Ngoc Ngan Ben Tre founder among indoor plants"
+      "imageAlt": "Ngoc Ngan Ben Tre founders smiling together in front of a yellow flowering tree"
     },
     "ownerStory": {
-      "introTitle": "Meet the person behind Ngoc Ngan Ben Tre.",
-      "introDescription": "I first fell in love with plants by watching them grow — slowly, patiently, and full of quiet wonder. That curiosity grew into a habit of learning what each plant needs, and a joy in helping friends find the right green companion for their homes.",
-      "introImageAlt": "A calm plant corner with warm natural light",
-      "journeyTitle": "From a love of plants to Ngoc Ngan Ben Tre.",
-      "journeyParagraph1": "Ngoc Ngan Ben Tre began when I realized how many people wanted plants in their lives, but felt unsure where to start. Choosing a plant should feel inspiring, not overwhelming.",
-      "journeyParagraph2": "I started carefully selecting healthy plants, learning their habits, and sharing practical guidance — so every home could feel a little more alive.",
-      "journeyParagraph3": "Today, Ngoc Ngan Ben Tre is still guided by that same intention: help you find a plant that fits your space, your routine, and the way you want to live.",
-      "journeyImageAlt": "Healthy nursery plants arranged in soft natural light"
+      "introTitle": "From the green gardens of Ben Tre.",
+      "introDescription": "Ngoc Ngan Ben Tre is a seedling business from Ben Tre — a land known for lush gardens and traditional farming. Driven by a love of plants and a wish to bring quality varieties to growers, Ngoc Ngan has dedicated the work to selling and supplying seedlings to customers near and far.",
+      "introImageAlt": "Cai Mon Ben Tre seedlings with guava and durian",
+      "journeyTitle": "Patient selection, shared know-how.",
+      "journeyParagraph1": "From the smallest seedlings, Ngoc Ngan carefully chooses plants that are healthy, true to variety, and suited to each customer’s needs. As the old saying goes: “With enough work grinding iron, one day it becomes a needle.” Building a lasting business likewise takes persistence, diligence, and trust.",
+      "journeyParagraph2": "Beyond selling seedlings, Ngoc Ngan shares planting and care experience so customers gain practical knowledge for their gardens. For growers, the proverb “First water, second fertilizer, third diligence, fourth variety” remains valuable wisdom — a reminder that many factors must work together for plants to thrive.",
+      "journeyParagraph3": "Through direct sales and social media, Ngoc Ngan gradually brings Ben Tre seedlings to plant lovers and gardeners. With dedication and a spirit of continuous learning, Ngoc Ngan aims to keep building reputation, raising seedling quality, and helping create greener gardens.",
+      "journeyImageAlt": "Ngoc Ngan Ben Tre packing healthy seedlings for delivery"
     },
     "ownerPhilosophy": {
-      "title": "Every plant has a place where it can thrive.",
-      "description": "I believe the best plant is not always the rarest or most beautiful one. It is the one that fits your space, your lifestyle, and the way you want to live."
-    },
-    "ownerValues": {
-      "title": "What matters to us",
-      "healthyPlants": {
-        "title": "Healthy Plants",
-        "description": "Every plant should arrive healthy, carefully prepared, and ready to settle into its new home."
-      },
-      "honestGuidance": {
-        "title": "Honest Guidance",
-        "description": "We recommend plants based on your space and routine, not simply what is trending."
-      },
-      "growingTogether": {
-        "title": "Growing Together",
-        "description": "Ngoc Ngan Ben Tre is here to help you become more confident in caring for your plants."
-      }
-    },
-    "ownerNote": {
-      "title": "Thank you for growing with us.",
-      "description": "Every order from Ngoc Ngan Ben Tre is more than a sale. It is another plant finding a new home and another person beginning or continuing their plant journey.",
-      "name": "The Founder",
-      "role": "Owner, Ngoc Ngan Ben Tre",
-      "imageAlt": "Small portrait of the Ngoc Ngan Ben Tre founder"
-    },
-    "ownerCta": {
-      "title": "Let's find the right plant for your space.",
-      "shop": "Shop Plants",
-      "careGuide": "Explore Plant Care"
+      "title": "Honor the land, love what you grow.",
+      "description": "As the familiar folk verse says: “Dear friend, do not leave fields fallow — every inch of land is an inch of gold.” That is the spirit Ngoc Ngan wants to share: respect the land, love the crops, and work with farmers to create lasting value from the gardens of home."
     }
   },
   "faq": {

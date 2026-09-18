@@ -225,57 +225,30 @@
   },
   "about": {
     "metadata": {
-      "title": "Gặp gỡ người sáng lập | Ngoc Ngan Ben Tre",
-      "description": "Gặp người đứng sau Ngoc Ngan Ben Tre — câu chuyện cá nhân về trồng, chăm sóc và chia sẻ cây xanh với mọi người."
+      "title": "Tiểu sử Ngọc Ngân Bến Tre | Ngoc Ngan Ben Tre",
+      "description": "Ngọc Ngân Bến Tre — kinh doanh cây giống từ vùng đất Bến Tre, mang giống cây khỏe mạnh và kinh nghiệm trồng trọt đến người yêu cây và người làm vườn."
     },
     "ownerHero": {
-      "eyebrow": "Gặp gỡ người sáng lập",
-      "title": "Cây xanh luôn là một phần trong câu chuyện của tôi.",
-      "description": "Ngoc Ngan Ben Tre bắt đầu từ tình yêu giản dị với việc trồng, chăm sóc và chia sẻ cây với mọi người.",
-      "primaryCta": "Khám phá cây của chúng tôi",
+      "eyebrow": "Tiểu sử Ngọc Ngân Bến Tre",
+      "title": "Cây giống từ Bến Tre, đến tay người trồng.",
+      "description": "Ngọc Ngân Bến Tre gắn bó với nghề bán và cung cấp cây giống — chọn cây khỏe, đúng chủng loại, và chia sẻ kinh nghiệm trồng chăm từ chính mảnh vườn quê hương.",
+      "primaryCta": "Khám phá cây giống",
       "secondaryCta": "Đọc hướng dẫn chăm sóc",
-      "imageAlt": "Chân dung người sáng lập Ngoc Ngan Ben Tre giữa những cây nội thất"
+      "imageAlt": "Người sáng lập Ngoc Ngan Ben Tre cười bên nhau trước cây hoa vàng"
     },
     "ownerStory": {
-      "introTitle": "Gặp người đứng sau Ngoc Ngan Ben Tre.",
-      "introDescription": "Tôi bắt đầu yêu cây khi quan sát chúng lớn lên — chậm rãi, kiên nhẫn, và đầy sự kỳ diệu dịu dàng. Sự tò mò ấy trở thành thói quen tìm hiểu nhu cầu của từng cây, và niềm vui khi giúp bạn bè chọn đúng người bạn xanh cho ngôi nhà của họ.",
-      "introImageAlt": "Góc cây yên tĩnh dưới ánh sáng tự nhiên ấm áp",
-      "journeyTitle": "Từ tình yêu với cây đến Ngoc Ngan Ben Tre.",
-      "journeyParagraph1": "Ngoc Ngan Ben Tre ra đời khi tôi nhận ra nhiều người muốn có cây trong cuộc sống, nhưng chưa biết bắt đầu từ đâu. Chọn một cây nên mang lại cảm hứng, chứ không phải sự choáng ngợp.",
-      "journeyParagraph2": "Tôi bắt đầu chọn lọc những cây khỏe mạnh, tìm hiểu thói quen của chúng, và chia sẻ hướng dẫn thực tế — để mỗi ngôi nhà đều có thể trở nên sống động hơn một chút.",
-      "journeyParagraph3": "Hôm nay, Ngoc Ngan Ben Tre vẫn được dẫn dắt bởi ý nguyện ấy: giúp bạn tìm một cây phù hợp với không gian, nhịp sống, và cách bạn muốn sống.",
-      "journeyImageAlt": "Những cây khỏe mạnh trong ánh sáng tự nhiên dịu nhẹ"
+      "introTitle": "Từ vùng đất Bến Tre xanh tốt.",
+      "introDescription": "Ngọc Ngân Bến Tre là người kinh doanh cây giống đến từ vùng đất Bến Tre — nơi nổi tiếng với những vườn cây xanh tốt và nghề nông truyền thống. Với tình yêu dành cho cây cối và mong muốn mang đến những giống cây chất lượng cho người trồng, Ngọc Ngân đã gắn bó với công việc bán và cung cấp cây giống cho khách hàng ở nhiều nơi.",
+      "introImageAlt": "Cây giống Cái Mơn Bến Tre cùng ổi và sầu riêng",
+      "journeyTitle": "Kiên trì chọn giống, tận tâm chia sẻ.",
+      "journeyParagraph1": "Từ những cây giống nhỏ bé, Ngọc Ngân luôn cố gắng lựa chọn những cây khỏe mạnh, đúng chủng loại và phù hợp với nhu cầu của khách hàng. Bởi như ông cha ta vẫn thường nói: “Có công mài sắt, có ngày nên kim.” Công việc kinh doanh cũng cần sự kiên trì, chăm chỉ và uy tín mới có thể phát triển lâu dài.",
+      "journeyParagraph2": "Không chỉ bán cây giống, Ngọc Ngân còn chia sẻ kinh nghiệm trồng và chăm sóc cây để khách hàng có thêm kiến thức trong quá trình canh tác. Đối với người làm vườn, câu tục ngữ “Nhất nước, nhì phân, tam cần, tứ giống” luôn là kinh nghiệm quý giá, nhắc nhở người trồng phải quan tâm đến nhiều yếu tố để cây phát triển tốt.",
+      "journeyParagraph3": "Thông qua việc bán hàng trực tiếp và mạng xã hội, Ngọc Ngân từng bước đưa những cây giống từ Bến Tre đến với nhiều người yêu cây và người làm vườn. Với sự tận tâm và tinh thần học hỏi, Ngọc Ngân mong muốn tiếp tục xây dựng uy tín, nâng cao chất lượng cây giống và góp phần tạo nên những khu vườn xanh tốt.",
+      "journeyImageAlt": "Ngọc Ngân Bến Tre đóng gói cây giống khỏe mạnh để giao khách"
     },
     "ownerPhilosophy": {
-      "title": "Mỗi cây đều có một nơi để phát triển tốt.",
-      "description": "Tôi tin rằng cây tốt nhất không phải lúc nào cũng là cây hiếm hay đẹp nhất. Đó là cây phù hợp với không gian của bạn, lối sống của bạn, và cách bạn muốn sống."
-    },
-    "ownerValues": {
-      "title": "Điều chúng tôi trân trọng",
-      "healthyPlants": {
-        "title": "Cây khỏe mạnh",
-        "description": "Mỗi cây cần đến tay bạn ở trạng thái khỏe mạnh, được chuẩn bị kỹ lưỡng, và sẵn sàng thích nghi với ngôi nhà mới."
-      },
-      "honestGuidance": {
-        "title": "Lời khuyên chân thành",
-        "description": "Chúng tôi gợi ý cây dựa trên không gian và thói quen của bạn, không chỉ theo xu hướng."
-      },
-      "growingTogether": {
-        "title": "Cùng nhau lớn lên",
-        "description": "Ngoc Ngan Ben Tre ở đây để giúp bạn tự tin hơn trong việc chăm sóc cây."
-      }
-    },
-    "ownerNote": {
-      "title": "Cảm ơn bạn đã cùng chúng tôi trồng xanh.",
-      "description": "Mỗi đơn hàng từ Ngoc Ngan Ben Tre không chỉ là một giao dịch. Đó là một cây tìm được ngôi nhà mới, và một người bắt đầu hoặc tiếp tục hành trình với cây xanh.",
-      "name": "Người sáng lập",
-      "role": "Chủ cửa hàng, Ngoc Ngan Ben Tre",
-      "imageAlt": "Ảnh chân dung nhỏ của người sáng lập Ngoc Ngan Ben Tre"
-    },
-    "ownerCta": {
-      "title": "Cùng tìm cây phù hợp với không gian của bạn.",
-      "shop": "Mua cây",
-      "careGuide": "Khám phá chăm sóc cây"
+      "title": "Trân trọng đất đai, yêu cây trồng.",
+      "description": "Như câu ca dao quen thuộc: “Ai ơi, đừng bỏ ruộng hoang, bao nhiêu tấc đất, tấc vàng bấy nhiêu.” Đó cũng là tinh thần mà Ngọc Ngân muốn lan tỏa: trân trọng đất đai, yêu cây trồng và cùng người nông dân tạo nên những giá trị bền vững từ chính mảnh vườn quê hương."
     }
   },
   "faq": {
