@@ -1,7 +1,7 @@
 import { routing, type AppLocale } from "@/i18n/routing";
 
 const INDEXNOW_ENDPOINT = "https://api.indexnow.org/IndexNow";
-const HOST = "ngocnganbentre.vn";
+const HOST = "www.ngocnganbentre.vn";
 const BASE_URL = `https://${HOST}`;
 const INDEXNOW_KEY = "5d07f35298024c499a46e8cdc9ceb18e";
 const KEY_LOCATION = `${BASE_URL}/${INDEXNOW_KEY}.txt`;

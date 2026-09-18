@@ -3,7 +3,7 @@ import { routing, type AppLocale } from "@/i18n/routing";
 import { getStorefrontPlants } from "@/lib/api/storefront";
 import { getAllPosts } from "@/services/blog.service";
 
-const baseUrl = "https://ngocnganbentre.vn";
+const baseUrl = "https://www.ngocnganbentre.vn";
 
 /** Matches the storefront API `page_size` cap. */
 const PLANT_PAGE_SIZE = 100;

@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/admin/", "/cart/", "/checkout/"],
     },
-    sitemap: "https://ngocnganbentre.vn/sitemap.xml",
+    sitemap: "https://www.ngocnganbentre.vn/sitemap.xml",
   };
 }
