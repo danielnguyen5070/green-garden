@@ -36,8 +36,14 @@ function handleAdminAuth(request: NextRequest) {
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Keep metadata endpoints outside locale rewriting.
-  if (pathname === "/sitemap.xml" || pathname === "/robots.txt") {
+  // Technical routes must never go through next-intl locale rewriting.
+  if (
+    pathname === "/sitemap.xml" ||
+    pathname === "/robots.txt" ||
+    pathname === "/favicon.ico" ||
+    pathname.startsWith("/api/") ||
+    pathname.startsWith("/_next/")
+  ) {
     return NextResponse.next();
   }
 
@@ -49,8 +55,13 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Skip API, Next internals, metadata endpoints, and static files with extensions
   matcher: [
-    "/((?!api|trpc|_next|_vercel|sitemap\\.xml|robots\\.txt|.*\\..*).*)",
+    /*
+     * Run proxy on app routes only. Skip:
+     * - /api/*, /trpc/*, /_next/*, /_vercel/*
+     * - /sitemap.xml, /robots.txt, /favicon.ico
+     * - any path with a file extension (images, IndexNow key .txt, etc.)
+     */
+    "/((?!api|trpc|_next|_vercel|sitemap\\.xml|robots\\.txt|favicon\\.ico|.*\\..*).*)",
   ],
 };
