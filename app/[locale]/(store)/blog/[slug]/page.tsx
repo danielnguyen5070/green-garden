@@ -7,11 +7,42 @@ import { formatDate } from "@/components/blog/blog-card";
 import { MdxContent } from "@/components/blog/mdx-content";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
-import { getAllSlugs, getPostBySlug } from "@/services/blog.service";
+import {
+  getAllSlugs,
+  getPostBySlug,
+  getPostImage,
+} from "@/services/blog.service";
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
 };
+
+const OG_IMAGE_WIDTH = 1200;
+const OG_IMAGE_HEIGHT = 630;
+
+function toIsoDate(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return undefined;
+  return parsed.toISOString();
+}
+
+function blogPostLanguages(slug: string): Record<string, string> {
+  const languages: Record<string, string> = {};
+
+  for (const locale of routing.locales) {
+    if (getPostBySlug(locale, slug)) {
+      languages[locale] = `/${locale}/blog/${slug}`;
+    }
+  }
+
+  const defaultPath = languages[routing.defaultLocale];
+  if (defaultPath) {
+    languages["x-default"] = defaultPath;
+  }
+
+  return languages;
+}
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
@@ -27,9 +58,49 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {};
   }
 
+  const title = post.title;
+  const description = post.description;
+  const ogTitle = `${title} | Ngoc Ngan Ben Tre`;
+  const path = `/${locale}/blog/${slug}`;
+  const languages = blogPostLanguages(slug);
+  const image = getPostImage(post);
+  const imageAlt = post.ogImageAlt ?? title;
+  const publishedTime = toIsoDate(post.publishedAt);
+  const modifiedTime = toIsoDate(post.updatedAt) ?? publishedTime;
+
   return {
-    title: post.title,
-    description: post.description,
+    title,
+    description,
+    authors: post.author ? [{ name: post.author }] : undefined,
+    alternates: {
+      canonical: path,
+      languages,
+    },
+    openGraph: {
+      title: ogTitle,
+      description,
+      url: path,
+      locale: locale === "vi" ? "vi_VN" : "en_US",
+      alternateLocale: locale === "vi" ? ["en_US"] : ["vi_VN"],
+      type: "article",
+      publishedTime,
+      modifiedTime,
+      authors: post.author ? [post.author] : undefined,
+      images: [
+        {
+          url: image,
+          width: OG_IMAGE_WIDTH,
+          height: OG_IMAGE_HEIGHT,
+          alt: imageAlt,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: ogTitle,
+      description,
+      images: [image],
+    },
   };
 }
 
@@ -42,6 +113,8 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   const t = await getTranslations("blog");
+  const image = getPostImage(post);
+  const imageAlt = post.ogImageAlt ?? post.title;
 
   return (
     <article
@@ -63,7 +136,9 @@ export default async function BlogPostPage({ params }: Props) {
                 {post.category}
               </span>
             ) : null}
-            <time dateTime={post.date}>{formatDate(post.date, locale)}</time>
+            <time dateTime={post.publishedAt}>
+              {formatDate(post.publishedAt, locale)}
+            </time>
             {post.author ? <span>· {post.author}</span> : null}
           </div>
 
@@ -91,8 +166,8 @@ export default async function BlogPostPage({ params }: Props) {
 
         <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-2xl bg-muted">
           <Image
-            src={post.cover}
-            alt={post.title}
+            src={image}
+            alt={imageAlt}
             fill
             priority
             className="object-cover"

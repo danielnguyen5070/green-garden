@@ -6,6 +6,7 @@ import { routing } from "@/i18n/routing";
 import type { BlogPost, BlogPostMeta } from "@/types/blog";
 
 const BLOG_ROOT = path.join(process.cwd(), "content/blog");
+const DEFAULT_OG_IMAGE = "/images/blog/placeholder.svg";
 
 function getBlogDir(locale: string) {
   if (!hasLocale(routing.locales, locale)) {
@@ -31,6 +32,13 @@ function toSlug(fileName: string) {
   return fileName.replace(/\.mdx$/, "");
 }
 
+function optionalString(value: unknown): string | undefined {
+  if (value === undefined || value === null || value === "") {
+    return undefined;
+  }
+  return String(value);
+}
+
 function parsePost(locale: string, fileName: string): BlogPost | null {
   const dir = getBlogDir(locale);
   if (!dir) return null;
@@ -45,18 +53,27 @@ function parsePost(locale: string, fileName: string): BlogPost | null {
   const { data, content } = matter(raw);
 
   const slug = toSlug(fileName);
+  const publishedAt = String(data.publishedAt ?? data.date ?? "");
+  const ogImage = optionalString(data.ogImage ?? data.cover);
 
   return {
     slug,
     title: String(data.title ?? slug),
     description: String(data.description ?? ""),
-    date: String(data.date ?? ""),
+    publishedAt,
+    updatedAt: optionalString(data.updatedAt),
     author: String(data.author ?? ""),
     category: String(data.category ?? ""),
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
-    cover: String(data.cover ?? "/images/blog/placeholder.svg"),
+    ogImage,
+    ogImageAlt: optionalString(data.ogImageAlt),
     content,
   };
+}
+
+/** Image URL for cards and article hero (placeholder when unset). */
+export function getPostImage(post: BlogPostMeta): string {
+  return post.ogImage ?? DEFAULT_OG_IMAGE;
 }
 
 export function getAllSlugs(locale: string): string[] {
@@ -74,8 +91,8 @@ export function getAllPosts(locale: string): BlogPostMeta[] {
     })
     .filter((post): post is BlogPostMeta => post !== null)
     .sort((a, b) => {
-      const aTime = new Date(a.date).getTime();
-      const bTime = new Date(b.date).getTime();
+      const aTime = new Date(a.publishedAt).getTime();
+      const bTime = new Date(b.publishedAt).getTime();
       return bTime - aTime;
     });
 }

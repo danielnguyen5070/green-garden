@@ -7,4 +7,5 @@ export {
   getAllPosts,
   getAllSlugs,
   getPostBySlug,
+  getPostImage,
 } from "@/lib/blog";

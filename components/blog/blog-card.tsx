@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import type { BlogPostMeta } from "@/types/blog";
+import { getPostImage } from "@/lib/blog";
 import { cn } from "@/lib/utils";
 
 function formatDate(date: string, locale = "en") {
@@ -25,6 +26,9 @@ function BlogCard({
   readMoreLabel: string;
   className?: string;
 }) {
+  const image = getPostImage(post);
+  const imageAlt = post.ogImageAlt ?? post.title;
+
   return (
     <article
       data-slot="blog-card"
@@ -37,8 +41,8 @@ function BlogCard({
         <div className="relative overflow-hidden rounded-2xl bg-muted">
           <div className="relative aspect-[16/10] w-full">
             <Image
-              src={post.cover}
-              alt={post.title}
+              src={image}
+              alt={imageAlt}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -53,7 +57,9 @@ function BlogCard({
                 {post.category}
               </span>
             ) : null}
-            <time dateTime={post.date}>{formatDate(post.date, locale)}</time>
+            <time dateTime={post.publishedAt}>
+              {formatDate(post.publishedAt, locale)}
+            </time>
           </div>
 
           <h2 className="font-heading text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
