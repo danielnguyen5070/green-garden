@@ -101,6 +101,7 @@ type PlantFormValues = {
   price: string;
   price_vi: string;
   stock: string;
+  og_image_url: string;
   is_featured: boolean;
   is_active: boolean;
 };
@@ -118,6 +119,7 @@ function readForm(form: HTMLFormElement, categoryId: string): PlantFormValues {
     price: String(formData.get("price") ?? "").trim(),
     price_vi: String(formData.get("price_vi") ?? "").trim(),
     stock: String(formData.get("stock") ?? "").trim(),
+    og_image_url: String(formData.get("og_image_url") ?? "").trim(),
     is_featured: formData.get("is_featured") === "on",
     is_active: formData.get("is_active") === "on",
   };
@@ -126,6 +128,15 @@ function readForm(form: HTMLFormElement, categoryId: string): PlantFormValues {
 function isNonNegativeAmount(value: string): boolean {
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed >= 0;
+}
+
+function isValidHttpUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
 }
 
 /** Client-side guardrails; the backend stays the source of truth. */
@@ -147,6 +158,10 @@ function validateForm(values: PlantFormValues): string | null {
   const stock = Number(values.stock);
   if (!values.stock || !Number.isInteger(stock) || stock < 0) {
     return copy.invalidStock;
+  }
+
+  if (values.og_image_url && !isValidHttpUrl(values.og_image_url)) {
+    return copy.invalidOgImageUrl;
   }
 
   return null;
@@ -373,6 +388,7 @@ export default function AdminPlantsPage() {
       price_vi: values.price_vi || null,
       stock: Number(values.stock),
       sku: values.sku,
+      og_image_url: values.og_image_url || null,
       is_featured: values.is_featured,
       is_active: values.is_active,
     };
@@ -431,6 +447,11 @@ export default function AdminPlantsPage() {
 
     const nextStock = Number(values.stock);
     if (nextStock !== selected.stock) changes.stock = nextStock;
+
+    const nextOgImageUrl = values.og_image_url || null;
+    if (nextOgImageUrl !== selected.og_image_url) {
+      changes.og_image_url = nextOgImageUrl;
+    }
 
     if (values.is_featured !== selected.is_featured) {
       changes.is_featured = values.is_featured;
@@ -928,6 +949,8 @@ function PlantForm({
 }: PlantFormProps) {
   const prefix = mode === "create" ? "create" : "edit";
   const [categoryId, setCategoryId] = useState(plant?.category_id ?? "");
+  const [ogImageUrl, setOgImageUrl] = useState(plant?.og_image_url ?? "");
+  const [ogImageBroken, setOgImageBroken] = useState(false);
   // Nested resources save immediately, so they live outside the form submit.
   const [images, setImages] = useState<AdminPlantImage[]>(plant?.images ?? []);
   const [potSizes, setPotSizes] = useState<AdminPlantPotSize[]>(
@@ -937,6 +960,10 @@ function PlantForm({
   const selectedCategory = categories.find(
     (category) => category.id === categoryId
   );
+  const ogImagePreviewUrl =
+    ogImageUrl.trim() && isValidHttpUrl(ogImageUrl.trim())
+      ? ogImageUrl.trim()
+      : null;
 
   function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -1080,6 +1107,38 @@ function PlantForm({
               disabled={submitting}
               className="rounded-lg"
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor={`${prefix}-og-image-url`}>
+              {copy.fields.ogImageUrl}
+            </Label>
+            <Input
+              id={`${prefix}-og-image-url`}
+              name="og_image_url"
+              type="url"
+              inputMode="url"
+              value={ogImageUrl}
+              onChange={(event) => {
+                setOgImageUrl(event.target.value);
+                setOgImageBroken(false);
+              }}
+              disabled={submitting}
+              className="h-11 rounded-full"
+            />
+            <p className="text-xs text-muted-foreground">
+              {copy.fields.ogImageUrlHint}
+            </p>
+            {ogImagePreviewUrl && !ogImageBroken ? (
+              // eslint-disable-next-line @next/next/no-img-element -- OG images are arbitrary remote URLs, not configured next/image hosts
+              <img
+                src={ogImagePreviewUrl}
+                alt=""
+                className="mt-1 h-20 w-36 rounded-lg border border-border object-cover"
+                loading="lazy"
+                onError={() => setOgImageBroken(true)}
+              />
+            ) : null}
           </div>
         </section>
 

@@ -172,6 +172,8 @@ export const adminCopy = {
       price: "Price (USD)",
       priceVi: "Price (VND)",
       stock: "Stock",
+      ogImageUrl: "OG Image URL",
+      ogImageUrlHint: "Used for social sharing previews.",
       featured: "Featured",
       featuredHint: "Highlighted on the storefront.",
       active: "Active",
@@ -202,6 +204,7 @@ export const adminCopy = {
     invalidPrice: "Price must be a number of 0 or more.",
     invalidPriceVi: "Vietnamese price must be a number of 0 or more.",
     invalidStock: "Stock must be a whole number of 0 or more.",
+    invalidOgImageUrl: "OG Image URL must be a valid URL.",
     categoriesLoadError: "Unable to load categories.",
     table: {
       plant: "Plant",

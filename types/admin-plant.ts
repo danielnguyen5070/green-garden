@@ -59,6 +59,7 @@ export type AdminPlant = {
   price_vi: DecimalString | null;
   stock: number;
   sku: string;
+  og_image_url: string | null;
   is_featured: boolean;
   is_active: boolean;
   images: AdminPlantImage[];
@@ -94,6 +95,7 @@ export type AdminPlantCreateRequest = {
   price_vi?: DecimalInput | null;
   stock?: number;
   sku: string;
+  og_image_url?: string | null;
   is_featured?: boolean;
   is_active?: boolean;
 };
@@ -109,6 +111,7 @@ export type AdminPlantUpdateRequest = {
   price_vi?: DecimalInput | null;
   stock?: number | null;
   sku?: string | null;
+  og_image_url?: string | null;
   is_featured?: boolean | null;
   is_active?: boolean | null;
 };
