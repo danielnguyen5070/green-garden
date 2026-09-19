@@ -13,11 +13,26 @@ type Props = {
 };
 
 export const metadata: Metadata = {
-  title: "NGOC NGAN",
+  metadataBase: new URL("https://www.ngocnganbentre.vn"),
+  title: {
+    default: "Ngoc Ngan Ben Tre",
+    template: "%s | Ngoc Ngan Ben Tre",
+  },
   description: "Seedling and plant nursery",
+  applicationName: "Ngoc Ngan Ben Tre",
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    siteName: "Ngoc Ngan Ben Tre",
   },
 };
 

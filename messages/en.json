@@ -66,6 +66,12 @@
     "copyright": "© {year} Ngoc Ngan Ben Tre. All rights reserved."
   },
   "home": {
+    "metadata": {
+      "title": "Ngoc Ngan Ben Tre | Cai Mon seedlings",
+      "description": "Seedlings, fruit trees, and ornamental plants from Cai Mon – Cho Lach. Healthy stock, careful packing, nationwide delivery.",
+      "ogImageAlt": "Ngoc Ngan Ben Tre — a woman in a traditional dress among yellow blossoms in a Ben Tre garden",
+      "keywords": "Cai Mon seedlings, Ben Tre nursery, fruit tree seedlings, ornamental plants, Ngoc Ngan"
+    },
     "hero": {
       "badge": "Cai Mon seedlings · Ships nationwide",
       "titleLine1": "Seedlings from Cai Mon,",
@@ -225,7 +231,7 @@
   },
   "about": {
     "metadata": {
-      "title": "About Ngoc Ngan Ben Tre | Ngoc Ngan Ben Tre",
+      "title": "About",
       "description": "Ngoc Ngan Ben Tre — a seedling grower from Ben Tre, bringing healthy plant varieties and practical growing know-how to gardeners and plant lovers."
     },
     "ownerHero": {
@@ -253,7 +259,7 @@
   },
   "faq": {
     "metadata": {
-      "title": "FAQ | Ngoc Ngan Ben Tre",
+      "title": "FAQ",
       "description": "Answers about Cai Mon seedlings, ordering, nationwide delivery, cash on delivery, planting, and plant care at Ngoc Ngan Ben Tre."
     },
     "hero": {

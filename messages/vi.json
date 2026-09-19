@@ -66,6 +66,12 @@
     "copyright": "© {year} Ngoc Ngan Ben Tre. Bảo lưu mọi quyền."
   },
   "home": {
+    "metadata": {
+      "title": "Ngọc Ngân Bến Tre | Cây giống Cái Mơn",
+      "description": "Cây giống, cây ăn trái và hoa kiểng từ Cái Mơn – Chợ Lách. Cây khỏe, đóng gói cẩn thận, giao toàn quốc.",
+      "ogImageAlt": "Ngọc Ngân Bến Tre — người phụ nữ trong vườn hoa vàng tại Bến Tre",
+      "keywords": "cây giống Cái Mơn, vườn ươm Bến Tre, cây ăn trái, hoa kiểng, Ngọc Ngân"
+    },
     "hero": {
       "badge": "Cây giống Cái Mơn · Giao toàn quốc",
       "titleLine1": "Cây giống từ Cái Mơn,",
@@ -225,7 +231,7 @@
   },
   "about": {
     "metadata": {
-      "title": "Tiểu sử Ngọc Ngân Bến Tre | Ngoc Ngan Ben Tre",
+      "title": "Giới thiệu",
       "description": "Ngọc Ngân Bến Tre — kinh doanh cây giống từ vùng đất Bến Tre, mang giống cây khỏe mạnh và kinh nghiệm trồng trọt đến người yêu cây và người làm vườn."
     },
     "ownerHero": {
@@ -253,7 +259,7 @@
   },
   "faq": {
     "metadata": {
-      "title": "Câu hỏi thường gặp | Ngoc Ngan Ben Tre",
+      "title": "Câu hỏi thường gặp",
       "description": "Giải đáp về cây giống Cái Mơn, cách đặt hàng, giao hàng toàn quốc, thanh toán khi nhận hàng, cách trồng và chăm sóc cây."
     },
     "hero": {
