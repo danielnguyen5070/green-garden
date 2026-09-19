@@ -5,6 +5,7 @@
 export const CONTACT_CONFIG = {
   phone: "0386569374",
   phoneE164: "+84386569374",
+  address: "618/34 ấp Bình Tây, Vĩnh Thành, Vĩnh Long",
   zaloUrl: "https://zalo.me/0386569374",
   /** Zalo community group invite. Falls back to the 1:1 chat until the real group link is set. */
   zaloGroupUrl: "https://zalo.me/0386569374",

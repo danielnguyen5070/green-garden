@@ -5,6 +5,7 @@ import {
   type FooterNavSection,
   type FooterSocialIcon,
 } from "@/config/footer";
+import { CONTACT_CONFIG } from "@/config/contact";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/layout/container";
@@ -45,6 +46,9 @@ async function FooterBrand() {
       <p className="mt-4 max-w-[16.25rem] text-small leading-relaxed text-primary-foreground/50">
         {t(FOOTER_BRAND.descriptionKey)}
       </p>
+      <address className="mt-3 max-w-[16.25rem] text-small leading-relaxed text-primary-foreground/50 not-italic">
+        {CONTACT_CONFIG.address}
+      </address>
     </div>
   );
 }
