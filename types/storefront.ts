@@ -104,6 +104,8 @@ export type StorefrontPlantDetail = {
   price_vi: Decimal | null;
   is_featured: boolean;
   in_stock: boolean;
+  /** Dedicated social-share image from the admin plant form; may be null. */
+  og_image_url: string | null;
   category?: StorefrontCategorySummary | null;
   images?: StorefrontPlantDetailImage[];
   pot_sizes?: StorefrontPlantPotSize[];
