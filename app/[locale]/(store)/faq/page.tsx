@@ -35,14 +35,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: ogTitle,
       description,
       url: path,
+      siteName: "Ngoc Ngan Ben Tre",
       locale: locale === "vi" ? "vi_VN" : "en_US",
       alternateLocale: locale === "vi" ? ["en_US"] : ["vi_VN"],
       type: "website",
       images: [
         {
           url: "/images/og-faq.jpg",
-          width: 1024,
-          height: 537,
+          width: 1200,
+          height: 630,
           alt: t("ogImageAlt"),
         },
       ],
