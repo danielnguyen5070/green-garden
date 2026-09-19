@@ -232,7 +232,9 @@
   "about": {
     "metadata": {
       "title": "About",
-      "description": "Ngoc Ngan Ben Tre — a seedling grower from Ben Tre, bringing healthy plant varieties and practical growing know-how to gardeners and plant lovers."
+      "description": "Ngoc Ngan Ben Tre — a seedling grower from Ben Tre, bringing healthy plant varieties and practical growing know-how to gardeners and plant lovers.",
+      "ogImageAlt": "Ngoc Ngan Ben Tre nursery staff tending young saplings in a Ben Tre greenhouse",
+      "keywords": "Ngoc Ngan Ben Tre, about, seedling nursery, Ben Tre growers, Cai Mon seedlings"
     },
     "ownerHero": {
       "eyebrow": "About Ngoc Ngan Ben Tre",
