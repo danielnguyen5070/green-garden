@@ -11,7 +11,10 @@ async function OwnerPhilosophy({ className }: { className?: string }) {
     <Section
       data-slot="owner-philosophy"
       aria-labelledby="owner-philosophy-heading"
-      className={cn("bg-secondary", className)}
+      className={cn(
+        "bg-secondary !py-12 md:!py-16 lg:!py-20",
+        className
+      )}
     >
       <Container>
         <Stack

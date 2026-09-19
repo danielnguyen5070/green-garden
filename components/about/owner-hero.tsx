@@ -16,7 +16,7 @@ async function OwnerHero({ className }: { className?: string }) {
       aria-labelledby="owner-hero-heading"
       className={cn("bg-background", className)}
     >
-      <Container className="pt-6 pb-14 md:pt-8 md:pb-16 lg:pt-10 lg:pb-20">
+      <Container className="pt-6 pb-10 md:pt-8 md:pb-12 lg:pt-10 lg:pb-14">
         <div className="grid items-center gap-10 md:grid-cols-2 md:gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-14 xl:gap-16">
           <div className="flex flex-col items-start">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-3 py-1.5 font-sans text-[0.6875rem] font-semibold tracking-[0.14em] text-accent uppercase">
