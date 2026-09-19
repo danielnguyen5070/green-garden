@@ -38,6 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: t("title"),
       description: t("description"),
       url: path,
+      siteName: "Ngoc Ngan Ben Tre",
       locale: locale === "vi" ? "vi_VN" : "en_US",
       alternateLocale: locale === "vi" ? ["en_US"] : ["vi_VN"],
       type: "website",
