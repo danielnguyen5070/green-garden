@@ -262,7 +262,9 @@
   "faq": {
     "metadata": {
       "title": "FAQ",
-      "description": "Answers about Cai Mon seedlings, ordering, nationwide delivery, cash on delivery, planting, and plant care at Ngoc Ngan Ben Tre."
+      "description": "Answers about Cai Mon seedlings, ordering, nationwide delivery, cash on delivery, planting, and plant care at Ngoc Ngan Ben Tre.",
+      "ogImageAlt": "Ngoc Ngan Ben Tre FAQ — question mark over a sunlit seedling nursery",
+      "keywords": "FAQ, Cai Mon seedlings, ordering, delivery, cash on delivery, plant care, Ngoc Ngan Ben Tre"
     },
     "hero": {
       "eyebrow": "Help Center",

@@ -262,7 +262,9 @@
   "faq": {
     "metadata": {
       "title": "Câu hỏi thường gặp",
-      "description": "Giải đáp về cây giống Cái Mơn, cách đặt hàng, giao hàng toàn quốc, thanh toán khi nhận hàng, cách trồng và chăm sóc cây."
+      "description": "Giải đáp về cây giống Cái Mơn, cách đặt hàng, giao hàng toàn quốc, thanh toán khi nhận hàng, cách trồng và chăm sóc cây.",
+      "ogImageAlt": "Câu hỏi thường gặp Ngọc Ngân Bến Tre — dấu hỏi trên nền nhà vườn cây giống",
+      "keywords": "câu hỏi thường gặp, cây giống Cái Mơn, đặt hàng, giao hàng, COD, chăm sóc cây, Ngọc Ngân Bến Tre"
     },
     "hero": {
       "eyebrow": "Trung tâm hỗ trợ",
