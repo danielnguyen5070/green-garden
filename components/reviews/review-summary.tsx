@@ -52,7 +52,7 @@ function ReviewSummary({
           </p>
           <Button
             type="button"
-            className="mt-5 h-10 rounded-xl px-4"
+            className="mt-5 h-10 rounded-xl px-6 has-data-[icon=inline-start]:pl-6"
             onClick={onWriteReview}
           >
             <PencilIcon data-icon="inline-start" className="size-3.5" />
