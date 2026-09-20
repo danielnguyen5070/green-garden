@@ -22,6 +22,11 @@ export const adminCopy = {
   },
   topbar: {
     notifications: "Notifications",
+    markAllAsRead: "Mark all as read",
+    noNotifications: "No notifications yet.",
+    loadError: "Unable to load notifications.",
+    unreadCount: (count: number) =>
+      count > 99 ? "99+ unread notifications" : `${count} unread notifications`,
     profile: "Admin profile",
     profileName: "Admin",
     profileEmail: "admin@example.com",

@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MoreHorizontal, Plus, Search } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminSection } from "@/components/admin/admin-section";
 import { AdminStatusBadge } from "@/components/admin/admin-status-badge";
@@ -68,6 +69,11 @@ type DialogMode = "create" | "detail" | null;
 type StatusFilter = "all" | OrderStatus;
 
 export default function AdminOrdersPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const orderIdFromQuery = searchParams.get("order");
+  const openedOrderQueryRef = useRef<string | null>(null);
+
   const [orders, setOrders] = useState<Order[]>([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -205,10 +211,13 @@ export default function AdminOrdersPage() {
     setFormError(null);
     setDialogMode("detail");
     setDetailLoading(true);
+    openedOrderQueryRef.current = order.id;
 
     try {
       setSelected(await getOrder(order.id));
+      router.replace(`/admin/orders?order=${encodeURIComponent(order.id)}`);
     } catch (err) {
+      openedOrderQueryRef.current = null;
       setDialogMode(null);
       toast.error(getErrorMessage(err));
       refresh(page);
@@ -217,12 +226,57 @@ export default function AdminOrdersPage() {
     }
   }
 
+  function clearOrderQuery() {
+    if (!orderIdFromQuery) return;
+    openedOrderQueryRef.current = null;
+    router.replace("/admin/orders");
+  }
+
   function closeDialog() {
     if (submitting) return;
     setDialogMode(null);
     setSelected(null);
     setFormError(null);
+    clearOrderQuery();
   }
+
+  // Deep-link from notifications: `/admin/orders?order=<id>`.
+  useEffect(() => {
+    if (!orderIdFromQuery) {
+      openedOrderQueryRef.current = null;
+      return;
+    }
+    if (openedOrderQueryRef.current === orderIdFromQuery) return;
+
+    const controller = new AbortController();
+    openedOrderQueryRef.current = orderIdFromQuery;
+
+    async function openFromQuery() {
+      setSelected(null);
+      setFormError(null);
+      setDialogMode("detail");
+      setDetailLoading(true);
+
+      try {
+        const order = await getOrder(orderIdFromQuery!);
+        if (controller.signal.aborted) return;
+        setSelected(order);
+      } catch (err) {
+        if (controller.signal.aborted) return;
+        openedOrderQueryRef.current = null;
+        setDialogMode(null);
+        toast.error(getErrorMessage(err));
+        router.replace("/admin/orders");
+      } finally {
+        if (!controller.signal.aborted) {
+          setDetailLoading(false);
+        }
+      }
+    }
+
+    void openFromQuery();
+    return () => controller.abort();
+  }, [orderIdFromQuery, router]);
 
   async function handleCreate(payload: OrderCreateRequest) {
     setFormError(null);

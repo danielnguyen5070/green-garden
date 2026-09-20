@@ -1,8 +1,9 @@
 "use client";
 
-import { Bell, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAdminAuth } from "@/components/admin/admin-auth-provider";
+import { AdminNotifications } from "@/components/admin/admin-notifications";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -83,14 +84,7 @@ function AdminTopbar({ onMenuClick, className }: AdminTopbarProps) {
       </div>
 
       <div className="flex items-center gap-1.5">
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          aria-label={adminCopy.topbar.notifications}
-        >
-          <Bell className="size-4" />
-        </Button>
+        <AdminNotifications />
 
         <DropdownMenu>
           <DropdownMenuTrigger
