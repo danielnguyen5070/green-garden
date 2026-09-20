@@ -2,9 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
+  STOREFRONT_PLANTS_MAX_PAGE_SIZE,
   STOREFRONT_PLANTS_PAGE_SIZE,
   getStorefrontPlants,
 } from "@/lib/api/storefront";
+import { plantMatchesSearch } from "@/lib/plant-search";
 import type {
   StorefrontCategory,
   StorefrontPlantListItem,
@@ -53,10 +55,55 @@ export type UseStorefrontPlantsResult = {
 };
 
 /**
+ * Loads every catalogue page for the active category/sort so accent-insensitive
+ * search can run on the full result set without a backend change.
+ */
+async function fetchAllPlantsForSearch(params: {
+  category_id?: string;
+  sort: StorefrontPlantSort;
+  order: StorefrontSortOrder;
+  signal: AbortSignal;
+}): Promise<StorefrontPlantListItem[]> {
+  const first = await getStorefrontPlants(
+    {
+      page: 1,
+      page_size: STOREFRONT_PLANTS_MAX_PAGE_SIZE,
+      category_id: params.category_id,
+      sort: params.sort,
+      order: params.order,
+    },
+    { signal: params.signal }
+  );
+
+  const items = [...first.items];
+  const totalPages = Math.max(
+    1,
+    Math.ceil(first.total / STOREFRONT_PLANTS_MAX_PAGE_SIZE)
+  );
+
+  for (let page = 2; page <= totalPages; page += 1) {
+    const response = await getStorefrontPlants(
+      {
+        page,
+        page_size: STOREFRONT_PLANTS_MAX_PAGE_SIZE,
+        category_id: params.category_id,
+        sort: params.sort,
+        order: params.order,
+      },
+      { signal: params.signal }
+    );
+    items.push(...response.items);
+  }
+
+  return items;
+}
+
+/**
  * Keeps the Homepage grid in sync with `GET /storefront/plants`. The first page
  * is rendered on the server and reused as-is, so the default view costs no
- * browser request; searching, filtering, sorting and "load more" are handed to
- * the API rather than applied to a fully downloaded catalog.
+ * browser request; category, sort and "load more" stay on the API. Text search
+ * is matched on the client with diacritic folding so queries like `lan` hit
+ * `Lan Hồ Điệp`.
  */
 export function useStorefrontPlants({
   initial,
@@ -94,9 +141,11 @@ export function useStorefrontPlants({
     return () => clearTimeout(timer);
   }, [searchInput]);
 
+  const isSearching = search.length > 0;
+
   const isServerRenderedQuery =
     page === 1 &&
-    search === "" &&
+    !isSearching &&
     categorySlug === ALL_CATEGORIES &&
     sortOption === DEFAULT_SORT &&
     reloadToken === 0;
@@ -116,23 +165,36 @@ export function useStorefrontPlants({
     setIsLoading(true);
     setHasError(false);
 
-    getStorefrontPlants(
-      {
-        page,
-        page_size: STOREFRONT_PLANTS_PAGE_SIZE,
-        search: search || undefined,
-        category_id: categoryId,
-        sort,
-        order,
-      },
-      { signal: controller.signal }
-    )
-      .then((response) => {
-        setItems((current) =>
-          page > 1 ? [...current, ...response.items] : response.items
-        );
-        setTotal(response.total);
-      })
+    const request = isSearching
+      ? fetchAllPlantsForSearch({
+          category_id: categoryId,
+          sort,
+          order,
+          signal: controller.signal,
+        }).then((allItems) => {
+          const matched = allItems.filter((plant) =>
+            plantMatchesSearch(plant, search)
+          );
+          setItems(matched);
+          setTotal(matched.length);
+        })
+      : getStorefrontPlants(
+          {
+            page,
+            page_size: STOREFRONT_PLANTS_PAGE_SIZE,
+            category_id: categoryId,
+            sort,
+            order,
+          },
+          { signal: controller.signal }
+        ).then((response) => {
+          setItems((current) =>
+            page > 1 ? [...current, ...response.items] : response.items
+          );
+          setTotal(response.total);
+        });
+
+    request
       .catch(() => {
         if (controller.signal.aborted) return;
         setHasError(true);
@@ -145,6 +207,7 @@ export function useStorefrontPlants({
     return () => controller.abort();
   }, [
     isServerRenderedQuery,
+    isSearching,
     page,
     search,
     categoryId,
@@ -175,8 +238,9 @@ export function useStorefrontPlants({
   }, []);
 
   const loadMore = useCallback(() => {
+    if (isSearching) return;
     setPage((current) => current + 1);
-  }, []);
+  }, [isSearching]);
 
   const clearFilters = useCallback(() => {
     setSearchInput("");
@@ -198,7 +262,8 @@ export function useStorefrontPlants({
     sortOption,
     isLoading,
     hasError,
-    hasMore: items.length < total,
+    // Search loads the full filtered set in one pass; pagination stays for browse.
+    hasMore: !isSearching && items.length < total,
     setSearchInput: handleSearchInput,
     setCategorySlug: handleCategoryChange,
     setSortOption: handleSortChange,

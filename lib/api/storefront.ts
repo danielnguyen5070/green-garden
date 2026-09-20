@@ -28,7 +28,7 @@ const CATALOG_REVALIDATE_SECONDS = 60;
 export const STOREFRONT_PLANTS_PAGE_SIZE = 8;
 
 /** The API caps `page_size` at 100. */
-const MAX_PAGE_SIZE = 100;
+export const STOREFRONT_PLANTS_MAX_PAGE_SIZE = 100;
 
 type RequestContext = {
   signal?: AbortSignal;
@@ -55,7 +55,7 @@ export async function getStorefrontCategories(
     signal: context.signal,
     revalidate: CATALOG_REVALIDATE_SECONDS,
     // The backend already limits this to active categories.
-    query: { page: 1, page_size: MAX_PAGE_SIZE },
+    query: { page: 1, page_size: STOREFRONT_PLANTS_MAX_PAGE_SIZE },
   });
 }
 
