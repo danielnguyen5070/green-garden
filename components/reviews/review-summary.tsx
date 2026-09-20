@@ -38,12 +38,12 @@ function ReviewSummary({
     <div
       data-slot="review-summary"
       className={cn(
-        "rounded-2xl border border-border bg-card p-4 shadow-subtle md:p-5",
+        "rounded-md border border-border bg-card p-5 shadow-subtle md:p-6",
         className
       )}
     >
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
-        <div className="flex min-w-0 shrink-0 flex-wrap items-center gap-x-3 gap-y-2">
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
+        <div className="flex min-w-0 shrink-0 flex-wrap items-center gap-x-4 gap-y-2">
           <p className="font-heading text-3xl font-bold tracking-tight text-foreground tabular-nums">
             {summary.total_reviews === 0
               ? "—"
@@ -57,14 +57,14 @@ function ReviewSummary({
                 rating: summary.average_rating.toFixed(1),
               })}
             />
-            <p className="mt-1 font-sans text-small text-muted-foreground">
+            <p className="mt-1.5 font-sans text-small text-muted-foreground">
               {t("basedOn", { count: summary.total_reviews })}
             </p>
           </div>
         </div>
 
         <div
-          className="flex flex-wrap gap-2 lg:justify-end"
+          className="flex flex-wrap gap-2.5 lg:justify-end"
           role="group"
           aria-label={t("distributionLabel")}
         >
