@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { ReviewCard } from "@/components/reviews/review-card";
 import { ReviewFormDialog } from "@/components/reviews/review-form-dialog";
+import { ReviewMasonryList } from "@/components/reviews/review-masonry-list";
 import { ReviewSummary } from "@/components/reviews/review-summary";
 import { Button } from "@/components/ui/button";
 import {
@@ -108,13 +108,7 @@ function ReviewsSection({
         </div>
       ) : (
         <div className="space-y-4">
-          <ul className="grid list-none grid-cols-1 gap-4 md:grid-cols-2">
-            {reviews.map((review) => (
-              <li key={review.id}>
-                <ReviewCard review={review} className="h-full" />
-              </li>
-            ))}
-          </ul>
+          <ReviewMasonryList reviews={reviews} />
 
           {hasMore ? (
             <div className="flex justify-center pt-2">
