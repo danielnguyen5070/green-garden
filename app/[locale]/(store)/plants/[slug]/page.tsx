@@ -1,11 +1,15 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { PlantDetail } from "@/components/plant/plant-detail";
 import { RelatedPlants } from "@/components/plant/related-plants";
+import { JsonLd } from "@/components/seo/json-ld";
+import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
 import { ApiError } from "@/lib/api/errors";
 import { getStorefrontPlantBySlug } from "@/lib/api/storefront";
+import { buildPlantJsonLd } from "@/lib/seo/plant-json-ld";
 import { localizeOptionalText, localizeText } from "@/lib/storefront";
 import type { StorefrontPlantDetail } from "@/types/storefront";
 
@@ -45,7 +49,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     plant.description_vi,
     locale
   );
-  const ogTitle = `${name} | Ngoc Ngan Ben Tre`;
+  const ogTitle = `${name} | ${SITE_NAME}`;
   const path = `/${locale}/plants/${slug}`;
   const languages = {
     vi: `/vi/plants/${slug}`,
@@ -65,7 +69,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: ogTitle,
       description: description ?? undefined,
       url: path,
-      siteName: "Ngoc Ngan Ben Tre",
+      siteName: SITE_NAME,
       locale: locale === "vi" ? "vi_VN" : "en_US",
       alternateLocale: locale === "vi" ? ["en_US"] : ["vi_VN"],
       type: "website",
@@ -92,15 +96,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PlantDetailPage({ params }: Props) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
   const plant = await loadPlant(slug);
 
   if (!plant) {
     notFound();
   }
 
+  const t = await getTranslations({ locale, namespace: "plantDetail" });
+  const jsonLd = buildPlantJsonLd({
+    locale,
+    plant,
+    homeLabel: t("home"),
+  });
+
   return (
     <>
+      <JsonLd data={jsonLd} />
       <PlantDetail plant={plant} />
       <Suspense fallback={null}>
         <RelatedPlants plant={plant} />

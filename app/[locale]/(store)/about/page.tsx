@@ -3,7 +3,10 @@ import { getTranslations } from "next-intl/server";
 import { OwnerHero } from "@/components/about/owner-hero";
 import { OwnerPhilosophy } from "@/components/about/owner-philosophy";
 import { OwnerStory } from "@/components/about/owner-story";
+import { JsonLd } from "@/components/seo/json-ld";
+import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
+import { buildAboutJsonLd } from "@/lib/seo/about-json-ld";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -15,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = t("title");
   const description = t("description");
-  const ogTitle = `${title} | Ngoc Ngan Ben Tre`;
+  const ogTitle = `${title} | ${SITE_NAME}`;
 
   const path = `/${locale}/about`;
   const languages = {
@@ -36,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: ogTitle,
       description,
       url: path,
-      siteName: "Ngoc Ngan Ben Tre",
+      siteName: SITE_NAME,
       locale: locale === "vi" ? "vi_VN" : "en_US",
       alternateLocale: locale === "vi" ? ["en_US"] : ["vi_VN"],
       type: "website",
@@ -58,9 +61,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function AboutPage() {
+export default async function AboutPage({ params }: Props) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "about.metadata" });
+  const jsonLd = buildAboutJsonLd({
+    locale,
+    name: t("title"),
+    description: t("description"),
+  });
+
   return (
     <>
+      <JsonLd data={jsonLd} />
       <OwnerHero />
       <OwnerStory />
       <OwnerPhilosophy />

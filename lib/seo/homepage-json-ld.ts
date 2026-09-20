@@ -1,8 +1,6 @@
 import { CONTACT_CONFIG } from "@/config/contact";
 import { SITE_NAME, SITE_URL } from "@/config/site";
-
-const LOCAL_BUSINESS_ID = `${SITE_URL}/#localbusiness`;
-const WEBSITE_ID = `${SITE_URL}/#website`;
+import { LOCAL_BUSINESS_ID, WEBSITE_ID } from "@/lib/seo/schema-ids";
 
 type HomepageJsonLdInput = {
   locale: string;

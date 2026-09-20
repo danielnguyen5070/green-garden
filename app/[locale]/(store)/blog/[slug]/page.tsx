@@ -5,8 +5,12 @@ import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/layout/container";
 import { formatDate } from "@/components/blog/blog-card";
 import { MdxContent } from "@/components/blog/mdx-content";
+import { JsonLd } from "@/components/seo/json-ld";
+import { SITE_NAME } from "@/config/site";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
+import { buildBlogPostJsonLd } from "@/lib/seo/blog-post-json-ld";
+import { toIsoDate } from "@/lib/seo/url";
 import {
   getAllSlugs,
   getPostBySlug,
@@ -19,13 +23,6 @@ type Props = {
 
 const OG_IMAGE_WIDTH = 1200;
 const OG_IMAGE_HEIGHT = 630;
-
-function toIsoDate(value: string | undefined): string | undefined {
-  if (!value) return undefined;
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) return undefined;
-  return parsed.toISOString();
-}
 
 function blogPostLanguages(slug: string): Record<string, string> {
   const languages: Record<string, string> = {};
@@ -60,7 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = post.title;
   const description = post.description;
-  const ogTitle = `${title} | Ngoc Ngan Ben Tre`;
+  const ogTitle = `${title} | ${SITE_NAME}`;
   const path = `/${locale}/blog/${slug}`;
   const languages = blogPostLanguages(slug);
   const image = getPostImage(post);
@@ -80,7 +77,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: ogTitle,
       description,
       url: path,
-      siteName: "Ngoc Ngan Ben Tre",
+      siteName: SITE_NAME,
       locale: locale === "vi" ? "vi_VN" : "en_US",
       alternateLocale: locale === "vi" ? ["en_US"] : ["vi_VN"],
       type: "article",
@@ -116,12 +113,18 @@ export default async function BlogPostPage({ params }: Props) {
   const t = await getTranslations("blog");
   const image = getPostImage(post);
   const imageAlt = post.ogImageAlt ?? post.title;
+  const jsonLd = buildBlogPostJsonLd({
+    locale,
+    post,
+    imageUrl: image,
+  });
 
   return (
     <article
       data-slot="blog-post"
       className="bg-background py-10 md:py-12 lg:py-14"
     >
+      <JsonLd data={jsonLd} />
       <Container className="max-w-3xl">
         <Link
           href="/blog"
