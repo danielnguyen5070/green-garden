@@ -7,7 +7,10 @@ import {
   PlantListSection,
   PlantListSkeleton,
 } from "@/components/plant/plant-list-section";
+import { JsonLd } from "@/components/seo/json-ld";
+import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
+import { buildHomepageJsonLd } from "@/lib/seo/homepage-json-ld";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -38,7 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: t("title"),
       description: t("description"),
       url: path,
-      siteName: "Ngoc Ngan Ben Tre",
+      siteName: SITE_NAME,
       locale: locale === "vi" ? "vi_VN" : "en_US",
       alternateLocale: locale === "vi" ? ["en_US"] : ["vi_VN"],
       type: "website",
@@ -60,9 +63,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function HomePage() {
+export default async function HomePage({ params }: Props) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "home.metadata" });
+  const jsonLd = buildHomepageJsonLd({
+    locale,
+    name: t("title"),
+    description: t("description"),
+  });
+
   return (
     <>
+      <JsonLd data={jsonLd} />
       <Hero />
       <Suspense fallback={<PlantListSkeleton />}>
         <PlantListSection />
