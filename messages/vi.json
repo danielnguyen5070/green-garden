@@ -169,6 +169,8 @@
     "ratingLabel": "{rating} trên 5 sao",
     "averageRatingLabel": "Điểm trung bình {rating} trên 5",
     "filterByRating": "Lọc đánh giá {rating} sao ({count})",
+    "filterAll": "Tất cả ({count})",
+    "filterStars": "{rating} sao ({count})",
     "filteredByRating": "{count, plural, =0 {Không có đánh giá} other {Đang xem # đánh giá}} {rating} sao",
     "filteredListTitle": "Đánh giá {rating} sao ({count})",
     "allReviews": "Tất cả đánh giá ({count})",

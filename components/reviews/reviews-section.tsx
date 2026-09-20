@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
+import { PencilIcon } from "lucide-react";
 import { ReviewFormDialog } from "@/components/reviews/review-form-dialog";
 import { ReviewMasonryList } from "@/components/reviews/review-masonry-list";
 import { ReviewSummary } from "@/components/reviews/review-summary";
@@ -95,15 +96,27 @@ function ReviewsSection({
 
   return (
     <div className="space-y-6 md:space-y-8">
-      <h1 id="reviews-heading" className="sr-only">
-        {t("title")}
-      </h1>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1
+          id="reviews-heading"
+          className="font-heading text-h3 font-bold tracking-tight text-foreground md:text-h2"
+        >
+          {t("title")}
+        </h1>
+        <Button
+          type="button"
+          className="h-9 shrink-0 self-start rounded-xl px-6 has-data-[icon=inline-start]:pl-6 sm:self-center"
+          onClick={() => setFormOpen(true)}
+        >
+          <PencilIcon data-icon="inline-start" className="size-3.5" />
+          {t("writeReview")}
+        </Button>
+      </div>
 
       <ReviewSummary
         summary={summary}
         selectedRating={selectedRating}
         onSelectRating={setSelectedRating}
-        onWriteReview={() => setFormOpen(true)}
       />
 
       {reviews.length === 0 ? (
@@ -122,27 +135,14 @@ function ReviewsSection({
       ) : (
         <div className="space-y-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="min-w-0">
-              <h2 className="font-heading text-lg font-bold tracking-tight text-foreground">
-                {isFiltered
-                  ? t("filteredListTitle", {
-                      count: listCount,
-                      rating: selectedRating,
-                    })
-                  : t("allReviews", { count: listCount })}
-              </h2>
-              {isFiltered ? (
-                <Button
-                  type="button"
-                  variant="link"
-                  size="sm"
-                  className="mt-1 h-auto px-0 font-sans text-small"
-                  onClick={() => setSelectedRating(null)}
-                >
-                  {t("viewAllReviews")}
-                </Button>
-              ) : null}
-            </div>
+            <h2 className="font-heading text-lg font-bold tracking-tight text-foreground">
+              {isFiltered
+                ? t("filteredListTitle", {
+                    count: listCount,
+                    rating: selectedRating,
+                  })
+                : t("allReviews", { count: listCount })}
+            </h2>
 
             <Select
               value={sortOption}
@@ -158,7 +158,11 @@ function ReviewsSection({
               >
                 <SelectValue>{t(`sort.${sortOption}`)}</SelectValue>
               </SelectTrigger>
-              <SelectContent align="end" className="min-w-[9.5rem]">
+              <SelectContent
+                align="end"
+                alignItemWithTrigger={false}
+                className="min-w-(--anchor-width) rounded-xl"
+              >
                 <SelectItem value="newest" className="font-sans">
                   {t("sort.newest")}
                 </SelectItem>
