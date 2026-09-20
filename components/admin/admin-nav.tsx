@@ -4,6 +4,7 @@ import {
   FolderTree,
   LayoutDashboard,
   Leaf,
+  MessageSquareQuote,
   Settings,
   Shield,
   ShoppingBag,
@@ -37,6 +38,11 @@ const primaryNav: NavItem[] = [
     href: "/admin/orders",
     label: adminCopy.navigation.orders,
     icon: ShoppingBag,
+  },
+  {
+    href: "/admin/reviews",
+    label: adminCopy.navigation.reviews,
+    icon: MessageSquareQuote,
   },
 ];
 

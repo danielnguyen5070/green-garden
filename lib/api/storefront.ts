@@ -9,6 +9,11 @@ import type {
   StorefrontPlantSort,
   StorefrontSortOrder,
 } from "@/types/storefront";
+import type {
+  StorefrontReview,
+  StorefrontReviewCreateRequest,
+  StorefrontReviewListResponse,
+} from "@/types/storefront-review";
 import type { AppLocale } from "@/i18n/routing";
 
 /**
@@ -29,6 +34,12 @@ export const STOREFRONT_PLANTS_PAGE_SIZE = 8;
 
 /** The API caps `page_size` at 100. */
 export const STOREFRONT_PLANTS_MAX_PAGE_SIZE = 100;
+
+/** Approved reviews per Reviews page load / "Load more" step. */
+export const STOREFRONT_REVIEWS_PAGE_SIZE = 8;
+
+/** Reviews change when admins moderate; keep a short Data Cache window. */
+const REVIEWS_REVALIDATE_SECONDS = 60;
 
 type RequestContext = {
   signal?: AbortSignal;
@@ -136,4 +147,63 @@ export async function getStorefrontPlantBySlug(
       revalidate: CATALOG_REVALIDATE_SECONDS,
     }
   );
+}
+
+export type StorefrontReviewsParams = {
+  page?: number;
+  page_size?: number;
+};
+
+export async function getStorefrontReviews(
+  params: StorefrontReviewsParams = {},
+  context: RequestContext = {}
+): Promise<StorefrontReviewListResponse> {
+  return api.get<StorefrontReviewListResponse>("/storefront/reviews", {
+    ...PUBLIC_REQUEST,
+    signal: context.signal,
+    revalidate: REVIEWS_REVALIDATE_SECONDS,
+    query: {
+      page: params.page ?? 1,
+      page_size: params.page_size ?? STOREFRONT_REVIEWS_PAGE_SIZE,
+    },
+  });
+}
+
+/**
+ * Loads every approved review page so average/distribution can be derived when
+ * the list endpoint does not yet return summary fields.
+ */
+export async function getAllStorefrontReviews(
+  context: RequestContext = {}
+): Promise<StorefrontReview[]> {
+  const first = await getStorefrontReviews(
+    { page: 1, page_size: STOREFRONT_PLANTS_MAX_PAGE_SIZE },
+    context
+  );
+
+  const items = [...first.items];
+  const totalPages = Math.max(
+    1,
+    Math.ceil(first.total / STOREFRONT_PLANTS_MAX_PAGE_SIZE)
+  );
+
+  for (let page = 2; page <= totalPages; page += 1) {
+    const response = await getStorefrontReviews(
+      { page, page_size: STOREFRONT_PLANTS_MAX_PAGE_SIZE },
+      context
+    );
+    items.push(...response.items);
+  }
+
+  return items;
+}
+
+export async function createStorefrontReview(
+  payload: StorefrontReviewCreateRequest,
+  context: RequestContext = {}
+): Promise<StorefrontReview> {
+  return api.post<StorefrontReview>("/storefront/reviews", payload, {
+    ...PUBLIC_REQUEST,
+    signal: context.signal,
+  });
 }

@@ -1,7 +1,8 @@
 {
   "nav": {
     "careGuide": "Chăm sóc",
-    "about": "Giới thiệu"
+    "about": "Giới thiệu",
+    "reviews": "Đánh giá"
   },
   "common": {
     "search": "Tìm cây...",
@@ -54,6 +55,7 @@
       "title": "Hỗ trợ",
       "careGuide": "Chăm sóc",
       "faq": "Câu hỏi thường gặp",
+      "reviews": "Đánh giá",
       "shipping": "Vận chuyển & Đổi trả",
       "contact": "Liên hệ"
     },
@@ -145,6 +147,52 @@
     "emptyDescription": "Bạn có thể tìm một loại cây, danh mục hoặc chủ đề khác.",
     "productsError": "Không tải được kết quả cây giống lúc này.",
     "prompt": "Nhập từ khóa ở trên và nhấn Enter để tìm kiếm."
+  },
+  "reviews": {
+    "metadata": {
+      "title": "Đánh giá khách hàng | Ngọc Ngân Bến Tre",
+      "description": "Đọc đánh giá của khách hàng về cây giống, đóng gói và dịch vụ tại Ngọc Ngân Bến Tre — và chia sẻ trải nghiệm của bạn.",
+      "ogImageAlt": "Đánh giá khách hàng Ngọc Ngân Bến Tre",
+      "keywords": "đánh giá khách hàng, Ngọc Ngân Bến Tre, đánh giá cây giống, nhà vườn Bến Tre"
+    },
+    "title": "Đánh giá",
+    "description": "Khách hàng nói gì về cây giống, đóng gói và hỗ trợ chăm sóc của chúng tôi.",
+    "writeReview": "Viết đánh giá",
+    "empty": "Chưa có đánh giá nào. Hãy là người đầu tiên chia sẻ trải nghiệm của bạn.",
+    "loadMore": "Xem thêm đánh giá",
+    "loadingMore": "Đang tải...",
+    "basedOn": "{count, plural, =0 {Chưa có đánh giá} other {Dựa trên # đánh giá}}",
+    "distributionLabel": "Phân bố xếp hạng",
+    "starRow": "{rating} ★",
+    "ratingLabel": "{rating} trên 5 sao",
+    "averageRatingLabel": "Điểm trung bình {rating} trên 5",
+    "submitSuccess": "Cảm ơn bạn đã đánh giá.",
+    "submitSuccessDescription": "Đánh giá sẽ được hiển thị sau khi được duyệt.",
+    "form": {
+      "title": "Viết đánh giá",
+      "description": "Chia sẻ trải nghiệm của bạn với Ngọc Ngân Bến Tre. Không cần đăng nhập.",
+      "name": "Tên của bạn",
+      "rating": "Đánh giá của bạn",
+      "ratingValue": "{rating} sao",
+      "content": "Nội dung đánh giá",
+      "submit": "Gửi đánh giá",
+      "submitting": "Đang gửi...",
+      "cancel": "Hủy",
+      "errors": {
+        "nameRequired": "Vui lòng nhập tên của bạn.",
+        "nameTooLong": "Tên tối đa 255 ký tự.",
+        "ratingRequired": "Vui lòng chọn điểm từ 1 đến 5 sao.",
+        "contentRequired": "Vui lòng nhập nội dung đánh giá.",
+        "contentTooLong": "Nội dung tối đa 5000 ký tự."
+      }
+    },
+    "errors": {
+      "generic": "Đã xảy ra lỗi. Vui lòng thử lại.",
+      "unavailable": "Hiện không tải được đánh giá. Vui lòng thử lại sau.",
+      "validation": "Vui lòng kiểm tra lại thông tin và thử lại.",
+      "rateLimited": "Bạn thao tác quá nhanh. Vui lòng đợi một chút rồi thử lại.",
+      "spam": "Không xác minh được gửi đánh giá. Vui lòng thử lại."
+    }
   },
   "plantDetail": {
     "home": "Trang chủ",

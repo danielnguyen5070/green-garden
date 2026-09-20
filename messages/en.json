@@ -1,7 +1,8 @@
 {
   "nav": {
     "careGuide": "Care Guide",
-    "about": "About"
+    "about": "About",
+    "reviews": "Reviews"
   },
   "common": {
     "search": "Search plants...",
@@ -54,6 +55,7 @@
       "title": "Support",
       "careGuide": "Care Guide",
       "faq": "FAQ",
+      "reviews": "Reviews",
       "shipping": "Shipping & Returns",
       "contact": "Contact Us"
     },
@@ -145,6 +147,52 @@
     "emptyDescription": "You can search for another plant, category, or topic.",
     "productsError": "We couldn't load plant results right now.",
     "prompt": "Enter a keyword above and press Enter to search."
+  },
+  "reviews": {
+    "metadata": {
+      "title": "Customer Reviews | Ngoc Ngan Ben Tre",
+      "description": "Read customer reviews of Ngoc Ngan Ben Tre seedlings, packing, and service — and share your own experience.",
+      "ogImageAlt": "Customer reviews for Ngoc Ngan Ben Tre nursery",
+      "keywords": "customer reviews, Ngoc Ngan Ben Tre, seedling reviews, Ben Tre nursery reviews"
+    },
+    "title": "Reviews",
+    "description": "What customers say about our seedlings, packing, and care support.",
+    "writeReview": "Write a review",
+    "empty": "No reviews yet. Be the first to share your experience.",
+    "loadMore": "Load more reviews",
+    "loadingMore": "Loading...",
+    "basedOn": "{count, plural, =0 {No reviews yet} one {Based on # review} other {Based on # reviews}}",
+    "distributionLabel": "Rating distribution",
+    "starRow": "{rating} ★",
+    "ratingLabel": "{rating} out of 5 stars",
+    "averageRatingLabel": "Average rating {rating} out of 5",
+    "submitSuccess": "Thank you for your review.",
+    "submitSuccessDescription": "Your review will appear after approval.",
+    "form": {
+      "title": "Write a review",
+      "description": "Share your experience with Ngoc Ngan Ben Tre. No account needed.",
+      "name": "Your name",
+      "rating": "Your rating",
+      "ratingValue": "{rating} stars",
+      "content": "Your review",
+      "submit": "Submit review",
+      "submitting": "Submitting...",
+      "cancel": "Cancel",
+      "errors": {
+        "nameRequired": "Please enter your name.",
+        "nameTooLong": "Name must be 255 characters or fewer.",
+        "ratingRequired": "Please choose a rating from 1 to 5.",
+        "contentRequired": "Please write your review.",
+        "contentTooLong": "Review must be 5000 characters or fewer."
+      }
+    },
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "unavailable": "Reviews are temporarily unavailable. Please try again later.",
+      "validation": "Please check the form and try again.",
+      "rateLimited": "Too many requests. Please wait a moment and try again.",
+      "spam": "We could not verify your submission. Please try again."
+    }
   },
   "plantDetail": {
     "home": "Home",

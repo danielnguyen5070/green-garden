@@ -14,6 +14,8 @@ const statusStyles: Record<string, string> = {
   confirmed: "bg-primary/10 text-primary border-transparent",
   scheduled: "bg-primary/10 text-primary border-transparent",
   pending: "bg-warning/15 text-warning border-transparent",
+  approved: "bg-success/15 text-success border-transparent",
+  rejected: "bg-destructive/10 text-destructive border-transparent",
   low_stock: "bg-warning/15 text-warning border-transparent",
   draft: "bg-muted text-muted-foreground border-transparent",
   cancelled: "bg-destructive/10 text-destructive border-transparent",

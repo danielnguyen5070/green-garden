@@ -21,6 +21,7 @@ export const FOOTER_SUPPORT = {
   links: [
     { href: "/blog", labelKey: "support.careGuide" },
     { href: "/faq", labelKey: "support.faq" },
+    { href: "/reviews", labelKey: "support.reviews" },
     {
       href: CONTACT_CONFIG.zaloUrl,
       labelKey: "support.shipping",
