@@ -166,6 +166,10 @@
     "starRow": "{rating} ★",
     "ratingLabel": "{rating} trên 5 sao",
     "averageRatingLabel": "Điểm trung bình {rating} trên 5",
+    "filterByRating": "Lọc đánh giá {rating} sao ({count})",
+    "filteredByRating": "{count, plural, =0 {Không có đánh giá} other {Đang xem # đánh giá}} {rating} sao",
+    "filteredEmpty": "Chưa tải được đánh giá {rating} sao. Thử xem thêm, hoặc xem tất cả đánh giá.",
+    "viewAllReviews": "Xem tất cả đánh giá",
     "submitSuccess": "Cảm ơn bạn đã đánh giá.",
     "submitSuccessDescription": "Đánh giá sẽ được hiển thị sau khi được duyệt.",
     "form": {

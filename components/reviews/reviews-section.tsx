@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { ReviewFormDialog } from "@/components/reviews/review-form-dialog";
 import { ReviewMasonryList } from "@/components/reviews/review-masonry-list";
@@ -34,8 +34,15 @@ function ReviewsSection({
   const [total, setTotal] = useState(initialTotal);
   const [loadingMore, setLoadingMore] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
+  const [selectedRating, setSelectedRating] = useState<number | null>(null);
+
+  const visibleReviews = useMemo(() => {
+    if (selectedRating == null) return reviews;
+    return reviews.filter((review) => review.rating === selectedRating);
+  }, [reviews, selectedRating]);
 
   const hasMore = reviews.length < total;
+  const isFiltered = selectedRating != null;
 
   async function handleLoadMore() {
     if (loadingMore || !hasMore) return;
@@ -91,7 +98,11 @@ function ReviewsSection({
         </Button>
       </div>
 
-      <ReviewSummary summary={summary} />
+      <ReviewSummary
+        summary={summary}
+        selectedRating={selectedRating}
+        onSelectRating={setSelectedRating}
+      />
 
       {reviews.length === 0 ? (
         <div className="rounded-2xl border border-border bg-card px-6 py-12 text-center shadow-subtle">
@@ -108,9 +119,62 @@ function ReviewsSection({
         </div>
       ) : (
         <div className="space-y-4">
-          <ReviewMasonryList reviews={reviews} />
+          {isFiltered ? (
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <p
+                className="font-sans text-small text-muted-foreground"
+                aria-live="polite"
+              >
+                {t("filteredByRating", {
+                  count: visibleReviews.length,
+                  rating: selectedRating,
+                })}
+              </p>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="self-start rounded-full"
+                onClick={() => setSelectedRating(null)}
+              >
+                {t("viewAllReviews")}
+              </Button>
+            </div>
+          ) : null}
 
-          {hasMore ? (
+          {visibleReviews.length === 0 ? (
+            <div className="rounded-2xl border border-border bg-card px-6 py-10 text-center shadow-subtle">
+              <p className="font-sans text-body text-muted-foreground">
+                {t("filteredEmpty", { rating: selectedRating ?? 0 })}
+              </p>
+              {hasMore ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="mt-4 rounded-full"
+                  disabled={loadingMore}
+                  onClick={() => {
+                    void handleLoadMore();
+                  }}
+                >
+                  {loadingMore ? t("loadingMore") : t("loadMore")}
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="mt-4 rounded-full"
+                  onClick={() => setSelectedRating(null)}
+                >
+                  {t("viewAllReviews")}
+                </Button>
+              )}
+            </div>
+          ) : (
+            <ReviewMasonryList reviews={visibleReviews} />
+          )}
+
+          {hasMore && visibleReviews.length > 0 ? (
             <div className="flex justify-center pt-2">
               <Button
                 type="button"
