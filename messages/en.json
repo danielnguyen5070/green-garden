@@ -158,18 +158,32 @@
     "title": "Reviews",
     "description": "What customers say about our seedlings, packing, and care support.",
     "writeReview": "Write a review",
+    "writeReviewNow": "Write a review now",
     "empty": "No reviews yet. Be the first to share your experience.",
     "loadMore": "Load more reviews",
     "loadingMore": "Loading...",
     "basedOn": "{count, plural, =0 {No reviews yet} one {Based on # review} other {Based on # reviews}}",
     "distributionLabel": "Rating distribution",
     "starRow": "{rating} ★",
+    "distributionCount": "{count} ({percent}%)",
     "ratingLabel": "{rating} out of 5 stars",
     "averageRatingLabel": "Average rating {rating} out of 5",
     "filterByRating": "Filter reviews with {rating} stars ({count})",
     "filteredByRating": "{count, plural, =0 {No reviews} one {Showing # review} other {Showing # reviews}} with {rating} stars",
+    "filteredListTitle": "{rating}-star reviews ({count})",
+    "allReviews": "All reviews ({count})",
     "filteredEmpty": "No loaded reviews with {rating} stars yet. Try loading more, or view all reviews.",
     "viewAllReviews": "View all reviews",
+    "sortLabel": "Sort reviews",
+    "sort": {
+      "newest": "Newest",
+      "oldest": "Oldest"
+    },
+    "cta": {
+      "title": "Share your experience",
+      "description": "Every review helps us improve and bring you even better plants.",
+      "button": "Write a review now"
+    },
     "submitSuccess": "Thank you for your review.",
     "submitSuccessDescription": "Your review will appear after approval.",
     "form": {

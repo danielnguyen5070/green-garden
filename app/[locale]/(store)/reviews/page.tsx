@@ -121,7 +121,7 @@ export default async function ReviewsPage() {
     <section
       data-slot="reviews-page"
       aria-labelledby="reviews-heading"
-      className="bg-background py-10 md:py-12 lg:py-14"
+      className="bg-muted/40 py-10 md:py-12 lg:py-14"
     >
       <Container>
         {error ? (

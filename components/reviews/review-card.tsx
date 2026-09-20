@@ -2,7 +2,10 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { ReviewStars } from "@/components/reviews/review-stars";
-import { formatRelativeReviewDate } from "@/lib/reviews";
+import {
+  formatRelativeReviewDate,
+  splitReviewContent,
+} from "@/lib/reviews";
 import type { StorefrontReview } from "@/types/storefront-review";
 import { cn } from "@/lib/utils";
 
@@ -15,6 +18,7 @@ function ReviewCard({
 }) {
   const t = useTranslations("reviews");
   const locale = useLocale();
+  const { title, body } = splitReviewContent(review.content);
 
   return (
     <article
@@ -28,9 +32,22 @@ function ReviewCard({
         rating={review.rating}
         label={t("ratingLabel", { rating: review.rating })}
       />
-      <p className="mt-3 whitespace-pre-wrap font-sans text-body text-foreground">
-        {review.content}
+
+      {title ? (
+        <h3 className="mt-3 font-heading text-base font-bold tracking-tight text-foreground md:text-lg">
+          {title}
+        </h3>
+      ) : null}
+
+      <p
+        className={cn(
+          "whitespace-pre-wrap font-sans text-body text-muted-foreground",
+          title ? "mt-2" : "mt-3"
+        )}
+      >
+        {body}
       </p>
+
       <footer className="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-1">
         <p className="font-sans text-sm font-semibold text-foreground">
           {review.name}

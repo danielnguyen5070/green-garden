@@ -143,3 +143,28 @@ export function formatRelativeReviewDate(
   }
   return rtf.format(Math.round(diffSeconds / (86_400 * 365)), "year");
 }
+
+/**
+ * First non-empty line becomes the card title when the review has a blank line
+ * (or newline) separating a headline from the body.
+ */
+export function splitReviewContent(content: string): {
+  title: string | null;
+  body: string;
+} {
+  const trimmed = content.trim();
+  if (!trimmed) return { title: null, body: "" };
+
+  const parts = trimmed.split(/\n+/);
+  if (parts.length < 2) {
+    return { title: null, body: trimmed };
+  }
+
+  const title = parts[0]?.trim() || null;
+  const body = parts.slice(1).join("\n\n").trim();
+  if (!title || !body) {
+    return { title: null, body: trimmed };
+  }
+
+  return { title, body };
+}

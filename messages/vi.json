@@ -158,18 +158,32 @@
     "title": "Đánh giá",
     "description": "Khách hàng nói gì về cây giống, đóng gói và hỗ trợ chăm sóc của chúng tôi.",
     "writeReview": "Viết đánh giá",
+    "writeReviewNow": "Viết đánh giá ngay",
     "empty": "Chưa có đánh giá nào. Hãy là người đầu tiên chia sẻ trải nghiệm của bạn.",
     "loadMore": "Xem thêm đánh giá",
     "loadingMore": "Đang tải...",
     "basedOn": "{count, plural, =0 {Chưa có đánh giá} other {Dựa trên # đánh giá}}",
     "distributionLabel": "Phân bố xếp hạng",
     "starRow": "{rating} ★",
+    "distributionCount": "{count} ({percent}%)",
     "ratingLabel": "{rating} trên 5 sao",
     "averageRatingLabel": "Điểm trung bình {rating} trên 5",
     "filterByRating": "Lọc đánh giá {rating} sao ({count})",
     "filteredByRating": "{count, plural, =0 {Không có đánh giá} other {Đang xem # đánh giá}} {rating} sao",
+    "filteredListTitle": "Đánh giá {rating} sao ({count})",
+    "allReviews": "Tất cả đánh giá ({count})",
     "filteredEmpty": "Chưa tải được đánh giá {rating} sao. Thử xem thêm, hoặc xem tất cả đánh giá.",
     "viewAllReviews": "Xem tất cả đánh giá",
+    "sortLabel": "Sắp xếp đánh giá",
+    "sort": {
+      "newest": "Mới nhất",
+      "oldest": "Cũ nhất"
+    },
+    "cta": {
+      "title": "Chia sẻ trải nghiệm của bạn",
+      "description": "Mỗi đánh giá đều giúp chúng mình cải thiện và mang đến những cây đẹp hơn cho bạn.",
+      "button": "Viết đánh giá ngay"
+    },
     "submitSuccess": "Cảm ơn bạn đã đánh giá.",
     "submitSuccessDescription": "Đánh giá sẽ được hiển thị sau khi được duyệt.",
     "form": {
