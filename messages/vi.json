@@ -126,6 +126,26 @@
     "backToBlog": "Quay lại blog",
     "empty": "Chưa có bài viết nào."
   },
+  "search": {
+    "metadata": {
+      "title": "Kết quả tìm kiếm cho \"{query}\" | Ngọc Ngân Bến Tre",
+      "titleEmpty": "Tìm kiếm | Ngọc Ngân Bến Tre",
+      "description": "Kết quả tìm kiếm cho \"{query}\" về cây giống và bài viết tại Ngọc Ngân Bến Tre.",
+      "descriptionEmpty": "Tìm cây giống và bài viết tại Ngọc Ngân Bến Tre."
+    },
+    "heading": "Kết quả tìm kiếm cho \"{query}\"",
+    "headingEmpty": "Tìm kiếm",
+    "description": "Cây giống và bài viết khớp với từ khóa của bạn.",
+    "descriptionEmpty": "Tìm cây giống, mẹo chăm sóc và ghi chú vườn.",
+    "searchPlaceholder": "Tìm cây hoặc bài viết...",
+    "searchLabel": "Tìm kiếm trên trang",
+    "products": "Sản phẩm",
+    "blog": "Blog",
+    "emptyTitle": "Không tìm thấy kết quả cho \"{query}\"",
+    "emptyDescription": "Bạn có thể tìm một loại cây, danh mục hoặc chủ đề khác.",
+    "productsError": "Không tải được kết quả cây giống lúc này.",
+    "prompt": "Nhập từ khóa ở trên và nhấn Enter để tìm kiếm."
+  },
   "plantDetail": {
     "home": "Trang chủ",
     "breadcrumb": "Đường dẫn",

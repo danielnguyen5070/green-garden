@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Container } from "@/components/layout/container";
 import { cn } from "@/lib/utils";
 import { HeaderActions } from "./header/header-actions";
@@ -5,6 +6,18 @@ import { Logo } from "./header/logo";
 import { MobileMenu } from "./header/mobile-menu";
 import { Navigation } from "./header/navigation";
 import { HeaderSearch } from "./header/search";
+
+function HeaderSearchFallback({ className }: { className?: string }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        "h-10 w-full max-w-56 min-w-0 rounded-full bg-muted",
+        className
+      )}
+    />
+  );
+}
 
 function Header({ className }: { className?: string }) {
   return (
@@ -21,7 +34,13 @@ function Header({ className }: { className?: string }) {
         <Navigation className="hidden md:block" />
 
         <div className="ml-auto flex min-w-0 items-center gap-1.5 sm:gap-2.5 md:gap-3">
-          <HeaderSearch className="max-w-[9.5rem] sm:max-w-[11rem] md:max-w-[13rem] lg:max-w-56" />
+          <Suspense
+            fallback={
+              <HeaderSearchFallback className="max-w-[9.5rem] sm:max-w-[11rem] md:max-w-[13rem] lg:max-w-56" />
+            }
+          >
+            <HeaderSearch className="max-w-[9.5rem] sm:max-w-[11rem] md:max-w-[13rem] lg:max-w-56" />
+          </Suspense>
           <HeaderActions />
           <MobileMenu />
         </div>

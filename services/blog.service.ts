@@ -8,4 +8,5 @@ export {
   getAllSlugs,
   getPostBySlug,
   getPostImage,
+  searchPosts,
 } from "@/lib/blog";

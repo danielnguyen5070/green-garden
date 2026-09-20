@@ -1,23 +1,27 @@
 "use client";
 
-import { type FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useEffect, useId, useState } from "react";
 import { useTranslations } from "next-intl";
-import { useSearchParams } from "next/navigation";
 import { SearchIcon } from "lucide-react";
-import { usePathname, useRouter } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
-function HeaderSearch({ className }: { className?: string }) {
-  const t = useTranslations("common");
+function SearchForm({
+  query,
+  className,
+}: {
+  /** Current URL `q` value — source of truth after navigation. */
+  query: string;
+  className?: string;
+}) {
+  const t = useTranslations("search");
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const urlQuery = pathname === "/search" ? (searchParams.get("q") ?? "") : "";
-  const [value, setValue] = useState(urlQuery);
+  const inputId = useId();
+  const [value, setValue] = useState(query);
 
   useEffect(() => {
-    setValue(urlQuery);
-  }, [urlQuery]);
+    setValue(query);
+  }, [query]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -31,25 +35,25 @@ function HeaderSearch({ className }: { className?: string }) {
     <form
       role="search"
       onSubmit={handleSubmit}
-      className={cn("relative w-full max-w-56 min-w-0", className)}
+      className={cn("relative w-full max-w-xl", className)}
     >
       <SearchIcon
         aria-hidden="true"
         className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
       />
-      <label htmlFor="header-search" className="sr-only">
+      <label htmlFor={inputId} className="sr-only">
         {t("searchLabel")}
       </label>
       <input
-        id="header-search"
+        id={inputId}
         type="search"
         name="q"
         value={value}
         onChange={(event) => setValue(event.target.value)}
-        placeholder={t("search")}
+        placeholder={t("searchPlaceholder")}
         autoComplete="off"
         className={cn(
-          "h-10 w-full rounded-full border-0 bg-muted py-2 pr-3 pl-9 font-sans text-sm text-foreground outline-none placeholder:text-muted-foreground",
+          "h-11 w-full rounded-full border border-border bg-card py-2 pr-4 pl-10 font-sans text-sm text-foreground shadow-subtle outline-none placeholder:text-muted-foreground",
           "transition-shadow focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         )}
       />
@@ -57,4 +61,4 @@ function HeaderSearch({ className }: { className?: string }) {
   );
 }
 
-export { HeaderSearch };
+export { SearchForm };

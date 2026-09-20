@@ -5,9 +5,11 @@ import type {
   StorefrontOrderResponse,
   StorefrontPlantDetail,
   StorefrontPlantListResponse,
+  StorefrontPlantSearchResponse,
   StorefrontPlantSort,
   StorefrontSortOrder,
 } from "@/types/storefront";
+import type { AppLocale } from "@/i18n/routing";
 
 /**
  * Storefront endpoints are public. Opting out of the shared client's refresh
@@ -75,6 +77,35 @@ export async function getStorefrontPlants(
       max_price: params.max_price,
       sort: params.sort,
       order: params.order,
+    },
+  });
+}
+
+/** Default cap for keyword search results (API max is 100). */
+export const STOREFRONT_PLANTS_SEARCH_LIMIT = 20;
+
+export type StorefrontPlantSearchParams = {
+  q: string;
+  locale: AppLocale;
+  limit?: number;
+};
+
+/**
+ * Locale-aware keyword search over the active catalogue.
+ * `locale` selects which name/description columns the API matches against.
+ */
+export async function searchStorefrontPlants(
+  params: StorefrontPlantSearchParams,
+  context: RequestContext = {}
+): Promise<StorefrontPlantSearchResponse> {
+  return api.get<StorefrontPlantSearchResponse>("/storefront/plants/search", {
+    ...PUBLIC_REQUEST,
+    signal: context.signal,
+    revalidate: CATALOG_REVALIDATE_SECONDS,
+    query: {
+      q: params.q,
+      locale: params.locale,
+      limit: params.limit ?? STOREFRONT_PLANTS_SEARCH_LIMIT,
     },
   });
 }

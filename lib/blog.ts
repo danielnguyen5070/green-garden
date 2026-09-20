@@ -104,3 +104,41 @@ export function getPostBySlug(locale: string, slug: string): BlogPost | null {
 
   return parsePost(locale, `${slug}.mdx`);
 }
+
+function postMatchesQuery(post: BlogPost, query: string): boolean {
+  const haystack = [
+    post.title,
+    post.description,
+    post.content,
+    post.category,
+    ...post.tags,
+  ]
+    .join("\n")
+    .toLowerCase();
+
+  return haystack.includes(query);
+}
+
+/**
+ * Case-insensitive partial search over locale-specific MDX posts.
+ * Matches title, description, body, category, and tags.
+ */
+export function searchPosts(locale: string, query: string): BlogPostMeta[] {
+  const normalized = query.trim().toLowerCase();
+  if (!normalized) return [];
+
+  return getMdxFileNames(locale)
+    .map((fileName) => parsePost(locale, fileName))
+    .filter((post): post is BlogPost => {
+      return post !== null && postMatchesQuery(post, normalized);
+    })
+    .map((post) => {
+      const { content: _content, ...meta } = post;
+      return meta;
+    })
+    .sort((a, b) => {
+      const aTime = new Date(a.publishedAt).getTime();
+      const bTime = new Date(b.publishedAt).getTime();
+      return bTime - aTime;
+    });
+}

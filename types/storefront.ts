@@ -93,6 +93,13 @@ export type StorefrontPlantListResponse = {
   total: number;
 };
 
+/** Response from `GET /storefront/plants/search`. */
+export type StorefrontPlantSearchResponse = {
+  query: string;
+  items: StorefrontPlantListItem[];
+  total: number;
+};
+
 export type StorefrontPlantDetail = {
   id: string;
   name: string;

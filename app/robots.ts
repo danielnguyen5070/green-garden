@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/admin/", "/cart/", "/checkout/"],
+      disallow: ["/admin/", "/cart/", "/checkout/", "/*/search"],
     },
     sitemap: "https://www.ngocnganbentre.vn/sitemap.xml",
   };

@@ -126,6 +126,26 @@
     "backToBlog": "Back to blog",
     "empty": "No posts yet."
   },
+  "search": {
+    "metadata": {
+      "title": "Search results for \"{query}\" | Ngoc Ngan Ben Tre",
+      "titleEmpty": "Search | Ngoc Ngan Ben Tre",
+      "description": "Search results for \"{query}\" across plants and garden notes at Ngoc Ngan Ben Tre.",
+      "descriptionEmpty": "Search plants and garden notes at Ngoc Ngan Ben Tre."
+    },
+    "heading": "Search results for \"{query}\"",
+    "headingEmpty": "Search",
+    "description": "Plants and articles matching your search.",
+    "descriptionEmpty": "Find seedlings, care tips, and garden notes.",
+    "searchPlaceholder": "Search plants or articles...",
+    "searchLabel": "Search the site",
+    "products": "Products",
+    "blog": "Blog",
+    "emptyTitle": "No results found for \"{query}\"",
+    "emptyDescription": "You can search for another plant, category, or topic.",
+    "productsError": "We couldn't load plant results right now.",
+    "prompt": "Enter a keyword above and press Enter to search."
+  },
   "plantDetail": {
     "home": "Home",
     "breadcrumb": "Breadcrumb",

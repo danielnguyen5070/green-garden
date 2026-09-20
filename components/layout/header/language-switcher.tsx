@@ -1,6 +1,7 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -18,10 +19,14 @@ function LanguageSwitcher({ className }: { className?: string }) {
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   function switchLocale(nextLocale: AppLocale) {
     if (nextLocale === locale) return;
-    router.replace(pathname, { locale: nextLocale });
+
+    const query = searchParams.toString();
+    const href = query ? `${pathname}?${query}` : pathname;
+    router.replace(href, { locale: nextLocale });
   }
 
   return (
