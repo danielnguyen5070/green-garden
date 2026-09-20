@@ -1,0 +1,91 @@
+# Ngoc Ngan Ben Tre — full context
+
+> Detailed LLM-oriented summary of Ngọc Ngân Bến Tre (https://www.ngocnganbentre.vn): business facts, storefront routes, plant catalog entries from the live API, and blog posts from the site content. Do not invent products or policies beyond what is listed here.
+
+## Business information
+
+- Legal / brand names: Cây giống Ngọc Ngân Bến Tre; alternateName Ngọc Ngân Bến Tre; English site name Ngoc Ngan Ben Tre.
+- Business type: Local nursery selling seedlings (cây giống), fruit trees (cây ăn trái), and ornamental plants (hoa kiểng), sourced from Cái Mơn – Chợ Lách.
+- Website: https://www.ngocnganbentre.vn
+- Phone / Zalo / SMS: 0386569374 (+84386569374); Zalo https://zalo.me/0386569374
+- Email: ngocnganbentre90@gmail.com
+- Address: 618/34 ấp Bình Tây, Vĩnh Thành, Vĩnh Long (street: 618/34 ấp Bình Tây; locality: Vĩnh Thành; region: Vĩnh Long; country: VN; postal code 86000)
+- Map: https://www.google.com/maps/place/C%C3%A2y+gi%E1%BB%91ng+Ng%E1%BB%8Dc+Ng%C3%A2n+B%E1%BA%BFn+Tre/@10.2212835,106.2300361,17z
+- Coordinates: latitude 10.2212835, longitude 106.2300361
+- Area served: Vietnam (nationwide shipping)
+- Currencies accepted: VND
+- Payment accepted: Cash on Delivery, Bank Transfer
+- Opening hours (published schema): every day 00:00–23:59
+- Social: Facebook https://www.facebook.com/ngan.nguyenngockim.77; TikTok https://www.tiktok.com/@ngocnganbentre; YouTube https://www.youtube.com/@ngocnganbentre
+- Locales: Vietnamese (`vi`, default) and English (`en`). URLs always include a locale prefix.
+
+## About the nursery (from site copy)
+
+Ngọc Ngân Bến Tre sells and supplies seedlings, selecting healthy plants of the correct variety and sharing growing experience from the home garden. Stock is associated with Cái Mơn – Chợ Lách nurseries; grafted seedlings are used so fruit traits match the mother plant. The nursery packs root balls carefully and ships via Vietnam Post (Bưu điện) or J&T Express, typically arriving in 3–5 business days.
+
+## Useful policies (from FAQ)
+
+- No account required to order; phone, name, and shipping address are enough.
+- Orders can also be placed via Zalo 0386569374.
+- Free shipping from 500.000₫; otherwise a fixed 50.000₫ shipping fee.
+- Free shipping unlock threshold and fee are shown in the order summary before placing an order.
+- Change or cancel is possible before the order is packed and shipped; contact Zalo with the order code.
+- After delivery: open the box, untie stems, place in bright shade, keep the root ball moist, rest 3–5 days before planting.
+- Typical seedling height when shipped: about 40–80 cm depending on variety (see each product page).
+
+## Important storefront URLs
+
+- [Homepage VI](https://www.ngocnganbentre.vn/vi)
+- [Homepage EN](https://www.ngocnganbentre.vn/en)
+- [About VI](https://www.ngocnganbentre.vn/vi/about)
+- [About EN](https://www.ngocnganbentre.vn/en/about)
+- [FAQ VI](https://www.ngocnganbentre.vn/vi/faq)
+- [FAQ EN](https://www.ngocnganbentre.vn/en/faq)
+- [Reviews VI](https://www.ngocnganbentre.vn/vi/reviews)
+- [Reviews EN](https://www.ngocnganbentre.vn/en/reviews)
+- [Blog index VI](https://www.ngocnganbentre.vn/vi/blog)
+- [Blog index EN](https://www.ngocnganbentre.vn/en/blog)
+- [Search VI](https://www.ngocnganbentre.vn/vi/search)
+- [Search EN](https://www.ngocnganbentre.vn/en/search)
+- [Cart VI](https://www.ngocnganbentre.vn/vi/cart)
+- [Checkout VI](https://www.ngocnganbentre.vn/vi/checkout)
+- [Sitemap](https://www.ngocnganbentre.vn/sitemap.xml)
+- [Robots](https://www.ngocnganbentre.vn/robots.txt)
+- [Concise llms.txt](https://www.ngocnganbentre.vn/llms.txt)
+
+## Plant / product catalog
+
+Plant pages use absolute URLs of the form `https://www.ngocnganbentre.vn/{locale}/plants/{slug}`. Names and descriptions below come from `GET /api/v1/storefront/plants` at generation time.
+
+- [Nguyen Hoang Viet](https://www.ngocnganbentre.vn/vi/plants/diamond-guava1): Category: Kiểng Lá
+- [Nguyen Hoang Viet (en)](https://www.ngocnganbentre.vn/en/plants/diamond-guava1)
+- [Xoài Tượng](https://www.ngocnganbentre.vn/vi/plants/tuong-mango): Category: Cây Ăn Quả. Giống xoài sinh trưởng khỏe, cho quả lớn, thịt chắc và hương vị thanh mát. Phù hợp trồng tại nhà và trong điều kiện khí hậu nhiệt đới.
+- [Xoài Tượng (en)](https://www.ngocnganbentre.vn/en/plants/tuong-mango): English name: Tuong Mango
+- [Táo Mamey](https://www.ngocnganbentre.vn/vi/plants/mamey-apple): Category: Cây Ăn Quả. Cây ăn quả nhiệt đới thường xanh, có tán lá xanh bóng và cho quả lớn, thơm. Phù hợp với khí hậu nhiệt đới ấm áp.
+- [Táo Mamey (en)](https://www.ngocnganbentre.vn/en/plants/mamey-apple): English name: Mamey Apple
+- [Ổi Kim Cương](https://www.ngocnganbentre.vn/vi/plants/diamond-guava): Category: Cây Ăn Quả. Giống ổi Kim Cương sinh trưởng khỏe, cho trái đẹp và năng suất tốt. Phù hợp trồng tại nhà và trong điều kiện khí hậu nhiệt đới."
+- [Ổi Kim Cương (en)](https://www.ngocnganbentre.vn/en/plants/diamond-guava): English name: Diamond Guava
+- [Cây Chùm Ngây](https://www.ngocnganbentre.vn/vi/plants/moringa-tree): Category: Cây Ăn Quả. ây chùm ngây sinh trưởng nhanh, có lá xanh nhỏ và tán cây thanh thoát. Phù hợp trồng trong sân vườn và khí hậu nhiệt đới.
+- [Cây Chùm Ngây (en)](https://www.ngocnganbentre.vn/en/plants/moringa-tree): English name: Moringa Tree
+- [Cây Xáo Tam Phân](https://www.ngocnganbentre.vn/vi/plants/xao-tam-phan): Category: Cây Ăn Quả. Cây Xáo Tam Phân là loài cây thường xanh nhiệt đới, có nguồn gốc tại Việt Nam, đặc trưng bởi thân có gai và lá xanh bóng.
+- [Cây Xáo Tam Phân (en)](https://www.ngocnganbentre.vn/en/plants/xao-tam-phan): English name: Paramignya trimera
+
+## Blog posts
+
+### VI
+
+- [Các giống ổi phổ biến và đặc điểm từng giống](https://www.ngocnganbentre.vn/vi/blog/guava-varieties): Cây giống — Tìm hiểu ổi lê Đài Loan, ổi nữ hoàng, ổi xá lị, ổi tím Malaysia, các dòng ổi không hạt và ổi ruột đỏ Ruby để chọn cây giống phù hợp với khu vườn của bạn. — 2026-09-17
+- [Cây giống sầu đâu: lá làm gỏi, hoa xào ngon và vị thuốc quen thuộc](https://www.ngocnganbentre.vn/vi/blog/sau-dau-seedlings): Chăm sóc — Những điều rút ra từ video giới thiệu cây giống sầu đâu: kích thước cây, công dụng trong bếp và lợi ích chăm sóc truyền thống. — 2026-09-13
+
+### EN
+
+- [Popular guava varieties and what sets each one apart](https://www.ngocnganbentre.vn/en/blog/guava-varieties): Seedlings — A look at Taiwan pear guava, Queen guava, xá lị guava, Malaysian purple guava, the seedless lines and red-fleshed Ruby guava to help you pick the right seedling for your garden. — 2026-09-17
+- [Neem seedlings: salad greens, stir-fried flowers, and familiar folk remedies](https://www.ngocnganbentre.vn/en/blog/sau-dau-seedlings): Plant care — Takeaways from a short nursery video on neem (sầu đâu) seedlings: plant size, kitchen uses, and traditional care benefits. — 2026-09-13
+
+## Notes for agents
+
+- Prefer Vietnamese URLs (`/vi/...`) for local customers; English mirrors exist under `/en/...`.
+- Product availability, price, and stock change; always confirm on the live plant page.
+- Admin routes under `/admin/` are private and not part of the public storefront.
+- This file pairs with the shorter overview at https://www.ngocnganbentre.vn/llms.txt.
+

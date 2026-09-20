@@ -1,0 +1,44 @@
+# Ngoc Ngan Ben Tre
+
+> Cây giống Ngọc Ngân Bến Tre (Ngọc Ngân Bến Tre) — nursery selling seedlings, fruit trees, and ornamental plants from Cái Mơn – Chợ Lách. Healthy stock, careful packing, nationwide delivery in Vietnam. Site: https://www.ngocnganbentre.vn. Languages: Vietnamese (`/vi`) and English (`/en`). Default locale: `vi`.
+
+Contact is by Zalo or SMS (no voice calls). Cash on delivery and bank transfer are accepted. Orders do not require an account.
+
+## Main pages
+
+- [Trang chủ (vi)](https://www.ngocnganbentre.vn/vi): Homepage catalog of seedlings and featured plants
+- [Home (en)](https://www.ngocnganbentre.vn/en): English homepage
+- [Giới thiệu](https://www.ngocnganbentre.vn/vi/about): About Ngọc Ngân Bến Tre nursery
+- [About](https://www.ngocnganbentre.vn/en/about): About page (English)
+- [Câu hỏi thường gặp](https://www.ngocnganbentre.vn/vi/faq): Ordering, shipping, COD, packing, and plant care FAQ
+- [FAQ](https://www.ngocnganbentre.vn/en/faq): FAQ (English)
+- [Đánh giá](https://www.ngocnganbentre.vn/vi/reviews): Customer reviews of plants, packing, and service
+- [Reviews](https://www.ngocnganbentre.vn/en/reviews): Customer reviews (English)
+- [Blog](https://www.ngocnganbentre.vn/vi/blog): Growing guides and nursery articles
+- [Blog (en)](https://www.ngocnganbentre.vn/en/blog): Blog index (English)
+- [Tìm kiếm](https://www.ngocnganbentre.vn/vi/search): Search plants and blog posts
+- [Sitemap](https://www.ngocnganbentre.vn/sitemap.xml): Machine-readable URL list
+
+## Plant / product pages
+
+- [Nguyen Hoang Viet](https://www.ngocnganbentre.vn/vi/plants/diamond-guava1): Kiểng Lá
+- [Xoài Tượng](https://www.ngocnganbentre.vn/vi/plants/tuong-mango): Cây Ăn Quả — Giống xoài sinh trưởng khỏe, cho quả lớn, thịt chắc và hương vị thanh mát. Phù hợp trồng tại nhà và trong điều kiện khí 
+- [Táo Mamey](https://www.ngocnganbentre.vn/vi/plants/mamey-apple): Cây Ăn Quả — Cây ăn quả nhiệt đới thường xanh, có tán lá xanh bóng và cho quả lớn, thơm. Phù hợp với khí hậu nhiệt đới ấm áp.
+- [Ổi Kim Cương](https://www.ngocnganbentre.vn/vi/plants/diamond-guava): Cây Ăn Quả — Giống ổi Kim Cương sinh trưởng khỏe, cho trái đẹp và năng suất tốt. Phù hợp trồng tại nhà và trong điều kiện khí hậu nhi
+- [Cây Chùm Ngây](https://www.ngocnganbentre.vn/vi/plants/moringa-tree): Cây Ăn Quả — ây chùm ngây sinh trưởng nhanh, có lá xanh nhỏ và tán cây thanh thoát. Phù hợp trồng trong sân vườn và khí hậu nhiệt đới
+- [Cây Xáo Tam Phân](https://www.ngocnganbentre.vn/vi/plants/xao-tam-phan): Cây Ăn Quả — Cây Xáo Tam Phân là loài cây thường xanh nhiệt đới, có nguồn gốc tại Việt Nam, đặc trưng bởi thân có gai và lá xanh bóng
+
+## Blog pages
+
+- [Các giống ổi phổ biến và đặc điểm từng giống](https://www.ngocnganbentre.vn/vi/blog/guava-varieties): Tìm hiểu ổi lê Đài Loan, ổi nữ hoàng, ổi xá lị, ổi tím Malaysia, các dòng ổi không hạt và ổi ruột đỏ Ruby để chọn cây giống phù hợp với khu vườn của bạn.
+- [Cây giống sầu đâu: lá làm gỏi, hoa xào ngon và vị thuốc quen thuộc](https://www.ngocnganbentre.vn/vi/blog/sau-dau-seedlings): Những điều rút ra từ video giới thiệu cây giống sầu đâu: kích thước cây, công dụng trong bếp và lợi ích chăm sóc truyền thống.
+
+## Optional
+
+- [Full LLM context](https://www.ngocnganbentre.vn/llms-full.txt): Longer business, catalog, FAQ, and content summary
+- [Cart](https://www.ngocnganbentre.vn/vi/cart): Shopping cart
+- [Checkout](https://www.ngocnganbentre.vn/vi/checkout): Checkout (phone, name, address)
+- [Facebook](https://www.facebook.com/ngan.nguyenngockim.77)
+- [TikTok](https://www.tiktok.com/@ngocnganbentre)
+- [YouTube](https://www.youtube.com/@ngocnganbentre)
+- [Zalo](https://zalo.me/0386569374): Phone 0386569374
