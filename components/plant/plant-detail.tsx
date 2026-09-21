@@ -42,6 +42,7 @@ function formatAdjustment(amount: number, locale: string): string | null {
 
 function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
   const t = useTranslations("plantDetail");
+  const tPlants = useTranslations("plants");
   const locale = useLocale();
   const addItem = useCartStore((state) => state.addItem);
 
@@ -124,16 +125,17 @@ function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
                 {t("home")}
               </Link>
             </li>
-            {categoryName ? (
-              <>
-                <li aria-hidden="true" className="text-muted-foreground/70">
-                  <ChevronRightIcon className="size-3.5" />
-                </li>
-                <li>
-                  <span className="text-muted-foreground">{categoryName}</span>
-                </li>
-              </>
-            ) : null}
+            <li aria-hidden="true" className="text-muted-foreground/70">
+              <ChevronRightIcon className="size-3.5" />
+            </li>
+            <li>
+              <Link
+                href="/plants"
+                className="text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                {tPlants("title")}
+              </Link>
+            </li>
             <li aria-hidden="true" className="text-muted-foreground/70">
               <ChevronRightIcon className="size-3.5" />
             </li>

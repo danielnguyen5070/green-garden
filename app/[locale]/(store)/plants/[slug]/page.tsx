@@ -104,10 +104,12 @@ export default async function PlantDetailPage({ params }: Props) {
   }
 
   const t = await getTranslations({ locale, namespace: "plantDetail" });
+  const tPlants = await getTranslations({ locale, namespace: "plants" });
   const jsonLd = buildPlantJsonLd({
     locale,
     plant,
     homeLabel: t("home"),
+    plantsLabel: tPlants("title"),
   });
 
   return (

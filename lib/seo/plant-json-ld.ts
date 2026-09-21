@@ -6,6 +6,7 @@ import {
   getActivePotSizes,
   getLocalizedPlant,
   getPrimaryPlantImage,
+  localizeOptionalTextEither,
   localizePrice,
   localizeText,
   sortPlantImages,
@@ -16,21 +17,30 @@ type PlantJsonLdInput = {
   locale: string;
   plant: StorefrontPlantDetail;
   homeLabel: string;
+  plantsLabel: string;
 };
 
 /**
  * Plant detail @graph: Product (+ Offer/AggregateOffer) and BreadcrumbList.
- * Matches the visible Home → Plant trail (category has no public URL).
+ * Matches the visible Home → Plants → Plant trail.
  */
 export function buildPlantJsonLd({
   locale,
   plant,
   homeLabel,
+  plantsLabel,
 }: PlantJsonLdInput) {
   const { name, description, price: basePrice } = getLocalizedPlant(
     plant,
     locale
   );
+  const longDescription = localizeOptionalTextEither(
+    plant.long_description,
+    plant.long_description_vi,
+    locale
+  );
+  // Prefer long-form copy for Product schema when present.
+  const schemaDescription = longDescription ?? description;
   const pageUrl = `${SITE_URL}/${locale}/plants/${plant.slug}`;
   const currency = getCartCurrency(locale);
   const availability = plant.in_stock
@@ -91,6 +101,7 @@ export function buildPlantJsonLd({
           seller: { "@id": LOCAL_BUSINESS_ID },
         };
 
+  const plantsUrl = `${SITE_URL}/${locale}/plants`;
   const breadcrumbItems = [
     {
       "@type": "ListItem",
@@ -98,18 +109,15 @@ export function buildPlantJsonLd({
       name: homeLabel,
       item: `${SITE_URL}/${locale}`,
     },
-    ...(categoryName
-      ? [
-          {
-            "@type": "ListItem",
-            position: 2,
-            name: categoryName,
-          },
-        ]
-      : []),
     {
       "@type": "ListItem",
-      position: categoryName ? 3 : 2,
+      position: 2,
+      name: plantsLabel,
+      item: plantsUrl,
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
       name,
       item: pageUrl,
     },
@@ -122,7 +130,7 @@ export function buildPlantJsonLd({
         "@type": "Product",
         "@id": `${pageUrl}#product`,
         name,
-        ...(description ? { description } : {}),
+        ...(schemaDescription ? { description: schemaDescription } : {}),
         ...(imageUrls.length > 0 ? { image: imageUrls } : {}),
         url: pageUrl,
         ...(categoryName ? { category: categoryName } : {}),
@@ -135,7 +143,7 @@ export function buildPlantJsonLd({
           "@id": pageUrl,
           url: pageUrl,
           name,
-          ...(description ? { description } : {}),
+          ...(schemaDescription ? { description: schemaDescription } : {}),
           inLanguage: locale,
           isPartOf: {
             "@id": WEBSITE_ID,
