@@ -172,7 +172,7 @@ function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
               <div
-                className="inline-flex h-11 items-center justify-between rounded-xl bg-muted px-1.5 sm:w-[7.5rem]"
+                className="inline-flex h-12 w-full items-center justify-between rounded-xl bg-muted px-1.5 sm:w-[7.5rem]"
                 role="group"
                 aria-label={t("quantity")}
               >
@@ -208,7 +208,7 @@ function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
               <Button
                 type="button"
                 size="lg"
-                className="h-11 flex-1 rounded-xl font-sans text-sm font-semibold"
+                className="h-12 w-full rounded-xl px-5 font-sans text-sm font-semibold sm:flex-1"
                 disabled={!plant.in_stock}
                 onClick={handleAddToCart}
               >
@@ -228,7 +228,7 @@ function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
                 variant="outline"
                 size="icon-lg"
                 className={cn(
-                  "size-11 shrink-0 rounded-xl border-border",
+                  "size-12 shrink-0 rounded-xl border-border",
                   favorited && "border-primary/40 text-primary"
                 )}
                 aria-label={favorited ? t("unfavorite") : t("favorite")}
