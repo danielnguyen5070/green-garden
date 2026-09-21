@@ -97,6 +97,8 @@ type PlantFormValues = {
   slug: string;
   description: string;
   description_vi: string;
+  long_description: string;
+  long_description_vi: string;
   sku: string;
   price: string;
   price_vi: string;
@@ -115,6 +117,10 @@ function readForm(form: HTMLFormElement, categoryId: string): PlantFormValues {
     slug: String(formData.get("slug") ?? "").trim(),
     description: String(formData.get("description") ?? "").trim(),
     description_vi: String(formData.get("description_vi") ?? "").trim(),
+    long_description: String(formData.get("long_description") ?? "").trim(),
+    long_description_vi: String(
+      formData.get("long_description_vi") ?? ""
+    ).trim(),
     sku: String(formData.get("sku") ?? "").trim(),
     price: String(formData.get("price") ?? "").trim(),
     price_vi: String(formData.get("price_vi") ?? "").trim(),
@@ -383,6 +389,8 @@ export default function AdminPlantsPage() {
       slug: values.slug,
       description: values.description || null,
       description_vi: values.description_vi || null,
+      long_description: values.long_description || null,
+      long_description_vi: values.long_description_vi || null,
       // Decimal strings are sent as-is so money never round-trips as a float.
       price: values.price,
       price_vi: values.price_vi || null,
@@ -434,6 +442,16 @@ export default function AdminPlantsPage() {
     const nextDescriptionVi = values.description_vi || null;
     if (nextDescriptionVi !== selected.description_vi) {
       changes.description_vi = nextDescriptionVi;
+    }
+
+    const nextLongDescription = values.long_description || null;
+    if (nextLongDescription !== selected.long_description) {
+      changes.long_description = nextLongDescription;
+    }
+
+    const nextLongDescriptionVi = values.long_description_vi || null;
+    if (nextLongDescriptionVi !== selected.long_description_vi) {
+      changes.long_description_vi = nextLongDescriptionVi;
     }
 
     if (!isSameDecimal(values.price, selected.price)) {
@@ -1106,6 +1124,37 @@ function PlantForm({
               defaultValue={plant?.description_vi ?? ""}
               disabled={submitting}
               className="rounded-lg"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor={`${prefix}-long-description`}>
+              {copy.fields.longDescription}
+            </Label>
+            <Textarea
+              id={`${prefix}-long-description`}
+              name="long_description"
+              rows={12}
+              defaultValue={plant?.long_description ?? ""}
+              disabled={submitting}
+              className="min-h-48 rounded-lg font-sans"
+            />
+            <p className="text-xs text-muted-foreground">
+              {copy.fields.longDescriptionHint}
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor={`${prefix}-long-description-vi`}>
+              {copy.fields.longDescriptionVi}
+            </Label>
+            <Textarea
+              id={`${prefix}-long-description-vi`}
+              name="long_description_vi"
+              rows={12}
+              defaultValue={plant?.long_description_vi ?? ""}
+              disabled={submitting}
+              className="min-h-48 rounded-lg font-sans"
             />
           </div>
 

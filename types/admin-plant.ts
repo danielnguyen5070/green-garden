@@ -55,6 +55,8 @@ export type AdminPlant = {
   slug: string;
   description: string | null;
   description_vi: string | null;
+  long_description: string | null;
+  long_description_vi: string | null;
   price: DecimalString;
   price_vi: DecimalString | null;
   stock: number;
@@ -71,7 +73,12 @@ export type AdminPlant = {
 /** Row from `GET /plants`; omits description, images and pot sizes. */
 export type AdminPlantListItem = Omit<
   AdminPlant,
-  "description" | "description_vi" | "images" | "pot_sizes"
+  | "description"
+  | "description_vi"
+  | "long_description"
+  | "long_description_vi"
+  | "images"
+  | "pot_sizes"
 >;
 
 export type AdminPlantListResponse = {
@@ -91,6 +98,8 @@ export type AdminPlantCreateRequest = {
   slug: string;
   description?: string | null;
   description_vi?: string | null;
+  long_description?: string | null;
+  long_description_vi?: string | null;
   price: DecimalInput;
   price_vi?: DecimalInput | null;
   stock?: number;
@@ -107,6 +116,8 @@ export type AdminPlantUpdateRequest = {
   slug?: string | null;
   description?: string | null;
   description_vi?: string | null;
+  long_description?: string | null;
+  long_description_vi?: string | null;
   price?: DecimalInput | null;
   price_vi?: DecimalInput | null;
   stock?: number | null;

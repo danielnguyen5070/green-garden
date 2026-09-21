@@ -107,6 +107,8 @@ export type StorefrontPlantDetail = {
   slug: string;
   description: string | null;
   description_vi: string | null;
+  long_description: string | null;
+  long_description_vi: string | null;
   price: Decimal;
   price_vi: Decimal | null;
   is_featured: boolean;

@@ -24,6 +24,7 @@ import {
   getActivePotSizes,
   getLocalizedPlant,
   getPrimaryPlantImage,
+  localizeOptionalTextEither,
   localizePrice,
   localizeText,
   sortPlantImages,
@@ -49,6 +50,11 @@ function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
     description,
     price: basePrice,
   } = getLocalizedPlant(plant, locale);
+  const longDescription = localizeOptionalTextEither(
+    plant.long_description,
+    plant.long_description_vi,
+    locale
+  );
   const categoryName = plant.category
     ? localizeText(plant.category.name, plant.category.name_vi, locale)
     : null;
@@ -239,6 +245,14 @@ function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
             </div>
           </div>
         </div>
+
+        {longDescription ? (
+          <div className="mt-12 max-w-3xl border-t border-border pt-10 md:mt-14 md:pt-12 lg:mt-16">
+            <div className="whitespace-pre-wrap font-sans text-body leading-relaxed text-muted-foreground">
+              {longDescription}
+            </div>
+          </div>
+        ) : null}
       </Container>
     </section>
   );

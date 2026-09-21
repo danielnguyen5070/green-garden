@@ -36,6 +36,21 @@ export function localizeOptionalText(
   return vietnamese?.trim() ? vietnamese : fallback;
 }
 
+/**
+ * Locale-first optional text that falls back to the other language when the
+ * preferred value is empty (used for long-form plant copy).
+ */
+export function localizeOptionalTextEither(
+  english: string | null | undefined,
+  vietnamese: string | null | undefined,
+  locale: string
+): string | null {
+  const en = english?.trim() ? english : null;
+  const vi = vietnamese?.trim() ? vietnamese : null;
+  if (isVietnamese(locale)) return vi ?? en;
+  return en ?? vi;
+}
+
 /** Number/currency formatting locale for the active UI locale. */
 export function getMoneyLocale(locale: string): string {
   return isVietnamese(locale) ? "vi-VN" : "en-US";

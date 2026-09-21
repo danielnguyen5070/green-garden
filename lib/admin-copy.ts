@@ -176,6 +176,10 @@ export const adminCopy = {
       slug: "Slug",
       description: "Description (English)",
       descriptionVi: "Description (Vietnamese)",
+      longDescription: "Long description (English)",
+      longDescriptionVi: "Long description (Vietnamese)",
+      longDescriptionHint:
+        "Full product story on the plant detail page. Supports multiple paragraphs.",
       sku: "SKU",
       price: "Price (USD)",
       priceVi: "Price (VND)",
