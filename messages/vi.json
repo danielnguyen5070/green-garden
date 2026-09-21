@@ -1,5 +1,6 @@
 {
   "nav": {
+    "plants": "Cây giống",
     "careGuide": "Chăm sóc",
     "about": "Giới thiệu",
     "reviews": "Đánh giá"
@@ -119,6 +120,20 @@
       "description": "Kết nối cùng những người yêu hoa kiểng, cây giống và nhà vườn Cái Mơn. Cập nhật cây mới, chia sẻ kinh nghiệm chăm sóc và những giống cây đẹp.",
       "cta": "Tham gia nhóm Zalo",
       "note": "Cộng đồng dành cho người yêu cây và hoa kiểng"
+    }
+  },
+  "plants": {
+    "title": "Cây giống",
+    "metadata": {
+      "title": "Cây giống",
+      "description": "Xem cây giống Cái Mơn, cây ăn trái và hoa kiểng từ Ngọc Ngân Bến Tre. Tìm kiếm, lọc theo danh mục và sắp xếp toàn bộ danh mục.",
+      "ogImageAlt": "Danh mục cây Ngọc Ngân Bến Tre — cây giống Cái Mơn và cây nhà vườn",
+      "keywords": "cây giống Cái Mơn, danh mục cây, vườn ươm Bến Tre, cây ăn trái, hoa kiểng"
+    },
+    "featured": {
+      "title": "Cây nổi bật",
+      "viewAll": "Xem tất cả cây",
+      "loadError": "Hiện chưa tải được danh sách cây."
     }
   },
   "blog": {

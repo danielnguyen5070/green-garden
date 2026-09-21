@@ -18,12 +18,19 @@ import { cn } from "@/lib/utils";
 function PlantList({
   initial,
   categories,
+  title,
   className,
+  frameId = "products",
+  headingAs = "h2",
 }: {
   /** First page of `GET /storefront/plants`, already fetched on the server. */
   initial: StorefrontPlantListResponse;
   categories: StorefrontCategory[];
+  /** Section heading; defaults to `home.products.title`. */
+  title?: string;
   className?: string;
+  frameId?: string;
+  headingAs?: "h1" | "h2";
 }) {
   const t = useTranslations("home.products");
   const {
@@ -46,7 +53,12 @@ function PlantList({
   const isEmpty = plants.length === 0;
 
   return (
-    <PlantListFrame title={t("title")} className={className}>
+    <PlantListFrame
+      title={title ?? t("title")}
+      className={className}
+      id={frameId}
+      headingAs={headingAs}
+    >
       <div className="mt-4 flex flex-col gap-4 lg:mt-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
         <div className="relative w-full max-w-md">
           <SearchIcon

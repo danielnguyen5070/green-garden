@@ -1,5 +1,6 @@
 {
   "nav": {
+    "plants": "Plants",
     "careGuide": "Care Guide",
     "about": "About",
     "reviews": "Reviews"
@@ -119,6 +120,20 @@
       "description": "Connect with fellow lovers of ornamental plants, seedlings, and the Cai Mon nurseries. Get updates on new arrivals, plus care tips and beautiful varieties.",
       "cta": "Join the Zalo group",
       "note": "A community for plant and flower lovers"
+    }
+  },
+  "plants": {
+    "title": "Plants",
+    "metadata": {
+      "title": "Plants",
+      "description": "Browse Cai Mon seedlings, fruit trees, and ornamental plants from Ngoc Ngan Ben Tre. Search, filter by category, and sort the full catalog.",
+      "ogImageAlt": "Ngoc Ngan Ben Tre plant catalog — Cai Mon seedlings and nursery stock",
+      "keywords": "Cai Mon seedlings, plant catalog, Ben Tre nursery, fruit tree seedlings, ornamental plants"
+    },
+    "featured": {
+      "title": "Featured plants",
+      "viewAll": "View all plants",
+      "loadError": "We couldn't load plants right now."
     }
   },
   "blog": {

@@ -50,7 +50,7 @@ async function FaqContact({ className }: { className?: string }) {
               variant="outline"
               size="lg"
               className="h-12 w-full rounded-xl border-border bg-card px-5 text-sm text-foreground shadow-subtle hover:bg-card hover:text-foreground sm:w-auto sm:min-w-[10.5rem]"
-              render={<Link href="/#products" />}
+              render={<Link href="/plants" />}
               nativeButton={false}
             >
               {t("shopPlants")}

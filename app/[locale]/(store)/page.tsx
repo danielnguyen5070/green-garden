@@ -4,9 +4,9 @@ import { getTranslations } from "next-intl/server";
 import { Hero } from "@/components/home/hero";
 import { NewsletterSection } from "@/components/home/newsletter-section";
 import {
-  PlantListSection,
-  PlantListSkeleton,
-} from "@/components/plant/plant-list-section";
+  FeaturedPlantsSection,
+  FeaturedPlantsSkeleton,
+} from "@/components/plant/featured-plants-section";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
@@ -76,8 +76,8 @@ export default async function HomePage({ params }: Props) {
     <>
       <JsonLd data={jsonLd} />
       <Hero />
-      <Suspense fallback={<PlantListSkeleton />}>
-        <PlantListSection />
+      <Suspense fallback={<FeaturedPlantsSkeleton />}>
+        <FeaturedPlantsSection />
       </Suspense>
       <NewsletterSection />
     </>

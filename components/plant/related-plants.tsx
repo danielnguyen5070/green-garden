@@ -119,7 +119,7 @@ async function RelatedPlants({
             {t("title")}
           </h2>
           <Link
-            href="/#products"
+            href="/plants"
             className="inline-flex items-center gap-1.5 font-sans text-sm font-medium text-primary outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-ring"
           >
             {t("viewAll")}

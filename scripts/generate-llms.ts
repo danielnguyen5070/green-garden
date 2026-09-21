@@ -130,9 +130,19 @@ function buildLlmsTxt(plants: PlantListItem[], postsVi: BlogMeta[]): string {
     link(
       "Trang chủ (vi)",
       `${SITE_URL}/vi`,
-      "Homepage catalog of seedlings and featured plants"
+      "Homepage with featured plants linking to the full catalog"
     ),
     link("Home (en)", `${SITE_URL}/en`, "English homepage"),
+    link(
+      "Cây giống",
+      `${SITE_URL}/vi/plants`,
+      "Full seedling catalog with search, filters, and sorting"
+    ),
+    link(
+      "Plants",
+      `${SITE_URL}/en/plants`,
+      "Full plant catalog (English)"
+    ),
     link(
       "Giới thiệu",
       `${SITE_URL}/vi/about`,
@@ -257,6 +267,8 @@ function buildLlmsFullTxt(
     "",
     link("Homepage VI", `${SITE_URL}/vi`),
     link("Homepage EN", `${SITE_URL}/en`),
+    link("Plants catalog VI", `${SITE_URL}/vi/plants`),
+    link("Plants catalog EN", `${SITE_URL}/en/plants`),
     link("About VI", `${SITE_URL}/vi/about`),
     link("About EN", `${SITE_URL}/en/about`),
     link("FAQ VI", `${SITE_URL}/vi/faq`),

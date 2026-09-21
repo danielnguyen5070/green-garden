@@ -1,4 +1,5 @@
 export const NAV_LINKS = [
+  { href: "/plants", labelKey: "plants" },
   { href: "/blog", labelKey: "careGuide" },
   { href: "/reviews", labelKey: "reviews" },
   { href: "/about", labelKey: "about" },

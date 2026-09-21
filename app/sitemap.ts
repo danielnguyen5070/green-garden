@@ -10,6 +10,7 @@ const PLANT_PAGE_SIZE = 100;
 
 const STATIC_PAGES = [
   { path: "", priority: 1 },
+  { path: "/plants", priority: 0.9 },
   { path: "/blog", priority: 0.8 },
   { path: "/reviews", priority: 0.7 },
   { path: "/faq", priority: 0.7 },

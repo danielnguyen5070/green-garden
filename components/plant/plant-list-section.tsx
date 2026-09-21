@@ -15,11 +15,26 @@ const SKELETON_CARDS = Array.from(
 
 const SKELETON_CHIPS = [4.5, 6, 5.5, 7] as const;
 
-async function PlantListSkeleton() {
+async function PlantListSkeleton({
+  title,
+  headingAs = "h2",
+  frameId = "products",
+  className,
+}: {
+  title?: string;
+  headingAs?: "h1" | "h2";
+  frameId?: string;
+  className?: string;
+} = {}) {
   const t = await getTranslations("home.products");
 
   return (
-    <PlantListFrame title={t("title")}>
+    <PlantListFrame
+      title={title ?? t("title")}
+      headingAs={headingAs}
+      id={frameId}
+      className={className}
+    >
       <div className="mt-4 flex flex-col gap-4 lg:mt-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
         <Skeleton className="h-10 w-full max-w-md rounded-full" />
         <Skeleton className="h-9 w-[11.5rem] rounded-full" />
@@ -53,12 +68,21 @@ async function PlantListSkeleton() {
 }
 
 /**
- * Server-rendered first page of the Homepage catalog. Categories degrade to an
- * empty filter row on their own, but without plants there is nothing to show —
- * and no mock catalog to fall back to.
+ * Full storefront catalog with search, category filters, sort, and load more.
  */
-async function PlantListSection() {
+async function PlantListSection({
+  title,
+  headingAs = "h2",
+  frameId = "products",
+  className,
+}: {
+  title?: string;
+  headingAs?: "h1" | "h2";
+  frameId?: string;
+  className?: string;
+} = {}) {
   const t = await getTranslations("home.products");
+  const sectionTitle = title ?? t("title");
 
   const [plants, categories] = await Promise.all([
     getStorefrontPlants({
@@ -72,7 +96,12 @@ async function PlantListSection() {
 
   if (!plants) {
     return (
-      <PlantListFrame title={t("title")}>
+      <PlantListFrame
+        title={sectionTitle}
+        headingAs={headingAs}
+        id={frameId}
+        className={className}
+      >
         <div className="mt-8 rounded-2xl border border-border bg-card px-6 py-10 shadow-subtle">
           <p className="font-sans text-body text-foreground">
             {t("loadError")}
@@ -82,7 +111,16 @@ async function PlantListSection() {
     );
   }
 
-  return <PlantList initial={plants} categories={categories?.items ?? []} />;
+  return (
+    <PlantList
+      initial={plants}
+      categories={categories?.items ?? []}
+      title={sectionTitle}
+      headingAs={headingAs}
+      frameId={frameId}
+      className={className}
+    />
+  );
 }
 
 export { PlantListSection, PlantListSkeleton };

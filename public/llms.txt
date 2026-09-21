@@ -6,8 +6,10 @@ Contact is by Zalo or SMS (no voice calls). Cash on delivery and bank transfer a
 
 ## Main pages
 
-- [Trang chủ (vi)](https://www.ngocnganbentre.vn/vi): Homepage catalog of seedlings and featured plants
+- [Trang chủ (vi)](https://www.ngocnganbentre.vn/vi): Homepage with featured plants linking to the full catalog
 - [Home (en)](https://www.ngocnganbentre.vn/en): English homepage
+- [Cây giống](https://www.ngocnganbentre.vn/vi/plants): Full seedling catalog with search, filters, and sorting
+- [Plants](https://www.ngocnganbentre.vn/en/plants): Full plant catalog (English)
 - [Giới thiệu](https://www.ngocnganbentre.vn/vi/about): About Ngọc Ngân Bến Tre nursery
 - [About](https://www.ngocnganbentre.vn/en/about): About page (English)
 - [Câu hỏi thường gặp](https://www.ngocnganbentre.vn/vi/faq): Ordering, shipping, COD, packing, and plant care FAQ
