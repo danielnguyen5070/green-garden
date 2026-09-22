@@ -8,6 +8,7 @@
  */
 
 import type { OrderStatus } from "@/types/order";
+import type { PlantCareAttributes } from "@/types/plant-attributes";
 
 /** Money arrives as a decimal string so no precision is lost in transport. */
 type Decimal = string;
@@ -118,7 +119,7 @@ export type StorefrontPlantDetail = {
   category?: StorefrontCategorySummary | null;
   images?: StorefrontPlantDetailImage[];
   pot_sizes?: StorefrontPlantPotSize[];
-};
+} & PlantCareAttributes;
 
 /**
  * Public checkout payload for `POST /api/v1/storefront/orders`.

@@ -4,6 +4,8 @@
  * bookkeeping and audit fields.
  */
 
+import type { PlantCareAttributes, PlantCareAttributesInput } from "@/types/plant-attributes";
+
 /**
  * Money is serialized by the backend as an exact decimal string ("450000.00").
  * Keep it a string end to end and parse only when formatting for display.
@@ -68,9 +70,9 @@ export type AdminPlant = {
   pot_sizes: AdminPlantPotSize[];
   created_at: string;
   updated_at: string;
-};
+} & PlantCareAttributes;
 
-/** Row from `GET /plants`; omits description, images and pot sizes. */
+/** Row from `GET /plants`; omits description, images, pot sizes and care detail. */
 export type AdminPlantListItem = Omit<
   AdminPlant,
   | "description"
@@ -79,6 +81,16 @@ export type AdminPlantListItem = Omit<
   | "long_description_vi"
   | "images"
   | "pot_sizes"
+  | "plant_type"
+  | "difficulty"
+  | "growth_rate"
+  | "sunlight"
+  | "watering"
+  | "space_requirement"
+  | "indoor_suitable"
+  | "outdoor_suitable"
+  | "pet_safe"
+  | "beginner_friendly"
 >;
 
 export type AdminPlantListResponse = {
@@ -107,7 +119,7 @@ export type AdminPlantCreateRequest = {
   og_image_url?: string | null;
   is_featured?: boolean;
   is_active?: boolean;
-};
+} & PlantCareAttributesInput;
 
 export type AdminPlantUpdateRequest = {
   category_id?: string | null;
@@ -125,7 +137,7 @@ export type AdminPlantUpdateRequest = {
   og_image_url?: string | null;
   is_featured?: boolean | null;
   is_active?: boolean | null;
-};
+} & PlantCareAttributesInput;
 
 export type AdminPlantStatusUpdateRequest = {
   is_active: boolean;

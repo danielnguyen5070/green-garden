@@ -68,6 +68,26 @@ import type {
   AdminPlantSort,
   AdminPlantUpdateRequest,
 } from "@/types/admin-plant";
+import {
+  PLANT_DIFFICULTIES,
+  PLANT_GROWTH_RATES,
+  PLANT_SPACE_REQUIREMENTS,
+  PLANT_SUNLIGHTS,
+  PLANT_TYPES,
+  PLANT_WATERINGS,
+  isPlantDifficulty,
+  isPlantGrowthRate,
+  isPlantSpaceRequirement,
+  isPlantSunlight,
+  isPlantType,
+  isPlantWatering,
+  type PlantDifficulty,
+  type PlantGrowthRate,
+  type PlantSpaceRequirement,
+  type PlantSunlight,
+  type PlantType,
+  type PlantWatering,
+} from "@/types/plant-attributes";
 
 const PAGE_SIZE = 20;
 const FILTER_DEBOUNCE_MS = 350;
@@ -77,6 +97,8 @@ const CATEGORY_MAX_PAGES = 10;
 /** Caps the dialog to the viewport so the form body can scroll on short screens. */
 const FORM_DIALOG_CLASS =
   "sm:max-w-2xl max-h-[calc(100dvh-2rem)] grid-rows-[auto_minmax(0,1fr)]";
+/** Select sentinel for optional enum / nullable boolean fields. */
+const UNSET_VALUE = "__unset__";
 
 const copy = adminCopy.plants;
 
@@ -106,9 +128,51 @@ type PlantFormValues = {
   og_image_url: string;
   is_featured: boolean;
   is_active: boolean;
+  plant_type: PlantType | null;
+  difficulty: PlantDifficulty | null;
+  growth_rate: PlantGrowthRate | null;
+  sunlight: PlantSunlight | null;
+  watering: PlantWatering | null;
+  space_requirement: PlantSpaceRequirement | null;
+  indoor_suitable: boolean | null;
+  outdoor_suitable: boolean | null;
+  pet_safe: boolean | null;
+  beginner_friendly: boolean | null;
 };
 
-function readForm(form: HTMLFormElement, categoryId: string): PlantFormValues {
+type CareFormState = {
+  plant_type: PlantType | null;
+  difficulty: PlantDifficulty | null;
+  growth_rate: PlantGrowthRate | null;
+  sunlight: PlantSunlight | null;
+  watering: PlantWatering | null;
+  space_requirement: PlantSpaceRequirement | null;
+  indoor_suitable: boolean | null;
+  outdoor_suitable: boolean | null;
+  pet_safe: boolean | null;
+  beginner_friendly: boolean | null;
+};
+
+function careStateFromPlant(plant?: AdminPlant | null): CareFormState {
+  return {
+    plant_type: plant?.plant_type ?? null,
+    difficulty: plant?.difficulty ?? null,
+    growth_rate: plant?.growth_rate ?? null,
+    sunlight: plant?.sunlight ?? null,
+    watering: plant?.watering ?? null,
+    space_requirement: plant?.space_requirement ?? null,
+    indoor_suitable: plant?.indoor_suitable ?? null,
+    outdoor_suitable: plant?.outdoor_suitable ?? null,
+    pet_safe: plant?.pet_safe ?? null,
+    beginner_friendly: plant?.beginner_friendly ?? null,
+  };
+}
+
+function readForm(
+  form: HTMLFormElement,
+  categoryId: string,
+  care: CareFormState
+): PlantFormValues {
   const formData = new FormData(form);
   return {
     category_id: categoryId,
@@ -128,6 +192,16 @@ function readForm(form: HTMLFormElement, categoryId: string): PlantFormValues {
     og_image_url: String(formData.get("og_image_url") ?? "").trim(),
     is_featured: formData.get("is_featured") === "on",
     is_active: formData.get("is_active") === "on",
+    plant_type: care.plant_type,
+    difficulty: care.difficulty,
+    growth_rate: care.growth_rate,
+    sunlight: care.sunlight,
+    watering: care.watering,
+    space_requirement: care.space_requirement,
+    indoor_suitable: care.indoor_suitable,
+    outdoor_suitable: care.outdoor_suitable,
+    pet_safe: care.pet_safe,
+    beginner_friendly: care.beginner_friendly,
   };
 }
 
@@ -170,7 +244,51 @@ function validateForm(values: PlantFormValues): string | null {
     return copy.invalidOgImageUrl;
   }
 
+  if (values.plant_type != null && !isPlantType(values.plant_type)) {
+    return copy.invalidPlantType;
+  }
+  if (values.difficulty != null && !isPlantDifficulty(values.difficulty)) {
+    return copy.invalidDifficulty;
+  }
+  if (values.growth_rate != null && !isPlantGrowthRate(values.growth_rate)) {
+    return copy.invalidGrowthRate;
+  }
+  if (values.sunlight != null && !isPlantSunlight(values.sunlight)) {
+    return copy.invalidSunlight;
+  }
+  if (values.watering != null && !isPlantWatering(values.watering)) {
+    return copy.invalidWatering;
+  }
+  if (
+    values.space_requirement != null &&
+    !isPlantSpaceRequirement(values.space_requirement)
+  ) {
+    return copy.invalidSpaceRequirement;
+  }
+
   return null;
+}
+
+function enumSelectValue<T extends string>(value: T | null): string {
+  return value ?? UNSET_VALUE;
+}
+
+function parseEnumSelectValue<T extends string>(
+  value: string | null | undefined,
+  isValid: (candidate: string) => candidate is T
+): T | null {
+  if (value == null || value === UNSET_VALUE) return null;
+  return isValid(value) ? value : null;
+}
+
+/** Checkbox: checked → true; unchecking a true value → false; unset stays null. */
+function nextNullableBool(
+  checked: boolean,
+  previous: boolean | null
+): boolean | null {
+  if (checked) return true;
+  if (previous === true) return false;
+  return previous;
 }
 
 export default function AdminPlantsPage() {
@@ -399,6 +517,16 @@ export default function AdminPlantsPage() {
       og_image_url: values.og_image_url || null,
       is_featured: values.is_featured,
       is_active: values.is_active,
+      plant_type: values.plant_type,
+      difficulty: values.difficulty,
+      growth_rate: values.growth_rate,
+      sunlight: values.sunlight,
+      watering: values.watering,
+      space_requirement: values.space_requirement,
+      indoor_suitable: values.indoor_suitable,
+      outdoor_suitable: values.outdoor_suitable,
+      pet_safe: values.pet_safe,
+      beginner_friendly: values.beginner_friendly,
     };
 
     setFormError(null);
@@ -473,6 +601,37 @@ export default function AdminPlantsPage() {
 
     if (values.is_featured !== selected.is_featured) {
       changes.is_featured = values.is_featured;
+    }
+
+    if (values.plant_type !== selected.plant_type) {
+      changes.plant_type = values.plant_type;
+    }
+    if (values.difficulty !== selected.difficulty) {
+      changes.difficulty = values.difficulty;
+    }
+    if (values.growth_rate !== selected.growth_rate) {
+      changes.growth_rate = values.growth_rate;
+    }
+    if (values.sunlight !== selected.sunlight) {
+      changes.sunlight = values.sunlight;
+    }
+    if (values.watering !== selected.watering) {
+      changes.watering = values.watering;
+    }
+    if (values.space_requirement !== selected.space_requirement) {
+      changes.space_requirement = values.space_requirement;
+    }
+    if (values.indoor_suitable !== selected.indoor_suitable) {
+      changes.indoor_suitable = values.indoor_suitable;
+    }
+    if (values.outdoor_suitable !== selected.outdoor_suitable) {
+      changes.outdoor_suitable = values.outdoor_suitable;
+    }
+    if (values.pet_safe !== selected.pet_safe) {
+      changes.pet_safe = values.pet_safe;
+    }
+    if (values.beginner_friendly !== selected.beginner_friendly) {
+      changes.beginner_friendly = values.beginner_friendly;
     }
 
     if (Object.keys(changes).length === 0) {
@@ -969,6 +1128,7 @@ function PlantForm({
   const [categoryId, setCategoryId] = useState(plant?.category_id ?? "");
   const [ogImageUrl, setOgImageUrl] = useState(plant?.og_image_url ?? "");
   const [ogImageBroken, setOgImageBroken] = useState(false);
+  const [care, setCare] = useState<CareFormState>(() => careStateFromPlant(plant));
   // Nested resources save immediately, so they live outside the form submit.
   const [images, setImages] = useState<AdminPlantImage[]>(plant?.images ?? []);
   const [potSizes, setPotSizes] = useState<AdminPlantPotSize[]>(
@@ -985,7 +1145,7 @@ function PlantForm({
 
   function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
-    const values = readForm(event.currentTarget, categoryId);
+    const values = readForm(event.currentTarget, categoryId, care);
     const invalid = validateForm(values);
     if (invalid) {
       onValidationError(invalid);
@@ -1192,6 +1352,172 @@ function PlantForm({
         </section>
 
         <section className="space-y-4">
+          <h3 className="text-sm font-medium">{copy.sections.care}</h3>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <CareEnumSelect
+              id={`${prefix}-plant-type`}
+              label={copy.fields.plantType}
+              value={care.plant_type}
+              disabled={submitting}
+              options={PLANT_TYPES.map((value) => ({
+                value,
+                label: copy.enums.plantType[value],
+              }))}
+              onChange={(value) =>
+                setCare((current) => ({
+                  ...current,
+                  plant_type: parseEnumSelectValue(value, isPlantType),
+                }))
+              }
+            />
+            <CareEnumSelect
+              id={`${prefix}-difficulty`}
+              label={copy.fields.difficulty}
+              value={care.difficulty}
+              disabled={submitting}
+              options={PLANT_DIFFICULTIES.map((value) => ({
+                value,
+                label: copy.enums.difficulty[value],
+              }))}
+              onChange={(value) =>
+                setCare((current) => ({
+                  ...current,
+                  difficulty: parseEnumSelectValue(value, isPlantDifficulty),
+                }))
+              }
+            />
+            <CareEnumSelect
+              id={`${prefix}-growth-rate`}
+              label={copy.fields.growthRate}
+              value={care.growth_rate}
+              disabled={submitting}
+              options={PLANT_GROWTH_RATES.map((value) => ({
+                value,
+                label: copy.enums.growthRate[value],
+              }))}
+              onChange={(value) =>
+                setCare((current) => ({
+                  ...current,
+                  growth_rate: parseEnumSelectValue(value, isPlantGrowthRate),
+                }))
+              }
+            />
+            <CareEnumSelect
+              id={`${prefix}-sunlight`}
+              label={copy.fields.sunlight}
+              value={care.sunlight}
+              disabled={submitting}
+              options={PLANT_SUNLIGHTS.map((value) => ({
+                value,
+                label: copy.enums.sunlight[value],
+              }))}
+              onChange={(value) =>
+                setCare((current) => ({
+                  ...current,
+                  sunlight: parseEnumSelectValue(value, isPlantSunlight),
+                }))
+              }
+            />
+            <CareEnumSelect
+              id={`${prefix}-watering`}
+              label={copy.fields.watering}
+              value={care.watering}
+              disabled={submitting}
+              options={PLANT_WATERINGS.map((value) => ({
+                value,
+                label: copy.enums.watering[value],
+              }))}
+              onChange={(value) =>
+                setCare((current) => ({
+                  ...current,
+                  watering: parseEnumSelectValue(value, isPlantWatering),
+                }))
+              }
+            />
+            <CareEnumSelect
+              id={`${prefix}-space-requirement`}
+              label={copy.fields.spaceRequirement}
+              value={care.space_requirement}
+              disabled={submitting}
+              options={PLANT_SPACE_REQUIREMENTS.map((value) => ({
+                value,
+                label: copy.enums.spaceRequirement[value],
+              }))}
+              onChange={(value) =>
+                setCare((current) => ({
+                  ...current,
+                  space_requirement: parseEnumSelectValue(
+                    value,
+                    isPlantSpaceRequirement
+                  ),
+                }))
+              }
+            />
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <CareBooleanCheckbox
+              id={`${prefix}-indoor-suitable`}
+              label={copy.fields.indoorSuitable}
+              checked={care.indoor_suitable === true}
+              disabled={submitting}
+              onCheckedChange={(checked) =>
+                setCare((current) => ({
+                  ...current,
+                  indoor_suitable: nextNullableBool(
+                    checked,
+                    current.indoor_suitable
+                  ),
+                }))
+              }
+            />
+            <CareBooleanCheckbox
+              id={`${prefix}-outdoor-suitable`}
+              label={copy.fields.outdoorSuitable}
+              checked={care.outdoor_suitable === true}
+              disabled={submitting}
+              onCheckedChange={(checked) =>
+                setCare((current) => ({
+                  ...current,
+                  outdoor_suitable: nextNullableBool(
+                    checked,
+                    current.outdoor_suitable
+                  ),
+                }))
+              }
+            />
+            <CareBooleanCheckbox
+              id={`${prefix}-pet-safe`}
+              label={copy.fields.petSafe}
+              checked={care.pet_safe === true}
+              disabled={submitting}
+              onCheckedChange={(checked) =>
+                setCare((current) => ({
+                  ...current,
+                  pet_safe: nextNullableBool(checked, current.pet_safe),
+                }))
+              }
+            />
+            <CareBooleanCheckbox
+              id={`${prefix}-beginner-friendly`}
+              label={copy.fields.beginnerFriendly}
+              checked={care.beginner_friendly === true}
+              disabled={submitting}
+              onCheckedChange={(checked) =>
+                setCare((current) => ({
+                  ...current,
+                  beginner_friendly: nextNullableBool(
+                    checked,
+                    current.beginner_friendly
+                  ),
+                }))
+              }
+            />
+          </div>
+        </section>
+
+        <section className="space-y-4">
           <h3 className="text-sm font-medium">{copy.sections.pricing}</h3>
 
           <div className="grid gap-4 sm:grid-cols-3">
@@ -1342,5 +1668,89 @@ function PlantForm({
         </Button>
       </DialogFooter>
     </form>
+  );
+}
+
+type CareEnumSelectProps = {
+  id: string;
+  label: string;
+  value: string | null;
+  disabled?: boolean;
+  options: Array<{ value: string; label: string }>;
+  onChange: (value: string) => void;
+};
+
+function CareEnumSelect({
+  id,
+  label,
+  value,
+  disabled,
+  options,
+  onChange,
+}: CareEnumSelectProps) {
+  const selected = options.find((option) => option.value === value);
+
+  return (
+    <div className="space-y-2">
+      <Label htmlFor={id}>{label}</Label>
+      <Select
+        value={enumSelectValue(value)}
+        disabled={disabled}
+        onValueChange={(next) => {
+          if (next == null) return;
+          onChange(next as string);
+        }}
+      >
+        <SelectTrigger id={id} className="h-11 w-full rounded-full px-4">
+          <SelectValue>
+            {selected ? (
+              selected.label
+            ) : (
+              <span className="text-muted-foreground">
+                {copy.fields.enumUnset}
+              </span>
+            )}
+          </SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value={UNSET_VALUE}>{copy.fields.enumUnset}</SelectItem>
+          {options.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
+}
+
+type CareBooleanCheckboxProps = {
+  id: string;
+  label: string;
+  checked: boolean;
+  disabled?: boolean;
+  onCheckedChange: (checked: boolean) => void;
+};
+
+function CareBooleanCheckbox({
+  id,
+  label,
+  checked,
+  disabled,
+  onCheckedChange,
+}: CareBooleanCheckboxProps) {
+  return (
+    <div className="flex items-start gap-2">
+      <input
+        id={id}
+        type="checkbox"
+        checked={checked}
+        disabled={disabled}
+        onChange={(event) => onCheckedChange(event.target.checked)}
+        className="mt-0.5 size-4 accent-primary"
+      />
+      <Label htmlFor={id}>{label}</Label>
+    </div>
   );
 }

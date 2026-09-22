@@ -245,6 +245,61 @@
     "selectImage": "View image {index} of {name}",
     "selectVideo": "View video preview of {name}",
     "videoPreview": "Video preview",
+    "care": {
+      "title": "Care & specifications",
+      "plantType": "Plant type",
+      "difficulty": "Difficulty",
+      "growthRate": "Growth rate",
+      "sunlight": "Sunlight",
+      "watering": "Watering",
+      "spaceRequirement": "Space",
+      "indoorSuitable": "Suitable for indoors",
+      "outdoorSuitable": "Suitable for outdoors",
+      "petSafe": "Pet safe",
+      "notPetSafe": "Not pet safe",
+      "beginnerFriendly": "Beginner friendly",
+      "plantTypeValues": {
+        "foliage": "Foliage",
+        "flowering": "Flowering",
+        "succulent": "Succulent",
+        "cactus": "Cactus",
+        "herb": "Herb",
+        "fern": "Fern",
+        "vine": "Vine",
+        "tree": "Tree",
+        "palm": "Palm",
+        "bamboo": "Bamboo",
+        "aquatic": "Aquatic",
+        "other": "Other"
+      },
+      "difficultyValues": {
+        "easy": "Easy",
+        "moderate": "Moderate",
+        "hard": "Hard"
+      },
+      "growthRateValues": {
+        "slow": "Slow",
+        "moderate": "Moderate",
+        "fast": "Fast"
+      },
+      "sunlightValues": {
+        "full_sun": "Full sun",
+        "partial_sun": "Partial sun",
+        "partial_shade": "Partial shade",
+        "shade": "Shade",
+        "low_light": "Low light"
+      },
+      "wateringValues": {
+        "low": "Low",
+        "moderate": "Moderate",
+        "high": "High"
+      },
+      "spaceRequirementValues": {
+        "small": "Small",
+        "medium": "Medium",
+        "large": "Large"
+      }
+    },
     "related": {
       "title": "You Might Also Like",
       "viewAll": "View all"

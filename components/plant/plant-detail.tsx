@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
 import { PlantGallery } from "@/components/plant/plant-gallery";
 import { PlantInfo } from "@/components/plant/plant-info";
+import { PlantCareSpecs } from "@/components/plant/plant-care-specs";
 import {
   PlantOptions,
   type PotSizeOption,
@@ -245,11 +246,13 @@ function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
                 />
               </Button>
             </div>
+
+            <PlantCareSpecs plant={plant} className="mt-8" />
           </div>
         </div>
 
         {longDescription ? (
-          <div className="mt-12 max-w-3xl border-t border-border pt-10 md:mt-14 md:pt-12 lg:mt-16">
+          <div className="mt-12 border-t border-border pt-10 md:mt-14 md:pt-12 lg:mt-16">
             <div className="whitespace-pre-wrap font-sans text-body leading-relaxed text-muted-foreground">
               {longDescription}
             </div>
