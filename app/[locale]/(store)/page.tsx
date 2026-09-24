@@ -10,6 +10,7 @@ import {
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
+import { loadStorefrontReviewSummary } from "@/lib/reviews";
 import { buildHomepageJsonLd } from "@/lib/seo/homepage-json-ld";
 
 type Props = {
@@ -66,10 +67,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function HomePage({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "home.metadata" });
+  const reviewSummary = await loadStorefrontReviewSummary();
   const jsonLd = buildHomepageJsonLd({
     locale,
     name: t("title"),
     description: t("description"),
+    reviewSummary,
   });
 
   return (

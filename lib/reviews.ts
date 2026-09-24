@@ -1,3 +1,8 @@
+import {
+  STOREFRONT_REVIEWS_PAGE_SIZE,
+  getAllStorefrontReviews,
+  getStorefrontReviews,
+} from "@/lib/api/storefront";
 import type {
   StorefrontRatingDistribution,
   StorefrontReview,
@@ -117,6 +122,31 @@ export function resolveReviewSummary(
   }
 
   return buildReviewSummaryFromItems(fallbackItems, total);
+}
+
+/**
+ * Same summary the reviews page UI uses — for homepage LocalBusiness JSON-LD.
+ * Returns null when the API is unreachable (do not invent ratings).
+ */
+export async function loadStorefrontReviewSummary(): Promise<StorefrontReviewSummary | null> {
+  try {
+    const page = await getStorefrontReviews({
+      page: 1,
+      page_size: STOREFRONT_REVIEWS_PAGE_SIZE,
+    });
+
+    const hasApiSummary =
+      typeof page.average_rating === "number" &&
+      page.rating_distribution != null;
+
+    const allForSummary = hasApiSummary
+      ? null
+      : await getAllStorefrontReviews().catch(() => page.items);
+
+    return resolveReviewSummary(page, allForSummary ?? page.items);
+  } catch {
+    return null;
+  }
 }
 
 export function formatRelativeReviewDate(
