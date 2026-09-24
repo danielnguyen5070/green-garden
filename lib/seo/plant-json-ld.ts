@@ -1,6 +1,11 @@
 import { SITE_URL } from "@/config/site";
 import { getCartCurrency } from "@/lib/cart";
-import { LOCAL_BUSINESS_ID, WEBSITE_ID } from "@/lib/seo/schema-ids";
+import {
+  BRAND_ID,
+  BUSINESS_DISPLAY_NAME,
+  LOCAL_BUSINESS_ID,
+  WEBSITE_ID,
+} from "@/lib/seo/schema-ids";
 import { toAbsoluteUrl } from "@/lib/seo/url";
 import {
   getActivePotSizes,
@@ -21,8 +26,13 @@ type PlantJsonLdInput = {
 };
 
 /**
- * Plant detail @graph: Product (+ Offer/AggregateOffer) and BreadcrumbList.
- * Matches the visible Home → Plants → Plant trail.
+ * Plant detail @graph: Brand, Product (+ Offer/AggregateOffer), BreadcrumbList.
+ *
+ * - `brand` → `#brand` (Brand with a real name) — never `#localbusiness`
+ * - `seller` → `#localbusiness` (the shop LocalBusiness on the homepage)
+ *
+ * Omits optional fields we cannot represent accurately yet: `review`,
+ * `aggregateRating`, `shippingDetails`, `hasMerchantReturnPolicy`.
  */
 export function buildPlantJsonLd({
   locale,
@@ -80,6 +90,8 @@ export function buildPlantJsonLd({
     ? localizeText(plant.category.name, plant.category.name_vi, locale)
     : null;
 
+  const seller = { "@id": LOCAL_BUSINESS_ID };
+
   const offers =
     potSizes.length > 1
       ? {
@@ -90,7 +102,7 @@ export function buildPlantJsonLd({
           offerCount: potSizes.length,
           availability,
           url: pageUrl,
-          seller: { "@id": LOCAL_BUSINESS_ID },
+          seller,
         }
       : {
           "@type": "Offer",
@@ -98,7 +110,7 @@ export function buildPlantJsonLd({
           priceCurrency: currency,
           availability,
           url: pageUrl,
-          seller: { "@id": LOCAL_BUSINESS_ID },
+          seller,
         };
 
   const plantsUrl = `${SITE_URL}/${locale}/plants`;
@@ -127,6 +139,12 @@ export function buildPlantJsonLd({
     "@context": "https://schema.org",
     "@graph": [
       {
+        "@type": "Brand",
+        "@id": BRAND_ID,
+        name: BUSINESS_DISPLAY_NAME,
+        url: SITE_URL,
+      },
+      {
         "@type": "Product",
         "@id": `${pageUrl}#product`,
         name,
@@ -134,9 +152,7 @@ export function buildPlantJsonLd({
         ...(imageUrls.length > 0 ? { image: imageUrls } : {}),
         url: pageUrl,
         ...(categoryName ? { category: categoryName } : {}),
-        brand: {
-          "@id": LOCAL_BUSINESS_ID,
-        },
+        brand: { "@id": BRAND_ID },
         offers,
         mainEntityOfPage: {
           "@type": "WebPage",

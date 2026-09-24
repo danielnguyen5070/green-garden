@@ -1,6 +1,10 @@
 import { CONTACT_CONFIG } from "@/config/contact";
 import { SITE_NAME, SITE_URL } from "@/config/site";
-import { LOCAL_BUSINESS_ID, WEBSITE_ID } from "@/lib/seo/schema-ids";
+import {
+  BUSINESS_DISPLAY_NAME,
+  LOCAL_BUSINESS_ID,
+  WEBSITE_ID,
+} from "@/lib/seo/schema-ids";
 
 type HomepageJsonLdInput = {
   locale: string;
@@ -25,7 +29,7 @@ export function buildHomepageJsonLd({
       {
         "@type": "LocalBusiness",
         "@id": LOCAL_BUSINESS_ID,
-        name: "Cây giống Ngọc Ngân Bến Tre",
+        name: BUSINESS_DISPLAY_NAME,
         alternateName: "Ngọc Ngân Bến Tre",
         url: SITE_URL,
         logo: `${SITE_URL}/images/logo-mark2.png`,
