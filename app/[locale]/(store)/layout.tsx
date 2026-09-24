@@ -1,3 +1,4 @@
+import { ChatWidget } from "@/components/chatbot/chat-widget";
 import { FloatingContact } from "@/components/floating/floating-contact";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
@@ -13,6 +14,7 @@ export default function StoreLayout({
       <main className="flex-1">{children}</main>
       <Footer />
       <FloatingContact />
+      <ChatWidget />
     </>
   );
 }

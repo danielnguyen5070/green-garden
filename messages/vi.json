@@ -542,5 +542,18 @@
     "navLabel": "Liên hệ nhanh",
     "sms": "Nhắn tin SMS",
     "zalo": "Chat Zalo"
+  },
+  "chatbot": {
+    "title": "Ngọc Ngân Bến Tre AI",
+    "online": "Đang trực tuyến",
+    "open": "Mở trợ lý cây trồng",
+    "close": "Đóng chat",
+    "minimize": "Thu nhỏ chat",
+    "refresh": "Bắt đầu hội thoại mới",
+    "placeholder": "Hỏi về cây, chăm sóc hoặc giao hàng…",
+    "send": "Gửi tin nhắn",
+    "typing": "Trợ lý đang soạn tin",
+    "emojiSoon": "Biểu tượng cảm xúc sắp có",
+    "attachSoon": "Đính kèm tệp sắp có"
   }
 }
