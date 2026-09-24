@@ -1,5 +1,6 @@
 "use client";
 
+import { ChatMarkdown } from "@/components/chatbot/chat-markdown";
 import { cn } from "@/lib/utils";
 import type { ChatMessage } from "@/types/chatbot";
 
@@ -24,13 +25,17 @@ function ChatMessageBubble({
     >
       <div
         className={cn(
-          "max-w-[85%] whitespace-pre-wrap font-sans text-small leading-relaxed",
+          "max-w-[85%] font-sans text-small leading-relaxed",
           isUser
-            ? "rounded-2xl rounded-br-md bg-primary px-3.5 py-2.5 text-primary-foreground"
+            ? "whitespace-pre-wrap rounded-2xl rounded-br-md bg-primary px-3.5 py-2.5 text-primary-foreground"
             : "rounded-2xl rounded-bl-md bg-muted px-3.5 py-2.5 text-foreground"
         )}
       >
-        {message.content}
+        {isUser ? (
+          message.content
+        ) : (
+          <ChatMarkdown content={message.content} />
+        )}
       </div>
     </div>
   );
