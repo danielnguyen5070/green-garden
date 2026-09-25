@@ -66,6 +66,8 @@
       "tiktok": "TikTok",
       "youtube": "YouTube"
     },
+    "pageViews": "{count, number} page views",
+    "pageViewsPeriod": "Total production page views since Web Analytics was enabled",
     "copyright": "© {year} Ngoc Ngan Ben Tre. All rights reserved."
   },
   "home": {

@@ -1,12 +1,13 @@
 import Image from "next/image";
+import { EyeIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import {
   FOOTER_SECTIONS,
   type FooterNavSection,
-  type FooterSocialIcon,
 } from "@/config/footer";
 import { CONTACT_CONFIG } from "@/config/contact";
 import { Link } from "@/i18n/navigation";
+import { getVisitsPageviews } from "@/lib/vercel-web-analytics";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/layout/container";
 import { LogoMark } from "@/components/layout/header/logo";
@@ -49,6 +50,7 @@ async function FooterBrand() {
       <address className="mt-3 max-w-[16.25rem] text-small leading-relaxed text-primary-foreground/50 not-italic">
         {CONTACT_CONFIG.address}
       </address>
+      <FooterPageViews />
     </div>
   );
 }
@@ -118,6 +120,30 @@ async function FooterSocial() {
         ))}
       </ul>
     </nav>
+  );
+}
+
+async function FooterPageViews() {
+  const t = await getTranslations("footer");
+  const visits = await getVisitsPageviews();
+
+  if (!visits.available || visits.pageviews == null) {
+    return null;
+  }
+
+  return (
+    <p
+      className="mt-4 inline-flex items-center gap-2 text-small text-primary-foreground/45"
+      title={t("pageViewsPeriod")}
+    >
+      <span
+        aria-hidden="true"
+        className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-primary-foreground/12 text-primary-foreground/70"
+      >
+        <EyeIcon className="size-3.5" strokeWidth={1.75} />
+      </span>
+      {t("pageViews", { count: visits.pageviews })}
+    </p>
   );
 }
 

@@ -66,6 +66,8 @@
       "tiktok": "TikTok",
       "youtube": "YouTube"
     },
+    "pageViews": "{count, number} lượt xem",
+    "pageViewsPeriod": "Tổng lượt xem production kể từ khi bật Web Analytics",
     "copyright": "© {year} Ngoc Ngan Ben Tre. Bảo lưu mọi quyền."
   },
   "home": {
