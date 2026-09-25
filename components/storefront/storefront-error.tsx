@@ -1,25 +1,28 @@
 "use client";
 
 import { useEffect } from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { StatusView } from "@/components/storefront/status-view";
+import { Link } from "@/i18n/navigation";
 
-export default function RootError({
+function StorefrontError({
   error,
   retry,
 }: {
   error: Error & { digest?: string };
   retry: () => void;
 }) {
+  const t = useTranslations("status.error");
+
   useEffect(() => {
     console.error(error);
   }, [error]);
 
   return (
     <StatusView
-      title="Something went wrong"
-      description="We couldn't load this page right now. Please try again in a moment."
+      title={t("title")}
+      description={t("description")}
       actions={
         <>
           <Button
@@ -28,7 +31,7 @@ export default function RootError({
             className="h-12 w-full rounded-xl px-6 font-sans text-sm font-semibold sm:w-auto"
             onClick={() => retry()}
           >
-            Try again
+            {t("tryAgain")}
           </Button>
           <Button
             variant="outline"
@@ -37,10 +40,12 @@ export default function RootError({
             render={<Link href="/" />}
             nativeButton={false}
           >
-            Back to homepage
+            {t("backHome")}
           </Button>
         </>
       }
     />
   );
 }
+
+export { StorefrontError };

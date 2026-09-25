@@ -17,6 +17,26 @@
     "addToCart": "Add to cart",
     "cartWithCount": "Cart, {count, plural, =0 {empty} one {# item} other {# items}}"
   },
+  "status": {
+    "notFound": {
+      "title": "Page not found",
+      "description": "The page you're looking for doesn't exist or may have been moved.",
+      "browsePlants": "Browse plants",
+      "backHome": "Back to homepage"
+    },
+    "plantNotFound": {
+      "title": "Plant not found",
+      "description": "This plant may have been removed, or the link might be incorrect.",
+      "browsePlants": "Browse plants",
+      "backHome": "Back to homepage"
+    },
+    "error": {
+      "title": "Something went wrong",
+      "description": "We couldn't load this page right now. Please try again in a moment.",
+      "tryAgain": "Try again",
+      "backHome": "Back to homepage"
+    }
+  },
   "cart": {
     "title": "Your Cart",
     "description": "Review the plants in your cart and continue to checkout.",

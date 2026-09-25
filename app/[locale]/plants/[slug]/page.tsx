@@ -7,11 +7,9 @@ import { RelatedPlants } from "@/components/plant/related-plants";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
-import { ApiError } from "@/lib/api/errors";
-import { getStorefrontPlantBySlug } from "@/lib/api/storefront";
+import { getPlantBySlugOrNull } from "@/lib/storefront/get-plant-by-slug";
 import { buildPlantJsonLd } from "@/lib/seo/plant-json-ld";
 import { localizeOptionalText, localizeText } from "@/lib/storefront";
-import type { StorefrontPlantDetail } from "@/types/storefront";
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
@@ -20,24 +18,9 @@ type Props = {
 const OG_IMAGE_WIDTH = 1200;
 const OG_IMAGE_HEIGHT = 630;
 
-/**
- * Resolves the public slug. `generateMetadata` and the page both call this, and
- * fetch memoization collapses them into the single request per render.
- */
-async function loadPlant(slug: string): Promise<StorefrontPlantDetail | null> {
-  try {
-    return await getStorefrontPlantBySlug(slug);
-  } catch (error) {
-    if (error instanceof ApiError && error.status === 404) {
-      return null;
-    }
-    throw error;
-  }
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
-  const plant = await loadPlant(slug);
+  const plant = await getPlantBySlugOrNull(slug);
 
   if (!plant) {
     return {};
@@ -97,7 +80,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PlantDetailPage({ params }: Props) {
   const { locale, slug } = await params;
-  const plant = await loadPlant(slug);
+  const plant = await getPlantBySlugOrNull(slug);
 
   if (!plant) {
     notFound();

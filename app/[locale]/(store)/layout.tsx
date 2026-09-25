@@ -1,20 +1,9 @@
-import { ChatWidget } from "@/components/chatbot/chat-widget";
-import { FloatingContact } from "@/components/floating/floating-contact";
-import { Footer } from "@/components/layout/footer";
-import { Header } from "@/components/layout/header";
+import { StoreChrome } from "@/components/layout/store-chrome";
 
 export default function StoreLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <Header />
-      <main className="flex-1">{children}</main>
-      <Footer />
-      <FloatingContact />
-      <ChatWidget />
-    </>
-  );
+  return <StoreChrome>{children}</StoreChrome>;
 }

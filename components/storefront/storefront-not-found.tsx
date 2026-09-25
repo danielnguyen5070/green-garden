@@ -1,34 +1,24 @@
-"use client";
-
-import { useEffect } from "react";
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { StatusView } from "@/components/storefront/status-view";
+import { Link } from "@/i18n/navigation";
 
-export default function RootError({
-  error,
-  retry,
-}: {
-  error: Error & { digest?: string };
-  retry: () => void;
-}) {
-  useEffect(() => {
-    console.error(error);
-  }, [error]);
+async function StorefrontNotFound() {
+  const t = await getTranslations("status.notFound");
 
   return (
     <StatusView
-      title="Something went wrong"
-      description="We couldn't load this page right now. Please try again in a moment."
+      title={t("title")}
+      description={t("description")}
       actions={
         <>
           <Button
-            type="button"
             size="lg"
             className="h-12 w-full rounded-xl px-6 font-sans text-sm font-semibold sm:w-auto"
-            onClick={() => retry()}
+            render={<Link href="/plants" />}
+            nativeButton={false}
           >
-            Try again
+            {t("browsePlants")}
           </Button>
           <Button
             variant="outline"
@@ -37,10 +27,12 @@ export default function RootError({
             render={<Link href="/" />}
             nativeButton={false}
           >
-            Back to homepage
+            {t("backHome")}
           </Button>
         </>
       }
     />
   );
 }
+
+export { StorefrontNotFound };

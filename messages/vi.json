@@ -17,6 +17,26 @@
     "addToCart": "Thêm vào giỏ",
     "cartWithCount": "Giỏ hàng, {count, plural, =0 {trống} other {# sản phẩm}}"
   },
+  "status": {
+    "notFound": {
+      "title": "Không tìm thấy trang",
+      "description": "Trang bạn đang tìm không tồn tại hoặc có thể đã được di chuyển.",
+      "browsePlants": "Xem cây giống",
+      "backHome": "Về trang chủ"
+    },
+    "plantNotFound": {
+      "title": "Không tìm thấy cây",
+      "description": "Cây này có thể đã bị gỡ, hoặc đường dẫn không còn đúng.",
+      "browsePlants": "Xem cây giống",
+      "backHome": "Về trang chủ"
+    },
+    "error": {
+      "title": "Đã xảy ra lỗi",
+      "description": "Hiện chưa tải được trang này. Vui lòng thử lại sau giây lát.",
+      "tryAgain": "Thử lại",
+      "backHome": "Về trang chủ"
+    }
+  },
   "cart": {
     "title": "Giỏ hàng của bạn",
     "description": "Xem lại cây trong giỏ và tiếp tục thanh toán.",
