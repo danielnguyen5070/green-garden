@@ -49,4 +49,5 @@ green-garden/
 └── public/
 ```
 
+
 Customers do not have accounts. Only `/admin` requires authentication.
