@@ -69,13 +69,32 @@ function buildOfferShippingDetails(locale: string) {
 }
 
 /**
+ * Offer-level return policy for merchant listings.
+ *
+ * Matches FAQ: living plants are not taken back when healthy; damage / order
+ * issues must be reported within 48 hours of delivery for replacement or refund.
+ */
+function buildMerchantReturnPolicy(locale: string) {
+  return {
+    "@type": "MerchantReturnPolicy" as const,
+    applicableCountry: "VN",
+    returnPolicyCategory:
+      "https://schema.org/MerchantReturnFiniteReturnWindow" as const,
+    merchantReturnDays: 2,
+    returnMethod: "https://schema.org/ReturnByMail" as const,
+    returnFees: "https://schema.org/FreeReturn" as const,
+    merchantReturnLink: `${SITE_URL}/${locale}/faq`,
+  };
+}
+
+/**
  * Plant detail @graph: Brand, Product (+ Offer/AggregateOffer), BreadcrumbList.
  *
  * - `brand` → `#brand` (Brand with a real name) — never `#localbusiness`
  * - `seller` → `#localbusiness` (the shop LocalBusiness on the homepage)
  *
  * Omits optional fields we cannot represent accurately yet: `review`,
- * `aggregateRating`, `hasMerchantReturnPolicy`.
+ * `aggregateRating`.
  */
 export function buildPlantJsonLd({
   locale,
@@ -135,6 +154,7 @@ export function buildPlantJsonLd({
 
   const seller = { "@id": LOCAL_BUSINESS_ID };
   const shippingDetails = buildOfferShippingDetails(locale);
+  const hasMerchantReturnPolicy = buildMerchantReturnPolicy(locale);
 
   const offers =
     potSizes.length > 1
@@ -148,6 +168,7 @@ export function buildPlantJsonLd({
           url: pageUrl,
           seller,
           shippingDetails,
+          hasMerchantReturnPolicy,
         }
       : {
           "@type": "Offer",
@@ -157,6 +178,7 @@ export function buildPlantJsonLd({
           url: pageUrl,
           seller,
           shippingDetails,
+          hasMerchantReturnPolicy,
         };
 
   const plantsUrl = `${SITE_URL}/${locale}/plants`;
