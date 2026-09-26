@@ -1,5 +1,5 @@
 import { SITE_URL } from "@/config/site";
-import { getCartCurrency } from "@/lib/cart";
+import { getCartCurrency, SHIPPING_RULES } from "@/lib/cart";
 import {
   BRAND_ID,
   BUSINESS_DISPLAY_NAME,
@@ -26,13 +26,56 @@ type PlantJsonLdInput = {
 };
 
 /**
+ * Offer-level shipping for merchant listings.
+ *
+ * Uses the same flat fee / free-shipping currency rules as checkout
+ * (`SHIPPING_RULES`). Lists the standard fee for Vietnam; free shipping still
+ * applies in checkout when the cart meets the threshold.
+ *
+ * Transit: 3–5 business days (Vietnam Post / J&T), matching checkout copy.
+ */
+function buildOfferShippingDetails(locale: string) {
+  const currency = getCartCurrency(locale);
+  const { fee } = SHIPPING_RULES[currency];
+  const decimals = currency === "VND" ? 0 : 2;
+
+  return {
+    "@type": "OfferShippingDetails" as const,
+    shippingRate: {
+      "@type": "MonetaryAmount" as const,
+      value: Number(fee.toFixed(decimals)),
+      currency,
+    },
+    shippingDestination: {
+      "@type": "DefinedRegion" as const,
+      addressCountry: "VN",
+    },
+    deliveryTime: {
+      "@type": "ShippingDeliveryTime" as const,
+      handlingTime: {
+        "@type": "QuantitativeValue" as const,
+        minValue: 0,
+        maxValue: 1,
+        unitCode: "DAY",
+      },
+      transitTime: {
+        "@type": "QuantitativeValue" as const,
+        minValue: 3,
+        maxValue: 5,
+        unitCode: "DAY",
+      },
+    },
+  };
+}
+
+/**
  * Plant detail @graph: Brand, Product (+ Offer/AggregateOffer), BreadcrumbList.
  *
  * - `brand` → `#brand` (Brand with a real name) — never `#localbusiness`
  * - `seller` → `#localbusiness` (the shop LocalBusiness on the homepage)
  *
  * Omits optional fields we cannot represent accurately yet: `review`,
- * `aggregateRating`, `shippingDetails`, `hasMerchantReturnPolicy`.
+ * `aggregateRating`, `hasMerchantReturnPolicy`.
  */
 export function buildPlantJsonLd({
   locale,
@@ -91,6 +134,7 @@ export function buildPlantJsonLd({
     : null;
 
   const seller = { "@id": LOCAL_BUSINESS_ID };
+  const shippingDetails = buildOfferShippingDetails(locale);
 
   const offers =
     potSizes.length > 1
@@ -103,6 +147,7 @@ export function buildPlantJsonLd({
           availability,
           url: pageUrl,
           seller,
+          shippingDetails,
         }
       : {
           "@type": "Offer",
@@ -111,6 +156,7 @@ export function buildPlantJsonLd({
           availability,
           url: pageUrl,
           seller,
+          shippingDetails,
         };
 
   const plantsUrl = `${SITE_URL}/${locale}/plants`;
