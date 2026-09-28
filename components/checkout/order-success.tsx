@@ -1,16 +1,18 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { CheckIcon, WalletIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "@/i18n/navigation";
-import { formatCartMoney } from "@/lib/cart";
+import { parseMoney } from "@/lib/cart";
+import { formatStorefrontPrice } from "@/lib/storefront";
 import { useLastOrderStore } from "@/store/order.store";
 
 function OrderSuccess() {
   const t = useTranslations("orderSuccess");
+  const locale = useLocale();
 
   const placed = useLastOrderStore((state) => state.order);
   const hasHydrated = useLastOrderStore((state) => state.hasHydrated);
@@ -76,11 +78,29 @@ function OrderSuccess() {
                 </dd>
               </div>
               <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-border pt-3">
+                <dt className="font-sans text-small text-muted-foreground">
+                  {t("subtotal")}
+                </dt>
+                <dd className="font-sans text-sm tabular-nums text-foreground">
+                  {formatStorefrontPrice(placed.order.subtotal_amount, locale)}
+                </dd>
+              </div>
+              <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+                <dt className="font-sans text-small text-muted-foreground">
+                  {t("shipping")}
+                </dt>
+                <dd className="font-sans text-sm tabular-nums text-foreground">
+                  {parseMoney(placed.order.shipping_fee) === 0
+                    ? t("free")
+                    : formatStorefrontPrice(placed.order.shipping_fee, locale)}
+                </dd>
+              </div>
+              <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-border pt-3">
                 <dt className="font-sans text-sm font-semibold text-foreground">
                   {t("total")}
                 </dt>
                 <dd className="font-sans text-lg font-bold tabular-nums text-foreground">
-                  {formatCartMoney(placed.total, placed.moneyLocale)}
+                  {formatStorefrontPrice(placed.order.total_amount, locale)}
                 </dd>
               </div>
             </dl>

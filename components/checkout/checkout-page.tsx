@@ -1,12 +1,13 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { CheckoutProgress } from "@/components/checkout/checkout-progress";
 import { OrderSummary } from "@/components/checkout/order-summary";
 import { ShippingDetails } from "@/components/checkout/shipping-details";
 import { ShippingMethod } from "@/components/checkout/shipping-method";
+import { useCartQuote } from "@/hooks/use-cart-quote";
 import { useRouter } from "@/i18n/navigation";
 import { createStorefrontOrder } from "@/lib/api/storefront";
 import { ApiError } from "@/lib/api/errors";
@@ -43,9 +44,8 @@ function getErrorKey(error: unknown) {
 
 function CheckoutPageView() {
   const t = useTranslations("checkout");
+  const tCart = useTranslations("cart");
   const router = useRouter();
-  const locale = useLocale();
-  const moneyLocale = locale === "vi" ? "vi-VN" : "en-US";
 
   const [values, setValues] = useState<CheckoutFormValues>(EMPTY_CHECKOUT_FORM);
   const [errors, setErrors] = useState<CheckoutFormErrors>({});
@@ -54,14 +54,18 @@ function CheckoutPageView() {
   const items = useCartStore((state) => state.items);
   const hasHydrated = useCartStore((state) => state.hasHydrated);
   const clearCart = useCartStore((state) => state.clearCart);
-  const total = useCartStore((state) => state.total(moneyLocale));
   const setLastOrder = useLastOrderStore((state) => state.setOrder);
+  const cartQuote = useCartQuote();
 
+  // The customer only submits against a current backend quote they can see.
   const canSubmit =
     hasHydrated &&
     !submitting &&
     items.length > 0 &&
+    cartQuote.isOrderable &&
     isCheckoutFormValid(values);
+  const showCartProblem =
+    cartQuote.quote !== null && !cartQuote.isStale && !cartQuote.isOrderable;
 
   const handleChange = useCallback(
     (field: CheckoutFormField, value: string) => {
@@ -113,9 +117,7 @@ function CheckoutPageView() {
         toStorefrontOrderPayload(values, items),
       );
 
-      // Carry the checkout total across: the backend prices in USD, so its own
-      // total would not match what the customer just agreed to.
-      setLastOrder({ order, total, moneyLocale });
+      setLastOrder({ order });
       // Only now is the order safely on the backend.
       clearCart();
       router.push("/order-success");
@@ -148,7 +150,16 @@ function CheckoutPageView() {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          <ShippingMethod className="mt-9 md:mt-10" />
+          <ShippingMethod className="mt-9 md:mt-10" cartQuote={cartQuote} />
+
+          {showCartProblem ? (
+            <p
+              className="mt-8 font-sans text-small font-medium text-destructive md:mt-10"
+              role="alert"
+            >
+              {tCart("reviewCart")}
+            </p>
+          ) : null}
 
           <Button
             type="submit"
@@ -160,7 +171,7 @@ function CheckoutPageView() {
           </Button>
         </form>
 
-        <OrderSummary className="lg:sticky lg:top-8" />
+        <OrderSummary className="lg:sticky lg:top-8" cartQuote={cartQuote} />
       </div>
     </div>
   );

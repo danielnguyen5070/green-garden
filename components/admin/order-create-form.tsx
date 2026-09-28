@@ -29,7 +29,7 @@ type DraftItem = {
   key: string;
   plant_id: string;
   quantity: string;
-  pot_size: string;
+  pot_size_id: string;
 };
 
 type OrderCreateFormProps = {
@@ -50,7 +50,7 @@ function createDraftItem(): DraftItem {
     key: crypto.randomUUID(),
     plant_id: "",
     quantity: "1",
-    pot_size: NO_POT_SIZE,
+    pot_size_id: NO_POT_SIZE,
   };
 }
 
@@ -76,7 +76,7 @@ export function OrderCreateForm({
 
   async function handlePlantChange(key: string, plantId: string) {
     // Changing the plant invalidates any pot size picked for the old one.
-    updateItem(key, { plant_id: plantId, pot_size: NO_POT_SIZE });
+    updateItem(key, { plant_id: plantId, pot_size_id: NO_POT_SIZE });
 
     if (potSizesByPlant[plantId]) return;
 
@@ -136,7 +136,7 @@ export function OrderCreateForm({
       payloadItems.push({
         plant_id: item.plant_id,
         quantity,
-        pot_size: item.pot_size === NO_POT_SIZE ? null : item.pot_size,
+        pot_size_id: item.pot_size_id === NO_POT_SIZE ? null : item.pot_size_id,
       });
     }
 
@@ -316,11 +316,11 @@ export function OrderCreateForm({
                     </div>
 
                     <Select
-                      value={item.pot_size}
+                      value={item.pot_size_id}
                       disabled={submitting || potSizes.length === 0}
                       onValueChange={(value) => {
                         if (value == null) return;
-                        updateItem(item.key, { pot_size: value as string });
+                        updateItem(item.key, { pot_size_id: value as string });
                       }}
                     >
                       <SelectTrigger
@@ -328,9 +328,11 @@ export function OrderCreateForm({
                         aria-label={copy.items.potSize}
                       >
                         <SelectValue>
-                          {item.pot_size === NO_POT_SIZE
+                          {item.pot_size_id === NO_POT_SIZE
                             ? copy.items.noPotSize
-                            : item.pot_size}
+                            : (potSizes.find(
+                                (potSize) => potSize.id === item.pot_size_id
+                              )?.name ?? copy.items.noPotSize)}
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
@@ -338,7 +340,7 @@ export function OrderCreateForm({
                           {copy.items.noPotSize}
                         </SelectItem>
                         {potSizes.map((potSize) => (
-                          <SelectItem key={potSize.id} value={potSize.name}>
+                          <SelectItem key={potSize.id} value={potSize.id}>
                             {potSize.name}
                           </SelectItem>
                         ))}

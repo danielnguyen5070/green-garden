@@ -68,9 +68,19 @@ export type StorefrontPlantPotSize = {
   updated_at: string;
 };
 
+/** The pot size a card's "Add to cart" sells: the plant's first active one. */
+export type StorefrontPotSizeSummary = {
+  id: string;
+  name: string;
+  price_adjustment_vi: Decimal | null;
+};
+
 /**
  * Listing row. Carries everything a product card renders, so a catalogue page
  * never has to call the detail endpoint per card.
+ *
+ * `price_vi` is the VND selling price; `price` is a legacy column that is never
+ * charged or shown.
  */
 export type StorefrontPlantListItem = {
   id: string;
@@ -85,6 +95,7 @@ export type StorefrontPlantListItem = {
   is_featured: boolean;
   category?: StorefrontCategorySummary | null;
   images?: StorefrontPlantImage[];
+  default_pot_size?: StorefrontPotSizeSummary | null;
 };
 
 export type StorefrontPlantListResponse = {
@@ -130,8 +141,8 @@ export type StorefrontPlantDetail = {
 export type StorefrontOrderItemRequest = {
   plant_id: string;
   quantity: number;
-  /** Pot size *name*, matching what the catalogue returned. */
-  pot_size?: string | null;
+  /** Without one, the backend sells the plant's first active pot size. */
+  pot_size_id?: string | null;
 };
 
 export type CreateStorefrontOrderRequest = {
@@ -144,13 +155,69 @@ export type CreateStorefrontOrderRequest = {
   items: StorefrontOrderItemRequest[];
 };
 
+/** Every storefront amount is in VND. */
+export type StorefrontCurrency = "VND";
+
 /** Confirmation returned on 201 — the source of truth for the order total. */
 export type StorefrontOrderResponse = {
   id: string;
   order_number: string;
   status: OrderStatus;
+  currency: StorefrontCurrency;
+  subtotal_amount: Decimal;
+  shipping_fee: Decimal;
   total_amount: Decimal;
   created_at: string;
+};
+
+/** A cart line for `POST /storefront/orders/quote`: the selection only. */
+export type StorefrontQuoteItemRequest = {
+  plant_id: string;
+  quantity: number;
+  pot_size_id?: string | null;
+};
+
+export type StorefrontQuoteRequest = {
+  items: StorefrontQuoteItemRequest[];
+};
+
+/**
+ * One priced cart line, in request order. An unavailable line (unknown or
+ * inactive plant, no VND price, pot size off sale) costs nothing and may have
+ * null catalogue fields. `max_quantity` is the plant's current stock.
+ */
+export type StorefrontQuoteLine = {
+  plant_id: string;
+  pot_size_id: string | null;
+  quantity: number;
+  available: boolean;
+  slug: string | null;
+  name: string | null;
+  name_vi: string | null;
+  image_url: string | null;
+  pot_size_name: string | null;
+  unit_price: Decimal;
+  line_total: Decimal;
+  max_quantity: number;
+};
+
+/** What checkout would charge right now. */
+export type StorefrontQuoteResponse = {
+  currency: StorefrontCurrency;
+  lines: StorefrontQuoteLine[];
+  subtotal_amount: Decimal;
+  shipping_fee: Decimal;
+  total_amount: Decimal;
+  /** Shipping is free when the subtotal is strictly above this. */
+  free_shipping_above: Decimal;
+  amount_to_free_shipping: Decimal;
+};
+
+/** Response from `GET /storefront/shipping-policy`. */
+export type StorefrontShippingPolicy = {
+  currency: StorefrontCurrency;
+  shipping_fee: Decimal;
+  free_shipping_above: Decimal;
 };
 
 export type StorefrontPlantSort = "created_at" | "name" | "price" | "stock";

@@ -1,70 +1,32 @@
 import type { CartItem } from "@/types/cart";
 
-export type CartCurrency = "USD" | "VND";
-
 /**
- * Cart amounts are already in the locale's currency (see `formatCartMoney`),
- * so the free-shipping rule has to be expressed per currency rather than as a
- * single number.
+ * VND is the only transaction currency. Prices, shipping and totals come from
+ * the backend (catalogue and cart quote); this module only formats them.
  */
-export const SHIPPING_RULES: Record<
-  CartCurrency,
-  {
-    /** Subtotal at or above this unlocks free shipping. */
-    threshold: number;
-    /** Flat fee charged below the threshold. */
-    fee: number;
-  }
-> = {
-  USD: { threshold: 20, fee: 8 },
-  VND: { threshold: 500_000, fee: 50_000 },
-};
-
-export function getCartCurrency(locale = "en-US"): CartCurrency {
-  return locale.startsWith("vi") ? "VND" : "USD";
-}
-
-export function getFreeShippingThreshold(locale?: string) {
-  return SHIPPING_RULES[getCartCurrency(locale)].threshold;
-}
+export const CART_CURRENCY = "VND";
 
 export function getCartTotalItems(items: CartItem[]) {
   return items.reduce((sum, item) => sum + item.quantity, 0);
 }
 
-export function getCartSubtotal(items: CartItem[]) {
-  return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-}
-
-export function getCartShipping(subtotal: number, locale?: string) {
-  if (subtotal <= 0) return 0;
-  const { threshold, fee } = SHIPPING_RULES[getCartCurrency(locale)];
-  return subtotal >= threshold ? 0 : fee;
-}
-
-export function getCartTotal(subtotal: number, shipping: number) {
-  return subtotal + shipping;
-}
-
-export function getAmountToFreeShipping(subtotal: number, locale?: string) {
-  return Math.max(0, getFreeShippingThreshold(locale) - subtotal);
-}
-
-export function hasFreeShipping(subtotal: number, locale?: string) {
-  return subtotal > 0 && subtotal >= getFreeShippingThreshold(locale);
+/** Money is carried as decimal strings and only parsed at the display edge. */
+export function parseMoney(value: string | number | null | undefined): number {
+  const amount = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(amount) ? amount : 0;
 }
 
 /**
- * Prices are stored in the currency the backend sends for the active locale
- * (`price` is USD, `price_vi` is VND), so the currency follows the locale
- * rather than being converted here.
+ * Always VND, with no decimals. `locale` only picks the digit grouping and
+ * symbol placement: "350.000 ₫" on `/vi`, "₫350,000" on `/en`.
  */
-export function formatCartMoney(amount: number, locale = "en-US") {
-  const currency = getCartCurrency(locale);
-
+export function formatVnd(
+  amount: string | number,
+  locale: string = "vi-VN"
+): string {
   return new Intl.NumberFormat(locale, {
     style: "currency",
-    currency,
-    maximumFractionDigits: currency === "VND" ? 0 : 2,
-  }).format(amount);
+    currency: CART_CURRENCY,
+    maximumFractionDigits: 0,
+  }).format(parseMoney(amount));
 }

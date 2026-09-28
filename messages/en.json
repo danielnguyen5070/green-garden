@@ -15,6 +15,7 @@
     "menu": "Menu",
     "viewAll": "View all",
     "addToCart": "Add to cart",
+    "contactForPrice": "Contact for price",
     "cartWithCount": "Cart, {count, plural, =0 {empty} one {# item} other {# items}}"
   },
   "status": {
@@ -58,7 +59,13 @@
     "free": "Free",
     "total": "Total",
     "checkout": "Checkout Now →",
-    "secureCheckout": "Cash on delivery"
+    "secureCheckout": "Cash on delivery",
+    "unavailablePlant": "Unavailable plant",
+    "lineUnavailable": "No longer available — please remove it.",
+    "lineLimitedStock": "Only {count} left in stock.",
+    "priceError": "We couldn't load current prices.",
+    "retry": "Try again",
+    "reviewCart": "Some plants can't be ordered as they are. Please update your cart."
   },
   "footer": {
     "brand": {
@@ -407,6 +414,9 @@
     "description": "We have received your order and will contact you shortly.",
     "orderNumber": "Order number",
     "status": "Status",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "free": "Free",
     "total": "Total",
     "codNotice": "You pay when your plants arrive. No payment up front.",
     "continueShopping": "Continue shopping",
@@ -508,7 +518,7 @@
       },
       "shippingCost": {
         "question": "How much is shipping?",
-        "answer": "Orders of $20 or more ship free. Below that there is a flat $8 fee, shown in the order summary before you place the order."
+        "answer": "Orders above 500,000₫ ship free. Otherwise there is a flat 50,000₫ fee, shown in the order summary before you place the order."
       },
       "nationwide": {
         "question": "Do you ship nationwide?",

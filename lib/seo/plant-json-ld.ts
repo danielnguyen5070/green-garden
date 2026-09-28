@@ -1,5 +1,5 @@
 import { SITE_URL } from "@/config/site";
-import { getCartCurrency, SHIPPING_RULES } from "@/lib/cart";
+import { CART_CURRENCY, parseMoney } from "@/lib/cart";
 import {
   BRAND_ID,
   BUSINESS_DISPLAY_NAME,
@@ -10,15 +10,15 @@ import { toAbsoluteUrl } from "@/lib/seo/url";
 import {
   getActivePotSizes,
   getLocalizedPlant,
+  getPotSizeAdjustment,
   getPrimaryPlantImage,
   localizeOptionalTextEither,
-  localizePrice,
   localizeText,
   sortPlantImages,
 } from "@/lib/storefront";
 import type {
   StorefrontPlantDetail,
-  StorefrontPlantPotSize,
+  StorefrontShippingPolicy,
 } from "@/types/storefront";
 
 type PlantJsonLdInput = {
@@ -26,28 +26,26 @@ type PlantJsonLdInput = {
   plant: StorefrontPlantDetail;
   homeLabel: string;
   plantsLabel: string;
+  /** `null` when the policy could not be loaded; shipping details are omitted. */
+  shippingPolicy: StorefrontShippingPolicy | null;
 };
 
 /**
  * Offer-level shipping for merchant listings.
  *
- * Uses the same flat fee / free-shipping currency rules as checkout
- * (`SHIPPING_RULES`). Lists the standard fee for Vietnam; free shipping still
- * applies in checkout when the cart meets the threshold.
+ * Lists the standard fee from the backend shipping policy, the same one
+ * checkout charges; free shipping still applies when the order subtotal is
+ * above the threshold.
  *
  * Transit: 3–5 business days (Vietnam Post / J&T), matching checkout copy.
  */
-function buildOfferShippingDetails(locale: string) {
-  const currency = getCartCurrency(locale);
-  const { fee } = SHIPPING_RULES[currency];
-  const decimals = currency === "VND" ? 0 : 2;
-
+function buildOfferShippingDetails(policy: StorefrontShippingPolicy) {
   return {
     "@type": "OfferShippingDetails" as const,
     shippingRate: {
       "@type": "MonetaryAmount" as const,
-      value: Number(fee.toFixed(decimals)),
-      currency,
+      value: parseMoney(policy.shipping_fee),
+      currency: policy.currency,
     },
     shippingDestination: {
       "@type": "DefinedRegion" as const,
@@ -88,25 +86,14 @@ function buildMerchantReturnPolicy(locale: string) {
   };
 }
 
-/** Must match the unit price `PlantDetail` shows for the selected pot size. */
-function getPotSizeUnitPrice(
-  basePrice: number,
-  size: StorefrontPlantPotSize,
-  locale: string
-): number {
-  return (
-    basePrice +
-    localizePrice(size.price_adjustment, size.price_adjustment_vi, locale)
-  );
-}
-
 /**
  * Plant detail @graph: Brand, Product (+ Offers), BreadcrumbList.
  *
  * - `brand` → `#brand` (Brand with a real name) — never `#localbusiness`
  * - `seller` → `#localbusiness` (the shop LocalBusiness on the homepage)
- * - `offers` → one Offer per active pot size (default size first), or a single
- *   Offer at the base price when the plant has no sizes
+ * - `offers` → one VND Offer per active pot size (default size first), or a
+ *   single Offer at the base price when the plant has no sizes. Omitted when
+ *   the plant has no VND price, because it cannot be ordered.
  *
  * Omits optional fields we cannot represent accurately yet: `review`,
  * `aggregateRating`.
@@ -116,6 +103,7 @@ export function buildPlantJsonLd({
   plant,
   homeLabel,
   plantsLabel,
+  shippingPolicy,
 }: PlantJsonLdInput) {
   const { name, description, price: basePrice } = getLocalizedPlant(
     plant,
@@ -129,13 +117,11 @@ export function buildPlantJsonLd({
   // Prefer long-form copy for Product schema when present.
   const schemaDescription = longDescription ?? description;
   const pageUrl = `${SITE_URL}/${locale}/plants/${plant.slug}`;
-  const currency = getCartCurrency(locale);
   const availability = plant.in_stock
     ? "https://schema.org/InStock"
     : "https://schema.org/OutOfStock";
 
   const potSizes = getActivePotSizes(plant.pot_sizes);
-  const priceDecimals = currency === "VND" ? 0 : 2;
 
   const imageUrls = sortPlantImages(plant.images)
     .filter((image) => image.type === "image")
@@ -155,27 +141,32 @@ export function buildPlantJsonLd({
     : null;
 
   const seller = { "@id": LOCAL_BUSINESS_ID };
-  const shippingDetails = buildOfferShippingDetails(locale);
+  const shippingDetails = shippingPolicy
+    ? buildOfferShippingDetails(shippingPolicy)
+    : null;
   const hasMerchantReturnPolicy = buildMerchantReturnPolicy(locale);
 
   const buildOffer = (price: number, sizeName?: string) => ({
     "@type": "Offer" as const,
     ...(sizeName ? { name: sizeName } : {}),
-    price: price.toFixed(priceDecimals),
-    priceCurrency: currency,
+    price: price.toFixed(0),
+    priceCurrency: CART_CURRENCY,
     availability,
     url: pageUrl,
     seller,
-    shippingDetails,
+    ...(shippingDetails ? { shippingDetails } : {}),
     hasMerchantReturnPolicy,
   });
 
+  // Unit prices must match what `PlantDetail` shows and checkout charges.
   const offers =
-    potSizes.length > 0
-      ? potSizes.map((size) =>
-          buildOffer(getPotSizeUnitPrice(basePrice, size, locale), size.name)
-        )
-      : buildOffer(basePrice);
+    basePrice === null
+      ? null
+      : potSizes.length > 0
+        ? potSizes.map((size) =>
+            buildOffer(basePrice + getPotSizeAdjustment(size), size.name)
+          )
+        : buildOffer(basePrice);
 
   const plantsUrl = `${SITE_URL}/${locale}/plants`;
   const breadcrumbTrail = [
@@ -215,7 +206,7 @@ export function buildPlantJsonLd({
         url: pageUrl,
         ...(categoryName ? { category: categoryName } : {}),
         brand: { "@id": BRAND_ID },
-        offers,
+        ...(offers ? { offers } : {}),
         mainEntityOfPage: {
           "@type": "WebPage",
           "@id": pageUrl,

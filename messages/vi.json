@@ -15,6 +15,7 @@
     "menu": "Menu",
     "viewAll": "Xem tất cả",
     "addToCart": "Thêm vào giỏ",
+    "contactForPrice": "Liên hệ báo giá",
     "cartWithCount": "Giỏ hàng, {count, plural, =0 {trống} other {# sản phẩm}}"
   },
   "status": {
@@ -58,7 +59,13 @@
     "free": "Miễn phí",
     "total": "Tổng cộng",
     "checkout": "Thanh toán ngay →",
-    "secureCheckout": "Thanh toán khi nhận hàng"
+    "secureCheckout": "Thanh toán khi nhận hàng",
+    "unavailablePlant": "Sản phẩm không còn bán",
+    "lineUnavailable": "Sản phẩm này không còn bán — vui lòng xóa khỏi giỏ.",
+    "lineLimitedStock": "Chỉ còn {count} cây trong kho.",
+    "priceError": "Chưa tải được giá hiện tại.",
+    "retry": "Thử lại",
+    "reviewCart": "Một số sản phẩm chưa thể đặt. Vui lòng cập nhật giỏ hàng."
   },
   "footer": {
     "brand": {
@@ -407,6 +414,9 @@
     "description": "Shop đã nhận được đơn hàng và sẽ liên hệ với bạn sớm nhất.",
     "orderNumber": "Mã đơn hàng",
     "status": "Trạng thái",
+    "subtotal": "Tạm tính",
+    "shipping": "Vận chuyển",
+    "free": "Miễn phí",
     "total": "Tổng cộng",
     "codNotice": "Bạn sẽ thanh toán khi nhận được cây. Không cần trả trước.",
     "continueShopping": "Tiếp tục mua cây",
@@ -508,7 +518,7 @@
       },
       "shippingCost": {
         "question": "Phí vận chuyển bao nhiêu?",
-        "answer": "Đơn từ 500.000₫ trở lên được miễn phí vận chuyển. Đơn dưới mức này có phí cố định 50.000₫, hiển thị rõ ở phần Tóm tắt đơn hàng trước khi bạn đặt."
+        "answer": "Đơn trên 500.000₫ được miễn phí vận chuyển. Các đơn còn lại có phí cố định 50.000₫, hiển thị rõ ở phần Tóm tắt đơn hàng trước khi bạn đặt."
       },
       "nationwide": {
         "question": "Shop có giao toàn quốc không?",

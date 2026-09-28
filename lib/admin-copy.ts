@@ -162,6 +162,9 @@ export const adminCopy = {
     deactivate: "Deactivate",
     pageInfo: (page: number, totalPages: number, total: number) =>
       `Page ${page}/${totalPages} · ${total} plants`,
+    list: {
+      noSellingPrice: "No VND price — not for sale",
+    },
     sections: {
       basics: "Basic information",
       care: "Care & suitability",
@@ -182,8 +185,8 @@ export const adminCopy = {
       longDescriptionHint:
         "Full product story on the plant detail page. Supports multiple paragraphs.",
       sku: "SKU",
-      price: "Price (USD)",
-      priceVi: "Price (VND)",
+      price: "Legacy price (USD, not charged)",
+      priceVi: "Selling price (VND)",
       stock: "Stock",
       ogImageUrl: "OG Image URL",
       ogImageUrlHint: "Used for social sharing previews.",
@@ -311,10 +314,11 @@ export const adminCopy = {
     },
     potSizes: {
       title: "Pot sizes",
-      description: "Price adjustments are added on top of the base price.",
+      description:
+        "The VND adjustment is added on top of the VND selling price. The first active size is the default.",
       empty: "No pot sizes yet.",
       name: "Name",
-      adjustment: "Adjustment (USD)",
+      adjustment: "Legacy adjustment (USD, not charged)",
       adjustmentVi: "Adjustment (VND)",
       add: "Add pot size",
       adding: "Adding...",
@@ -397,8 +401,10 @@ export const adminCopy = {
       note: "Note",
       created: "Created",
       updated: "Updated",
+      subtotalAmount: "Subtotal",
+      shippingFee: "Shipping",
       totalAmount: "Total",
-      totalHint: "Calculated by the backend.",
+      totalHint: "Calculated by the backend in VND; this is what the customer pays on delivery.",
     },
     items: {
       title: "Items",
@@ -410,8 +416,9 @@ export const adminCopy = {
       add: "Add item",
       remove: "Remove item",
       selectPlant: "Select a plant",
-      noPotSize: "No pot size",
-      priceHint: "Prices and stock are resolved by the backend.",
+      noPotSize: "Default pot size",
+      priceHint:
+        "Prices (VND), shipping and stock are resolved by the backend, exactly as on the storefront.",
       required: "Add at least one item.",
     },
     invalidCustomerName: "Customer name is required (1-255 characters).",

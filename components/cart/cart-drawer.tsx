@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { CartEmpty } from "@/components/cart/cart-empty";
 import { CartItem } from "@/components/cart/cart-item";
 import { CartSummary } from "@/components/cart/cart-summary";
+import { useCartQuote } from "@/hooks/use-cart-quote";
 import { useCartStore } from "@/store/cart.store";
 
 function CartDrawer() {
@@ -22,6 +23,7 @@ function CartDrawer() {
   const items = useCartStore((state) => state.items);
   const totalItems = useCartStore((state) => state.totalItems());
   const hasHydrated = useCartStore((state) => state.hasHydrated);
+  const cartQuote = useCartQuote();
 
   const count = hasHydrated ? totalItems : 0;
 
@@ -78,10 +80,15 @@ function CartDrawer() {
           <>
             <ul className="min-h-0 flex-1 overflow-y-auto px-5 sm:px-6">
               {items.map((item) => (
-                <CartItem key={item.id} item={item} />
+                <CartItem
+                  key={item.id}
+                  item={item}
+                  line={cartQuote.lineFor(item.id)}
+                  isStale={cartQuote.isStale}
+                />
               ))}
             </ul>
-            <CartSummary />
+            <CartSummary cartQuote={cartQuote} />
           </>
         )}
       </SheetContent>

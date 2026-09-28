@@ -4,11 +4,9 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { StorefrontOrderResponse } from "@/types/storefront";
 
+/** The backend confirmation is the only source of the amounts shown. */
 export type PlacedOrder = {
   order: StorefrontOrderResponse;
-  /** Total exactly as it was shown at checkout, with the locale that formatted it. */
-  total: number;
-  moneyLocale: string;
 };
 
 /**
@@ -36,8 +34,11 @@ export const useLastOrderStore = create<LastOrderState>()(
     }),
     {
       name: "green-garden-last-order",
+      // Version 0 carried a client-side total with no subtotal or shipping.
+      version: 1,
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({ order: state.order }),
+      migrate: () => ({ order: null }),
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
       },

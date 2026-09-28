@@ -7,6 +7,7 @@ import { RelatedPlants } from "@/components/plant/related-plants";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
+import { getStorefrontShippingPolicy } from "@/lib/api/storefront";
 import { getPlantBySlugOrNull } from "@/lib/storefront/get-plant-by-slug";
 import { buildPlantJsonLd } from "@/lib/seo/plant-json-ld";
 import { localizeOptionalText, localizeText } from "@/lib/storefront";
@@ -86,13 +87,18 @@ export default async function PlantDetailPage({ params }: Props) {
     notFound();
   }
 
-  const t = await getTranslations({ locale, namespace: "plantDetail" });
-  const tPlants = await getTranslations({ locale, namespace: "plants" });
+  const [t, tPlants, shippingPolicy] = await Promise.all([
+    getTranslations({ locale, namespace: "plantDetail" }),
+    getTranslations({ locale, namespace: "plants" }),
+    // Structured data can go without shipping details; the page cannot fail.
+    getStorefrontShippingPolicy().catch(() => null),
+  ]);
   const jsonLd = buildPlantJsonLd({
     locale,
     plant,
     homeLabel: t("home"),
     plantsLabel: tPlants("title"),
+    shippingPolicy,
   });
 
   return (

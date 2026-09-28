@@ -1,7 +1,8 @@
-import { formatCartMoney } from "@/lib/cart";
+import { formatVnd, parseMoney } from "@/lib/cart";
 import type {
   StorefrontPlantImage,
   StorefrontPlantPotSize,
+  StorefrontPotSizeSummary,
 } from "@/types/storefront";
 
 /** Shown when a plant has no image of its own. */
@@ -51,32 +52,31 @@ export function localizeOptionalTextEither(
   return en ?? vi;
 }
 
-/** Number/currency formatting locale for the active UI locale. */
+/** Digit-grouping locale for VND amounts on the active UI locale. */
 export function getMoneyLocale(locale: string): string {
   return isVietnamese(locale) ? "vi-VN" : "en-US";
 }
 
-/** Money is carried as decimal strings and only parsed at the display edge. */
-function parseMoney(value: string | null | undefined): number {
-  const amount = Number(value);
-  return Number.isFinite(amount) ? amount : 0;
-}
-
 /**
- * `price_vi` is already VND as stored by the backend — it is selected, never
- * calculated from `price`.
+ * The VND selling price on every locale. `null` means the plant has no VND
+ * price and cannot be ordered — the legacy `price` column is never shown.
  */
-export function localizePrice(
-  price: string,
-  priceVi: string | null | undefined,
-  locale: string
-): number {
-  if (!isVietnamese(locale)) return parseMoney(price);
-  return priceVi?.trim() ? parseMoney(priceVi) : parseMoney(price);
+export function getVndPrice(priceVi: string | null | undefined): number | null {
+  return priceVi?.trim() ? parseMoney(priceVi) : null;
 }
 
-export function formatStorefrontPrice(amount: number, locale: string): string {
-  return formatCartMoney(amount, getMoneyLocale(locale));
+/** A missing VND adjustment costs nothing extra, exactly as checkout prices it. */
+export function getPotSizeAdjustment(
+  size: Pick<StorefrontPlantPotSize | StorefrontPotSizeSummary, "price_adjustment_vi">
+): number {
+  return parseMoney(size.price_adjustment_vi);
+}
+
+export function formatStorefrontPrice(
+  amount: string | number,
+  locale: string
+): string {
+  return formatVnd(amount, getMoneyLocale(locale));
 }
 
 /** Fields the listing and detail responses share for localization. */
@@ -85,14 +85,13 @@ type LocalizablePlant = {
   name_vi: string | null;
   description: string | null;
   description_vi: string | null;
-  price: string;
   price_vi: string | null;
 };
 
 /**
- * Resolves the copy and price for the active locale in one call, so components
- * don't repeat the fallback rules field by field. `slug` is shared across
- * locales and is therefore never localized.
+ * Resolves the copy and VND price for the active locale in one call, so
+ * components don't repeat the fallback rules field by field. `slug` is shared
+ * across locales and is therefore never localized.
  */
 export function getLocalizedPlant(plant: LocalizablePlant, locale: string) {
   return {
@@ -102,8 +101,23 @@ export function getLocalizedPlant(plant: LocalizablePlant, locale: string) {
       plant.description_vi,
       locale
     ),
-    price: localizePrice(plant.price, plant.price_vi, locale),
+    price: getVndPrice(plant.price_vi),
   };
+}
+
+/**
+ * What a catalogue card sells: the base VND price plus the default pot size,
+ * the same line "Add to cart" puts in the cart and checkout charges.
+ */
+export function getCardPrice(plant: {
+  price_vi: string | null;
+  default_pot_size?: StorefrontPotSizeSummary | null;
+}): number | null {
+  const base = getVndPrice(plant.price_vi);
+  if (base === null) return null;
+  return plant.default_pot_size
+    ? base + getPotSizeAdjustment(plant.default_pot_size)
+    : base;
 }
 
 /**

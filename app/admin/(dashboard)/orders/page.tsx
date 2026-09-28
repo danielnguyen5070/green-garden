@@ -450,7 +450,7 @@ export default function AdminOrdersPage() {
                     </TableCell>
                     <TableCell>{order.items.length}</TableCell>
                     <TableCell>
-                      {formatAdminCurrency(order.total_amount, "USD")}
+                      {formatAdminCurrency(order.total_amount, order.currency)}
                     </TableCell>
                     <TableCell>
                       <AdminStatusBadge

@@ -1,13 +1,16 @@
 /**
  * Order shapes from the FastAPI backend.
  *
- * The backend owns every monetary value here: it snapshots the plant price plus
- * the pot-size adjustment into `unit_price` and sums them into `total_amount`.
- * The admin UI only displays what it receives.
+ * The backend owns every monetary value here, all in `currency` (always VND):
+ * it snapshots the plant price plus the pot-size adjustment into `unit_price`,
+ * sums the lines into `subtotal_amount`, adds `shipping_fee` and stores the
+ * result as `total_amount`. The admin UI only displays what it receives.
  */
 
 /** Money is serialized by the backend as an exact decimal string ("1250000.00"). */
 export type DecimalString = string;
+
+export type OrderCurrency = "VND";
 
 export const ORDER_STATUSES = [
   "pending",
@@ -46,6 +49,9 @@ export type Order = {
   id: string;
   order_number: string;
   status: OrderStatus;
+  currency: OrderCurrency;
+  subtotal_amount: DecimalString;
+  shipping_fee: DecimalString;
   total_amount: DecimalString;
   shipping_address: string;
   note: string | null;
@@ -73,6 +79,9 @@ export type OrderCustomerCreateRequest = {
 export type OrderItemCreateRequest = {
   plant_id: string;
   quantity: number;
+  /** Without one, the backend sells the plant's first active pot size. */
+  pot_size_id?: string | null;
+  /** Deprecated: pot size name. Prefer `pot_size_id`. */
   pot_size?: string | null;
 };
 

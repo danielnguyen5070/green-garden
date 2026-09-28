@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { getStorefrontPlants } from "@/lib/api/storefront";
 import {
   formatStorefrontPrice,
+  getCardPrice,
   getLocalizedPlant,
   getPlantCardImage,
   localizeText,
@@ -21,11 +22,14 @@ const RELATED_LIMIT = 4;
 function RelatedPlantCard({
   plant,
   locale,
+  contactForPrice,
 }: {
   plant: StorefrontPlantListItem;
   locale: string;
+  contactForPrice: string;
 }) {
-  const { name, description, price } = getLocalizedPlant(plant, locale);
+  const { name, description } = getLocalizedPlant(plant, locale);
+  const price = getCardPrice(plant);
   const image = getPlantCardImage(plant.images, name);
   const subtitle =
     description ??
@@ -62,7 +66,7 @@ function RelatedPlantCard({
           {subtitle}
         </p>
         <p className="pt-0.5 font-sans text-base font-semibold text-foreground">
-          {formatStorefrontPrice(price, locale)}
+          {price === null ? contactForPrice : formatStorefrontPrice(price, locale)}
         </p>
       </div>
     </article>
@@ -84,8 +88,9 @@ async function RelatedPlants({
     return null;
   }
 
-  const [t, locale, response] = await Promise.all([
+  const [t, tCommon, locale, response] = await Promise.all([
     getTranslations("plantDetail.related"),
+    getTranslations("common"),
     getLocale(),
     getStorefrontPlants({
       category_id: plant.category.id,
@@ -129,7 +134,12 @@ async function RelatedPlants({
 
         <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-5 md:grid-cols-3 lg:mt-10 lg:grid-cols-4 lg:gap-x-6">
           {plants.map((item) => (
-            <RelatedPlantCard key={item.id} plant={item} locale={locale} />
+            <RelatedPlantCard
+              key={item.id}
+              plant={item}
+              locale={locale}
+              contactForPrice={tCommon("contactForPrice")}
+            />
           ))}
         </div>
       </Container>

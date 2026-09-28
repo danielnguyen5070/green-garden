@@ -257,7 +257,7 @@ function buildLlmsFullTxt(
     "",
     "- No account required to order; phone, name, and shipping address are enough.",
     "- Orders can also be placed via Zalo 0386569374.",
-    "- Free shipping from 500.000₫; otherwise a fixed 50.000₫ shipping fee.",
+    "- Free shipping on orders above 500.000₫; otherwise a fixed 50.000₫ shipping fee.",
     "- Free shipping unlock threshold and fee are shown in the order summary before placing an order.",
     "- Change or cancel is possible before the order is packed and shipped; contact Zalo with the order code.",
     "- After delivery: open the box, untie stems, place in bright shade, keep the root ball moist, rest 3–5 days before planting.",

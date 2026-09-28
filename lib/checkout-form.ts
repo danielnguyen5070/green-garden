@@ -91,7 +91,7 @@ export function toStorefrontOrderPayload(
     items: items.map((item) => ({
       plant_id: item.plantId,
       quantity: item.quantity,
-      pot_size: item.potSizeLabel ?? null,
+      pot_size_id: item.potSizeId ?? null,
     })),
   };
 }

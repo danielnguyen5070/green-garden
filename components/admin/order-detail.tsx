@@ -108,7 +108,7 @@ export function OrderDetail({
                   </TableCell>
                   <TableCell>{item.quantity}</TableCell>
                   <TableCell>
-                    {formatAdminCurrency(item.unit_price, "USD")}
+                    {formatAdminCurrency(item.unit_price, order.currency)}
                   </TableCell>
                 </TableRow>
               ))}
@@ -116,14 +116,26 @@ export function OrderDetail({
           </Table>
         )}
 
-        {/* Displayed as returned; the frontend never recalculates the total. */}
-        <div className="flex items-baseline justify-between rounded-lg bg-muted px-3 py-2">
-          <span className="text-sm font-medium">
-            {copy.fields.totalAmount}
-          </span>
-          <span className="text-sm font-medium">
-            {formatAdminCurrency(order.total_amount, "USD")}
-          </span>
+        {/* Displayed as returned; the frontend never recalculates the totals. */}
+        <div className="space-y-1.5 rounded-lg bg-muted px-3 py-2">
+          <div className="flex items-baseline justify-between text-sm text-muted-foreground">
+            <span>{copy.fields.subtotalAmount}</span>
+            <span>
+              {formatAdminCurrency(order.subtotal_amount, order.currency)}
+            </span>
+          </div>
+          <div className="flex items-baseline justify-between text-sm text-muted-foreground">
+            <span>{copy.fields.shippingFee}</span>
+            <span>{formatAdminCurrency(order.shipping_fee, order.currency)}</span>
+          </div>
+          <div className="flex items-baseline justify-between border-t border-border pt-1.5">
+            <span className="text-sm font-medium">
+              {copy.fields.totalAmount}
+            </span>
+            <span className="text-sm font-medium">
+              {formatAdminCurrency(order.total_amount, order.currency)}
+            </span>
+          </div>
         </div>
         <p className="text-xs text-muted-foreground">
           {copy.fields.totalHint}

@@ -49,7 +49,7 @@ function OverviewRevenueChart({ data }: OverviewRevenueChartProps) {
               className="flex min-w-0 flex-1 flex-col items-center gap-2"
               title={copy.day(
                 formatAdminDate(point.date),
-                formatAdminCurrency(point.revenue, "USD")
+                formatAdminCurrency(point.revenue, "VND")
               )}
             >
               <div className="flex h-36 w-full items-end justify-center rounded bg-muted/60 px-0.5 py-1">

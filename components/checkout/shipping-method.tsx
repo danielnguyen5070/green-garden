@@ -3,22 +3,23 @@
 import { useLocale, useTranslations } from "next-intl";
 import { PackageIcon, TruckIcon } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { formatCartMoney } from "@/lib/cart";
-import { useCartStore } from "@/store/cart.store";
+import type { UseCartQuoteResult } from "@/hooks/use-cart-quote";
+import { parseMoney } from "@/lib/cart";
+import { formatStorefrontPrice } from "@/lib/storefront";
 import { cn } from "@/lib/utils";
 
-function ShippingMethod({ className }: { className?: string }) {
+function ShippingMethod({
+  className,
+  cartQuote,
+}: {
+  className?: string;
+  cartQuote: UseCartQuoteResult;
+}) {
   const t = useTranslations("checkout.shippingMethod");
   const locale = useLocale();
-  const moneyLocale = locale === "vi" ? "vi-VN" : "en-US";
 
-  const hasHydrated = useCartStore((state) => state.hasHydrated);
-  const shipping = useCartStore((state) => state.shipping(moneyLocale));
-  const amountToFreeShipping = useCartStore((state) =>
-    state.amountToFreeShipping(moneyLocale),
-  );
-
-  const isFree = shipping === 0;
+  const { quote, isStale } = cartQuote;
+  const isFree = quote !== null && parseMoney(quote.shipping_fee) === 0;
 
   return (
     <section
@@ -52,14 +53,17 @@ function ShippingMethod({ className }: { className?: string }) {
             <p className="font-sans text-sm font-semibold text-foreground">
               {t("standard")}
             </p>
-            {hasHydrated ? (
+            {quote ? (
               <p
                 className={cn(
-                  "font-sans text-sm font-semibold",
+                  "font-sans text-sm font-semibold transition-opacity",
                   isFree ? "text-primary" : "tabular-nums text-foreground",
+                  isStale && "opacity-50",
                 )}
               >
-                {isFree ? t("free") : formatCartMoney(shipping, moneyLocale)}
+                {isFree
+                  ? t("free")
+                  : formatStorefrontPrice(quote.shipping_fee, locale)}
               </p>
             ) : (
               <Skeleton className="h-4 w-24" />
@@ -71,10 +75,13 @@ function ShippingMethod({ className }: { className?: string }) {
           <p className="mt-0.5 font-sans text-small text-muted-foreground">
             {t("eta")}
           </p>
-          {hasHydrated && !isFree ? (
+          {quote && !isFree && parseMoney(quote.subtotal_amount) > 0 ? (
             <p className="mt-1.5 font-sans text-small font-medium text-primary">
               {t("freeShippingHint", {
-                amount: formatCartMoney(amountToFreeShipping, moneyLocale),
+                amount: formatStorefrontPrice(
+                  quote.amount_to_free_shipping,
+                  locale,
+                ),
               })}
             </p>
           ) : null}

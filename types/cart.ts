@@ -1,38 +1,22 @@
+/**
+ * A cart line is only a selection. Names, images, prices, shipping and totals
+ * all come from the backend quote, so nothing here can go stale or carry the
+ * wrong currency.
+ */
 export type CartItem = {
   id: string;
   plantId: string;
-  name: string;
-  slug: string;
-  image: string;
-  price: number;
-  quantity: number;
-  description: string;
+  /** Without one, the backend sells the plant's first active pot size. */
   potSizeId?: string;
-  potSizeLabel?: string;
-  potColorId?: string;
-  potColorLabel?: string;
+  quantity: number;
 };
 
 export type CartPlantInput = {
-  id: string;
-  name: string;
-  slug: string;
-  image: string;
-  price: number;
-  description: string;
-  quantity?: number;
+  plantId: string;
   potSizeId?: string;
-  potSizeLabel?: string;
-  potColorId?: string;
-  potColorLabel?: string;
+  quantity?: number;
 };
 
-export function getCartLineId(input: {
-  id: string;
-  potSizeId?: string;
-  potColorId?: string;
-}) {
-  const size = input.potSizeId ?? "default";
-  const color = input.potColorId ?? "default";
-  return `${input.id}__${size}__${color}`;
+export function getCartLineId(input: { plantId: string; potSizeId?: string }) {
+  return `${input.plantId}__${input.potSizeId ?? "default"}`;
 }

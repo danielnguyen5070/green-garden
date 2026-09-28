@@ -944,12 +944,16 @@ export default function AdminPlantsPage() {
                         {plant.sku}
                       </TableCell>
                       <TableCell>
-                        <span>{formatAdminCurrency(plant.price, "USD")}</span>
                         {plant.price_vi ? (
-                          <span className="block text-xs text-muted-foreground">
-                            {formatAdminCurrency(plant.price_vi, "VND")}
+                          <span>{formatAdminCurrency(plant.price_vi, "VND")}</span>
+                        ) : (
+                          <span className="text-destructive">
+                            {copy.list.noSellingPrice}
                           </span>
-                        ) : null}
+                        )}
+                        <span className="block text-xs text-muted-foreground">
+                          {formatAdminCurrency(plant.price, "USD")}
+                        </span>
                       </TableCell>
                       <TableCell>{plant.stock}</TableCell>
                       <TableCell>

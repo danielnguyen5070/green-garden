@@ -763,7 +763,7 @@ function CustomerDetail({ customer }: { customer: Customer }) {
                   </TableCell>
                   <TableCell>{order.items.length}</TableCell>
                   <TableCell>
-                    {formatAdminCurrency(order.total_amount, "USD")}
+                    {formatAdminCurrency(order.total_amount, order.currency)}
                   </TableCell>
                   <TableCell>
                     <AdminStatusBadge

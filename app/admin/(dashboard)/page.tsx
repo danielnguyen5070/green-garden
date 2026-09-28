@@ -31,11 +31,8 @@ import type { SalesPeriodStats } from "@/types/overview";
 
 const copy = adminCopy.dashboard;
 
-/**
- * Order totals are built from the plants' USD prices, so the dashboard formats
- * money the same way the Orders page does.
- */
-const CURRENCY: AdminCurrency = "USD";
+/** Every order is priced and stored in VND, so revenue is VND too. */
+const CURRENCY: AdminCurrency = "VND";
 
 /** The backend leaves the customer blank on orders placed without one. */
 const EMPTY_FIELD = "—";

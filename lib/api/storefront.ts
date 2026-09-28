@@ -7,6 +7,9 @@ import type {
   StorefrontPlantListResponse,
   StorefrontPlantSearchResponse,
   StorefrontPlantSort,
+  StorefrontQuoteRequest,
+  StorefrontQuoteResponse,
+  StorefrontShippingPolicy,
   StorefrontSortOrder,
 } from "@/types/storefront";
 import type {
@@ -118,6 +121,32 @@ export async function searchStorefrontPlants(
       locale: params.locale,
       limit: params.limit ?? STOREFRONT_PLANTS_SEARCH_LIMIT,
     },
+  });
+}
+
+/**
+ * Prices the cart exactly as checkout will, without creating an order. The
+ * cart holds only plant, pot size and quantity; everything shown comes from
+ * here.
+ */
+export async function quoteStorefrontCart(
+  payload: StorefrontQuoteRequest,
+  context: RequestContext = {}
+): Promise<StorefrontQuoteResponse> {
+  return api.post<StorefrontQuoteResponse>("/storefront/orders/quote", payload, {
+    ...PUBLIC_REQUEST,
+    signal: context.signal,
+  });
+}
+
+/** Shipping rules change rarely; the same short window as the catalogue. */
+export async function getStorefrontShippingPolicy(
+  context: RequestContext = {}
+): Promise<StorefrontShippingPolicy> {
+  return api.get<StorefrontShippingPolicy>("/storefront/shipping-policy", {
+    ...PUBLIC_REQUEST,
+    signal: context.signal,
+    revalidate: CATALOG_REVALIDATE_SECONDS,
   });
 }
 

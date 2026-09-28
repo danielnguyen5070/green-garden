@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import {
   formatStorefrontPrice,
+  getCardPrice,
   getLocalizedPlant,
   getPlantCardImage,
 } from "@/lib/storefront";
@@ -27,20 +28,18 @@ function PlantCard({
   const locale = useLocale();
   const addItem = useCartStore((state) => state.addItem);
 
-  const { name, description, price } = getLocalizedPlant(plant, locale);
+  const { name, description } = getLocalizedPlant(plant, locale);
+  const price = getCardPrice(plant);
   const image = getPlantCardImage(plant.images, name);
   const inStock = plant.stock > 0;
+  const canAddToCart = inStock && price !== null;
 
   function handleAddToCart(event: MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
     event.stopPropagation();
     addItem({
-      id: plant.id,
-      name,
-      slug: plant.slug,
-      image: image.src,
-      price,
-      description: description ?? "",
+      plantId: plant.id,
+      potSizeId: plant.default_pot_size?.id,
     });
   }
 
@@ -102,13 +101,15 @@ function PlantCard({
         ) : null}
         <div className="mt-auto flex items-center justify-between gap-3 pt-3">
           <p className="font-sans text-base font-semibold text-primary">
-            {formatStorefrontPrice(price, locale)}
+            {price === null
+              ? tCommon("contactForPrice")
+              : formatStorefrontPrice(price, locale)}
           </p>
           <Button
             type="button"
             size="sm"
             className="h-8 rounded-lg px-3 font-sans text-xs font-semibold"
-            disabled={!inStock}
+            disabled={!canAddToCart}
             onClick={handleAddToCart}
           >
             {inStock ? tCommon("addToCart") : t("outOfStock")}

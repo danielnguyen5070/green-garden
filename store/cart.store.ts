@@ -4,14 +4,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { CartItem, CartPlantInput } from "@/types/cart";
 import { getCartLineId } from "@/types/cart";
-import {
-  getAmountToFreeShipping,
-  getCartShipping,
-  getCartSubtotal,
-  getCartTotal,
-  getCartTotalItems,
-  hasFreeShipping,
-} from "@/lib/cart";
+import { getCartTotalItems } from "@/lib/cart";
 
 type CartState = {
   items: CartItem[];
@@ -27,12 +20,43 @@ type CartState = {
   closeCart: () => void;
   setHasHydrated: (value: boolean) => void;
   totalItems: () => number;
-  subtotal: () => number;
-  shipping: (locale?: string) => number;
-  total: (locale?: string) => number;
-  freeShippingUnlocked: (locale?: string) => boolean;
-  amountToFreeShipping: (locale?: string) => number;
 };
+
+const CART_STORAGE_VERSION = 1;
+
+/**
+ * Version 0 lines also stored a name, image and a bare `price` in whichever
+ * currency the locale showed. Only the selection survives; lines that end up
+ * identical are merged.
+ */
+function migrateCartItems(persisted: unknown): CartItem[] {
+  const rawItems =
+    persisted && typeof persisted === "object" && "items" in persisted
+      ? (persisted as { items: unknown }).items
+      : [];
+  if (!Array.isArray(rawItems)) return [];
+
+  const merged = new Map<string, CartItem>();
+  for (const raw of rawItems) {
+    if (!raw || typeof raw !== "object") continue;
+    const { plantId, potSizeId, quantity } = raw as Record<string, unknown>;
+    if (typeof plantId !== "string" || !plantId) continue;
+
+    const line = {
+      plantId,
+      potSizeId: typeof potSizeId === "string" && potSizeId ? potSizeId : undefined,
+    };
+    const id = getCartLineId(line);
+    const count = Math.max(1, Math.floor(Number(quantity) || 1));
+    const existing = merged.get(id);
+    merged.set(id, {
+      id,
+      ...line,
+      quantity: (existing?.quantity ?? 0) + count,
+    });
+  }
+  return [...merged.values()];
+}
 
 export const useCartStore = create<CartState>()(
   persist(
@@ -61,17 +85,9 @@ export const useCartStore = create<CartState>()(
 
           const nextItem: CartItem = {
             id: lineId,
-            plantId: plant.id,
-            name: plant.name,
-            slug: plant.slug,
-            image: plant.image,
-            price: plant.price,
-            quantity,
-            description: plant.description,
+            plantId: plant.plantId,
             potSizeId: plant.potSizeId,
-            potSizeLabel: plant.potSizeLabel,
-            potColorId: plant.potColorId,
-            potColorLabel: plant.potColorLabel,
+            quantity,
           };
 
           return {
@@ -128,21 +144,13 @@ export const useCartStore = create<CartState>()(
       setHasHydrated: (value) => set({ hasHydrated: value }),
 
       totalItems: () => getCartTotalItems(get().items),
-      subtotal: () => getCartSubtotal(get().items),
-      shipping: (locale) => getCartShipping(getCartSubtotal(get().items), locale),
-      total: (locale) => {
-        const subtotal = getCartSubtotal(get().items);
-        return getCartTotal(subtotal, getCartShipping(subtotal, locale));
-      },
-      freeShippingUnlocked: (locale) =>
-        hasFreeShipping(getCartSubtotal(get().items), locale),
-      amountToFreeShipping: (locale) =>
-        getAmountToFreeShipping(getCartSubtotal(get().items), locale),
     }),
     {
       name: "green-garden-cart",
+      version: CART_STORAGE_VERSION,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ items: state.items }),
+      migrate: (persisted) => ({ items: migrateCartItems(persisted) }),
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
       },

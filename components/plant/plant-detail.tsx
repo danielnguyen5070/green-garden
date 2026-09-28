@@ -20,13 +20,11 @@ import {
 } from "@/components/plant/plant-options";
 import { Link } from "@/i18n/navigation";
 import {
-  PLANT_IMAGE_PLACEHOLDER,
   formatStorefrontPrice,
   getActivePotSizes,
   getLocalizedPlant,
-  getPrimaryPlantImage,
+  getPotSizeAdjustment,
   localizeOptionalTextEither,
-  localizePrice,
   localizeText,
   sortPlantImages,
 } from "@/lib/storefront";
@@ -35,7 +33,7 @@ import { useCartStore } from "@/store/cart.store";
 import type { StorefrontPlantDetail } from "@/types/storefront";
 import { cn } from "@/lib/utils";
 
-/** Signed label such as `+$5.00`; zero adjustments are not worth the noise. */
+/** Signed label such as `+50.000 ₫`; zero adjustments are not worth the noise. */
 function formatAdjustment(amount: number, locale: string): string | null {
   if (amount === 0) return null;
   const sign = amount > 0 ? "+" : "−";
@@ -45,6 +43,7 @@ function formatAdjustment(amount: number, locale: string): string | null {
 function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
   const t = useTranslations("plantDetail");
   const tPlants = useTranslations("plants");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const addItem = useCartStore((state) => state.addItem);
 
@@ -79,35 +78,22 @@ function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
   const sizeOptions: PotSizeOption[] = potSizes.map((size) => ({
     id: size.id,
     label: size.name,
-    adjustmentLabel: formatAdjustment(
-      localizePrice(size.price_adjustment, size.price_adjustment_vi, locale),
-      locale
-    ),
+    adjustmentLabel: formatAdjustment(getPotSizeAdjustment(size), locale),
   }));
 
   // Both the base price and the adjustment come from the backend; the only
-  // arithmetic here is adding the two amounts it already decided on.
-  const adjustment = selectedSize
-    ? localizePrice(
-        selectedSize.price_adjustment,
-        selectedSize.price_adjustment_vi,
-        locale
-      )
-    : 0;
-  const unitPrice = basePrice + adjustment;
-  const lineTotal = unitPrice * quantity;
+  // arithmetic here is adding the two amounts it already decided on. The cart
+  // stores only the selection and is re-priced by the backend quote.
+  const adjustment = selectedSize ? getPotSizeAdjustment(selectedSize) : 0;
+  const unitPrice = basePrice === null ? null : basePrice + adjustment;
+  const lineTotal = unitPrice === null ? null : unitPrice * quantity;
+  const canAddToCart = plant.in_stock && unitPrice !== null;
 
   function handleAddToCart() {
     addItem({
-      id: plant.id,
-      name,
-      slug: plant.slug,
-      image: getPrimaryPlantImage(plant.images)?.url ?? PLANT_IMAGE_PLACEHOLDER,
-      price: unitPrice,
-      description: description ?? categoryName ?? "",
-      quantity,
+      plantId: plant.id,
       potSizeId: selectedSize?.id,
-      potSizeLabel: selectedSize?.name,
+      quantity,
     });
   }
 
@@ -174,7 +160,11 @@ function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
           <div className="flex min-w-0 flex-col">
             <PlantInfo
               name={name}
-              priceLabel={formatStorefrontPrice(unitPrice, locale)}
+              priceLabel={
+                unitPrice === null
+                  ? tCommon("contactForPrice")
+                  : formatStorefrontPrice(unitPrice, locale)
+              }
               description={description}
             />
 
@@ -228,18 +218,20 @@ function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
                 type="button"
                 size="lg"
                 className="h-12 w-full rounded-xl px-5 font-sans text-sm font-semibold sm:flex-1"
-                disabled={!plant.in_stock}
+                disabled={!canAddToCart}
                 onClick={handleAddToCart}
               >
                 <ShoppingBagIcon
                   className="size-4 stroke-[1.5]"
                   data-icon="inline-start"
                 />
-                {plant.in_stock
-                  ? t("addToCart", {
-                      price: formatStorefrontPrice(lineTotal, locale),
-                    })
-                  : t("outOfStock")}
+                {!plant.in_stock
+                  ? t("outOfStock")
+                  : lineTotal === null
+                    ? tCommon("contactForPrice")
+                    : t("addToCart", {
+                        price: formatStorefrontPrice(lineTotal, locale),
+                      })}
               </Button>
 
               <Button
