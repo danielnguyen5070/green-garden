@@ -1,8 +1,10 @@
+import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { Container } from "@/components/layout/container";
 import { PlantGallery } from "@/components/plant/plant-gallery";
 import { PlantCareSpecs } from "@/components/plant/plant-care-specs";
+import { PlantPageViews } from "@/components/plant/plant-page-views";
 import { PlantPurchase } from "@/components/plant/plant-purchase";
 import {
   getActivePotSizes,
@@ -77,6 +79,14 @@ async function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
             <h1 className="font-heading text-h3 font-bold tracking-tight text-foreground md:text-h2">
               {name}
             </h1>
+
+            <Suspense fallback={null}>
+              <PlantPageViews
+                locale={locale}
+                slug={plant.slug}
+                className="mt-2"
+              />
+            </Suspense>
 
             <PlantPurchase
               plantId={plant.id}

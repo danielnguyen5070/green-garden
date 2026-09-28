@@ -18,3 +18,12 @@ export type VisitsCountResponse = {
    */
   period: "lifetime";
 };
+
+/**
+ * Lifetime production page views for one exact pathname, from the same
+ * endpoint filtered by `requestPath`. Locale prefixes are part of the path,
+ * so `/vi/...` and `/en/...` are counted separately.
+ */
+export type PathVisitsCountResponse = VisitsCountResponse & {
+  path: string;
+};

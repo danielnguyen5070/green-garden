@@ -322,6 +322,8 @@
     "selectImage": "View image {index} of {name}",
     "selectVideo": "View video preview of {name}",
     "videoPreview": "Video preview",
+    "pageViews": "{count, plural, one {# view} other {# views}}",
+    "pageViewsPeriod": "Views of this page in English since Web Analytics was enabled",
     "care": {
       "title": "Care & specifications",
       "plantType": "Plant type",

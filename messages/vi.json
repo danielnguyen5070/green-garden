@@ -322,6 +322,8 @@
     "selectImage": "Xem ảnh {index} của {name}",
     "selectVideo": "Xem xem trước video của {name}",
     "videoPreview": "Xem trước video",
+    "pageViews": "{count, number} lượt xem",
+    "pageViewsPeriod": "Lượt xem trang tiếng Việt này kể từ khi bật Web Analytics",
     "care": {
       "title": "Chăm sóc & thông số",
       "plantType": "Loại cây",
