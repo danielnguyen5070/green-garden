@@ -1,6 +1,6 @@
 "use client";
 
-import type { MouseEvent } from "react";
+import type { MouseEvent, ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { ArrowLeftIcon, SearchIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -35,6 +35,7 @@ function PlantList({
   initialPage = 1,
   title,
   description,
+  breadcrumb,
   className,
   frameId = "products",
   headingAs = "h2",
@@ -49,6 +50,7 @@ function PlantList({
   /** Section heading; defaults to `home.products.title`. */
   title?: string;
   description?: string | null;
+  breadcrumb?: ReactNode;
   className?: string;
   frameId?: string;
   headingAs?: "h1" | "h2";
@@ -90,6 +92,7 @@ function PlantList({
     <PlantListFrame
       title={title ?? t("title")}
       description={description}
+      breadcrumb={breadcrumb}
       className={className}
       id={frameId}
       headingAs={headingAs}

@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import {
   PlantListSection,
   PlantListSkeleton,
@@ -81,6 +82,18 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     plantsLabel: t("title"),
   });
 
+  const breadcrumb = (
+    <Breadcrumbs
+      label={tDetail("breadcrumb")}
+      className="mb-6 md:mb-8"
+      items={[
+        { label: tDetail("home"), href: "/" },
+        { label: t("title"), href: "/plants" },
+        { label: name },
+      ]}
+    />
+  );
+
   return (
     <>
       <JsonLd data={jsonLd} />
@@ -88,6 +101,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         fallback={
           <PlantListSkeleton
             title={name}
+            breadcrumb={breadcrumb}
             headingAs="h1"
             frameId="plants"
             className={sectionClassName}
@@ -97,6 +111,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         <PlantListSection
           title={name}
           description={description}
+          breadcrumb={breadcrumb}
           category={category}
           page={page}
           headingAs="h1"

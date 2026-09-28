@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { PlantList } from "@/components/plant/plant-list";
@@ -19,11 +20,13 @@ const SKELETON_CHIPS = [4.5, 6, 5.5, 7] as const;
 
 async function PlantListSkeleton({
   title,
+  breadcrumb,
   headingAs = "h2",
   frameId = "products",
   className,
 }: {
   title?: string;
+  breadcrumb?: ReactNode;
   headingAs?: "h1" | "h2";
   frameId?: string;
   className?: string;
@@ -33,6 +36,7 @@ async function PlantListSkeleton({
   return (
     <PlantListFrame
       title={title ?? t("title")}
+      breadcrumb={breadcrumb}
       headingAs={headingAs}
       id={frameId}
       className={className}
@@ -77,6 +81,7 @@ async function PlantListSkeleton({
 async function PlantListSection({
   title,
   description,
+  breadcrumb,
   category = null,
   page = 1,
   headingAs = "h2",
@@ -85,6 +90,7 @@ async function PlantListSection({
 }: {
   title?: string;
   description?: string | null;
+  breadcrumb?: ReactNode;
   category?: StorefrontCategory | null;
   page?: number;
   headingAs?: "h1" | "h2";
@@ -113,6 +119,7 @@ async function PlantListSection({
     return (
       <PlantListFrame
         title={sectionTitle}
+        breadcrumb={breadcrumb}
         headingAs={headingAs}
         id={frameId}
         className={className}
@@ -134,6 +141,7 @@ async function PlantListSection({
       initialPage={page}
       title={sectionTitle}
       description={description}
+      breadcrumb={breadcrumb}
       headingAs={headingAs}
       frameId={frameId}
       className={className}

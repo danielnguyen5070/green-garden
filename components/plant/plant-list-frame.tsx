@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 function PlantListFrame({
   title,
   description,
+  breadcrumb,
   children,
   className,
   id = "products",
@@ -17,6 +18,8 @@ function PlantListFrame({
 }: {
   title: string;
   description?: string | null;
+  /** Rendered above the heading, inside the container. */
+  breadcrumb?: ReactNode;
   children: ReactNode;
   className?: string;
   id?: string;
@@ -33,6 +36,7 @@ function PlantListFrame({
       className={cn("bg-background py-8", className)}
     >
       <Container>
+        {breadcrumb}
         <header className="max-w-2xl">
           <Heading
             id={headingId}
