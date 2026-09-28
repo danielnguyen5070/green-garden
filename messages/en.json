@@ -142,6 +142,12 @@
       "description": "Connect with fellow lovers of ornamental plants, seedlings, and the Cai Mon nurseries. Get updates on new arrivals, plus care tips and beautiful varieties.",
       "cta": "Join the Zalo group",
       "note": "A community for plant and flower lovers"
+    },
+    "reviews": {
+      "title": "Customer Reviews",
+      "description": "What our customers say about their plants and shopping experience.",
+      "ratingValue": "{rating} / 5",
+      "cta": "View all reviews"
     }
   },
   "plants": {

@@ -1,3 +1,8 @@
+import {
+  STOREFRONT_REVIEWS_PAGE_SIZE,
+  getAllStorefrontReviews,
+  getStorefrontReviews,
+} from "@/lib/api/storefront";
 import type {
   StorefrontRatingDistribution,
   StorefrontReview,
@@ -117,6 +122,45 @@ export function resolveReviewSummary(
   }
 
   return buildReviewSummaryFromItems(fallbackItems, total);
+}
+
+/**
+ * Summary plus the newest few reviews for the homepage section. Sends the same
+ * first-page request as `/reviews`, so both pages share one cached response.
+ * Returns null when the API is unreachable (do not invent ratings).
+ */
+export async function loadStorefrontReviewPreview(limit: number): Promise<{
+  summary: StorefrontReviewSummary;
+  reviews: StorefrontReview[];
+} | null> {
+  try {
+    const page = await getStorefrontReviews({
+      page: 1,
+      page_size: STOREFRONT_REVIEWS_PAGE_SIZE,
+    });
+
+    const hasApiSummary =
+      typeof page.average_rating === "number" &&
+      page.rating_distribution != null;
+
+    const allForSummary = hasApiSummary
+      ? null
+      : await getAllStorefrontReviews().catch(() => page.items);
+
+    const reviews = [...page.items]
+      .sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      )
+      .slice(0, limit);
+
+    return {
+      summary: resolveReviewSummary(page, allForSummary ?? page.items),
+      reviews,
+    };
+  } catch {
+    return null;
+  }
 }
 
 export function formatRelativeReviewDate(

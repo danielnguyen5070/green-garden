@@ -142,6 +142,12 @@
       "description": "Kết nối cùng những người yêu hoa kiểng, cây giống và nhà vườn Cái Mơn. Cập nhật cây mới, chia sẻ kinh nghiệm chăm sóc và những giống cây đẹp.",
       "cta": "Tham gia nhóm Zalo",
       "note": "Cộng đồng dành cho người yêu cây và hoa kiểng"
+    },
+    "reviews": {
+      "title": "Đánh giá của khách hàng",
+      "description": "Những chia sẻ từ khách hàng về cây và trải nghiệm mua sắm.",
+      "ratingValue": "{rating} / 5",
+      "cta": "Xem tất cả đánh giá"
     }
   },
   "plants": {

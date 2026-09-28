@@ -1,6 +1,10 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import {
+  CustomerReviewsSection,
+  CustomerReviewsSkeleton,
+} from "@/components/home/customer-reviews-section";
 import { Hero } from "@/components/home/hero";
 import { NewsletterSection } from "@/components/home/newsletter-section";
 import {
@@ -78,6 +82,9 @@ export default async function HomePage({ params }: Props) {
       <Hero />
       <Suspense fallback={<FeaturedPlantsSkeleton />}>
         <FeaturedPlantsSection />
+      </Suspense>
+      <Suspense fallback={<CustomerReviewsSkeleton />}>
+        <CustomerReviewsSection />
       </Suspense>
       <NewsletterSection />
     </>

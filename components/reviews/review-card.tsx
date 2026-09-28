@@ -12,9 +12,11 @@ import { cn } from "@/lib/utils";
 function ReviewCard({
   review,
   className,
+  bodyClassName,
 }: {
   review: StorefrontReview;
   className?: string;
+  bodyClassName?: string;
 }) {
   const t = useTranslations("reviews");
   const locale = useLocale();
@@ -42,7 +44,8 @@ function ReviewCard({
       <p
         className={cn(
           "whitespace-pre-wrap font-sans text-body text-muted-foreground",
-          title ? "mt-2" : "mt-3"
+          title ? "mt-2" : "mt-3",
+          bodyClassName
         )}
       >
         {body}
