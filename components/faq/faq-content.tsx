@@ -1,18 +1,27 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaqCategories } from "@/components/faq/faq-categories";
 import { FaqHero } from "@/components/faq/faq-hero";
 import { FaqList } from "@/components/faq/faq-list";
 import { Container } from "@/components/layout/container";
 import {
+  FAQ_CATEGORY_IDS,
   FAQ_ITEMS,
   filterFaqItems,
   type FaqCategoryFilter,
+  type FaqCategoryId,
   type FaqItemConfig,
 } from "@/config/faq";
 import { cn } from "@/lib/utils";
+
+function getHashCategory(): FaqCategoryId | null {
+  const hash = window.location.hash.slice(1);
+  return (FAQ_CATEGORY_IDS as readonly string[]).includes(hash)
+    ? (hash as FaqCategoryId)
+    : null;
+}
 
 function matchesQuery(
   item: FaqItemConfig,
@@ -32,6 +41,18 @@ function FaqContent({ className }: { className?: string }) {
   const tItems = useTranslations("faq.items");
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState<FaqCategoryFilter>("all");
+
+  // Deep links like `/faq#delivery`; read after mount so `/faq` stays static.
+  useEffect(() => {
+    const syncFromHash = () => {
+      const hashCategory = getHashCategory();
+      if (hashCategory) setCategory(hashCategory);
+    };
+
+    syncFromHash();
+    window.addEventListener("hashchange", syncFromHash);
+    return () => window.removeEventListener("hashchange", syncFromHash);
+  }, []);
 
   const visibleItems = useMemo(() => {
     const byCategory = filterFaqItems(FAQ_ITEMS, category);

@@ -6,6 +6,8 @@ import {
   CustomerReviewsSkeleton,
 } from "@/components/home/customer-reviews-section";
 import { Hero } from "@/components/home/hero";
+import { HomeAboutSection } from "@/components/home/home-about-section";
+import { LatestGuidesSection } from "@/components/home/latest-guides-section";
 import { NewsletterSection } from "@/components/home/newsletter-section";
 import {
   ShopByCategorySection,
@@ -90,6 +92,8 @@ export default async function HomePage({ params }: Props) {
       <Suspense fallback={<ShopByCategorySkeleton />}>
         <ShopByCategorySection />
       </Suspense>
+      <HomeAboutSection />
+      <LatestGuidesSection />
       <Suspense fallback={<CustomerReviewsSkeleton />}>
         <CustomerReviewsSection />
       </Suspense>

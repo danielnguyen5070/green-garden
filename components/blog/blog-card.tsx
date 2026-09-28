@@ -19,11 +19,13 @@ function BlogCard({
   post,
   locale,
   readMoreLabel,
+  titleAs: Title = "h2",
   className,
 }: {
   post: BlogPostMeta;
   locale: string;
   readMoreLabel: string;
+  titleAs?: "h2" | "h3";
   className?: string;
 }) {
   const image = getPostImage(post);
@@ -62,9 +64,9 @@ function BlogCard({
             </time>
           </div>
 
-          <h2 className="font-heading text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
+          <Title className="font-heading text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
             {post.title}
-          </h2>
+          </Title>
 
           <p className="font-sans text-small text-muted-foreground">
             {post.description}

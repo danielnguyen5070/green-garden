@@ -114,9 +114,8 @@
       "description": "Cây giống, cây ăn trái và hoa kiểng được tuyển chọn từ vùng đất Cái Mơn – Chợ Lách. Cây khỏe, dễ trồng, đóng gói cẩn thận và giao tận nơi.",
       "primaryCta": "Xem cây giống",
       "secondaryCta": "Tìm hiểu về chúng tôi",
-      "socialProof": "Được tin tưởng bởi hơn 2.000 người yêu cây.",
-      "socialProofCount": "+2k",
-      "imageAlt": "Bộ sưu tập cây nội thất trong chậu gốm và đất nung bên cửa sổ sáng",
+      "socialProof": "{rating}/5 · {count, plural, other {# đánh giá của khách hàng}}",
+      "imageAlt": "Người phụ nữ mặc áo dài bên những chậu mai vàng bonsai trong vườn kiểng",
       "contactCta": {
         "title": "Cần tư vấn, đặt hàng?",
         "description": "Hãy nhắn tin qua Zalo hoặc SMS {phone}."
@@ -125,6 +124,35 @@
     "categories": {
       "title": "Mua theo danh mục",
       "description": "Chọn nhóm cây bạn cần: cây ăn trái, hoa kiểng và nhiều loại cây giống khác từ Cái Mơn."
+    },
+    "about": {
+      "title": "Về Ngọc Ngân Bến Tre",
+      "description": "Ngọc Ngân Bến Tre chọn cây giống Cái Mơn từ những nhà vườn quen ở Chợ Lách — vùng đất gắn bó lâu đời với nghề ươm cây. Từ cây ăn trái như sầu riêng, ổi đến hoa kiểng, mỗi cây đều được chọn khỏe, đúng giống và kèm kinh nghiệm trồng chăm để bạn yên tâm xuống giống.",
+      "highlights": {
+        "origin": {
+          "title": "Nguồn gốc Cái Mơn – Chợ Lách",
+          "description": "Cây lấy trực tiếp từ nhà vườn quen tại vùng cây giống nổi tiếng của Bến Tre."
+        },
+        "grafted": {
+          "title": "Cây ghép, đúng giống",
+          "description": "Chủ yếu là cây ghép, giữ đặc tính cây mẹ về trái và thời gian cho trái."
+        },
+        "shipping": {
+          "title": "Đóng gói kỹ, giao toàn quốc",
+          "description": "Bầu đất bọc kín, cây đặt trong thùng thoáng, gửi đi khắp các tỉnh thành."
+        },
+        "cod": {
+          "title": "Thanh toán khi nhận hàng",
+          "description": "Bạn chỉ thanh toán khi nhận được cây. Không cần trả trước."
+        }
+      },
+      "aboutCta": "Tìm hiểu về chúng tôi",
+      "faqCta": "Câu hỏi thường gặp"
+    },
+    "guides": {
+      "title": "Hướng dẫn trồng & chăm sóc",
+      "description": "Kinh nghiệm chọn giống, trồng và chăm cây từ nhà vườn Ngọc Ngân.",
+      "viewAll": "Xem tất cả bài viết"
     },
     "products": {
       "title": "Sản phẩm",

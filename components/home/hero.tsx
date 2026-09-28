@@ -1,17 +1,42 @@
+import { Suspense } from "react";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { ArrowRightIcon, LeafIcon, MessageCircleIcon, SproutIcon } from "lucide-react";
+import { HOME_REVIEWS_LIMIT } from "@/components/home/customer-reviews-section";
+import { ReviewStars } from "@/components/reviews/review-stars";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
 import { CONTACT_CONFIG } from "@/config/contact";
 import { Link } from "@/i18n/navigation";
+import { loadStorefrontReviewPreview } from "@/lib/reviews";
 import { cn } from "@/lib/utils";
 
-const AVATAR_TONES = [
-  "bg-[color-mix(in_oklab,var(--brand-earth),white_35%)]",
-  "bg-[color-mix(in_oklab,var(--brand-forest),white_55%)]",
-  "bg-[color-mix(in_oklab,var(--brand-earth),black_12%)]",
-] as const;
+/** Real rating from the reviews API; renders nothing rather than a made-up number. */
+async function HeroReviewSummary() {
+  const [t, preview] = await Promise.all([
+    getTranslations("home.hero"),
+    loadStorefrontReviewPreview(HOME_REVIEWS_LIMIT),
+  ]);
+  const summary = preview?.summary;
+
+  if (!summary || summary.total_reviews === 0) {
+    return null;
+  }
+
+  const rating = summary.average_rating.toFixed(1);
+
+  return (
+    <Link
+      href="/reviews"
+      className="inline-flex min-h-9 items-center gap-3 rounded-lg outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+    >
+      <ReviewStars rating={summary.average_rating} />
+      <span className="font-sans text-small text-muted-foreground">
+        {t("socialProof", { rating, count: summary.total_reviews })}
+      </span>
+    </Link>
+  );
+}
 
 async function Hero({ className }: { className?: string }) {
   const t = await getTranslations("home.hero");
@@ -69,25 +94,10 @@ async function Hero({ className }: { className?: string }) {
               </Button>
             </div>
 
-            <div className="mt-10 flex items-center gap-3">
-              <div className="flex items-center" aria-hidden="true">
-                {AVATAR_TONES.map((tone, index) => (
-                  <span
-                    key={tone}
-                    className={cn(
-                      "size-9 rounded-full border-2 border-background ring-0",
-                      tone,
-                      index > 0 && "-ml-2.5"
-                    )}
-                  />
-                ))}
-                <span className="-ml-2.5 inline-flex size-9 items-center justify-center rounded-full border-2 border-background bg-muted font-sans text-[0.625rem] font-semibold tracking-tight text-muted-foreground">
-                  {t("socialProofCount")}
-                </span>
-              </div>
-              <p className="max-w-[14rem] font-sans text-small text-muted-foreground sm:max-w-none">
-                {t("socialProof")}
-              </p>
+            <div className="mt-10 min-h-9">
+              <Suspense fallback={null}>
+                <HeroReviewSummary />
+              </Suspense>
             </div>
           </div>
 
