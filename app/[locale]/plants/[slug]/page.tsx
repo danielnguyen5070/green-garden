@@ -12,15 +12,29 @@ import {
   getPlantBySlugOrNull,
   redirectToCanonicalPlantSlug,
 } from "@/lib/storefront/get-plant-by-slug";
+import { resolveOgImage } from "@/lib/seo/og-image";
 import { buildPlantJsonLd } from "@/lib/seo/plant-json-ld";
-import { localizeOptionalText, localizeText } from "@/lib/storefront";
+import {
+  getPrimaryPlantImage,
+  localizeOptionalText,
+  localizeText,
+} from "@/lib/storefront";
+import type { StorefrontPlantDetail } from "@/types/storefront";
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
 };
 
-const OG_IMAGE_WIDTH = 1200;
-const OG_IMAGE_HEIGHT = 630;
+/** Admin-set OG image, then the first product photo, then the site default. */
+function resolvePlantOgImage(plant: StorefrontPlantDetail, name: string) {
+  if (plant.og_image_url?.trim()) {
+    return resolveOgImage(plant.og_image_url, name);
+  }
+
+  const primary = getPrimaryPlantImage(plant.images);
+  const photo = primary?.type === "image" ? primary : null;
+  return resolveOgImage(photo?.url, photo?.alt_text?.trim() || name);
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
@@ -43,7 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     en: `/en/plants/${plant.slug}`,
     "x-default": `/${routing.defaultLocale}/plants/${plant.slug}`,
   };
-  const ogImageUrl = plant.og_image_url?.trim() || null;
+  const ogImage = resolvePlantOgImage(plant, name);
 
   return {
     title: name,
@@ -60,24 +74,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       locale: locale === "vi" ? "vi_VN" : "en_US",
       alternateLocale: locale === "vi" ? ["en_US"] : ["vi_VN"],
       type: "website",
-      ...(ogImageUrl
-        ? {
-            images: [
-              {
-                url: ogImageUrl,
-                width: OG_IMAGE_WIDTH,
-                height: OG_IMAGE_HEIGHT,
-                alt: name,
-              },
-            ],
-          }
-        : {}),
+      images: [ogImage],
     },
     twitter: {
       card: "summary_large_image",
       title: ogTitle,
       description: description ?? undefined,
-      ...(ogImageUrl ? { images: [ogImageUrl] } : {}),
+      images: [ogImage.url],
     },
   };
 }

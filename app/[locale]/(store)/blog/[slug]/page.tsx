@@ -10,6 +10,7 @@ import { SITE_NAME } from "@/config/site";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { buildBlogPostJsonLd } from "@/lib/seo/blog-post-json-ld";
+import { resolveOgImage } from "@/lib/seo/og-image";
 import { toIsoDate } from "@/lib/seo/url";
 import {
   getAllSlugs,
@@ -20,9 +21,6 @@ import {
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
 };
-
-const OG_IMAGE_WIDTH = 1200;
-const OG_IMAGE_HEIGHT = 630;
 
 function blogPostLanguages(slug: string): Record<string, string> {
   const languages: Record<string, string> = {};
@@ -60,8 +58,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const ogTitle = `${title} | ${SITE_NAME}`;
   const path = `/${locale}/blog/${slug}`;
   const languages = blogPostLanguages(slug);
-  const image = getPostImage(post);
-  const imageAlt = post.ogImageAlt ?? title;
+  // The SVG placeholder from `getPostImage` is not accepted as a share image.
+  const ogImage = resolveOgImage(post.ogImage, post.ogImageAlt ?? title);
   const publishedTime = toIsoDate(post.publishedAt);
   const modifiedTime = toIsoDate(post.updatedAt) ?? publishedTime;
 
@@ -84,20 +82,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       publishedTime,
       modifiedTime,
       authors: post.author ? [post.author] : undefined,
-      images: [
-        {
-          url: image,
-          width: OG_IMAGE_WIDTH,
-          height: OG_IMAGE_HEIGHT,
-          alt: imageAlt,
-        },
-      ],
+      images: [ogImage],
     },
     twitter: {
       card: "summary_large_image",
       title: ogTitle,
       description,
-      images: [image],
+      images: [ogImage.url],
     },
   };
 }

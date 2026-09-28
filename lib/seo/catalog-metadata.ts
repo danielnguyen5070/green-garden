@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
+import { resolveOgImage } from "@/lib/seo/og-image";
 import { getCatalogPath } from "@/lib/storefront/catalog";
-
-const DEFAULT_OG_IMAGE = "/images/og-home.jpg";
 
 type CatalogMetadataInput = {
   locale: string;
@@ -38,8 +37,7 @@ export function buildCatalogMetadata({
     en: getCatalogPath("en", categorySlug, page),
     "x-default": getCatalogPath(routing.defaultLocale, categorySlug, page),
   };
-  const image = ogImageUrl?.trim() || DEFAULT_OG_IMAGE;
-  const isDefaultImage = image === DEFAULT_OG_IMAGE;
+  const image = resolveOgImage(ogImageUrl, ogImageAlt);
 
   return {
     title,
@@ -57,17 +55,13 @@ export function buildCatalogMetadata({
       locale: locale === "vi" ? "vi_VN" : "en_US",
       alternateLocale: locale === "vi" ? ["en_US"] : ["vi_VN"],
       type: "website",
-      images: [
-        isDefaultImage
-          ? { url: image, width: 1200, height: 630, alt: ogImageAlt }
-          : { url: image, alt: ogImageAlt },
-      ],
+      images: [image],
     },
     twitter: {
       card: "summary_large_image",
       title: ogTitle,
       description,
-      images: [image],
+      images: [image.url],
     },
   };
 }
