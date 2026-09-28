@@ -1,6 +1,4 @@
-"use client";
-
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import type { StorefrontPlantDetail } from "@/types/storefront";
 import { cn } from "@/lib/utils";
 
@@ -10,14 +8,14 @@ type CareRow = {
   value: string;
 };
 
-function PlantCareSpecs({
+async function PlantCareSpecs({
   plant,
   className,
 }: {
   plant: StorefrontPlantDetail;
   className?: string;
 }) {
-  const t = useTranslations("plantDetail.care");
+  const t = await getTranslations("plantDetail.care");
 
   const rows: CareRow[] = [];
 

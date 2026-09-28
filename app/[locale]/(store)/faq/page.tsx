@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { FaqContact } from "@/components/faq/faq-contact";
 import { FaqContent } from "@/components/faq/faq-content";
 import { JsonLd } from "@/components/seo/json-ld";
-import { FAQ_ITEMS } from "@/config/faq";
+import { FAQ_ITEMS, type FaqEntry } from "@/config/faq";
 import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
 import { buildFaqJsonLd } from "@/lib/seo/faq-json-ld";
@@ -66,20 +66,23 @@ export default async function FaqPage({ params }: Props) {
   const t = await getTranslations({ locale, namespace: "faq.metadata" });
   const tItems = await getTranslations({ locale, namespace: "faq.items" });
 
+  const items: FaqEntry[] = FAQ_ITEMS.map((item) => ({
+    ...item,
+    question: tItems(`${item.id}.question`),
+    answer: tItems(`${item.id}.answer`),
+  }));
+
   const jsonLd = buildFaqJsonLd({
     locale,
     name: t("title"),
     description: t("description"),
-    items: FAQ_ITEMS.map((item) => ({
-      question: tItems(`${item.id}.question`),
-      answer: tItems(`${item.id}.answer`),
-    })),
+    items: items.map(({ question, answer }) => ({ question, answer })),
   });
 
   return (
     <>
       <JsonLd data={jsonLd} />
-      <FaqContent />
+      <FaqContent items={items} />
       <FaqContact />
     </>
   );

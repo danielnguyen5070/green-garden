@@ -1,12 +1,25 @@
 "use client";
 
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ChatFab } from "@/components/chatbot/chat-fab";
-import { ChatPanel } from "@/components/chatbot/chat-panel";
 import { useChatbot } from "@/hooks/use-chatbot";
 import { cn } from "@/lib/utils";
 import type { ChatEngine, ChatSuggestion } from "@/types/chatbot";
+
+// The panel pulls in the markdown renderer; keep it out of first-load JS.
+// `React.lazy` rather than `next/dynamic`: the latter made Turbopack duplicate
+// shared modules into the checkout bundle. The panel only renders after a
+// click, so it never needs SSR.
+const loadChatPanel = () => import("@/components/chatbot/chat-panel");
+
+const ChatPanel = lazy(() =>
+  loadChatPanel().then((m) => ({ default: m.ChatPanel }))
+);
+
+function prefetchChatPanel() {
+  void loadChatPanel();
+}
 
 /**
  * Floating storefront chatbot. Replies stream from `/api/v1/chat/stream`;
@@ -65,23 +78,33 @@ function ChatWidget({
             "origin-bottom-right animate-in fade-in zoom-in-95 duration-200"
           )}
         >
-          <ChatPanel
-            messages={messages}
-            suggestions={suggestions}
-            isTyping={isTyping}
-            onSend={(text) => void sendMessage(text)}
-            onSelectSuggestion={handleSuggestion}
-            onRefresh={resetConversation}
-            onMinimize={close}
-            onClose={close}
-            className="h-full"
-          />
+          <Suspense
+            fallback={
+              <div className="h-full rounded-3xl border border-border bg-card shadow-[var(--shadow-elevated)]" />
+            }
+          >
+            <ChatPanel
+              messages={messages}
+              suggestions={suggestions}
+              isTyping={isTyping}
+              onSend={(text) => void sendMessage(text)}
+              onSelectSuggestion={handleSuggestion}
+              onRefresh={resetConversation}
+              onMinimize={close}
+              onClose={close}
+              className="h-full"
+            />
+          </Suspense>
         </div>
       ) : null}
 
       {!isOpen ? (
         <div className="pointer-events-auto">
-          <ChatFab label={t("open")} onClick={open} />
+          <ChatFab
+            label={t("open")}
+            onClick={open}
+            onIntent={prefetchChatPanel}
+          />
         </div>
       ) : null}
     </div>

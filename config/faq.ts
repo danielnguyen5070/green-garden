@@ -15,6 +15,12 @@ export type FaqItemConfig = {
   categoryId: FaqCategoryId;
 };
 
+/** An FAQ item with its copy already translated on the server. */
+export type FaqEntry = FaqItemConfig & {
+  question: string;
+  answer: string;
+};
+
 export const FAQ_CATEGORIES = [
   { id: "all", labelKey: "all" },
   { id: "orders", labelKey: "orders" },
@@ -52,10 +58,10 @@ export const FAQ_ITEMS: readonly FaqItemConfig[] = [
   { id: "exchangePlant", categoryId: "returns" },
 ] as const;
 
-export function filterFaqItems(
-  items: readonly FaqItemConfig[],
+export function filterFaqItems<T extends FaqItemConfig>(
+  items: readonly T[],
   category: FaqCategoryFilter
-): FaqItemConfig[] {
+): T[] {
   if (category === "all") {
     return [...items];
   }

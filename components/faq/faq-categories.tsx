@@ -1,35 +1,35 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { FAQ_CATEGORIES, type FaqCategoryFilter } from "@/config/faq";
+import { useFaqBrowser } from "@/components/faq/faq-browser";
+import type { FaqCategoryFilter } from "@/config/faq";
 import { cn } from "@/lib/utils";
 
 function FaqCategories({
-  activeCategory,
-  onCategoryChange,
+  categories,
+  navLabel,
   className,
 }: {
-  activeCategory: FaqCategoryFilter;
-  onCategoryChange: (category: FaqCategoryFilter) => void;
+  categories: ReadonlyArray<{ id: FaqCategoryFilter; label: string }>;
+  navLabel: string;
   className?: string;
 }) {
-  const t = useTranslations("faq.categories");
+  const { category: activeCategory, setCategory } = useFaqBrowser();
 
   return (
     <nav
       data-slot="faq-categories"
-      aria-label={t("navLabel")}
+      aria-label={navLabel}
       className={cn("w-full", className)}
     >
       <ul className="flex flex-wrap justify-center gap-2 md:gap-2.5">
-        {FAQ_CATEGORIES.map((category) => {
+        {categories.map((category) => {
           const isActive = category.id === activeCategory;
 
           return (
             <li key={category.id}>
               <button
                 type="button"
-                onClick={() => onCategoryChange(category.id)}
+                onClick={() => setCategory(category.id)}
                 aria-pressed={isActive}
                 className={cn(
                   "rounded-full px-3.5 py-2 font-sans text-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
@@ -38,7 +38,7 @@ function FaqCategories({
                     : "bg-muted text-foreground/80 hover:bg-secondary hover:text-foreground"
                 )}
               >
-                {t(category.labelKey)}
+                {category.label}
               </button>
             </li>
           );

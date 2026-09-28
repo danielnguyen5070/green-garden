@@ -7,10 +7,13 @@ import { cn } from "@/lib/utils";
 function ChatFab({
   label,
   onClick,
+  onIntent,
   className,
 }: {
   label: string;
   onClick: () => void;
+  /** Fired on hover or focus, before a likely click. */
+  onIntent?: () => void;
   className?: string;
 }) {
   return (
@@ -19,6 +22,8 @@ function ChatFab({
       size="icon-lg"
       aria-label={label}
       onClick={onClick}
+      onPointerEnter={onIntent}
+      onFocus={onIntent}
       className={cn(
         "size-14 rounded-full bg-primary text-primary-foreground shadow-[var(--shadow-elevated)]",
         "transition-transform duration-200 hover:scale-105 hover:bg-brand-deep",

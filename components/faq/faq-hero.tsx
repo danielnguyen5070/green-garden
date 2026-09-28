@@ -1,23 +1,10 @@
-"use client";
-
-import { useId } from "react";
-import { useTranslations } from "next-intl";
-import { SearchIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/layout/container";
+import { FaqSearch } from "@/components/faq/faq-search";
 import { cn } from "@/lib/utils";
 
-function FaqHero({
-  searchQuery,
-  onSearchChange,
-  className,
-}: {
-  searchQuery: string;
-  onSearchChange: (value: string) => void;
-  className?: string;
-}) {
-  const t = useTranslations("faq.hero");
-  const searchId = useId();
+async function FaqHero({ className }: { className?: string }) {
+  const t = await getTranslations("faq.hero");
 
   return (
     <section
@@ -42,24 +29,10 @@ function FaqHero({
             {t("description")}
           </p>
 
-          <div className="relative mx-auto mt-8 max-w-md">
-            <label htmlFor={searchId} className="sr-only">
-              {t("searchPlaceholder")}
-            </label>
-            <SearchIcon
-              aria-hidden="true"
-              className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground"
-            />
-            <Input
-              id={searchId}
-              type="search"
-              value={searchQuery}
-              onChange={(event) => onSearchChange(event.target.value)}
-              placeholder={t("searchPlaceholder")}
-              className="h-11 rounded-xl border-border bg-card pr-4 pl-10 font-sans text-sm shadow-subtle"
-              autoComplete="off"
-            />
-          </div>
+          <FaqSearch
+            placeholder={t("searchPlaceholder")}
+            className="mx-auto mt-8 max-w-md"
+          />
         </div>
       </Container>
     </section>
