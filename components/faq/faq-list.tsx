@@ -45,10 +45,13 @@ function FaqList({
     );
   }
 
+  // Closed answers stay in the HTML (hidden="until-found") so crawlers and
+  // find-in-page see every answer the FAQPage JSON-LD lists.
   return (
     <Accordion
       data-slot="faq-list"
       multiple
+      hiddenUntilFound
       className={cn("w-full", className)}
     >
       {items.map((item) => (

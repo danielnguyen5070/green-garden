@@ -15,7 +15,11 @@ type FaqJsonLdInput = {
 };
 
 /**
- * FAQ page @graph: FAQPage with Question/Answer entities for rich results.
+ * FAQ page @graph: FAQPage with Question/Answer entities.
+ *
+ * Semantics only: Google limits FAQ rich results to authoritative government
+ * and health sites. Every answer here must also be in the page HTML, which
+ * `FaqList` guarantees by keeping closed panels mounted.
  */
 export function buildFaqJsonLd({
   locale,
