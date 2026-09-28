@@ -3,13 +3,13 @@
 import { useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import {
-  ChevronRightIcon,
   HeartIcon,
   MinusIcon,
   PlusIcon,
   ShoppingBagIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { Container } from "@/components/layout/container";
 import { PlantGallery } from "@/components/plant/plant-gallery";
 import { PlantInfo } from "@/components/plant/plant-info";
@@ -18,7 +18,6 @@ import {
   PlantOptions,
   type PotSizeOption,
 } from "@/components/plant/plant-options";
-import { Link } from "@/i18n/navigation";
 import {
   formatStorefrontPrice,
   getActivePotSizes,
@@ -106,52 +105,22 @@ function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
       className="bg-background py-8 md:py-10 lg:py-12"
     >
       <Container>
-        <nav aria-label={t("breadcrumb")} className="mb-8 md:mb-10">
-          <ol className="flex flex-wrap items-center gap-1.5 font-sans text-small">
-            <li>
-              <Link
-                href="/"
-                className="text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                {t("home")}
-              </Link>
-            </li>
-            <li aria-hidden="true" className="text-muted-foreground/70">
-              <ChevronRightIcon className="size-3.5" />
-            </li>
-            <li>
-              <Link
-                href="/plants"
-                className="text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                {tPlants("title")}
-              </Link>
-            </li>
-            <li aria-hidden="true" className="text-muted-foreground/70">
-              <ChevronRightIcon className="size-3.5" />
-            </li>
-            {plant.category && categoryName ? (
-              <>
-                <li>
-                  <Link
-                    href={getCatalogHref(plant.category.slug, 1)}
-                    className="text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
-                  >
-                    {categoryName}
-                  </Link>
-                </li>
-                <li aria-hidden="true" className="text-muted-foreground/70">
-                  <ChevronRightIcon className="size-3.5" />
-                </li>
-              </>
-            ) : null}
-            <li>
-              <span className="font-medium text-foreground" aria-current="page">
-                {name}
-              </span>
-            </li>
-          </ol>
-        </nav>
+        <Breadcrumbs
+          label={t("breadcrumb")}
+          items={[
+            { label: t("home"), href: "/" },
+            { label: tPlants("title"), href: "/plants" },
+            ...(plant.category && categoryName
+              ? [
+                  {
+                    label: categoryName,
+                    href: getCatalogHref(plant.category.slug, 1),
+                  },
+                ]
+              : []),
+            { label: name },
+          ]}
+        />
 
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14 xl:gap-16">
           <PlantGallery
