@@ -1,7 +1,8 @@
 "use client";
 
+import type { MouseEvent } from "react";
 import { useTranslations } from "next-intl";
-import { SearchIcon } from "lucide-react";
+import { ArrowLeftIcon, SearchIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PlantCard } from "@/components/plant/plant-card";
@@ -9,52 +10,86 @@ import { PlantFilters } from "@/components/plant/plant-filters";
 import { PlantListFrame } from "@/components/plant/plant-list-frame";
 import { PlantSort } from "@/components/plant/plant-sort";
 import { useStorefrontPlants } from "@/hooks/use-storefront-plants";
+import { Link } from "@/i18n/navigation";
+import { getCatalogHref } from "@/lib/storefront/catalog";
 import type {
   StorefrontCategory,
   StorefrontPlantListResponse,
 } from "@/types/storefront";
 import { cn } from "@/lib/utils";
 
+function isPlainLeftClick(event: MouseEvent): boolean {
+  return (
+    event.button === 0 &&
+    !event.metaKey &&
+    !event.ctrlKey &&
+    !event.shiftKey &&
+    !event.altKey
+  );
+}
+
 function PlantList({
   initial,
   categories,
+  category = null,
+  initialPage = 1,
   title,
+  description,
   className,
   frameId = "products",
   headingAs = "h2",
 }: {
-  /** First page of `GET /storefront/plants`, already fetched on the server. */
+  /** Page `initialPage` of `GET /storefront/plants`, fetched on the server. */
   initial: StorefrontPlantListResponse;
   categories: StorefrontCategory[];
+  /** Category the URL is scoped to (`/categories/{slug}`), if any. */
+  category?: StorefrontCategory | null;
+  /** `?page=` the server rendered. */
+  initialPage?: number;
   /** Section heading; defaults to `home.products.title`. */
   title?: string;
+  description?: string | null;
   className?: string;
   frameId?: string;
   headingAs?: "h1" | "h2";
 }) {
   const t = useTranslations("home.products");
+  const categorySlug = category?.slug ?? null;
   const {
     plants,
     total,
     searchInput,
-    categorySlug,
     sortOption,
+    page,
+    firstPage,
+    isSearching,
     isLoading,
     hasError,
     hasMore,
     setSearchInput,
-    setCategorySlug,
     setSortOption,
     loadMore,
     clearFilters,
     retry,
-  } = useStorefrontPlants({ initial, categories });
+  } = useStorefrontPlants({
+    initial,
+    categoryId: category?.id,
+    initialPage,
+  });
 
   const isEmpty = plants.length === 0;
+
+  // The href keeps every page crawlable; a plain click appends in place.
+  function handleLoadMoreClick(event: MouseEvent) {
+    if (!isPlainLeftClick(event)) return;
+    event.preventDefault();
+    if (!isLoading) loadMore();
+  }
 
   return (
     <PlantListFrame
       title={title ?? t("title")}
+      description={description}
       className={className}
       id={frameId}
       headingAs={headingAs}
@@ -79,19 +114,28 @@ function PlantList({
       </div>
 
       <div className="mt-5">
-        <PlantFilters
-          categories={categories}
-          selected={categorySlug}
-          onSelect={setCategorySlug}
-        />
+        <PlantFilters categories={categories} selected={categorySlug} />
       </div>
 
-      <p
-        className="mt-12 font-sans text-small text-muted-foreground"
-        aria-live="polite"
-      >
-        {t("resultsCount", { count: total })}
-      </p>
+      <div className="mt-12 flex flex-wrap items-center justify-between gap-3">
+        <p
+          className="font-sans text-small text-muted-foreground"
+          aria-live="polite"
+        >
+          {t("resultsCount", { count: total })}
+        </p>
+
+        {firstPage > 1 && !isSearching ? (
+          <Link
+            href={getCatalogHref(categorySlug, firstPage - 1)}
+            rel="prev"
+            className="inline-flex items-center gap-1.5 font-sans text-sm font-medium text-primary outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <ArrowLeftIcon className="size-4 stroke-[1.5]" aria-hidden="true" />
+            {t("previousPage")}
+          </Link>
+        ) : null}
+      </div>
 
       <div
         className={cn(
@@ -116,14 +160,25 @@ function PlantList({
         ) : isEmpty ? (
           <div className="flex flex-col items-start gap-4 rounded-2xl border border-border bg-card px-6 py-10 shadow-subtle">
             <p className="font-sans text-body text-foreground">{t("empty")}</p>
-            <Button
-              type="button"
-              variant="outline"
-              className="rounded-full"
-              onClick={clearFilters}
-            >
-              {t("clearFilters")}
-            </Button>
+            {isSearching || !categorySlug ? (
+              <Button
+                type="button"
+                variant="outline"
+                className="rounded-full"
+                onClick={clearFilters}
+              >
+                {t("clearFilters")}
+              </Button>
+            ) : (
+              <Button
+                variant="outline"
+                className="rounded-full"
+                render={<Link href={getCatalogHref(null, 1)} />}
+                nativeButton={false}
+              >
+                {t("viewAllPlants")}
+              </Button>
+            )}
           </div>
         ) : (
           <>
@@ -142,7 +197,7 @@ function PlantList({
               </p>
             ) : null}
 
-            {hasMore || hasError ? (
+            {hasError ? (
               <div className="mt-12 flex justify-center">
                 <Button
                   type="button"
@@ -150,9 +205,32 @@ function PlantList({
                   size="lg"
                   className="h-11 rounded-full border-border bg-card px-6 font-sans text-sm shadow-subtle"
                   disabled={isLoading}
-                  onClick={hasError ? retry : loadMore}
+                  onClick={retry}
                 >
-                  {hasError ? t("retry") : t("loadMore")}
+                  {t("retry")}
+                </Button>
+              </div>
+            ) : hasMore ? (
+              <div className="mt-12 flex justify-center">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className={cn(
+                    "h-11 rounded-full border-border bg-card px-6 font-sans text-sm shadow-subtle",
+                    isLoading && "pointer-events-none opacity-50"
+                  )}
+                  aria-disabled={isLoading || undefined}
+                  render={
+                    <Link
+                      href={getCatalogHref(categorySlug, page + 1)}
+                      rel="next"
+                      scroll={false}
+                    />
+                  }
+                  nativeButton={false}
+                  onClick={handleLoadMoreClick}
+                >
+                  {t("loadMore")}
                 </Button>
               </div>
             ) : null}

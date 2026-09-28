@@ -1,6 +1,9 @@
 import type { MetadataRoute } from "next";
 import { routing, type AppLocale } from "@/i18n/routing";
-import { getStorefrontPlants } from "@/lib/api/storefront";
+import {
+  getStorefrontCategories,
+  getStorefrontPlants,
+} from "@/lib/api/storefront";
 import { getAllPosts } from "@/services/blog.service";
 
 const baseUrl = "https://www.ngocnganbentre.vn";
@@ -39,6 +42,16 @@ function entry(
     priority,
     alternates: { languages: alternates },
   };
+}
+
+async function getAllCategorySlugs(): Promise<string[]> {
+  try {
+    const { items } = await getStorefrontCategories();
+    return items.map((category) => category.slug).filter(Boolean);
+  } catch {
+    // Catalog may be unavailable at build time; keep the remaining URLs.
+    return [];
+  }
 }
 
 async function getAllPlantSlugs(): Promise<string[]> {
@@ -82,7 +95,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entries.push(entry(page.path, page.priority));
   }
 
-  const plantSlugs = await getAllPlantSlugs();
+  const [categorySlugs, plantSlugs] = await Promise.all([
+    getAllCategorySlugs(),
+    getAllPlantSlugs(),
+  ]);
+
+  for (const slug of categorySlugs) {
+    entries.push(entry(`/categories/${slug}`, 0.8));
+  }
+
   for (const slug of plantSlugs) {
     entries.push(entry(`/plants/${slug}`, 0.8));
   }

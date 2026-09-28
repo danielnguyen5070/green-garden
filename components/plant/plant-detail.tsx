@@ -30,6 +30,7 @@ import {
   localizeText,
   sortPlantImages,
 } from "@/lib/storefront";
+import { getCatalogHref } from "@/lib/storefront/catalog";
 import { useCartStore } from "@/store/cart.store";
 import type { StorefrontPlantDetail } from "@/types/storefront";
 import { cn } from "@/lib/utils";
@@ -140,6 +141,21 @@ function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
             <li aria-hidden="true" className="text-muted-foreground/70">
               <ChevronRightIcon className="size-3.5" />
             </li>
+            {plant.category && categoryName ? (
+              <>
+                <li>
+                  <Link
+                    href={getCatalogHref(plant.category.slug, 1)}
+                    className="text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    {categoryName}
+                  </Link>
+                </li>
+                <li aria-hidden="true" className="text-muted-foreground/70">
+                  <ChevronRightIcon className="size-3.5" />
+                </li>
+              </>
+            ) : null}
             <li>
               <span className="font-medium text-foreground" aria-current="page">
                 {name}

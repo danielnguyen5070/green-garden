@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
  */
 function PlantListFrame({
   title,
+  description,
   children,
   className,
   id = "products",
@@ -15,6 +16,7 @@ function PlantListFrame({
   headingAs = "h2",
 }: {
   title: string;
+  description?: string | null;
   children: ReactNode;
   className?: string;
   id?: string;
@@ -38,6 +40,11 @@ function PlantListFrame({
           >
             {title}
           </Heading>
+          {description ? (
+            <p className="mt-3 font-sans text-body text-muted-foreground">
+              {description}
+            </p>
+          ) : null}
         </header>
 
         {children}

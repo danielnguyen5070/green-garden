@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { notFound } from "next/navigation";
 import { PlantList } from "@/components/plant/plant-list";
 import { PlantListFrame } from "@/components/plant/plant-list-frame";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -7,6 +8,7 @@ import {
   getStorefrontCategories,
   getStorefrontPlants,
 } from "@/lib/api/storefront";
+import type { StorefrontCategory } from "@/types/storefront";
 
 const SKELETON_CARDS = Array.from(
   { length: STOREFRONT_PLANTS_PAGE_SIZE },
@@ -68,15 +70,23 @@ async function PlantListSkeleton({
 }
 
 /**
- * Full storefront catalog with search, category filters, sort, and load more.
+ * Storefront catalog with search, category links, sort, and load more.
+ * Renders the category and `?page=` named in the URL so each page is
+ * crawlable on its own.
  */
 async function PlantListSection({
   title,
+  description,
+  category = null,
+  page = 1,
   headingAs = "h2",
   frameId = "products",
   className,
 }: {
   title?: string;
+  description?: string | null;
+  category?: StorefrontCategory | null;
+  page?: number;
   headingAs?: "h1" | "h2";
   frameId?: string;
   className?: string;
@@ -86,13 +96,18 @@ async function PlantListSection({
 
   const [plants, categories] = await Promise.all([
     getStorefrontPlants({
-      page: 1,
+      page,
       page_size: STOREFRONT_PLANTS_PAGE_SIZE,
+      category_id: category?.id,
       sort: "created_at",
       order: "desc",
     }).catch(() => null),
     getStorefrontCategories().catch(() => null),
   ]);
+
+  if (plants && page > 1 && plants.items.length === 0) {
+    notFound();
+  }
 
   if (!plants) {
     return (
@@ -115,7 +130,10 @@ async function PlantListSection({
     <PlantList
       initial={plants}
       categories={categories?.items ?? []}
+      category={category}
+      initialPage={page}
       title={sectionTitle}
+      description={description}
       headingAs={headingAs}
       frameId={frameId}
       className={className}

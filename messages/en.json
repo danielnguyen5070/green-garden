@@ -119,6 +119,8 @@
       "sortLabel": "Sort by",
       "resultsCount": "{count, plural, =0 {0 plants} one {# plant} other {# plants}}",
       "loadMore": "Load More",
+      "previousPage": "Show previous plants",
+      "viewAllPlants": "View all plants",
       "empty": "No plants found.",
       "clearFilters": "Clear filters",
       "loadError": "We couldn't load plants right now.",
@@ -157,6 +159,10 @@
       "description": "Browse Cai Mon seedlings, fruit trees, and ornamental plants from Ngoc Ngan Ben Tre. Search, filter by category, and sort the full catalog.",
       "ogImageAlt": "Ngoc Ngan Ben Tre plant catalog — Cai Mon seedlings and nursery stock",
       "keywords": "Cai Mon seedlings, plant catalog, Ben Tre nursery, fruit tree seedlings, ornamental plants"
+    },
+    "pageTitle": "{title} – Page {page}",
+    "category": {
+      "metadataDescription": "Browse {category} from Ngoc Ngan Ben Tre — healthy Cai Mon nursery stock with careful packing and nationwide delivery in Vietnam."
     },
     "featured": {
       "title": "Featured plants",

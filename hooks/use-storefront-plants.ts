@@ -8,15 +8,12 @@ import {
 } from "@/lib/api/storefront";
 import { plantMatchesSearch } from "@/lib/plant-search";
 import type {
-  StorefrontCategory,
   StorefrontPlantListItem,
   StorefrontPlantListResponse,
   StorefrontPlantSort,
   StorefrontPlantSortOption,
   StorefrontSortOrder,
 } from "@/types/storefront";
-
-export const ALL_CATEGORIES = "all";
 
 const SEARCH_DEBOUNCE_MS = 350;
 
@@ -41,13 +38,16 @@ export type UseStorefrontPlantsResult = {
   plants: StorefrontPlantListItem[];
   total: number;
   searchInput: string;
-  categorySlug: string;
   sortOption: StorefrontPlantSortOption;
+  /** Page of the last loaded batch; "Load more" links to `page + 1`. */
+  page: number;
+  /** First page shown in the grid; above 1 only on a `?page=N` landing. */
+  firstPage: number;
+  isSearching: boolean;
   isLoading: boolean;
   hasError: boolean;
   hasMore: boolean;
   setSearchInput: (value: string) => void;
-  setCategorySlug: (slug: string) => void;
   setSortOption: (option: StorefrontPlantSortOption) => void;
   loadMore: () => void;
   clearFilters: () => void;
@@ -99,26 +99,29 @@ async function fetchAllPlantsForSearch(params: {
 }
 
 /**
- * Keeps the Homepage grid in sync with `GET /storefront/plants`. The first page
- * is rendered on the server and reused as-is, so the default view costs no
- * browser request; category, sort and "load more" stay on the API. Text search
- * is matched on the client with diacritic folding so queries like `lan` hit
- * `Lan Hồ Điệp`.
+ * Keeps the catalog grid in sync with `GET /storefront/plants`. The page named
+ * in the URL (category + `?page=`) is rendered on the server and reused as-is,
+ * so the default view costs no browser request; sort and "load more" stay on
+ * the API. Text search is matched on the client with diacritic folding so
+ * queries like `lan` hit `Lan Hồ Điệp`.
  */
 export function useStorefrontPlants({
   initial,
-  categories,
+  categoryId,
+  initialPage = 1,
 }: {
   initial: StorefrontPlantListResponse;
-  categories: StorefrontCategory[];
+  /** Category the URL is scoped to; category changes are page navigations. */
+  categoryId?: string;
+  initialPage?: number;
 }): UseStorefrontPlantsResult {
   const initialResponse = useRef(initial);
 
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
-  const [categorySlug, setCategorySlug] = useState(ALL_CATEGORIES);
   const [sortOption, setSortOption] = useState(DEFAULT_SORT);
-  const [page, setPage] = useState(1);
+  const [firstPage, setFirstPage] = useState(initialPage);
+  const [page, setPage] = useState(initialPage);
   const [reloadToken, setReloadToken] = useState(0);
 
   const [items, setItems] = useState(initial.items);
@@ -126,27 +129,26 @@ export function useStorefrontPlants({
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
 
-  const categoryId = useMemo(
-    () => categories.find((category) => category.slug === categorySlug)?.id,
-    [categories, categorySlug]
-  );
-
   // Typing should not turn every keystroke into a request.
   useEffect(() => {
+    const next = searchInput.trim();
+    if (next === search) return;
+
     const timer = setTimeout(() => {
-      setSearch(searchInput.trim());
+      setSearch(next);
+      setFirstPage(1);
       setPage(1);
     }, SEARCH_DEBOUNCE_MS);
 
     return () => clearTimeout(timer);
-  }, [searchInput]);
+  }, [searchInput, search]);
 
   const isSearching = search.length > 0;
 
   const isServerRenderedQuery =
-    page === 1 &&
+    page === initialPage &&
+    firstPage === initialPage &&
     !isSearching &&
-    categorySlug === ALL_CATEGORIES &&
     sortOption === DEFAULT_SORT &&
     reloadToken === 0;
 
@@ -189,7 +191,7 @@ export function useStorefrontPlants({
           { signal: controller.signal }
         ).then((response) => {
           setItems((current) =>
-            page > 1 ? [...current, ...response.items] : response.items
+            page > firstPage ? [...current, ...response.items] : response.items
           );
           setTotal(response.total);
         });
@@ -209,6 +211,7 @@ export function useStorefrontPlants({
     isServerRenderedQuery,
     isSearching,
     page,
+    firstPage,
     search,
     categoryId,
     sortOption,
@@ -227,13 +230,9 @@ export function useStorefrontPlants({
     setSearchInput(value);
   }, []);
 
-  const handleCategoryChange = useCallback((slug: string) => {
-    setCategorySlug(slug);
-    setPage(1);
-  }, []);
-
   const handleSortChange = useCallback((option: StorefrontPlantSortOption) => {
     setSortOption(option);
+    setFirstPage(1);
     setPage(1);
   }, []);
 
@@ -242,13 +241,14 @@ export function useStorefrontPlants({
     setPage((current) => current + 1);
   }, [isSearching]);
 
+  /** Back to exactly what the URL server-rendered. */
   const clearFilters = useCallback(() => {
     setSearchInput("");
     setSearch("");
-    setCategorySlug(ALL_CATEGORIES);
     setSortOption(DEFAULT_SORT);
-    setPage(1);
-  }, []);
+    setFirstPage(initialPage);
+    setPage(initialPage);
+  }, [initialPage]);
 
   const retry = useCallback(() => {
     setReloadToken((token) => token + 1);
@@ -258,14 +258,15 @@ export function useStorefrontPlants({
     plants,
     total,
     searchInput,
-    categorySlug,
     sortOption,
+    page,
+    firstPage,
+    isSearching,
     isLoading,
     hasError,
     // Search loads the full filtered set in one pass; pagination stays for browse.
-    hasMore: !isSearching && items.length < total,
+    hasMore: !isSearching && page * STOREFRONT_PLANTS_PAGE_SIZE < total,
     setSearchInput: handleSearchInput,
-    setCategorySlug: handleCategoryChange,
     setSortOption: handleSortChange,
     loadMore,
     clearFilters,

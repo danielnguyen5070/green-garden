@@ -178,26 +178,24 @@ export function buildPlantJsonLd({
       : buildOffer(basePrice);
 
   const plantsUrl = `${SITE_URL}/${locale}/plants`;
-  const breadcrumbItems = [
-    {
-      "@type": "ListItem",
-      position: 1,
-      name: homeLabel,
-      item: `${SITE_URL}/${locale}`,
-    },
-    {
-      "@type": "ListItem",
-      position: 2,
-      name: plantsLabel,
-      item: plantsUrl,
-    },
-    {
-      "@type": "ListItem",
-      position: 3,
-      name,
-      item: pageUrl,
-    },
+  const breadcrumbTrail = [
+    { name: homeLabel, item: `${SITE_URL}/${locale}` },
+    { name: plantsLabel, item: plantsUrl },
+    ...(plant.category && categoryName
+      ? [
+          {
+            name: categoryName,
+            item: `${SITE_URL}/${locale}/categories/${plant.category.slug}`,
+          },
+        ]
+      : []),
+    { name, item: pageUrl },
   ];
+  const breadcrumbItems = breadcrumbTrail.map((crumb, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    ...crumb,
+  }));
 
   return {
     "@context": "https://schema.org",
