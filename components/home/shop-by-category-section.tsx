@@ -43,7 +43,7 @@ async function ShopByCategorySkeleton() {
         <ul className={gridClassName}>
           {SKELETON_CARDS.map((index) => (
             <li key={index}>
-              <Skeleton className="aspect-[4/3] w-full rounded-2xl" />
+              <Skeleton className="aspect-square w-full rounded-2xl" />
               <Skeleton className="mt-4 h-5 w-2/3 rounded-md" />
               <Skeleton className="mt-2 h-4 w-full rounded-md" />
             </li>
@@ -99,7 +99,7 @@ async function ShopByCategorySection({ className }: { className?: string }) {
                   href={getCatalogHref(category.slug, 1)}
                   className="group block rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 >
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-muted">
+                  <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted">
                     {image ? (
                       <Image
                         src={image}
