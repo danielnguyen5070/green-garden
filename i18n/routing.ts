@@ -6,6 +6,8 @@ export const routing = defineRouting({
   localePrefix: "always",
   // Prefer URL + defaultLocale over Accept-Language so first visit lands on /vi
   localeDetection: false,
+  // Page metadata owns hreflang; the middleware header points x-default at a redirect
+  alternateLinks: false,
 });
 
 export type AppLocale = (typeof routing.locales)[number];
