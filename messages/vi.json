@@ -497,6 +497,17 @@
     "ownerPhilosophy": {
       "title": "Trân trọng đất đai, yêu cây trồng.",
       "description": "Như câu ca dao quen thuộc: “Ai ơi, đừng bỏ ruộng hoang, bao nhiêu tấc đất, tấc vàng bấy nhiêu.” Đó cũng là tinh thần mà Ngọc Ngân muốn lan tỏa: trân trọng đất đai, yêu cây trồng và cùng người nông dân tạo nên những giá trị bền vững từ chính mảnh vườn quê hương."
+    },
+    "visitInfo": {
+      "title": "Ghé thăm nhà vườn",
+      "description": "Bạn có thể đến tận vườn để xem và chọn cây. Nhắn tin trước để Ngọc Ngân chuẩn bị cây sẵn cho bạn.",
+      "addressTitle": "Địa chỉ",
+      "mapLink": "Xem trên Google Maps",
+      "hoursTitle": "Giờ mở cửa",
+      "everyDay": "Mỗi ngày",
+      "contactTitle": "Liên hệ",
+      "contactNote": "Nhắn Zalo hoặc SMS đến {phone}. Số này chỉ nhận tin nhắn, không nhận cuộc gọi.",
+      "zaloLink": "Nhắn Zalo"
     }
   },
   "faq": {

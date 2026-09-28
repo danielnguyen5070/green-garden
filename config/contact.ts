@@ -13,6 +13,23 @@ export const CONTACT_CONFIG = {
   facebookUrl: "https://www.facebook.com/ngan.nguyenngockim.77",
   tiktokUrl: "https://www.tiktok.com/@ngocnganbentre",
   youtubeUrl: "https://www.youtube.com/@ngocnganbentre",
+  mapUrl:
+    "https://www.google.com/maps/place/C%C3%A2y+gi%E1%BB%91ng+Ng%E1%BB%8Dc+Ng%C3%A2n+B%E1%BA%BFn+Tre/@10.2212835,106.2300361,17z",
+} as const;
+
+/** Must match the hours on the Google Business Profile. */
+export const BUSINESS_HOURS = {
+  days: [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ],
+  opens: "07:00",
+  closes: "18:00",
 } as const;
 
 export const CONTACT_SMS_HREF =

@@ -9,7 +9,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
-import { CONTACT_CONFIG } from "../config/contact";
+import { BUSINESS_HOURS, CONTACT_CONFIG } from "../config/contact";
 import { SITE_NAME, SITE_NAME_ASCII, SITE_URL } from "../config/site";
 import { getApiUrl } from "../lib/api/config";
 
@@ -240,12 +240,12 @@ function buildLlmsFullTxt(
     `- Phone / Zalo / SMS: ${CONTACT_CONFIG.phone} (${CONTACT_CONFIG.phoneE164}); Zalo ${CONTACT_CONFIG.zaloUrl}`,
     `- Email: ${CONTACT_CONFIG.email}`,
     `- Address: ${CONTACT_CONFIG.address} (street: 618/34 ấp Bình Tây; locality: Vĩnh Thành; region: Vĩnh Long; country: VN; postal code 86000)`,
-    "- Map: https://www.google.com/maps/place/C%C3%A2y+gi%E1%BB%91ng+Ng%E1%BB%8Dc+Ng%C3%A2n+B%E1%BA%BFn+Tre/@10.2212835,106.2300361,17z",
+    `- Map: ${CONTACT_CONFIG.mapUrl}`,
     "- Coordinates: latitude 10.2212835, longitude 106.2300361",
     "- Area served: Vietnam (nationwide shipping)",
     "- Currencies accepted: VND",
     "- Payment accepted: Cash on Delivery, Bank Transfer",
-    "- Opening hours (published schema): every day 00:00–23:59",
+    `- Opening hours: every day ${BUSINESS_HOURS.opens}–${BUSINESS_HOURS.closes} (walk-in visitors welcome; messages via Zalo/SMS only, no voice calls)`,
     `- Social: Facebook ${CONTACT_CONFIG.facebookUrl}; TikTok ${CONTACT_CONFIG.tiktokUrl}; YouTube ${CONTACT_CONFIG.youtubeUrl}`,
     "- Locales: Vietnamese (`vi`, default) and English (`en`). URLs always include a locale prefix.",
     "",

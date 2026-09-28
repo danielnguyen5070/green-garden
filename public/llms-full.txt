@@ -15,7 +15,7 @@
 - Area served: Vietnam (nationwide shipping)
 - Currencies accepted: VND
 - Payment accepted: Cash on Delivery, Bank Transfer
-- Opening hours (published schema): every day 00:00–23:59
+- Opening hours: every day 07:00–18:00 (walk-in visitors welcome; messages via Zalo/SMS only, no voice calls)
 - Social: Facebook https://www.facebook.com/ngan.nguyenngockim.77; TikTok https://www.tiktok.com/@ngocnganbentre; YouTube https://www.youtube.com/@ngocnganbentre
 - Locales: Vietnamese (`vi`, default) and English (`en`). URLs always include a locale prefix.
 

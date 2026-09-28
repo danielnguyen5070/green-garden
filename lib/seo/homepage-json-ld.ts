@@ -1,4 +1,4 @@
-import { CONTACT_CONFIG } from "@/config/contact";
+import { BUSINESS_HOURS, CONTACT_CONFIG } from "@/config/contact";
 import { SITE_NAME, SITE_NAME_ASCII, SITE_URL } from "@/config/site";
 import {
   BUSINESS_DISPLAY_NAME,
@@ -54,22 +54,13 @@ export function buildHomepageJsonLd({
           latitude: 10.2212835,
           longitude: 106.2300361,
         },
-        hasMap:
-          "https://www.google.com/maps/place/C%C3%A2y+gi%E1%BB%91ng+Ng%E1%BB%8Dc+Ng%C3%A2n+B%E1%BA%BFn+Tre/@10.2212835,106.2300361,17z",
+        hasMap: CONTACT_CONFIG.mapUrl,
         openingHoursSpecification: [
           {
             "@type": "OpeningHoursSpecification",
-            dayOfWeek: [
-              "Monday",
-              "Tuesday",
-              "Wednesday",
-              "Thursday",
-              "Friday",
-              "Saturday",
-              "Sunday",
-            ],
-            opens: "00:00",
-            closes: "23:59",
+            dayOfWeek: BUSINESS_HOURS.days,
+            opens: BUSINESS_HOURS.opens,
+            closes: BUSINESS_HOURS.closes,
           },
         ],
         sameAs: [

@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { OwnerHero } from "@/components/about/owner-hero";
 import { OwnerPhilosophy } from "@/components/about/owner-philosophy";
 import { OwnerStory } from "@/components/about/owner-story";
+import { VisitInfo } from "@/components/about/visit-info";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
@@ -76,6 +77,7 @@ export default async function AboutPage({ params }: Props) {
       <OwnerHero />
       <OwnerStory />
       <OwnerPhilosophy />
+      <VisitInfo />
     </>
   );
 }
