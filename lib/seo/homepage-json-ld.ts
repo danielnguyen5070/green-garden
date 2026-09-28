@@ -1,5 +1,5 @@
 import { CONTACT_CONFIG } from "@/config/contact";
-import { SITE_NAME, SITE_URL } from "@/config/site";
+import { SITE_NAME, SITE_NAME_ASCII, SITE_URL } from "@/config/site";
 import {
   BUSINESS_DISPLAY_NAME,
   LOCAL_BUSINESS_ID,
@@ -33,7 +33,7 @@ export function buildHomepageJsonLd({
         "@type": "LocalBusiness",
         "@id": LOCAL_BUSINESS_ID,
         name: BUSINESS_DISPLAY_NAME,
-        alternateName: "Ngọc Ngân Bến Tre",
+        alternateName: [SITE_NAME, SITE_NAME_ASCII],
         url: SITE_URL,
         logo: `${SITE_URL}/images/logo-mark2.png`,
         image: [`${SITE_URL}/images/og-home.jpg`],
@@ -90,7 +90,7 @@ export function buildHomepageJsonLd({
         "@type": "WebSite",
         "@id": WEBSITE_ID,
         name: SITE_NAME,
-        alternateName: "Ngọc Ngân Bến Tre",
+        alternateName: [SITE_NAME_ASCII],
         url: SITE_URL,
         description:
           "Cây giống, cây ăn trái và hoa kiểng từ Cái Mơn – Chợ Lách. Cây khỏe, đóng gói cẩn thận, giao toàn quốc.",

@@ -7,7 +7,7 @@ export const WEBSITE_ID = `${SITE_URL}/#website` as const;
 export const BRAND_ID = `${SITE_URL}/#brand` as const;
 
 /**
- * Public brand / shop display name. Matches LocalBusiness.name on the homepage
- * JSON-LD — not a new invented label.
+ * LocalBusiness.name — must exactly match the Google Business Profile name.
+ * The site/brand name is `SITE_NAME` in `config/site.ts`.
  */
 export const BUSINESS_DISPLAY_NAME = "Cây giống Ngọc Ngân Bến Tre" as const;

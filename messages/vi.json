@@ -74,7 +74,7 @@
   },
   "footer": {
     "brand": {
-      "name": "NGOC NGAN",
+      "name": "NGỌC NGÂN",
       "description": "Cùng giao lưu, chia sẻ kinh nghiệm và cập nhật những giống cây mới từ Cái Mơn – Bến Tre."
     },
     "shop": {
@@ -97,7 +97,7 @@
     },
     "pageViews": "{count, number} lượt xem",
     "pageViewsPeriod": "Tổng lượt xem production kể từ khi bật Web Analytics",
-    "copyright": "© {year} Ngoc Ngan Ben Tre. Bảo lưu mọi quyền."
+    "copyright": "© {year} Ngọc Ngân Bến Tre. Bảo lưu mọi quyền."
   },
   "home": {
     "metadata": {
@@ -405,7 +405,7 @@
     "footer": {
       "navLabel": "Thông tin pháp lý thanh toán",
       "help": "Trung tâm trợ giúp",
-      "copyright": "Ngoc Ngan Ben Tre"
+      "copyright": "Ngọc Ngân Bến Tre"
     },
     "placeOrder": "Hoàn tất thanh toán",
     "placingOrder": "Đang đặt hàng...",

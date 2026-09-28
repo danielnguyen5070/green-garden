@@ -1,10 +1,10 @@
-# Ngoc Ngan Ben Tre — full context
+# Ngọc Ngân Bến Tre — full context
 
 > Detailed LLM-oriented summary of Ngọc Ngân Bến Tre (https://www.ngocnganbentre.vn): business facts, storefront routes, plant catalog entries from the live API, and blog posts from the site content. Do not invent products or policies beyond what is listed here.
 
 ## Business information
 
-- Legal / brand names: Cây giống Ngọc Ngân Bến Tre; alternateName Ngọc Ngân Bến Tre; English site name Ngoc Ngan Ben Tre.
+- Legal / brand names: Cây giống Ngọc Ngân Bến Tre (Google Business Profile); site name Ngọc Ngân Bến Tre; alternateName Ngoc Ngan Ben Tre.
 - Business type: Local nursery selling seedlings (cây giống), fruit trees (cây ăn trái), and ornamental plants (hoa kiểng), sourced from Cái Mơn – Chợ Lách.
 - Website: https://www.ngocnganbentre.vn
 - Phone / Zalo / SMS: 0386569374 (+84386569374); Zalo https://zalo.me/0386569374
@@ -59,8 +59,6 @@ Ngọc Ngân Bến Tre sells and supplies seedlings, selecting healthy plants of
 
 Plant pages use absolute URLs of the form `https://www.ngocnganbentre.vn/{locale}/plants/{slug}`. Names and descriptions below come from `GET /api/v1/storefront/plants` at generation time.
 
-- [Nguyen Hoang Viet](https://www.ngocnganbentre.vn/vi/plants/diamond-guava1): Category: Kiểng Lá
-- [Nguyen Hoang Viet (en)](https://www.ngocnganbentre.vn/en/plants/diamond-guava1)
 - [Xoài Tượng](https://www.ngocnganbentre.vn/vi/plants/tuong-mango): Category: Cây Ăn Quả. Giống xoài sinh trưởng khỏe, cho quả lớn, thịt chắc và hương vị thanh mát. Phù hợp trồng tại nhà và trong điều kiện khí hậu nhiệt đới.
 - [Xoài Tượng (en)](https://www.ngocnganbentre.vn/en/plants/tuong-mango): English name: Tuong Mango
 - [Táo Mamey](https://www.ngocnganbentre.vn/vi/plants/mamey-apple): Category: Cây Ăn Quả. Cây ăn quả nhiệt đới thường xanh, có tán lá xanh bóng và cho quả lớn, thơm. Phù hợp với khí hậu nhiệt đới ấm áp.

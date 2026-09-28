@@ -43,7 +43,7 @@ async function FooterBrand() {
             {t(FOOTER_BRAND.nameKey)}
           </span>
           <span className="font-sans text-[0.625rem] font-medium leading-tight tracking-[0.18em] text-primary-foreground/50 uppercase sm:text-[0.6875rem]">
-            BEN TRE
+            BẾN TRE
           </span>
         </span>
       </Link>

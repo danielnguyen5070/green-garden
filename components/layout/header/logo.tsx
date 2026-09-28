@@ -27,10 +27,10 @@ function Logo({ className }: { className?: string }) {
       <LogoMark className="size-10 sm:size-11 md:size-12" />
       <span className="flex flex-col">
         <span className="font-sans text-base font-semibold leading-tight tracking-tight text-foreground sm:text-lg">
-          NGOC NGAN
+          NGỌC NGÂN
         </span>
         <span className="font-sans text-[0.625rem] font-medium leading-tight tracking-[0.18em] text-muted-foreground uppercase sm:text-[0.6875rem]">
-          BEN TRE
+          BẾN TRE
         </span>
       </span>
     </Link>

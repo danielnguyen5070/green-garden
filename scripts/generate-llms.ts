@@ -10,7 +10,7 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { CONTACT_CONFIG } from "../config/contact";
-import { SITE_NAME, SITE_URL } from "../config/site";
+import { SITE_NAME, SITE_NAME_ASCII, SITE_URL } from "../config/site";
 import { getApiUrl } from "../lib/api/config";
 
 type PlantListItem = {
@@ -234,7 +234,7 @@ function buildLlmsFullTxt(
     "",
     "## Business information",
     "",
-    `- Legal / brand names: Cây giống Ngọc Ngân Bến Tre; alternateName Ngọc Ngân Bến Tre; English site name ${SITE_NAME}.`,
+    `- Legal / brand names: Cây giống Ngọc Ngân Bến Tre (Google Business Profile); site name ${SITE_NAME}; alternateName ${SITE_NAME_ASCII}.`,
     "- Business type: Local nursery selling seedlings (cây giống), fruit trees (cây ăn trái), and ornamental plants (hoa kiểng), sourced from Cái Mơn – Chợ Lách.",
     `- Website: ${SITE_URL}`,
     `- Phone / Zalo / SMS: ${CONTACT_CONFIG.phone} (${CONTACT_CONFIG.phoneE164}); Zalo ${CONTACT_CONFIG.zaloUrl}`,

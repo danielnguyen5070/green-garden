@@ -1,4 +1,4 @@
-# Ngoc Ngan Ben Tre
+# Ngọc Ngân Bến Tre
 
 > Cây giống Ngọc Ngân Bến Tre (Ngọc Ngân Bến Tre) — nursery selling seedlings, fruit trees, and ornamental plants from Cái Mơn – Chợ Lách. Healthy stock, careful packing, nationwide delivery in Vietnam. Site: https://www.ngocnganbentre.vn. Languages: Vietnamese (`/vi`) and English (`/en`). Default locale: `vi`.
 
@@ -23,7 +23,6 @@ Contact is by Zalo or SMS (no voice calls). Cash on delivery and bank transfer a
 
 ## Plant / product pages
 
-- [Nguyen Hoang Viet](https://www.ngocnganbentre.vn/vi/plants/diamond-guava1): Kiểng Lá
 - [Xoài Tượng](https://www.ngocnganbentre.vn/vi/plants/tuong-mango): Cây Ăn Quả — Giống xoài sinh trưởng khỏe, cho quả lớn, thịt chắc và hương vị thanh mát. Phù hợp trồng tại nhà và trong điều kiện khí 
 - [Táo Mamey](https://www.ngocnganbentre.vn/vi/plants/mamey-apple): Cây Ăn Quả — Cây ăn quả nhiệt đới thường xanh, có tán lá xanh bóng và cho quả lớn, thơm. Phù hợp với khí hậu nhiệt đới ấm áp.
 - [Ổi Kim Cương](https://www.ngocnganbentre.vn/vi/plants/diamond-guava): Cây Ăn Quả — Giống ổi Kim Cương sinh trưởng khỏe, cho trái đẹp và năng suất tốt. Phù hợp trồng tại nhà và trong điều kiện khí hậu nhi

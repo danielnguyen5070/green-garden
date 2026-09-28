@@ -74,7 +74,7 @@
   },
   "footer": {
     "brand": {
-      "name": "NGOC NGAN",
+      "name": "NGỌC NGÂN",
       "description": "Swap growing tips and keep up with the newest seedlings from Cái Mơn – Bến Tre."
     },
     "shop": {
@@ -97,11 +97,11 @@
     },
     "pageViews": "{count, number} page views",
     "pageViewsPeriod": "Total production page views since Web Analytics was enabled",
-    "copyright": "© {year} Ngoc Ngan Ben Tre. All rights reserved."
+    "copyright": "© {year} Ngọc Ngân Bến Tre. All rights reserved."
   },
   "home": {
     "metadata": {
-      "title": "Ngoc Ngan Ben Tre | Cai Mon seedlings",
+      "title": "Ngọc Ngân Bến Tre | Cai Mon seedlings",
       "description": "Seedlings, fruit trees, and ornamental plants from Cai Mon – Cho Lach. Healthy stock, careful packing, nationwide delivery.",
       "ogImageAlt": "Ngoc Ngan Ben Tre — browse Cai Mon seedlings, woman among yellow blossoms in a Ben Tre garden",
       "keywords": "Cai Mon seedlings, Ben Tre nursery, fruit tree seedlings, ornamental plants, Ngoc Ngan"
@@ -192,8 +192,8 @@
   },
   "search": {
     "metadata": {
-      "title": "Search results for \"{query}\" | Ngoc Ngan Ben Tre",
-      "titleEmpty": "Search | Ngoc Ngan Ben Tre",
+      "title": "Search results for \"{query}\" | Ngọc Ngân Bến Tre",
+      "titleEmpty": "Search | Ngọc Ngân Bến Tre",
       "description": "Search results for \"{query}\" across plants and garden notes at Ngoc Ngan Ben Tre.",
       "descriptionEmpty": "Search plants and garden notes at Ngoc Ngan Ben Tre."
     },
@@ -212,7 +212,7 @@
   },
   "reviews": {
     "metadata": {
-      "title": "Customer Reviews | Ngoc Ngan Ben Tre",
+      "title": "Customer Reviews | Ngọc Ngân Bến Tre",
       "description": "Read customer reviews of Ngoc Ngan Ben Tre seedlings, packing, and service — and share your own experience.",
       "ogImageAlt": "Customer reviews for Ngoc Ngan Ben Tre nursery",
       "keywords": "customer reviews, Ngoc Ngan Ben Tre, seedling reviews, Ben Tre nursery reviews"
@@ -405,7 +405,7 @@
     "footer": {
       "navLabel": "Checkout legal",
       "help": "Help Center",
-      "copyright": "Ngoc Ngan Ben Tre"
+      "copyright": "Ngọc Ngân Bến Tre"
     },
     "placeOrder": "Complete checkout",
     "placingOrder": "Placing order...",
