@@ -16,7 +16,10 @@ import {
   localizeText,
   sortPlantImages,
 } from "@/lib/storefront";
-import type { StorefrontPlantDetail } from "@/types/storefront";
+import type {
+  StorefrontPlantDetail,
+  StorefrontPlantPotSize,
+} from "@/types/storefront";
 
 type PlantJsonLdInput = {
   locale: string;
@@ -71,27 +74,39 @@ function buildOfferShippingDetails(locale: string) {
 /**
  * Offer-level return policy for merchant listings.
  *
- * Matches FAQ: living plants are not taken back when healthy; damage / order
- * issues must be reported within 48 hours of delivery for replacement or refund.
+ * Matches FAQ: healthy plants are not taken back, so returns are not permitted.
+ * Transit damage reported within 48 hours gets a replacement or refund — a
+ * guarantee, not a return, so it lives only in the FAQ copy.
  */
 function buildMerchantReturnPolicy(locale: string) {
   return {
     "@type": "MerchantReturnPolicy" as const,
     applicableCountry: "VN",
     returnPolicyCategory:
-      "https://schema.org/MerchantReturnFiniteReturnWindow" as const,
-    merchantReturnDays: 2,
-    returnMethod: "https://schema.org/ReturnByMail" as const,
-    returnFees: "https://schema.org/FreeReturn" as const,
+      "https://schema.org/MerchantReturnNotPermitted" as const,
     merchantReturnLink: `${SITE_URL}/${locale}/faq`,
   };
 }
 
+/** Must match the unit price `PlantDetail` shows for the selected pot size. */
+function getPotSizeUnitPrice(
+  basePrice: number,
+  size: StorefrontPlantPotSize,
+  locale: string
+): number {
+  return (
+    basePrice +
+    localizePrice(size.price_adjustment, size.price_adjustment_vi, locale)
+  );
+}
+
 /**
- * Plant detail @graph: Brand, Product (+ Offer/AggregateOffer), BreadcrumbList.
+ * Plant detail @graph: Brand, Product (+ Offers), BreadcrumbList.
  *
  * - `brand` → `#brand` (Brand with a real name) — never `#localbusiness`
  * - `seller` → `#localbusiness` (the shop LocalBusiness on the homepage)
+ * - `offers` → one Offer per active pot size (default size first), or a single
+ *   Offer at the base price when the plant has no sizes
  *
  * Omits optional fields we cannot represent accurately yet: `review`,
  * `aggregateRating`.
@@ -120,20 +135,7 @@ export function buildPlantJsonLd({
     : "https://schema.org/OutOfStock";
 
   const potSizes = getActivePotSizes(plant.pot_sizes);
-  const offerPrices =
-    potSizes.length > 0
-      ? potSizes.map(
-          (size) =>
-            basePrice +
-            localizePrice(
-              size.price_adjustment,
-              size.price_adjustment_vi,
-              locale
-            )
-        )
-      : [basePrice];
-  const lowPrice = Math.min(...offerPrices);
-  const highPrice = Math.max(...offerPrices);
+  const priceDecimals = currency === "VND" ? 0 : 2;
 
   const imageUrls = sortPlantImages(plant.images)
     .filter((image) => image.type === "image")
@@ -156,30 +158,24 @@ export function buildPlantJsonLd({
   const shippingDetails = buildOfferShippingDetails(locale);
   const hasMerchantReturnPolicy = buildMerchantReturnPolicy(locale);
 
+  const buildOffer = (price: number, sizeName?: string) => ({
+    "@type": "Offer" as const,
+    ...(sizeName ? { name: sizeName } : {}),
+    price: price.toFixed(priceDecimals),
+    priceCurrency: currency,
+    availability,
+    url: pageUrl,
+    seller,
+    shippingDetails,
+    hasMerchantReturnPolicy,
+  });
+
   const offers =
-    potSizes.length > 1
-      ? {
-          "@type": "AggregateOffer",
-          lowPrice: lowPrice.toFixed(currency === "VND" ? 0 : 2),
-          highPrice: highPrice.toFixed(currency === "VND" ? 0 : 2),
-          priceCurrency: currency,
-          offerCount: potSizes.length,
-          availability,
-          url: pageUrl,
-          seller,
-          shippingDetails,
-          hasMerchantReturnPolicy,
-        }
-      : {
-          "@type": "Offer",
-          price: basePrice.toFixed(currency === "VND" ? 0 : 2),
-          priceCurrency: currency,
-          availability,
-          url: pageUrl,
-          seller,
-          shippingDetails,
-          hasMerchantReturnPolicy,
-        };
+    potSizes.length > 0
+      ? potSizes.map((size) =>
+          buildOffer(getPotSizeUnitPrice(basePrice, size, locale), size.name)
+        )
+      : buildOffer(basePrice);
 
   const plantsUrl = `${SITE_URL}/${locale}/plants`;
   const breadcrumbItems = [
