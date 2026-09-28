@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getErrorMessage } from "@/lib/api/errors";
+import { useTranslations } from "next-intl";
+import { ApiError } from "@/lib/api/errors";
 import { streamChat, toChatApiMessages } from "@/lib/api/chat";
 import { mockChatEngine } from "@/lib/chatbot/mock-engine";
 import type { ChatEngine, ChatMessage, ChatSuggestion } from "@/types/chatbot";
@@ -63,6 +64,7 @@ function useChatbot({
   locale,
   engine = mockChatEngine,
 }: UseChatbotOptions): UseChatbotReturn {
+  const t = useTranslations("chatbot.errors");
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [suggestions, setSuggestions] = useState<ChatSuggestion[]>([]);
@@ -195,18 +197,16 @@ function useChatbot({
                 setMessages((current) =>
                   current.map((message) =>
                     message.id === assistantId
-                      ? {
-                          ...message,
-                          content:
-                            "Sorry, I could not generate a reply. Please try again.",
-                        }
+                      ? { ...message, content: t("emptyReply") }
                       : message
                   )
                 );
               }
               finishStream();
             },
-            onError: (message) => {
+            // Backend stream errors are English diagnostics, not user copy.
+            onError: () => {
+              const message = t("generic");
               ensureAssistantMessage();
               assembled = message;
               setMessages((current) =>
@@ -227,10 +227,8 @@ function useChatbot({
         return;
       }
 
-      const message = getErrorMessage(
-        error,
-        "Something went wrong. Please try again."
-      );
+      const message =
+        error instanceof ApiError ? t("generic") : t("unreachable");
       if (assistantStarted) {
         setMessages((current) =>
           current.map((item) =>
@@ -242,7 +240,7 @@ function useChatbot({
       }
       finishStream();
     }
-  }, []);
+  }, [t]);
 
   return {
     isOpen,

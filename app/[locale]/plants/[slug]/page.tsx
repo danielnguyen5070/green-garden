@@ -16,14 +16,30 @@ import { resolveOgImage } from "@/lib/seo/og-image";
 import { buildPlantJsonLd } from "@/lib/seo/plant-json-ld";
 import {
   getPrimaryPlantImage,
-  localizeOptionalText,
   localizeText,
+  localizeTextStrict,
 } from "@/lib/storefront";
 import type { StorefrontPlantDetail } from "@/types/storefront";
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
 };
+
+/** Generated in the page's language for plants missing a translated description. */
+async function getFallbackDescription(
+  plant: StorefrontPlantDetail,
+  locale: string
+): Promise<string> {
+  const t = await getTranslations({ locale, namespace: "plantDetail" });
+  const name = localizeText(plant.name, plant.name_vi, locale);
+  const category = plant.category
+    ? localizeText(plant.category.name, plant.category.name_vi, locale)
+    : null;
+
+  return category
+    ? t("metadataDescription", { name, category })
+    : t("metadataDescriptionNoCategory", { name });
+}
 
 /** Admin-set OG image, then the first product photo, then the site default. */
 function resolvePlantOgImage(plant: StorefrontPlantDetail, name: string) {
@@ -45,11 +61,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const name = localizeText(plant.name, plant.name_vi, locale);
-  const description = localizeOptionalText(
-    plant.description,
-    plant.description_vi,
-    locale
-  );
+  const description =
+    localizeTextStrict(plant.description, plant.description_vi, locale) ??
+    (await getFallbackDescription(plant, locale));
   const ogTitle = `${name} | ${SITE_NAME}`;
   const path = `/${locale}/plants/${plant.slug}`;
   const languages = {
@@ -61,14 +75,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: name,
-    description: description ?? undefined,
+    description,
     alternates: {
       canonical: path,
       languages,
     },
     openGraph: {
       title: ogTitle,
-      description: description ?? undefined,
+      description,
       url: path,
       siteName: SITE_NAME,
       locale: locale === "vi" ? "vi_VN" : "en_US",
@@ -79,7 +93,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: ogTitle,
-      description: description ?? undefined,
+      description,
       images: [ogImage.url],
     },
   };
@@ -95,11 +109,12 @@ export default async function PlantDetailPage({ params }: Props) {
 
   redirectToCanonicalPlantSlug(locale, slug, plant);
 
-  const [t, tPlants, shippingPolicy] = await Promise.all([
+  const [t, tPlants, shippingPolicy, fallbackDescription] = await Promise.all([
     getTranslations({ locale, namespace: "plantDetail" }),
     getTranslations({ locale, namespace: "plants" }),
     // Structured data can go without shipping details; the page cannot fail.
     getStorefrontShippingPolicy().catch(() => null),
+    getFallbackDescription(plant, locale),
   ]);
   const jsonLd = buildPlantJsonLd({
     locale,
@@ -107,6 +122,7 @@ export default async function PlantDetailPage({ params }: Props) {
     homeLabel: t("home"),
     plantsLabel: tPlants("title"),
     shippingPolicy,
+    fallbackDescription,
   });
 
   return (

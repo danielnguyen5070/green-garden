@@ -13,8 +13,8 @@ import {
   getPotSizeUnitPrice,
   getPrimaryPlantImage,
   isPlantInStock,
-  localizeOptionalTextEither,
   localizeText,
+  localizeTextStrict,
   sortPlantImages,
 } from "@/lib/storefront";
 import type {
@@ -29,6 +29,8 @@ type PlantJsonLdInput = {
   plantsLabel: string;
   /** `null` when the policy could not be loaded; shipping details are omitted. */
   shippingPolicy: StorefrontShippingPolicy | null;
+  /** Used when the plant has no description in `locale`. */
+  fallbackDescription: string;
 };
 
 /**
@@ -106,18 +108,19 @@ export function buildPlantJsonLd({
   homeLabel,
   plantsLabel,
   shippingPolicy,
+  fallbackDescription,
 }: PlantJsonLdInput) {
-  const { name, description, price: basePrice } = getLocalizedPlant(
-    plant,
-    locale
-  );
-  const longDescription = localizeOptionalTextEither(
-    plant.long_description,
-    plant.long_description_vi,
-    locale
-  );
-  // Prefer long-form copy for Product schema when present.
-  const schemaDescription = longDescription ?? description;
+  const { name, price: basePrice } = getLocalizedPlant(plant, locale);
+  // Prefer long-form copy for Product schema; `inLanguage` rules out the
+  // other language's copy.
+  const schemaDescription =
+    localizeTextStrict(
+      plant.long_description,
+      plant.long_description_vi,
+      locale
+    ) ??
+    localizeTextStrict(plant.description, plant.description_vi, locale) ??
+    fallbackDescription;
   const pageUrl = `${SITE_URL}/${locale}/plants/${plant.slug}`;
   const availability = isPlantInStock(plant)
     ? "https://schema.org/InStock"
@@ -203,7 +206,7 @@ export function buildPlantJsonLd({
         "@type": "Product",
         "@id": `${pageUrl}#product`,
         name,
-        ...(schemaDescription ? { description: schemaDescription } : {}),
+        description: schemaDescription,
         ...(imageUrls.length > 0 ? { image: imageUrls } : {}),
         url: pageUrl,
         ...(categoryName ? { category: categoryName } : {}),
@@ -214,7 +217,7 @@ export function buildPlantJsonLd({
           "@id": pageUrl,
           url: pageUrl,
           name,
-          ...(schemaDescription ? { description: schemaDescription } : {}),
+          description: schemaDescription,
           inLanguage: locale,
           isPartOf: {
             "@id": WEBSITE_ID,

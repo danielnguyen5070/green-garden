@@ -10,7 +10,11 @@ import {
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildCatalogMetadata } from "@/lib/seo/catalog-metadata";
 import { buildCategoryJsonLd } from "@/lib/seo/category-json-ld";
-import { localizeOptionalText, localizeText } from "@/lib/storefront";
+import {
+  localizeOptionalText,
+  localizeText,
+  localizeTextStrict,
+} from "@/lib/storefront";
 import { parseCatalogPage } from "@/lib/storefront/catalog";
 import { getCategoryBySlugOrNull } from "@/lib/storefront/get-category-by-slug";
 import type { StorefrontCategory } from "@/types/storefront";
@@ -20,14 +24,24 @@ type Props = {
   searchParams: Promise<{ page?: string | string[] }>;
 };
 
-function getCategoryCopy(category: StorefrontCategory, locale: string) {
+async function getCategoryCopy(category: StorefrontCategory, locale: string) {
+  const t = await getTranslations({ locale, namespace: "plants" });
+  const name = localizeText(category.name, category.name_vi, locale);
+
   return {
-    name: localizeText(category.name, category.name_vi, locale),
+    name,
     description: localizeOptionalText(
       category.description,
       category.description_vi,
       locale
     ),
+    /** Never the other language's copy: metadata and schema declare `locale`. */
+    metaDescription:
+      localizeTextStrict(
+        category.description,
+        category.description_vi,
+        locale
+      ) ?? t("category.metadataDescription", { category: name }),
   };
 }
 
@@ -44,13 +58,12 @@ export async function generateMetadata({
   }
 
   const t = await getTranslations({ locale, namespace: "plants" });
-  const { name, description } = getCategoryCopy(category, locale);
+  const { name, metaDescription } = await getCategoryCopy(category, locale);
 
   return buildCatalogMetadata({
     locale,
     title: page > 1 ? t("pageTitle", { title: name, page }) : name,
-    description:
-      description ?? t("category.metadataDescription", { category: name }),
+    description: metaDescription,
     categorySlug: category.slug,
     page,
     ogImageAlt: name,
@@ -69,15 +82,17 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
   const t = await getTranslations({ locale, namespace: "plants" });
   const tDetail = await getTranslations({ locale, namespace: "plantDetail" });
-  const { name, description } = getCategoryCopy(category, locale);
+  const { name, description, metaDescription } = await getCategoryCopy(
+    category,
+    locale
+  );
   const sectionClassName = "pb-16 md:pb-20 lg:pb-24";
 
   const jsonLd = buildCategoryJsonLd({
     locale,
     slug: category.slug,
     name,
-    description:
-      description ?? t("category.metadataDescription", { category: name }),
+    description: metaDescription,
     homeLabel: tDetail("home"),
     plantsLabel: t("title"),
   });

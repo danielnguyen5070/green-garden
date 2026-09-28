@@ -219,12 +219,28 @@ function isValidHttpUrl(value: string): boolean {
   }
 }
 
+/**
+ * `/vi` is the default storefront; without these it shows English copy under
+ * `lang="vi"`, so a plant can't be live until they're filled in.
+ */
+function hasVietnameseCopy(plant: {
+  name_vi: string | null;
+  description_vi: string | null;
+}): boolean {
+  return Boolean(plant.name_vi?.trim() && plant.description_vi?.trim());
+}
+
 /** Client-side guardrails; the backend stays the source of truth. */
-function validateForm(values: PlantFormValues): string | null {
+function validateForm(
+  values: PlantFormValues,
+  willBeActive: boolean
+): string | null {
   if (!values.category_id) return copy.invalidCategory;
   if (!values.name || values.name.length > 255) return copy.invalidName;
-  // Vietnamese name is optional; only its length is constrained.
   if (values.name_vi.length > 255) return copy.invalidNameVi;
+  if (willBeActive && !hasVietnameseCopy(values)) {
+    return copy.vietnameseRequiredForActive;
+  }
   if (!values.slug || values.slug.length > 255) return copy.invalidSlug;
   if (!values.sku || values.sku.length > 100) return copy.invalidSku;
 
@@ -664,6 +680,12 @@ export default function AdminPlantsPage() {
   async function handleToggleStatus(plant: AdminPlantListItem) {
     setStatusPendingId(plant.id);
     try {
+      // List items omit descriptions, so activation checks the full record.
+      if (!plant.is_active && !hasVietnameseCopy(await getPlant(plant.id))) {
+        toast.error(copy.vietnameseRequiredForActive);
+        return;
+      }
+
       const updated = await updatePlantStatus(plant.id, {
         is_active: !plant.is_active,
       });
@@ -1154,7 +1176,10 @@ function PlantForm({
   function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     const values = readForm(event.currentTarget, categoryId, care);
-    const invalid = validateForm(values);
+    // Edit has no status field; status changes go through the list action.
+    const willBeActive =
+      mode === "create" ? values.is_active : Boolean(plant?.is_active);
+    const invalid = validateForm(values, willBeActive);
     if (invalid) {
       onValidationError(invalid);
       return;

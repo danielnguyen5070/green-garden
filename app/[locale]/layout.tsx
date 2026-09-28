@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Toaster } from "@/components/ui/toaster";
+import { SITE_NAME, SITE_URL } from "@/config/site";
 import { routing } from "@/i18n/routing";
 import { fontVariables } from "@/lib/fonts";
 import "../globals.css";
@@ -13,29 +14,47 @@ type Props = {
   params: Promise<{ locale: string }>;
 };
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://www.ngocnganbentre.vn"),
-  title: {
-    default: "Ngoc Ngan Ben Tre",
-    template: "%s | Ngoc Ngan Ben Tre",
-  },
-  description: "Seedling and plant nursery",
-  applicationName: "Ngoc Ngan Ben Tre",
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+/** Pages without their own description inherit this one, so it must match `lang`. */
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const base: Metadata = {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: SITE_NAME,
+      template: `%s | ${SITE_NAME}`,
+    },
+    applicationName: SITE_NAME,
+    robots: {
       index: true,
       follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
-  },
-  openGraph: {
-    type: "website",
-    siteName: "Ngoc Ngan Ben Tre",
-  },
-};
+    openGraph: {
+      type: "website",
+      siteName: SITE_NAME,
+    },
+  };
+
+  if (!hasLocale(routing.locales, locale)) {
+    return base;
+  }
+
+  const t = await getTranslations({ locale, namespace: "site" });
+
+  return {
+    ...base,
+    description: t("description"),
+    openGraph: {
+      ...base.openGraph,
+      locale: locale === "vi" ? "vi_VN" : "en_US",
+    },
+  };
+}
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

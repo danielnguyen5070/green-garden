@@ -38,6 +38,19 @@ export function localizeOptionalText(
 }
 
 /**
+ * The active locale's own value, never the other language. Metadata and
+ * structured data use this so `/vi` never ships English copy tagged as `vi`.
+ */
+export function localizeTextStrict(
+  english: string | null | undefined,
+  vietnamese: string | null | undefined,
+  locale: string
+): string | null {
+  const value = isVietnamese(locale) ? vietnamese : english;
+  return value?.trim() ? value : null;
+}
+
+/**
  * Locale-first optional text that falls back to the other language when the
  * preferred value is empty (used for long-form plant copy).
  */

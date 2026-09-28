@@ -1,4 +1,7 @@
 {
+  "site": {
+    "description": "Cai Mon – Ben Tre seedling nursery: healthy fruit trees and ornamental plants, carefully packed and delivered nationwide."
+  },
   "nav": {
     "plants": "Plants",
     "allPlants": "All plants",
@@ -276,6 +279,8 @@
   "plantDetail": {
     "home": "Home",
     "breadcrumb": "Breadcrumb",
+    "metadataDescription": "{name} seedlings – {category}. Healthy nursery stock from Cai Mon – Ben Tre, carefully packed and delivered nationwide.",
+    "metadataDescriptionNoCategory": "{name} seedlings from a Cai Mon – Ben Tre nursery. Healthy stock, carefully packed and delivered nationwide.",
     "featured": "Featured",
     "potSize": "Pot size",
     "sizeGuide": "Size Guide",
@@ -601,6 +606,11 @@
     "send": "Send message",
     "typing": "Assistant is typing",
     "emojiSoon": "Emoji picker coming soon",
-    "attachSoon": "Attachments coming soon"
+    "attachSoon": "Attachments coming soon",
+    "errors": {
+      "emptyReply": "Sorry, I could not generate a reply. Please try again.",
+      "generic": "Something went wrong. Please try again.",
+      "unreachable": "Unable to reach the chat service. Please try again."
+    }
   }
 }

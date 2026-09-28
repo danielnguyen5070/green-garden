@@ -193,7 +193,8 @@ export const adminCopy = {
       featured: "Featured",
       featuredHint: "Highlighted on the storefront.",
       active: "Active",
-      activeHint: "Visible in the storefront.",
+      activeHint:
+        "Visible in the storefront. Requires the Vietnamese name and description.",
       plantType: "Plant type",
       difficulty: "Difficulty",
       growthRate: "Growth rate",
@@ -273,6 +274,8 @@ export const adminCopy = {
     invalidSku: "SKU is required (1-100 characters).",
     invalidPrice: "Price must be a number of 0 or more.",
     invalidPriceVi: "Vietnamese price must be a number of 0 or more.",
+    vietnameseRequiredForActive:
+      "Vietnamese name and description are required before a plant can be active.",
     invalidStock: "Stock must be a whole number of 0 or more.",
     invalidOgImageUrl: "OG Image URL must be a valid URL.",
     invalidPlantType: "Plant type is invalid.",

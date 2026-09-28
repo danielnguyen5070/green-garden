@@ -1,4 +1,7 @@
 {
+  "site": {
+    "description": "Nhà vườn cây giống Cái Mơn – Bến Tre: cây ăn trái, hoa kiểng khỏe mạnh, đóng gói cẩn thận, giao hàng toàn quốc."
+  },
   "nav": {
     "plants": "Cây giống",
     "allPlants": "Tất cả cây giống",
@@ -276,6 +279,8 @@
   "plantDetail": {
     "home": "Trang chủ",
     "breadcrumb": "Đường dẫn",
+    "metadataDescription": "Cây giống {name} – {category}. Cây khỏe từ nhà vườn Cái Mơn – Bến Tre, đóng gói cẩn thận, giao hàng toàn quốc.",
+    "metadataDescriptionNoCategory": "Cây giống {name} từ nhà vườn Cái Mơn – Bến Tre. Cây khỏe, đóng gói cẩn thận, giao hàng toàn quốc.",
     "featured": "Nổi bật",
     "potSize": "Cỡ chậu",
     "sizeGuide": "Hướng dẫn kích thước",
@@ -601,6 +606,11 @@
     "send": "Gửi tin nhắn",
     "typing": "Trợ lý đang soạn tin",
     "emojiSoon": "Biểu tượng cảm xúc sắp có",
-    "attachSoon": "Đính kèm tệp sắp có"
+    "attachSoon": "Đính kèm tệp sắp có",
+    "errors": {
+      "emptyReply": "Xin lỗi, mình chưa trả lời được. Bạn vui lòng thử lại nhé.",
+      "generic": "Đã xảy ra lỗi. Vui lòng thử lại.",
+      "unreachable": "Không kết nối được trợ lý. Vui lòng thử lại."
+    }
   }
 }
