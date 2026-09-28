@@ -1,3 +1,5 @@
+import "server-only";
+
 import { routing, type AppLocale } from "@/i18n/routing";
 
 const INDEXNOW_ENDPOINT = "https://api.indexnow.org/IndexNow";
