@@ -639,6 +639,7 @@ export default function AdminPlantsPage() {
       return;
     }
 
+    const previousSlug = selected.slug;
     setFormError(null);
     setSubmitting(true);
     try {
@@ -648,7 +649,10 @@ export default function AdminPlantsPage() {
       toast.success(copy.updatedSuccess);
       refresh(page);
       if (plant.is_active) {
-        void notifyPlantToIndexNow(plant.slug);
+        void notifyPlantToIndexNow(
+          plant.slug,
+          previousSlug !== plant.slug ? previousSlug : undefined
+        );
       }
     } catch (err) {
       setFormError(getErrorMessage(err));

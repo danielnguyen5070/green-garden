@@ -114,8 +114,18 @@ export async function submitToIndexNow(urls: string[]): Promise<void> {
   );
 }
 
-export async function submitPlantToIndexNow(slug: string): Promise<void> {
-  await submitToIndexNow(getPublicPlantUrls(slug));
+/**
+ * Pass `previousSlug` after a rename so engines recrawl the old URLs, which
+ * now permanently redirect to the new slug.
+ */
+export async function submitPlantToIndexNow(
+  slug: string,
+  previousSlug?: string
+): Promise<void> {
+  await submitToIndexNow([
+    ...getPublicPlantUrls(slug),
+    ...(previousSlug ? getPublicPlantUrls(previousSlug) : []),
+  ]);
 }
 
 export async function submitBlogPostToIndexNow(slug: string): Promise<void> {

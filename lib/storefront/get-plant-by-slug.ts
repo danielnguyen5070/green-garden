@@ -1,3 +1,4 @@
+import { permanentRedirect } from "next/navigation";
 import { ApiError } from "@/lib/api/errors";
 import { getStorefrontPlantBySlug } from "@/lib/api/storefront";
 import type { StorefrontPlantDetail } from "@/types/storefront";
@@ -5,6 +6,9 @@ import type { StorefrontPlantDetail } from "@/types/storefront";
 /**
  * Resolves a public plant by slug. Returns null for HTTP 404 so callers can
  * invoke `notFound()` without leaking API details. Other errors rethrow.
+ *
+ * The API also resolves case/separator variants and slugs the plant used
+ * before a rename; `plant.slug` is always the current, canonical slug.
  *
  * Safe to call from `generateMetadata`, layout, and page — fetch memoization
  * collapses them into one request per render.
@@ -22,4 +26,18 @@ async function getPlantBySlugOrNull(
   }
 }
 
-export { getPlantBySlugOrNull };
+/**
+ * 308-redirects to the canonical plant URL when the requested slug is a
+ * variant or an old slug. Must run outside `try` blocks: it throws.
+ */
+function redirectToCanonicalPlantSlug(
+  locale: string,
+  urlSlug: string,
+  plant: StorefrontPlantDetail
+): void {
+  if (urlSlug !== plant.slug) {
+    permanentRedirect(`/${locale}/plants/${plant.slug}`);
+  }
+}
+
+export { getPlantBySlugOrNull, redirectToCanonicalPlantSlug };

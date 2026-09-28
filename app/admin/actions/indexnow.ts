@@ -20,10 +20,16 @@ function isValidSlug(value: unknown): value is string {
  * session is re-verified here. Rejections and IndexNow failures are logged
  * and never thrown back to the UI so a search ping cannot block catalog edits.
  *
+ * `previousSlug` is the slug before a rename; an invalid value is dropped so
+ * the new URLs are still submitted.
+ *
  * Blog posts have no in-app editor; scripts/CI should call
  * `submitBlogPostToIndexNow` from `@/lib/indexnow` directly.
  */
-export async function notifyPlantToIndexNow(slug: unknown): Promise<void> {
+export async function notifyPlantToIndexNow(
+  slug: unknown,
+  previousSlug?: unknown
+): Promise<void> {
   if (!isValidSlug(slug)) {
     console.warn("[IndexNow] rejected invalid plant slug");
     return;
@@ -35,8 +41,13 @@ export async function notifyPlantToIndexNow(slug: unknown): Promise<void> {
     return;
   }
 
+  const oldSlug =
+    isValidSlug(previousSlug) && previousSlug !== slug
+      ? previousSlug
+      : undefined;
+
   try {
-    await submitPlantToIndexNow(slug);
+    await submitPlantToIndexNow(slug, oldSlug);
   } catch (error) {
     console.error("[IndexNow] plant notify failed", slug, error);
   }

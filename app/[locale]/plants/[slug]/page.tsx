@@ -8,7 +8,10 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
 import { getStorefrontShippingPolicy } from "@/lib/api/storefront";
-import { getPlantBySlugOrNull } from "@/lib/storefront/get-plant-by-slug";
+import {
+  getPlantBySlugOrNull,
+  redirectToCanonicalPlantSlug,
+} from "@/lib/storefront/get-plant-by-slug";
 import { buildPlantJsonLd } from "@/lib/seo/plant-json-ld";
 import { localizeOptionalText, localizeText } from "@/lib/storefront";
 
@@ -34,11 +37,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     locale
   );
   const ogTitle = `${name} | ${SITE_NAME}`;
-  const path = `/${locale}/plants/${slug}`;
+  const path = `/${locale}/plants/${plant.slug}`;
   const languages = {
-    vi: `/vi/plants/${slug}`,
-    en: `/en/plants/${slug}`,
-    "x-default": `/${routing.defaultLocale}/plants/${slug}`,
+    vi: `/vi/plants/${plant.slug}`,
+    en: `/en/plants/${plant.slug}`,
+    "x-default": `/${routing.defaultLocale}/plants/${plant.slug}`,
   };
   const ogImageUrl = plant.og_image_url?.trim() || null;
 
@@ -86,6 +89,8 @@ export default async function PlantDetailPage({ params }: Props) {
   if (!plant) {
     notFound();
   }
+
+  redirectToCanonicalPlantSlug(locale, slug, plant);
 
   const [t, tPlants, shippingPolicy] = await Promise.all([
     getTranslations({ locale, namespace: "plantDetail" }),
