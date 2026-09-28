@@ -72,6 +72,27 @@ export function getPotSizeAdjustment(
   return parseMoney(size.price_adjustment_vi);
 }
 
+/**
+ * Unit price of a plant in a pot size: the one sum the card, detail page and
+ * Product JSON-LD all show, matching what checkout charges.
+ */
+export function getPotSizeUnitPrice(
+  basePrice: number,
+  size:
+    | Pick<StorefrontPlantPotSize | StorefrontPotSizeSummary, "price_adjustment_vi">
+    | null
+    | undefined
+): number {
+  return size ? basePrice + getPotSizeAdjustment(size) : basePrice;
+}
+
+/** Stock is tracked per plant; every pot size shares it. */
+export function isPlantInStock(
+  plant: { in_stock: boolean } | { stock: number }
+): boolean {
+  return "in_stock" in plant ? plant.in_stock : plant.stock > 0;
+}
+
 export function formatStorefrontPrice(
   amount: string | number,
   locale: string
@@ -115,9 +136,7 @@ export function getCardPrice(plant: {
 }): number | null {
   const base = getVndPrice(plant.price_vi);
   if (base === null) return null;
-  return plant.default_pot_size
-    ? base + getPotSizeAdjustment(plant.default_pot_size)
-    : base;
+  return getPotSizeUnitPrice(base, plant.default_pot_size);
 }
 
 /**

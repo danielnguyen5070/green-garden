@@ -24,6 +24,8 @@ import {
   getActivePotSizes,
   getLocalizedPlant,
   getPotSizeAdjustment,
+  getPotSizeUnitPrice,
+  isPlantInStock,
   localizeOptionalTextEither,
   localizeText,
   sortPlantImages,
@@ -84,10 +86,11 @@ function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
   // Both the base price and the adjustment come from the backend; the only
   // arithmetic here is adding the two amounts it already decided on. The cart
   // stores only the selection and is re-priced by the backend quote.
-  const adjustment = selectedSize ? getPotSizeAdjustment(selectedSize) : 0;
-  const unitPrice = basePrice === null ? null : basePrice + adjustment;
+  const unitPrice =
+    basePrice === null ? null : getPotSizeUnitPrice(basePrice, selectedSize);
   const lineTotal = unitPrice === null ? null : unitPrice * quantity;
-  const canAddToCart = plant.in_stock && unitPrice !== null;
+  const inStock = isPlantInStock(plant);
+  const canAddToCart = inStock && unitPrice !== null;
 
   function handleAddToCart() {
     addItem({
@@ -225,7 +228,7 @@ function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
                   className="size-4 stroke-[1.5]"
                   data-icon="inline-start"
                 />
-                {!plant.in_stock
+                {!inStock
                   ? t("outOfStock")
                   : lineTotal === null
                     ? tCommon("contactForPrice")

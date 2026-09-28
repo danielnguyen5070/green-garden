@@ -10,8 +10,9 @@ import { toAbsoluteUrl } from "@/lib/seo/url";
 import {
   getActivePotSizes,
   getLocalizedPlant,
-  getPotSizeAdjustment,
+  getPotSizeUnitPrice,
   getPrimaryPlantImage,
+  isPlantInStock,
   localizeOptionalTextEither,
   localizeText,
   sortPlantImages,
@@ -93,7 +94,8 @@ function buildMerchantReturnPolicy(locale: string) {
  * - `seller` → `#localbusiness` (the shop LocalBusiness on the homepage)
  * - `offers` → one VND Offer per active pot size (default size first), or a
  *   single Offer at the base price when the plant has no sizes. Omitted when
- *   the plant has no VND price, because it cannot be ordered.
+ *   the plant has no VND price, because it cannot be ordered. Every offer
+ *   shares the plant-level availability, since stock is not tracked per size.
  *
  * Omits optional fields we cannot represent accurately yet: `review`,
  * `aggregateRating`.
@@ -117,7 +119,7 @@ export function buildPlantJsonLd({
   // Prefer long-form copy for Product schema when present.
   const schemaDescription = longDescription ?? description;
   const pageUrl = `${SITE_URL}/${locale}/plants/${plant.slug}`;
-  const availability = plant.in_stock
+  const availability = isPlantInStock(plant)
     ? "https://schema.org/InStock"
     : "https://schema.org/OutOfStock";
 
@@ -164,9 +166,9 @@ export function buildPlantJsonLd({
       ? null
       : potSizes.length > 0
         ? potSizes.map((size) =>
-            buildOffer(basePrice + getPotSizeAdjustment(size), size.name)
+            buildOffer(getPotSizeUnitPrice(basePrice, size), size.name)
           )
-        : buildOffer(basePrice);
+        : buildOffer(getPotSizeUnitPrice(basePrice, null));
 
   const plantsUrl = `${SITE_URL}/${locale}/plants`;
   const breadcrumbTrail = [

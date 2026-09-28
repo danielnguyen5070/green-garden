@@ -11,6 +11,7 @@ import {
   getCardPrice,
   getLocalizedPlant,
   getPlantCardImage,
+  isPlantInStock,
 } from "@/lib/storefront";
 import type { StorefrontPlantListItem } from "@/types/storefront";
 import { cn } from "@/lib/utils";
@@ -31,7 +32,7 @@ function PlantCard({
   const { name, description } = getLocalizedPlant(plant, locale);
   const price = getCardPrice(plant);
   const image = getPlantCardImage(plant.images, name);
-  const inStock = plant.stock > 0;
+  const inStock = isPlantInStock(plant);
   const canAddToCart = inStock && price !== null;
 
   function handleAddToCart(event: MouseEvent<HTMLButtonElement>) {
