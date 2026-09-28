@@ -5,11 +5,18 @@ import { ArrowRightIcon, LeafIcon, MessageCircleIcon, SproutIcon } from "lucide-
 import { HOME_REVIEWS_LIMIT } from "@/components/home/customer-reviews-section";
 import { ReviewStars } from "@/components/reviews/review-stars";
 import { Button } from "@/components/ui/button";
+import { MediaImagePreload } from "@/components/ui/media-image-preload";
 import { Container } from "@/components/layout/container";
 import { CONTACT_CONFIG } from "@/config/contact";
 import { Link } from "@/i18n/navigation";
 import { loadStorefrontReviewPreview } from "@/lib/reviews";
 import { cn } from "@/lib/utils";
+
+/** Shared by the `<Image>` and its preload so both resolve the same candidate. */
+const HERO_IMAGE = {
+  src: "/images/hero-plants.avif",
+  sizes: "(max-width: 1024px) 45vw, 560px",
+} as const;
 
 /** Real rating from the reviews API; renders nothing rather than a made-up number. */
 async function HeroReviewSummary() {
@@ -128,13 +135,18 @@ async function Hero({ className }: { className?: string }) {
 
               <div className="absolute inset-[1.5%] [filter:drop-shadow(0_24px_48px_rgb(36_49_39_/_0.18))_drop-shadow(0_10px_20px_rgb(36_49_39_/_0.1))_drop-shadow(0_2px_6px_rgb(36_49_39_/_0.08))] md:inset-[2%]">
                 <div className="relative h-full w-full overflow-hidden [clip-path:url(#gg-hero-organic-clip)]">
+                  <MediaImagePreload
+                    {...HERO_IMAGE}
+                    fill
+                    media="(min-width: 768px)"
+                  />
+                  {/* Stays lazy so it is never fetched while hidden below `md`. */}
                   <Image
-                    src="/images/hero-plants.avif"
+                    {...HERO_IMAGE}
                     alt={t("imageAlt")}
                     fill
-                    priority
+                    fetchPriority="high"
                     className="object-cover"
-                    sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 560px"
                   />
                 </div>
               </div>

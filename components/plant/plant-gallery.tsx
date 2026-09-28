@@ -58,7 +58,7 @@ function PlantGallery({
             src={active.src}
             alt={active.alt}
             fill
-            priority
+            preload={activeIndex === 0}
             className="object-cover"
             sizes="(max-width: 1024px) 100vw, 50vw"
           />

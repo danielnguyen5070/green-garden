@@ -2,10 +2,17 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { ArrowRightIcon, LeafIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { MediaImagePreload } from "@/components/ui/media-image-preload";
 import { Container } from "@/components/layout/container";
 import { ABOUT_IMAGES } from "@/components/about/images";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
+
+/** Shared by the `<Image>` and its preload so both resolve the same candidate. */
+const OWNER_IMAGE = {
+  src: ABOUT_IMAGES.owner,
+  sizes: "(max-width: 1024px) 45vw, 520px",
+} as const;
 
 async function OwnerHero({ className }: { className?: string }) {
   const t = await getTranslations("about.ownerHero");
@@ -83,13 +90,18 @@ async function OwnerHero({ className }: { className?: string }) {
 
               <div className="absolute inset-[1.5%] [filter:drop-shadow(0_20px_40px_rgb(36_49_39_/_0.11))_drop-shadow(0_6px_14px_rgb(36_49_39_/_0.06))] md:inset-[2%]">
                 <div className="relative h-full w-full overflow-hidden [clip-path:url(#gg-owner-hero-organic-clip)]">
+                  <MediaImagePreload
+                    {...OWNER_IMAGE}
+                    fill
+                    media="(min-width: 768px)"
+                  />
+                  {/* Stays lazy so it is never fetched while hidden below `md`. */}
                   <Image
-                    src={ABOUT_IMAGES.owner}
+                    {...OWNER_IMAGE}
                     alt={t("imageAlt")}
                     fill
-                    priority
+                    fetchPriority="high"
                     className="object-cover"
-                    sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 520px"
                   />
                 </div>
               </div>

@@ -37,7 +37,7 @@ function StatusView({
               alt={ILLUSTRATION.alt}
               width={ILLUSTRATION.width}
               height={ILLUSTRATION.height}
-              priority
+              preload
               className="h-auto w-full max-h-[min(48vh,24rem)] object-contain object-center sm:max-h-[min(52vh,28rem)] lg:max-h-[min(68vh,34rem)]"
               sizes="(max-width: 1024px) min(24rem, 85vw), min(24rem, 40vw)"
             />
