@@ -2,9 +2,9 @@
  * Public storefront responses from `GET /api/v1/storefront/*`.
  *
  * Deliberately separate from `types/admin-plant.ts` and `types/category.ts`:
- * the storefront payloads omit SKU, stock counts, `is_active` and audit
+ * the storefront payloads omit SKU, stock counts, `is_active` and most audit
  * timestamps, so reusing the admin types would promise fields that are never
- * sent to the public site.
+ * sent to the public site. List rows carry `updated_at` for sitemap `<lastmod>`.
  */
 
 import type { OrderStatus } from "@/types/order";
@@ -22,6 +22,7 @@ export type StorefrontCategory = {
   description_vi: string | null;
   image_url: string | null;
   sort_order: number;
+  updated_at?: string;
 };
 
 export type StorefrontCategoryListResponse = {
@@ -96,6 +97,7 @@ export type StorefrontPlantListItem = {
   category?: StorefrontCategorySummary | null;
   images?: StorefrontPlantImage[];
   default_pot_size?: StorefrontPotSizeSummary | null;
+  updated_at?: string;
 };
 
 export type StorefrontPlantListResponse = {

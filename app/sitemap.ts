@@ -1,61 +1,79 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/config/site";
 import { routing, type AppLocale } from "@/i18n/routing";
 import {
   getStorefrontCategories,
   getStorefrontPlants,
 } from "@/lib/api/storefront";
+import { toIsoDate } from "@/lib/seo/url";
 import { getAllPosts } from "@/services/blog.service";
-
-const baseUrl = "https://www.ngocnganbentre.vn";
 
 /** Matches the storefront API `page_size` cap. */
 const PLANT_PAGE_SIZE = 100;
 
-const STATIC_PAGES = [
-  { path: "", priority: 1 },
-  { path: "/plants", priority: 0.9 },
-  { path: "/blog", priority: 0.8 },
-  { path: "/reviews", priority: 0.7 },
-  { path: "/faq", priority: 0.7 },
-  { path: "/about", priority: 0.6 },
-] as const;
+type DatedSlug = {
+  slug: string;
+  updatedAt: string | undefined;
+};
 
 function localeUrl(locale: AppLocale, path: string): string {
-  return path === "" ? `${baseUrl}/${locale}` : `${baseUrl}/${locale}${path}`;
+  return path === "" ? `${SITE_URL}/${locale}` : `${SITE_URL}/${locale}${path}`;
 }
 
-function entry(
+/** ISO strings from `toIsoDate` share one format, so they sort as text. */
+function latest(dates: (string | undefined)[]): string | undefined {
+  return dates.reduce<string | undefined>(
+    (max, date) => (date && (!max || date > max) ? date : max),
+    undefined
+  );
+}
+
+/**
+ * One `<url>` per locale version, each repeating the full hreflang set so
+ * every version is self-describing.
+ */
+function localizedEntries(
   path: string,
-  priority: number,
-  languages?: Record<string, string>
-): MetadataRoute.Sitemap[number] {
-  const alternates = languages ?? {
-    vi: localeUrl("vi", path),
-    en: localeUrl("en", path),
-  };
+  options: {
+    locales?: readonly AppLocale[];
+    lastModified?: (locale: AppLocale) => string | undefined;
+  } = {}
+): MetadataRoute.Sitemap {
+  const locales = options.locales ?? routing.locales;
+  if (locales.length === 0) return [];
 
-  const url =
-    alternates[routing.defaultLocale] ?? Object.values(alternates)[0];
+  const languages: Record<string, string> = Object.fromEntries(
+    locales.map((locale) => [locale, localeUrl(locale, path)])
+  );
+  const fallback = locales.includes(routing.defaultLocale)
+    ? routing.defaultLocale
+    : locales[0];
+  languages["x-default"] = localeUrl(fallback, path);
 
-  return {
-    url,
-    priority,
-    alternates: { languages: alternates },
-  };
+  return locales.map((locale) => ({
+    url: localeUrl(locale, path),
+    lastModified: options.lastModified?.(locale),
+    alternates: { languages },
+  }));
 }
 
-async function getAllCategorySlugs(): Promise<string[]> {
+async function getAllCategories(): Promise<DatedSlug[]> {
   try {
     const { items } = await getStorefrontCategories();
-    return items.map((category) => category.slug).filter(Boolean);
+    return items
+      .filter((category) => Boolean(category.slug))
+      .map((category) => ({
+        slug: category.slug,
+        updatedAt: toIsoDate(category.updated_at),
+      }));
   } catch {
     // Catalog may be unavailable at build time; keep the remaining URLs.
     return [];
   }
 }
 
-async function getAllPlantSlugs(): Promise<string[]> {
-  const slugs: string[] = [];
+async function getAllPlants(): Promise<DatedSlug[]> {
+  const plants: DatedSlug[] = [];
   let page = 1;
   let total = Number.POSITIVE_INFINITY;
 
@@ -68,7 +86,10 @@ async function getAllPlantSlugs(): Promise<string[]> {
 
       for (const plant of response.items) {
         if (plant.slug) {
-          slugs.push(plant.slug);
+          plants.push({
+            slug: plant.slug,
+            updatedAt: toIsoDate(plant.updated_at),
+          });
         }
       }
 
@@ -82,35 +103,59 @@ async function getAllPlantSlugs(): Promise<string[]> {
     }
   } catch {
     // Catalog may be unavailable at build time; keep static + blog URLs.
-    return slugs;
+    return plants;
   }
 
-  return slugs;
+  return plants;
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const entries: MetadataRoute.Sitemap = [];
-
-  for (const page of STATIC_PAGES) {
-    entries.push(entry(page.path, page.priority));
-  }
-
-  const [categorySlugs, plantSlugs] = await Promise.all([
-    getAllCategorySlugs(),
-    getAllPlantSlugs(),
+  const [categories, plants] = await Promise.all([
+    getAllCategories(),
+    getAllPlants(),
   ]);
-
-  for (const slug of categorySlugs) {
-    entries.push(entry(`/categories/${slug}`, 0.8));
-  }
-
-  for (const slug of plantSlugs) {
-    entries.push(entry(`/plants/${slug}`, 0.8));
-  }
 
   const postsByLocale = Object.fromEntries(
     routing.locales.map((locale) => [locale, getAllPosts(locale)])
   ) as Record<AppLocale, ReturnType<typeof getAllPosts>>;
+
+  const postDate = (post: ReturnType<typeof getAllPosts>[number]) =>
+    toIsoDate(post.updatedAt) ?? toIsoDate(post.publishedAt);
+
+  const plantsModified = latest(plants.map((plant) => plant.updatedAt));
+  const blogModified = latest(
+    routing.locales.flatMap((locale) => postsByLocale[locale].map(postDate))
+  );
+
+  // Pages without a content date omit `<lastmod>` rather than claim build time.
+  const staticPages: { path: string; lastModified?: string }[] = [
+    { path: "", lastModified: latest([plantsModified, blogModified]) },
+    { path: "/plants", lastModified: plantsModified },
+    { path: "/blog", lastModified: blogModified },
+    { path: "/reviews" },
+    { path: "/faq" },
+    { path: "/about" },
+  ];
+
+  const entries: MetadataRoute.Sitemap = staticPages.flatMap((page) =>
+    localizedEntries(page.path, { lastModified: () => page.lastModified })
+  );
+
+  for (const category of categories) {
+    entries.push(
+      ...localizedEntries(`/categories/${category.slug}`, {
+        lastModified: () => category.updatedAt,
+      })
+    );
+  }
+
+  for (const plant of plants) {
+    entries.push(
+      ...localizedEntries(`/plants/${plant.slug}`, {
+        lastModified: () => plant.updatedAt,
+      })
+    );
+  }
 
   const blogSlugs = new Set(
     routing.locales.flatMap((locale) =>
@@ -119,17 +164,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   );
 
   for (const slug of blogSlugs) {
-    const languages: Record<string, string> = {};
+    const postByLocale = new Map(
+      routing.locales.flatMap((locale) => {
+        const post = postsByLocale[locale].find((item) => item.slug === slug);
+        return post ? [[locale, post] as const] : [];
+      })
+    );
 
-    for (const locale of routing.locales) {
-      const post = postsByLocale[locale].find((item) => item.slug === slug);
-      if (!post) continue;
-      languages[locale] = localeUrl(locale, `/blog/${slug}`);
-    }
-
-    if (Object.keys(languages).length === 0) continue;
-
-    entries.push(entry(`/blog/${slug}`, 0.7, languages));
+    entries.push(
+      ...localizedEntries(`/blog/${slug}`, {
+        locales: [...postByLocale.keys()],
+        lastModified: (locale) => {
+          const post = postByLocale.get(locale);
+          return post ? postDate(post) : undefined;
+        },
+      })
+    );
   }
 
   return entries;
