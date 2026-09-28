@@ -84,11 +84,11 @@ export default async function HomePage({ params }: Props) {
     <>
       <JsonLd data={jsonLd} />
       <Hero />
-      <Suspense fallback={<ShopByCategorySkeleton />}>
-        <ShopByCategorySection />
-      </Suspense>
       <Suspense fallback={<FeaturedPlantsSkeleton />}>
         <FeaturedPlantsSection />
+      </Suspense>
+      <Suspense fallback={<ShopByCategorySkeleton />}>
+        <ShopByCategorySection />
       </Suspense>
       <Suspense fallback={<CustomerReviewsSkeleton />}>
         <CustomerReviewsSection />
