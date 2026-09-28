@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { Container } from "@/components/layout/container";
+import { getNavCategories } from "@/lib/storefront/get-nav-categories";
 import { cn } from "@/lib/utils";
 import { HeaderActions } from "./header/header-actions";
 import { Logo } from "./header/logo";
@@ -19,7 +20,9 @@ function HeaderSearchFallback({ className }: { className?: string }) {
   );
 }
 
-function Header({ className }: { className?: string }) {
+async function Header({ className }: { className?: string }) {
+  const categories = await getNavCategories();
+
   return (
     <header
       data-slot="header"
@@ -31,7 +34,7 @@ function Header({ className }: { className?: string }) {
       <Container className="flex h-[4.75rem] items-center gap-4 md:h-20 md:gap-6 lg:gap-10">
         <Logo />
 
-        <Navigation className="hidden md:block" />
+        <Navigation categories={categories} className="hidden md:block" />
 
         <div className="ml-auto flex min-w-0 items-center gap-1.5 sm:gap-2.5 md:gap-3">
           <Suspense
@@ -42,7 +45,7 @@ function Header({ className }: { className?: string }) {
             <HeaderSearch className="max-w-[9.5rem] sm:max-w-[11rem] md:max-w-[13rem] lg:max-w-56" />
           </Suspense>
           <HeaderActions />
-          <MobileMenu />
+          <MobileMenu categories={categories} />
         </div>
       </Container>
     </header>

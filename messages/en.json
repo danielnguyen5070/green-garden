@@ -1,6 +1,8 @@
 {
   "nav": {
     "plants": "Plants",
+    "allPlants": "All plants",
+    "categoriesLabel": "Plant categories",
     "careGuide": "Care Guide",
     "about": "About",
     "reviews": "Reviews"
@@ -74,10 +76,7 @@
     },
     "shop": {
       "title": "Shop",
-      "newArrivals": "New Arrivals",
-      "bestSellers": "Best Sellers",
-      "categories": "Categories",
-      "plants": "Plants"
+      "allPlants": "All plants"
     },
     "support": {
       "title": "Support",
@@ -119,6 +118,10 @@
         "title": "Need advice or to order?",
         "description": "Message us on Zalo or SMS {phone}, and the shop will get back to you as soon as possible."
       }
+    },
+    "categories": {
+      "title": "Shop by category",
+      "description": "Pick the kind of plant you need: fruit trees, ornamentals and more seedlings from Cai Mon."
     },
     "products": {
       "title": "Trending Products",

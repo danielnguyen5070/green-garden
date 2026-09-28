@@ -8,12 +8,8 @@ export const FOOTER_BRAND = {
 
 export const FOOTER_SHOP = {
   titleKey: "shop.title",
-  links: [
-    { href: "/plants", labelKey: "shop.newArrivals" },
-    { href: "/plants", labelKey: "shop.bestSellers" },
-    { href: "/plants", labelKey: "shop.categories" },
-    { href: "/plants", labelKey: "shop.plants" },
-  ],
+  /** Category links are appended from the API at render time. */
+  links: [{ href: "/plants", labelKey: "shop.allPlants" }],
 } as const;
 
 export const FOOTER_SUPPORT = {

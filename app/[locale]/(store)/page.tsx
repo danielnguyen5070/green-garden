@@ -8,6 +8,10 @@ import {
 import { Hero } from "@/components/home/hero";
 import { NewsletterSection } from "@/components/home/newsletter-section";
 import {
+  ShopByCategorySection,
+  ShopByCategorySkeleton,
+} from "@/components/home/shop-by-category-section";
+import {
   FeaturedPlantsSection,
   FeaturedPlantsSkeleton,
 } from "@/components/plant/featured-plants-section";
@@ -80,6 +84,9 @@ export default async function HomePage({ params }: Props) {
     <>
       <JsonLd data={jsonLd} />
       <Hero />
+      <Suspense fallback={<ShopByCategorySkeleton />}>
+        <ShopByCategorySection />
+      </Suspense>
       <Suspense fallback={<FeaturedPlantsSkeleton />}>
         <FeaturedPlantsSection />
       </Suspense>

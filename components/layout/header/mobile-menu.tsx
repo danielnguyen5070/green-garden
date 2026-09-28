@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { MenuIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,11 +13,15 @@ import {
 } from "@/components/ui/sheet";
 import { NAV_LINKS } from "@/config/navigation";
 import { Link } from "@/i18n/navigation";
+import { localizeText } from "@/lib/storefront";
+import { getCatalogHref } from "@/lib/storefront/catalog";
+import type { StorefrontCategory } from "@/types/storefront";
 import { Logo } from "./logo";
 
-function MobileMenu() {
+function MobileMenu({ categories }: { categories: StorefrontCategory[] }) {
   const tNav = useTranslations("nav");
   const tCommon = useTranslations("common");
+  const locale = useLocale();
 
   return (
     <Sheet>
@@ -57,6 +61,27 @@ function MobileMenu() {
                 >
                   {tNav(link.labelKey)}
                 </SheetClose>
+                {"withCategories" in link && categories.length > 0 ? (
+                  <ul
+                    aria-label={tNav("categoriesLabel")}
+                    className="mb-1 ml-3 flex flex-col gap-0.5 border-l border-border pl-2"
+                  >
+                    {categories.map((category) => (
+                      <li key={category.id}>
+                        <SheetClose
+                          render={
+                            <Link
+                              href={getCatalogHref(category.slug, 1)}
+                              className="block rounded-md px-3 py-2 font-sans text-sm text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-primary focus-visible:ring-2 focus-visible:ring-ring"
+                            />
+                          }
+                        >
+                          {localizeText(category.name, category.name_vi, locale)}
+                        </SheetClose>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
               </li>
             ))}
           </ul>

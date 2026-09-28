@@ -1,6 +1,8 @@
 {
   "nav": {
     "plants": "Cây giống",
+    "allPlants": "Tất cả cây giống",
+    "categoriesLabel": "Danh mục cây giống",
     "careGuide": "Chăm sóc",
     "about": "Giới thiệu",
     "reviews": "Đánh giá"
@@ -74,10 +76,7 @@
     },
     "shop": {
       "title": "Cửa hàng",
-      "newArrivals": "Hàng mới",
-      "bestSellers": "Bán chạy",
-      "categories": "Danh mục",
-      "plants": "Cây trồng"
+      "allPlants": "Tất cả cây giống"
     },
     "support": {
       "title": "Hỗ trợ",
@@ -119,6 +118,10 @@
         "title": "Cần tư vấn, đặt hàng?",
         "description": "Hãy nhắn tin qua Zalo hoặc SMS {phone}."
       }
+    },
+    "categories": {
+      "title": "Mua theo danh mục",
+      "description": "Chọn nhóm cây bạn cần: cây ăn trái, hoa kiểng và nhiều loại cây giống khác từ Cái Mơn."
     },
     "products": {
       "title": "Sản phẩm",

@@ -1,12 +1,15 @@
 import Image from "next/image";
 import { EyeIcon } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import {
   FOOTER_SECTIONS,
   type FooterNavSection,
 } from "@/config/footer";
 import { CONTACT_CONFIG } from "@/config/contact";
 import { Link } from "@/i18n/navigation";
+import { localizeText } from "@/lib/storefront";
+import { getCatalogHref } from "@/lib/storefront/catalog";
+import { getNavCategories } from "@/lib/storefront/get-nav-categories";
 import { getVisitsPageviews } from "@/lib/vercel-web-analytics";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/layout/container";
@@ -55,7 +58,19 @@ async function FooterBrand() {
   );
 }
 
-async function FooterNavColumn({ section }: { section: FooterNavSection }) {
+type FooterExtraLink = {
+  key: string;
+  href: ReturnType<typeof getCatalogHref>;
+  label: string;
+};
+
+async function FooterNavColumn({
+  section,
+  extraLinks = [],
+}: {
+  section: FooterNavSection;
+  extraLinks?: FooterExtraLink[];
+}) {
   const t = await getTranslations("footer");
   const headingId = `footer-${section.titleKey.replace(".", "-")}`;
 
@@ -81,6 +96,13 @@ async function FooterNavColumn({ section }: { section: FooterNavSection }) {
                 {t(link.labelKey)}
               </Link>
             )}
+          </li>
+        ))}
+        {extraLinks.map((link) => (
+          <li key={link.key}>
+            <Link href={link.href} className={linkClassName}>
+              {link.label}
+            </Link>
           </li>
         ))}
       </ul>
@@ -148,8 +170,17 @@ async function FooterPageViews() {
 }
 
 async function Footer({ className }: { className?: string }) {
-  const t = await getTranslations("footer");
+  const [t, locale, categories] = await Promise.all([
+    getTranslations("footer"),
+    getLocale(),
+    getNavCategories(),
+  ]);
   const year = new Date().getFullYear();
+  const categoryLinks = categories.map((category) => ({
+    key: category.id,
+    href: getCatalogHref(category.slug, 1),
+    label: localizeText(category.name, category.name_vi, locale),
+  }));
 
   return (
     <footer
@@ -159,7 +190,7 @@ async function Footer({ className }: { className?: string }) {
       <Container className="pt-16 md:pt-20 lg:pt-24">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-x-8 md:gap-y-12 lg:grid-cols-[minmax(0,1.35fr)_repeat(3,minmax(0,0.9fr))] lg:gap-x-16 xl:gap-x-24">
           <FooterBrand />
-          <FooterNavColumn section={FOOTER_SHOP} />
+          <FooterNavColumn section={FOOTER_SHOP} extraLinks={categoryLinks} />
           <FooterNavColumn section={FOOTER_SUPPORT} />
           <FooterSocial />
         </div>
