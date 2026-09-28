@@ -3,7 +3,10 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowRightIcon } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { Link } from "@/i18n/navigation";
-import { getStorefrontPlants } from "@/lib/api/storefront";
+import {
+  STOREFRONT_PLANTS_MAX_PAGE_SIZE,
+  getStorefrontPlants,
+} from "@/lib/api/storefront";
 import {
   formatStorefrontPrice,
   getCardPrice,
@@ -11,6 +14,7 @@ import {
   getPlantCardImage,
   localizeText,
 } from "@/lib/storefront";
+import { getCatalogHref } from "@/lib/storefront/catalog";
 import type {
   StorefrontPlantDetail,
   StorefrontPlantListItem,
@@ -74,8 +78,28 @@ function RelatedPlantCard({
 }
 
 /**
- * One extra listing request scoped to the plant's own category, rather than a
- * detail lookup per card.
+ * The `limit` plants after `plantId` in catalog order, wrapping to the start.
+ * Every product in a category gets inbound links from its neighbours instead
+ * of every page linking to the same newest few.
+ */
+function pickNeighbours(
+  items: StorefrontPlantListItem[],
+  plantId: string,
+  limit: number
+): StorefrontPlantListItem[] {
+  // With the current plant removed, its own index points at the next neighbour.
+  const start = Math.max(
+    items.findIndex((item) => item.id === plantId),
+    0
+  );
+  const others = items.filter((item) => item.id !== plantId);
+
+  return [...others.slice(start), ...others.slice(0, start)].slice(0, limit);
+}
+
+/**
+ * One listing request scoped to the plant's own category (in catalog order),
+ * rather than a detail lookup per card.
  */
 async function RelatedPlants({
   plant,
@@ -94,13 +118,13 @@ async function RelatedPlants({
     getLocale(),
     getStorefrontPlants({
       category_id: plant.category.id,
-      page_size: RELATED_LIMIT + 1,
+      page_size: STOREFRONT_PLANTS_MAX_PAGE_SIZE,
+      sort: "created_at",
+      order: "desc",
     }).catch(() => null),
   ]);
 
-  const plants = (response?.items ?? [])
-    .filter((item) => item.id !== plant.id)
-    .slice(0, RELATED_LIMIT);
+  const plants = pickNeighbours(response?.items ?? [], plant.id, RELATED_LIMIT);
 
   if (plants.length === 0) {
     return null;
@@ -124,7 +148,7 @@ async function RelatedPlants({
             {t("title")}
           </h2>
           <Link
-            href="/plants"
+            href={getCatalogHref(plant.category.slug, 1)}
             className="inline-flex items-center gap-1.5 font-sans text-sm font-medium text-primary outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-ring"
           >
             {t("viewAll")}
