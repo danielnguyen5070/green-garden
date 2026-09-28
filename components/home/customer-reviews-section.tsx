@@ -64,16 +64,15 @@ async function CustomerReviewsSection({ className }: { className?: string }) {
   ]);
 
   // Secondary content: hide instead of showing an error or an empty state.
-  if (
-    !preview ||
-    preview.summary.total_reviews === 0 ||
-    preview.reviews.length === 0
-  ) {
+  if (!preview || preview.reviews.length === 0) {
     return null;
   }
 
   const { summary, reviews } = preview;
-  const rating = summary.average_rating.toFixed(1);
+  const rating =
+    summary && summary.total_reviews > 0
+      ? summary.average_rating.toFixed(1)
+      : null;
 
   return (
     <section
@@ -92,23 +91,25 @@ async function CustomerReviewsSection({ className }: { className?: string }) {
             </p>
           </div>
 
-          <div
-            data-slot="home-reviews-summary"
-            className="flex shrink-0 items-center gap-4"
-          >
-            <p className="font-heading text-3xl font-bold tracking-tight text-foreground tabular-nums">
-              <span aria-hidden="true">{t("ratingValue", { rating })}</span>
-              <span className="sr-only">
-                {tReviews("averageRatingLabel", { rating })}
-              </span>
-            </p>
-            <div>
-              <ReviewStars rating={summary.average_rating} size="lg" />
-              <p className="mt-1.5 font-sans text-small text-muted-foreground">
-                {tReviews("basedOn", { count: summary.total_reviews })}
+          {summary && rating ? (
+            <div
+              data-slot="home-reviews-summary"
+              className="flex shrink-0 items-center gap-4"
+            >
+              <p className="font-heading text-3xl font-bold tracking-tight text-foreground tabular-nums">
+                <span aria-hidden="true">{t("ratingValue", { rating })}</span>
+                <span className="sr-only">
+                  {tReviews("averageRatingLabel", { rating })}
+                </span>
               </p>
+              <div>
+                <ReviewStars rating={summary.average_rating} size="lg" />
+                <p className="mt-1.5 font-sans text-small text-muted-foreground">
+                  {tReviews("basedOn", { count: summary.total_reviews })}
+                </p>
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
 
         <ul className={gridClassName}>
