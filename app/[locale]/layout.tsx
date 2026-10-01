@@ -3,6 +3,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { Toaster } from "@/components/ui/toaster";
 import { SITE_NAME, SITE_URL } from "@/config/site";
 import { pickClientMessages } from "@/i18n/client-messages";
@@ -81,6 +82,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         </NextIntlClientProvider>
         <Toaster />
         <Analytics />
+        <GoogleAnalytics />
       </body>
     </html>
   );
