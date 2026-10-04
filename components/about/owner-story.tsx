@@ -15,7 +15,7 @@ async function OwnerStory({ className }: { className?: string }) {
         data-slot="owner-intro"
         aria-labelledby="owner-intro-heading"
         className={cn(
-          "bg-background !py-12 md:!py-16 lg:!py-20",
+          "bg-background !pt-0 !pb-12 md:!pb-16 lg:!pb-20",
           className
         )}
       >
@@ -51,7 +51,7 @@ async function OwnerStory({ className }: { className?: string }) {
       <Section
         data-slot="owner-journey"
         aria-labelledby="owner-journey-heading"
-        className="bg-background !py-12 md:!py-16 lg:!py-20"
+        className="bg-background !pt-0 !pb-12 md:!pb-16 lg:!pb-20"
       >
         <Container>
           <div className="grid items-center gap-10 md:grid-cols-2 md:gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16 xl:gap-24">
