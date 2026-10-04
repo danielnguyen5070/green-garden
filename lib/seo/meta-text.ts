@@ -28,6 +28,11 @@ function stripMarkdown(text: string): string {
     .replace(/(\*\*|__|\*|_|`|~~)(\S(?:.*?\S)?)\1/g, "$2");
 }
 
+/** Markdown flattened to single-line plain text, untruncated. */
+function toPlainText(text: string): string {
+  return stripMarkdown(text).replace(/\s+/g, " ").trim();
+}
+
 /**
  * Single-line plain-text meta description, cut at a word boundary so the
  * snippet never ends mid-word.
@@ -36,7 +41,7 @@ function toMetaDescription(
   text: string,
   maxLength = META_DESCRIPTION_MAX_LENGTH
 ): string {
-  const normalized = stripMarkdown(text).replace(/\s+/g, " ").trim();
+  const normalized = toPlainText(text);
   if (normalized.length <= maxLength) return normalized;
 
   const cut = normalized.slice(0, maxLength - 1);
@@ -45,4 +50,4 @@ function toMetaDescription(
   return `${base.replace(/[\s,;:.–—-]+$/, "")}…`;
 }
 
-export { getPlantSearchName, toMetaDescription };
+export { getPlantSearchName, toMetaDescription, toPlainText };

@@ -7,6 +7,7 @@ import {
   LOCAL_BUSINESS_ID,
   WEBSITE_ID,
 } from "@/lib/seo/schema-ids";
+import { toPlainText } from "@/lib/seo/meta-text";
 import { toAbsoluteUrl } from "@/lib/seo/url";
 import {
   getActivePotSizes,
@@ -145,14 +146,15 @@ export function buildPlantJsonLd({
   const { name, price: basePrice } = getLocalizedPlant(plant, locale);
   // Prefer long-form copy for Product schema; `inLanguage` rules out the
   // other language's copy.
-  const schemaDescription =
+  const schemaDescription = toPlainText(
     localizeTextStrict(
       plant.long_description,
       plant.long_description_vi,
       locale
     ) ??
-    localizeTextStrict(plant.description, plant.description_vi, locale) ??
-    fallbackDescription;
+      localizeTextStrict(plant.description, plant.description_vi, locale) ??
+      fallbackDescription
+  );
   const pageUrl = `${SITE_URL}/${locale}/plants/${plant.slug}`;
   const availability = isPlantInStock(plant)
     ? "https://schema.org/InStock"

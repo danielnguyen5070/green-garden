@@ -183,7 +183,7 @@ export const adminCopy = {
       longDescription: "Long description (English)",
       longDescriptionVi: "Long description (Vietnamese)",
       longDescriptionHint:
-        "Full product story on the plant detail page. Supports multiple paragraphs.",
+        "Full product story on the plant detail page. Supports Markdown: headings, lists, bold, tables, and links.",
       sku: "SKU",
       price: "Legacy price (USD, not charged)",
       priceVi: "Selling price (VND)",

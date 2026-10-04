@@ -4,6 +4,7 @@ import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { Container } from "@/components/layout/container";
 import { PlantGallery } from "@/components/plant/plant-gallery";
 import { PlantCareSpecs } from "@/components/plant/plant-care-specs";
+import { PlantLongDescription } from "@/components/plant/plant-long-description";
 import { PlantPageViews } from "@/components/plant/plant-page-views";
 import { PlantPurchase } from "@/components/plant/plant-purchase";
 import { PlantReviews } from "@/components/plant/plant-reviews";
@@ -140,9 +141,7 @@ async function PlantDetail({
 
         {longDescription ? (
           <div className="mt-12 border-t border-border pt-10 md:mt-14 md:pt-12 lg:mt-16">
-            <div className="whitespace-pre-wrap font-sans text-body leading-relaxed text-muted-foreground">
-              {longDescription}
-            </div>
+            <PlantLongDescription source={longDescription} />
           </div>
         ) : null}
 
