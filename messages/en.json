@@ -546,92 +546,100 @@
       "shopPlants": "Shop Seedlings"
     },
     "items": {
+      "caiMonQuality": {
+        "question": "Are Cai Mon (Ben Tre) seedlings good quality?",
+        "answer": "Cai Mon – Cho Lach in Ben Tre has a long history of seedling nurseries and is known for healthy, true-to-variety grafted plants. We source from nurseries we know there, mostly grafted plants, so they keep the parent tree's traits and fruit much sooner than seed-grown trees."
+      },
+      "whereToBuy": {
+        "question": "Where can I buy Cai Mon seedlings from a trustworthy seller?",
+        "answer": "You can buy from Ngoc Ngan Ben Tre — we pick plants directly from nurseries we know in Cai Mon – Cho Lach. Order on this website or message us on Zalo at 0386569374, and pay when the plants arrive. If you live nearby, you can also visit the nursery to choose in person; just message us first so we can get plants ready."
+      },
       "placeOrder": {
-        "question": "How do I place an order?",
+        "question": "How do I order seedlings on the website?",
         "answer": "Pick a plant on the homepage, choose a size if options are offered, add it to your cart, and go to checkout. All we need is your phone number, name, and delivery address. You can also order directly through Zalo at 0386569374."
       },
       "noAccount": {
-        "question": "Do I need an account to order?",
+        "question": "Do I need to sign up to buy plants?",
         "answer": "No. You can order without signing up — just your phone number, name, and address so we can confirm the order and deliver your plants."
       },
       "orderConfirmation": {
-        "question": "How do I know my order went through?",
+        "question": "After I order, how do I know the shop received it?",
         "answer": "You will see your order number on the confirmation screen right after checkout. We then call or message you on Zalo to confirm the varieties, quantity, and address before shipping."
       },
       "changeOrder": {
-        "question": "Can I change or cancel my order?",
+        "question": "Can I edit or cancel an order after placing it?",
         "answer": "Yes, as long as the order has not been packed and shipped. Message us on Zalo at 0386569374 with your order number as soon as possible and we will update it."
       },
       "multiplePlants": {
-        "question": "Can I order several plants at once?",
-        "answer": "Yes. Add as many plants as you like and check out in a single order. Combining plants into one order also keeps shipping costs down."
+        "question": "Do I save on shipping if I buy several plants at once?",
+        "answer": "Yes. Add as many plants as you like and check out in a single order, so shipping is charged only once. Orders above 500,000₫ also ship free."
       },
       "deliveryTime": {
-        "question": "How long does delivery take?",
+        "question": "How long does it take to receive seedlings ordered online?",
         "answer": "Plants ship with Vietnam Post or J&T Express and usually arrive within 3–5 business days. Northern provinces and remote areas may take one or two days longer."
       },
       "shippingCost": {
-        "question": "How much is shipping?",
+        "question": "How much does shipping cost, and is it ever free?",
         "answer": "Orders above 500,000₫ ship free. Otherwise there is a flat 50,000₫ fee, shown in the order summary before you place the order."
       },
       "nationwide": {
-        "question": "Do you ship nationwide?",
-        "answer": "Yes. We ship to every province in Vietnam through Vietnam Post and J&T Express. Just give us a full address including street, ward, district, and province."
+        "question": "Do you ship Cai Mon seedlings to other provinces?",
+        "answer": "Yes. We ship seedlings to every province in Vietnam, from the Mekong Delta to the North, through Vietnam Post and J&T Express. Just give us a full address including house number, street, ward, and province."
       },
       "packaging": {
-        "question": "How are plants packed for shipping?",
-        "answer": "The root ball is wrapped to hold moisture and keep the soil intact, the branches are tied, and everything travels in a ventilated box. This keeps the plant healthy through 3–5 days in transit."
+        "question": "Will the plants wilt or get damaged on a long trip?",
+        "answer": "Plants are packed for long journeys: the root ball is wrapped to hold moisture and keep the soil intact, the branches are tied, and everything travels in a ventilated box. This keeps the plant healthy through 3–5 days in transit."
       },
       "trackOrder": {
-        "question": "How can I track my order?",
+        "question": "How can I see where my plant delivery is?",
         "answer": "Once your order ships we send the tracking number on Zalo so you can follow it on the Vietnam Post or J&T Express website."
       },
       "afterDelivery": {
-        "question": "What should I do when the plant arrives?",
+        "question": "What should I do first when my seedlings arrive?",
         "answer": "Unbox it right away, remove the ties, place it somewhere shaded with gentle sun, and water the root ball. Let the plant rest for 3–5 days to adjust before planting it out or repotting."
       },
       "watering": {
-        "question": "How often should I water?",
+        "question": "How often should I water a newly planted seedling?",
         "answer": "Water when the top of the root ball feels dry — usually once a day in the early morning or late afternoon, and less in the rainy season. Good drainage matters most: young plants are far more likely to die from waterlogging than from thirst."
       },
       "planting": {
-        "question": "Should I plant in the ground or in a pot?",
+        "question": "Should fruit trees go in the ground or in a pot?",
         "answer": "Fruit trees do best planted in the ground, but a large, well-draining pot works too. Mix the soil with well-rotted compost and choose a spot that gets at least 5–6 hours of sun a day."
       },
       "losingLeaves": {
-        "question": "Is it normal for leaves to drop after delivery?",
+        "question": "My new seedling is dropping leaves — is that normal?",
         "answer": "Yes, some leaf drop after transit is expected, and new shoots usually appear within one or two weeks as the roots settle. Keep the soil evenly moist, shade the plant from harsh sun, and hold off on fertiliser. If the plant wilts fast or the stem darkens, send us photos on Zalo."
       },
       "fruiting": {
-        "question": "How long until the tree bears fruit?",
+        "question": "How long do Cai Mon seedlings take to bear fruit?",
         "answer": "It depends on the variety and how it is cared for. Grafted trees usually fruit within one to two years, much sooner than seed-grown trees. Message us on Zalo for the timeline of a specific variety."
       },
       "graftedSeedlings": {
-        "question": "Are the plants true to variety?",
+        "question": "Will seedlings bought online be the right variety?",
         "answer": "Yes. We source from nurseries we know in Cai Mon – Cho Lach, mostly grafted plants, so they keep the parent tree's fruit quality, yield, and time to harvest."
       },
       "plantSize": {
-        "question": "How tall are the seedlings?",
+        "question": "How tall are the seedlings when they ship?",
         "answer": "It varies by variety, but most seedlings are around 40–80cm tall when they ship. Exact height and details are listed in each plant's description."
       },
       "potSize": {
-        "question": "Can I choose the plant size?",
+        "question": "Can I choose a bigger or smaller plant?",
         "answer": "Yes. Where size options are offered, you can choose one on the product page before adding the plant to your cart. The price updates to match the size you pick."
       },
       "plantsWithPots": {
-        "question": "Do plants come with a pot?",
+        "question": "Do the seedlings come with a pot?",
         "answer": "Seedlings ship in their nursery root ball rather than a decorative pot, which keeps them light and safe in transit. You can plant them straight into the ground or pot them up yourself."
       },
       "returnPolicy": {
-        "question": "What is your return policy?",
+        "question": "Can I return or exchange seedlings?",
         "answer": "Because plants are living products, we cannot take back healthy plants. If something is wrong with your order, message us on Zalo within 48 hours of delivery and we will sort it out."
       },
       "damagedPlant": {
-        "question": "What if my plant arrives broken or damaged?",
+        "question": "What if my plant arrives broken, bruised, or wilted?",
         "answer": "Photograph the plant and the box as soon as you open it and send the photos on Zalo within 48 hours. If the damage happened in transit, we will send a replacement or refund that plant."
       },
       "exchangePlant": {
-        "question": "Can I swap for a different variety?",
+        "question": "Can I switch to a different variety after ordering?",
         "answer": "We can swap varieties while the order is still with us. After delivery it depends on the condition of the plant and what is in stock — message us on Zalo and we will check."
       }
     }

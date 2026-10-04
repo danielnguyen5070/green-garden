@@ -34,6 +34,11 @@ export const FAQ_CATEGORIES = [
 }>;
 
 export const FAQ_ITEMS: readonly FaqItemConfig[] = [
+  { id: "caiMonQuality", categoryId: "plants" },
+  { id: "whereToBuy", categoryId: "orders" },
+  { id: "fruiting", categoryId: "care" },
+  { id: "nationwide", categoryId: "delivery" },
+  { id: "afterDelivery", categoryId: "care" },
   { id: "placeOrder", categoryId: "orders" },
   { id: "noAccount", categoryId: "orders" },
   { id: "orderConfirmation", categoryId: "orders" },
@@ -41,14 +46,11 @@ export const FAQ_ITEMS: readonly FaqItemConfig[] = [
   { id: "multiplePlants", categoryId: "orders" },
   { id: "deliveryTime", categoryId: "delivery" },
   { id: "shippingCost", categoryId: "delivery" },
-  { id: "nationwide", categoryId: "delivery" },
   { id: "packaging", categoryId: "delivery" },
   { id: "trackOrder", categoryId: "delivery" },
-  { id: "afterDelivery", categoryId: "care" },
   { id: "watering", categoryId: "care" },
   { id: "planting", categoryId: "care" },
   { id: "losingLeaves", categoryId: "care" },
-  { id: "fruiting", categoryId: "care" },
   { id: "graftedSeedlings", categoryId: "plants" },
   { id: "plantSize", categoryId: "plants" },
   { id: "potSize", categoryId: "plants" },

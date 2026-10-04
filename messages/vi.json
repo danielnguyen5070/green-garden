@@ -546,92 +546,100 @@
       "shopPlants": "Xem cây giống"
     },
     "items": {
+      "caiMonQuality": {
+        "question": "Cây giống Cái Mơn Bến Tre có tốt không?",
+        "answer": "Cái Mơn – Chợ Lách (Bến Tre) là vùng gắn bó lâu đời với nghề ươm cây giống, nổi tiếng với cây ghép khỏe và đúng giống. Ngọc Ngân chọn cây từ những nhà vườn quen tại đây, chủ yếu là cây ghép nên giữ đặc tính cây mẹ và cho trái sớm hơn nhiều so với cây trồng từ hạt."
+      },
+      "whereToBuy": {
+        "question": "Mua cây giống Cái Mơn ở đâu uy tín?",
+        "answer": "Bạn có thể mua tại Ngọc Ngân Bến Tre — cây được chọn trực tiếp từ nhà vườn quen ở Cái Mơn – Chợ Lách. Đặt online trên website hoặc nhắn Zalo 0386569374, nhận cây rồi mới thanh toán. Nếu ở gần, bạn có thể ghé nhà vườn xem và chọn cây, nhớ nhắn trước để shop chuẩn bị."
+      },
       "placeOrder": {
-        "question": "Làm sao để đặt hàng?",
+        "question": "Đặt mua cây giống online trên website như thế nào?",
         "answer": "Chọn cây trên trang chủ, chọn cỡ cây nếu có, thêm vào giỏ rồi bấm Thanh toán. Bạn chỉ cần điền số điện thoại, họ tên và địa chỉ nhận hàng. Nếu muốn, bạn cũng có thể đặt trực tiếp qua Zalo 0386569374."
       },
       "noAccount": {
-        "question": "Tôi có cần tạo tài khoản không?",
+        "question": "Mua cây có cần đăng ký tài khoản không?",
         "answer": "Không cần. Bạn đặt hàng ngay mà không phải đăng ký, chỉ cần số điện thoại, họ tên và địa chỉ để shop liên hệ và giao cây."
       },
       "orderConfirmation": {
-        "question": "Làm sao biết đơn hàng đã được nhận?",
+        "question": "Đặt hàng xong thì làm sao biết shop đã nhận đơn?",
         "answer": "Sau khi đặt, bạn sẽ thấy mã đơn hàng ngay trên màn hình xác nhận. Shop sẽ gọi hoặc nhắn Zalo theo số điện thoại bạn để lại để xác nhận giống cây, số lượng và địa chỉ trước khi gửi hàng."
       },
       "changeOrder": {
-        "question": "Tôi có thể thay đổi hoặc hủy đơn không?",
+        "question": "Đặt rồi có sửa hoặc hủy đơn được không?",
         "answer": "Được, nếu đơn chưa được đóng gói gửi đi. Hãy nhắn Zalo 0386569374 kèm mã đơn hàng càng sớm càng tốt, shop sẽ cập nhật giúp bạn."
       },
       "multiplePlants": {
-        "question": "Tôi có thể đặt nhiều cây cùng lúc không?",
-        "answer": "Có. Bạn thêm bao nhiêu cây tùy ý vào giỏ và thanh toán trong một đơn. Gộp nhiều cây vào một đơn cũng giúp tiết kiệm phí vận chuyển."
+        "question": "Mua nhiều cây một lúc có tiết kiệm phí ship không?",
+        "answer": "Có. Bạn thêm bao nhiêu cây tùy ý vào giỏ và thanh toán trong một đơn, chỉ tính phí vận chuyển một lần. Đơn trên 500.000₫ còn được miễn phí vận chuyển."
       },
       "deliveryTime": {
-        "question": "Giao hàng mất bao lâu?",
+        "question": "Đặt cây giống online bao lâu thì nhận được?",
         "answer": "Cây được gửi qua Bưu điện hoặc J&T Express, thường nhận sau 3–5 ngày làm việc. Khu vực miền Bắc hoặc vùng xa có thể lâu hơn 1–2 ngày."
       },
       "shippingCost": {
-        "question": "Phí vận chuyển bao nhiêu?",
+        "question": "Phí ship cây giống bao nhiêu, có được miễn phí không?",
         "answer": "Đơn trên 500.000₫ được miễn phí vận chuyển. Các đơn còn lại có phí cố định 50.000₫, hiển thị rõ ở phần Tóm tắt đơn hàng trước khi bạn đặt."
       },
       "nationwide": {
-        "question": "Shop có giao toàn quốc không?",
-        "answer": "Có. Shop gửi cây đi khắp các tỉnh thành qua Bưu điện và J&T Express. Bạn chỉ cần nhập địa chỉ đầy đủ gồm số nhà, đường, xã/phường, huyện và tỉnh."
+        "question": "Cây giống Cái Mơn có giao đi tỉnh không?",
+        "answer": "Có. Shop gửi cây giống đi khắp các tỉnh thành, từ miền Tây đến miền Bắc, qua Bưu điện và J&T Express. Bạn chỉ cần nhập địa chỉ đầy đủ gồm số nhà, đường, xã/phường và tỉnh/thành."
       },
       "packaging": {
-        "question": "Cây được đóng gói thế nào khi gửi đi?",
-        "answer": "Bầu đất được bọc kín để giữ ẩm và không bị vỡ, cành lá được buộc gọn, cả cây đặt trong thùng có lỗ thoáng. Cách đóng gói này giúp cây chịu được 3–5 ngày vận chuyển."
+        "question": "Gửi cây đi xa có bị héo hay hư không?",
+        "answer": "Cây được đóng gói để chịu được đường xa: bầu đất bọc kín để giữ ẩm và không bị vỡ, cành lá buộc gọn, cả cây đặt trong thùng có lỗ thoáng. Nhờ vậy cây vẫn khỏe sau 3–5 ngày vận chuyển."
       },
       "trackOrder": {
-        "question": "Tôi theo dõi đơn hàng bằng cách nào?",
+        "question": "Làm sao biết đơn cây đang giao tới đâu?",
         "answer": "Khi gửi hàng, shop sẽ nhắn mã vận đơn qua Zalo để bạn tra cứu trên website của Bưu điện hoặc J&T Express."
       },
       "afterDelivery": {
-        "question": "Nhận cây về thì làm gì đầu tiên?",
+        "question": "Nhận cây giống về thì nên làm gì đầu tiên?",
         "answer": "Mở thùng ngay, tháo dây buộc, đặt cây nơi mát có nắng nhẹ và tưới ẩm bầu đất. Để cây nghỉ 3–5 ngày cho quen khí hậu rồi hãy trồng xuống đất hoặc sang chậu."
       },
       "watering": {
-        "question": "Tưới nước bao nhiêu là đủ?",
+        "question": "Cây giống mới trồng nên tưới nước mấy lần một ngày?",
         "answer": "Tưới khi mặt bầu se khô, thường 1 lần mỗi ngày vào sáng sớm hoặc chiều mát, mùa mưa thì thưa hơn. Quan trọng nhất là đất thoát nước tốt, vì cây giống chết vì úng nhiều hơn vì thiếu nước."
       },
       "planting": {
-        "question": "Nên trồng xuống đất hay trồng chậu?",
+        "question": "Cây ăn trái nên trồng xuống đất hay trồng chậu?",
         "answer": "Cây ăn trái phát triển tốt nhất khi trồng xuống đất, nhưng vẫn trồng chậu được nếu chậu đủ lớn và thoát nước tốt. Trộn đất với phân hữu cơ hoai mục, trồng nơi có nắng ít nhất 5–6 giờ mỗi ngày."
       },
       "losingLeaves": {
-        "question": "Cây rụng lá sau khi nhận có sao không?",
+        "question": "Cây giống mới nhận bị rụng lá có sao không?",
         "answer": "Rụng bớt lá sau vận chuyển là bình thường, cây sẽ ra đọt mới sau 1–2 tuần khi đã bén rễ. Hãy giữ ẩm vừa phải, che nắng gắt và chưa bón phân ngay. Nếu cây héo nhanh hoặc thân thâm đen, hãy nhắn Zalo kèm ảnh để shop hỗ trợ."
       },
       "fruiting": {
-        "question": "Bao lâu thì cây cho trái?",
+        "question": "Cây giống Cái Mơn trồng bao lâu thì có trái?",
         "answer": "Tùy giống và cách chăm. Cây ghép thường cho trái sau 1–2 năm, sớm hơn nhiều so với cây trồng từ hạt. Bạn có thể nhắn Zalo để shop tư vấn thời gian cụ thể cho từng giống."
       },
       "graftedSeedlings": {
-        "question": "Cây có đúng giống không?",
+        "question": "Mua cây giống online có đúng giống không?",
         "answer": "Có. Cây được chọn từ nhà vườn quen tại Cái Mơn – Chợ Lách, chủ yếu là cây ghép nên giữ đúng đặc tính của cây mẹ về trái, năng suất và thời gian cho trái."
       },
       "plantSize": {
-        "question": "Cây giống cao khoảng bao nhiêu?",
+        "question": "Cây giống gửi đi cao khoảng bao nhiêu?",
         "answer": "Tùy giống, phần lớn cây giống cao khoảng 40–80cm khi gửi đi. Chiều cao và đặc điểm cụ thể được ghi trong phần mô tả của từng cây."
       },
       "potSize": {
-        "question": "Tôi có chọn được cỡ cây không?",
+        "question": "Có chọn được cây lớn hay cây nhỏ không?",
         "answer": "Có. Với những cây có nhiều lựa chọn, bạn chọn cỡ ngay trên trang sản phẩm trước khi thêm vào giỏ. Giá hiển thị theo đúng cỡ bạn chọn."
       },
       "plantsWithPots": {
-        "question": "Cây có kèm chậu không?",
+        "question": "Cây giống có kèm chậu không?",
         "answer": "Cây giống được gửi nguyên bầu đất, không kèm chậu trang trí, để nhẹ và an toàn khi vận chuyển. Bạn có thể trồng thẳng xuống đất hoặc sang chậu tùy ý."
       },
       "returnPolicy": {
-        "question": "Chính sách đổi trả thế nào?",
+        "question": "Mua cây giống có được đổi trả không?",
         "answer": "Vì cây là sản phẩm sống nên shop không nhận trả hàng khi cây vẫn khỏe. Nếu đơn hàng có vấn đề, hãy nhắn Zalo trong vòng 48 giờ kể từ khi nhận cây để shop hỗ trợ."
       },
       "damagedPlant": {
-        "question": "Nếu cây đến nơi bị gãy hoặc hư thì sao?",
+        "question": "Cây giao tới bị gãy, dập hoặc héo thì xử lý sao?",
         "answer": "Hãy chụp ảnh cây và thùng hàng ngay khi mở, gửi qua Zalo trong vòng 48 giờ. Nếu cây hư hỏng do vận chuyển, shop sẽ gửi cây thay thế hoặc hoàn tiền phần cây đó."
       },
       "exchangePlant": {
-        "question": "Tôi có thể đổi sang giống khác không?",
+        "question": "Đặt rồi muốn đổi sang giống cây khác được không?",
         "answer": "Shop có thể đổi giống nếu đơn chưa gửi đi. Khi cây đã giao, việc đổi sẽ tùy tình trạng cây và giống còn hàng — hãy nhắn Zalo để shop kiểm tra giúp bạn."
       }
     }
