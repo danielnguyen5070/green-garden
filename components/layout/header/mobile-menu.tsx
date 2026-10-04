@@ -66,6 +66,18 @@ function MobileMenu({ categories }: { categories: StorefrontCategory[] }) {
                     aria-label={tNav("categoriesLabel")}
                     className="mb-1 ml-3 flex flex-col gap-0.5 border-l border-border pl-2"
                   >
+                    <li>
+                      <SheetClose
+                        render={
+                          <Link
+                            href="/plants"
+                            className="block rounded-md px-3 py-2 font-sans text-sm font-medium text-foreground outline-none transition-colors hover:bg-muted hover:text-primary focus-visible:ring-2 focus-visible:ring-ring"
+                          />
+                        }
+                      >
+                        {tNav("allPlants")}
+                      </SheetClose>
+                    </li>
                     {categories.map((category) => (
                       <li key={category.id}>
                         <SheetClose
