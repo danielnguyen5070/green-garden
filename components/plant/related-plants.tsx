@@ -14,6 +14,7 @@ import {
   getPlantCardImage,
   localizeText,
 } from "@/lib/storefront";
+import { withBuildFallback } from "@/lib/storefront/build-fallback";
 import { getCatalogHref } from "@/lib/storefront/catalog";
 import type {
   StorefrontPlantDetail,
@@ -116,12 +117,15 @@ async function RelatedPlants({
     getTranslations("plantDetail.related"),
     getTranslations("common"),
     getLocale(),
-    getStorefrontPlants({
-      category_id: plant.category.id,
-      page_size: STOREFRONT_PLANTS_MAX_PAGE_SIZE,
-      sort: "created_at",
-      order: "desc",
-    }).catch(() => null),
+    withBuildFallback(
+      getStorefrontPlants({
+        category_id: plant.category.id,
+        page_size: STOREFRONT_PLANTS_MAX_PAGE_SIZE,
+        sort: "created_at",
+        order: "desc",
+      }),
+      null
+    ),
   ]);
 
   const plants = pickNeighbours(response?.items ?? [], plant.id, RELATED_LIMIT);

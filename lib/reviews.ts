@@ -4,6 +4,7 @@ import {
   getStorefrontPlantReviews,
   getStorefrontReviews,
 } from "@/lib/api/storefront";
+import { withBuildFallback } from "@/lib/storefront/build-fallback";
 import type {
   StorefrontRatingDistribution,
   StorefrontReview,
@@ -125,40 +126,41 @@ export function resolveReviewSummary(
   return buildReviewSummaryFromItems(fallbackItems, total);
 }
 
+async function fetchStorefrontReviewPreview(limit: number): Promise<{
+  summary: StorefrontReviewSummary | null;
+  reviews: StorefrontReview[];
+}> {
+  const page = await getStorefrontReviews({
+    page: 1,
+    page_size: STOREFRONT_REVIEWS_PAGE_SIZE,
+  });
+
+  const hasApiSummary =
+    typeof page.average_rating === "number" &&
+    page.rating_distribution != null;
+
+  const reviews = [...page.items]
+    .sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+    .slice(0, limit);
+
+  return {
+    summary: hasApiSummary ? resolveReviewSummary(page) : null,
+    reviews,
+  };
+}
+
 /**
  * Summary plus the newest few reviews for the homepage section. Sends the same
  * first-page request as `/reviews`, so both pages share one cached response.
  * Never pages through all reviews: `summary` is null unless the API sends it.
- * Returns null when the API is unreachable (do not invent ratings).
+ * Throws when the API is unreachable so a regenerating page keeps its cached
+ * reviews; only `next build` gets null (do not invent ratings).
  */
-export async function loadStorefrontReviewPreview(limit: number): Promise<{
-  summary: StorefrontReviewSummary | null;
-  reviews: StorefrontReview[];
-} | null> {
-  try {
-    const page = await getStorefrontReviews({
-      page: 1,
-      page_size: STOREFRONT_REVIEWS_PAGE_SIZE,
-    });
-
-    const hasApiSummary =
-      typeof page.average_rating === "number" &&
-      page.rating_distribution != null;
-
-    const reviews = [...page.items]
-      .sort(
-        (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      )
-      .slice(0, limit);
-
-    return {
-      summary: hasApiSummary ? resolveReviewSummary(page) : null,
-      reviews,
-    };
-  } catch {
-    return null;
-  }
+export function loadStorefrontReviewPreview(limit: number) {
+  return withBuildFallback(fetchStorefrontReviewPreview(limit), null);
 }
 
 export type PlantReviewsData = {
@@ -167,27 +169,28 @@ export type PlantReviewsData = {
   summary: StorefrontReviewSummary;
 };
 
+async function fetchPlantReviews(slug: string): Promise<PlantReviewsData> {
+  const page = await getStorefrontPlantReviews(slug, {
+    page: 1,
+    page_size: STOREFRONT_PLANT_REVIEWS_PAGE_SIZE,
+  });
+  return {
+    reviews: page.items,
+    total: page.total,
+    summary: resolveReviewSummary(page),
+  };
+}
+
 /**
  * First page of a plant's approved reviews plus its rating summary.
- * Returns null when the API is unreachable, so the page can hide the section
- * instead of showing invented ratings.
+ * Throws when the API is unreachable so a regenerating page keeps its cached
+ * stars and structured-data rating. Only `next build` gets null, which hides
+ * the section instead of showing invented ratings.
  */
-export async function loadPlantReviews(
+export function loadPlantReviews(
   slug: string
 ): Promise<PlantReviewsData | null> {
-  try {
-    const page = await getStorefrontPlantReviews(slug, {
-      page: 1,
-      page_size: STOREFRONT_PLANT_REVIEWS_PAGE_SIZE,
-    });
-    return {
-      reviews: page.items,
-      total: page.total,
-      summary: resolveReviewSummary(page),
-    };
-  } catch {
-    return null;
-  }
+  return withBuildFallback(fetchPlantReviews(slug), null);
 }
 
 export function formatRelativeReviewDate(

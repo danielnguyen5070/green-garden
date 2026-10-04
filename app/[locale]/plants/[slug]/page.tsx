@@ -121,7 +121,7 @@ export default async function PlantDetailPage({ params }: Props) {
     await Promise.all([
       getTranslations({ locale, namespace: "plantDetail" }),
       getTranslations({ locale, namespace: "plants" }),
-      // Structured data can go without shipping details; the page cannot fail.
+      // Genuinely optional: structured data can go without shipping details.
       getStorefrontShippingPolicy().catch(() => null),
       getFallbackDescription(plant, locale),
       loadPlantReviews(plant.slug),

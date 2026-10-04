@@ -4,12 +4,15 @@ import {
   getStorefrontCategories,
   getStorefrontPlants,
 } from "@/lib/api/storefront";
+import { withBuildFallback } from "@/lib/storefront/build-fallback";
 import { toIsoDate } from "@/lib/seo/url";
 
 /**
  * Every active plant and category, for the sitemap and `generateStaticParams`.
- * The catalog may be unavailable at build time, so these never throw: a
- * missing slug is simply rendered on its first visit instead.
+ * These throw when the API fails, even mid-pagination, so a sitemap
+ * regeneration keeps the last complete copy instead of dropping products.
+ * Only `next build` gets an empty list, so an unreachable catalog doesn't fail
+ * the build; missing slugs then render on their first visit.
  */
 
 export type CatalogSlug = {
@@ -21,55 +24,55 @@ export type CatalogPlantSlug = CatalogSlug & {
   categorySlug: string | null;
 };
 
-export async function getAllCategorySlugs(): Promise<CatalogSlug[]> {
-  try {
-    const { items } = await getStorefrontCategories();
-    return items
-      .filter((category) => Boolean(category.slug))
-      .map((category) => ({
-        slug: category.slug,
-        updatedAt: toIsoDate(category.updated_at),
-      }));
-  } catch {
-    return [];
-  }
+async function fetchAllCategorySlugs(): Promise<CatalogSlug[]> {
+  const { items } = await getStorefrontCategories();
+  return items
+    .filter((category) => Boolean(category.slug))
+    .map((category) => ({
+      slug: category.slug,
+      updatedAt: toIsoDate(category.updated_at),
+    }));
 }
 
-export async function getAllPlantSlugs(): Promise<CatalogPlantSlug[]> {
+async function fetchAllPlantSlugs(): Promise<CatalogPlantSlug[]> {
   const plants: CatalogPlantSlug[] = [];
   let page = 1;
   let total = Number.POSITIVE_INFINITY;
 
-  try {
-    while ((page - 1) * STOREFRONT_PLANTS_MAX_PAGE_SIZE < total) {
-      const response = await getStorefrontPlants({
-        page,
-        page_size: STOREFRONT_PLANTS_MAX_PAGE_SIZE,
-      });
+  while ((page - 1) * STOREFRONT_PLANTS_MAX_PAGE_SIZE < total) {
+    const response = await getStorefrontPlants({
+      page,
+      page_size: STOREFRONT_PLANTS_MAX_PAGE_SIZE,
+    });
 
-      for (const plant of response.items) {
-        if (plant.slug) {
-          plants.push({
-            slug: plant.slug,
-            updatedAt: toIsoDate(plant.updated_at),
-            categorySlug: plant.category?.slug ?? null,
-          });
-        }
+    for (const plant of response.items) {
+      if (plant.slug) {
+        plants.push({
+          slug: plant.slug,
+          updatedAt: toIsoDate(plant.updated_at),
+          categorySlug: plant.category?.slug ?? null,
+        });
       }
-
-      total = response.total;
-
-      if (response.items.length === 0) {
-        break;
-      }
-
-      page += 1;
     }
-  } catch {
-    return plants;
+
+    total = response.total;
+
+    if (response.items.length === 0) {
+      break;
+    }
+
+    page += 1;
   }
 
   return plants;
+}
+
+export function getAllCategorySlugs(): Promise<CatalogSlug[]> {
+  return withBuildFallback(fetchAllCategorySlugs(), []);
+}
+
+export function getAllPlantSlugs(): Promise<CatalogPlantSlug[]> {
+  return withBuildFallback(fetchAllPlantSlugs(), []);
 }
 
 /** Catalog page numbers past the first, as `generateStaticParams` strings. */

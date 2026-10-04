@@ -10,6 +10,7 @@ import {
   getStorefrontReviews,
 } from "@/lib/api/storefront";
 import { resolveReviewSummary } from "@/lib/reviews";
+import { withBuildFallback } from "@/lib/storefront/build-fallback";
 import type {
   StorefrontReview,
   StorefrontReviewSummary,
@@ -72,50 +73,32 @@ async function loadReviewsPageData(): Promise<{
   reviews: StorefrontReview[];
   total: number;
   summary: StorefrontReviewSummary;
-  error: boolean;
 }> {
-  try {
-    const page = await getStorefrontReviews({
-      page: 1,
-      page_size: STOREFRONT_REVIEWS_PAGE_SIZE,
-    });
+  const page = await getStorefrontReviews({
+    page: 1,
+    page_size: STOREFRONT_REVIEWS_PAGE_SIZE,
+  });
 
-    const hasApiSummary =
-      typeof page.average_rating === "number" &&
-      page.rating_distribution != null;
+  const hasApiSummary =
+    typeof page.average_rating === "number" &&
+    page.rating_distribution != null;
 
-    const allForSummary = hasApiSummary
-      ? null
-      : await getAllStorefrontReviews().catch(() => page.items);
+  const allForSummary = hasApiSummary
+    ? null
+    : await withBuildFallback(getAllStorefrontReviews(), page.items);
 
-    const summary = resolveReviewSummary(
-      page,
-      allForSummary ?? page.items
-    );
+  const summary = resolveReviewSummary(page, allForSummary ?? page.items);
 
-    return {
-      reviews: page.items,
-      total: page.total,
-      summary,
-      error: false,
-    };
-  } catch {
-    return {
-      reviews: [],
-      total: 0,
-      summary: {
-        average_rating: 0,
-        total_reviews: 0,
-        rating_distribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
-      },
-      error: true,
-    };
-  }
+  return {
+    reviews: page.items,
+    total: page.total,
+    summary,
+  };
 }
 
 export default async function ReviewsPage() {
   const t = await getTranslations("reviews");
-  const { reviews, total, summary, error } = await loadReviewsPageData();
+  const data = await withBuildFallback(loadReviewsPageData(), null);
 
   return (
     <section
@@ -124,7 +107,7 @@ export default async function ReviewsPage() {
       className="bg-muted/40 py-10 md:py-12 lg:py-14"
     >
       <Container>
-        {error ? (
+        {data === null ? (
           <div className="rounded-2xl border border-border bg-card px-6 py-12 text-center shadow-subtle">
             <h1
               id="reviews-heading"
@@ -138,9 +121,9 @@ export default async function ReviewsPage() {
           </div>
         ) : (
           <ReviewsSection
-            initialReviews={reviews}
-            initialTotal={total}
-            summary={summary}
+            initialReviews={data.reviews}
+            initialTotal={data.total}
+            summary={data.summary}
           />
         )}
       </Container>

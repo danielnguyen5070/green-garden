@@ -9,6 +9,7 @@ import {
   getStorefrontCategories,
   getStorefrontPlants,
 } from "@/lib/api/storefront";
+import { withBuildFallback } from "@/lib/storefront/build-fallback";
 import type { StorefrontCategory } from "@/types/storefront";
 
 const SKELETON_CARDS = Array.from(
@@ -119,8 +120,8 @@ async function PlantListSection({
   const sectionTitle = title ?? t("title");
 
   const [plants, categories] = await Promise.all([
-    getCatalogPagePlants(page, category).catch(() => null),
-    getStorefrontCategories().catch(() => null),
+    withBuildFallback(getCatalogPagePlants(page, category), null),
+    withBuildFallback(getStorefrontCategories(), null),
   ]);
 
   if (plants && page > 1 && plants.items.length === 0) {
