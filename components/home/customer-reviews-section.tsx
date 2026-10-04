@@ -131,7 +131,7 @@ async function CustomerReviewsSection({ className }: { className?: string }) {
           <Button
             variant="outline"
             size="lg"
-            className="h-12 rounded-xl border-border bg-card px-6 font-sans text-sm text-foreground shadow-subtle hover:bg-card hover:text-foreground"
+            className="h-12 rounded-xl border-border bg-card px-6 font-sans text-sm text-foreground shadow-subtle hover:bg-card hover:text-foreground has-data-[icon=inline-end]:pr-6"
             render={<Link href="/reviews" />}
             nativeButton={false}
           >

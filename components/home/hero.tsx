@@ -81,7 +81,7 @@ async function Hero({ className }: { className?: string }) {
             <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
               <Button
                 size="lg"
-                className="h-12 rounded-xl px-5 text-sm shadow-elevated sm:min-w-[10.5rem]"
+                className="h-12 rounded-xl px-5 text-sm shadow-elevated has-data-[icon=inline-end]:pr-5 sm:min-w-[10.5rem]"
                 render={<Link href="/plants" />}
                 nativeButton={false}
               >
@@ -92,7 +92,7 @@ async function Hero({ className }: { className?: string }) {
               <Button
                 variant="outline"
                 size="lg"
-                className="h-12 rounded-xl border-border bg-card px-5 text-sm text-foreground shadow-subtle hover:bg-card hover:text-foreground sm:min-w-[10.5rem]"
+                className="h-12 rounded-xl border-border bg-card px-5 text-sm text-foreground shadow-subtle hover:bg-card hover:text-foreground has-data-[icon=inline-end]:pr-5 sm:min-w-[10.5rem]"
                 render={<Link href="/about" />}
                 nativeButton={false}
               >
