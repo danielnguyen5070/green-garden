@@ -1,5 +1,7 @@
 /** Public storefront review types from `GET|POST /api/v1/storefront/reviews`. */
 
+import type { BotSignals } from "@/types/bot-signals";
+
 export type StorefrontReview = {
   id: string;
   name: string;
@@ -36,7 +38,7 @@ export type StorefrontReviewListResponse = {
   rating_distribution?: StorefrontRatingDistribution | number[];
 };
 
-export type StorefrontReviewCreateRequest = {
+export type StorefrontReviewCreateRequest = BotSignals & {
   name: string;
   rating: number;
   content: string;

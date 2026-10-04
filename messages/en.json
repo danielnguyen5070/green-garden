@@ -303,7 +303,7 @@
       "unavailable": "Reviews are temporarily unavailable. Please try again later.",
       "validation": "Please check the form and try again.",
       "rateLimited": "Too many requests. Please wait a moment and try again.",
-      "spam": "We could not verify your submission. Please try again."
+      "spam": "We could not verify your review. Please wait a few seconds and try again."
     }
   },
   "plantDetail": {
@@ -454,6 +454,9 @@
       "outOfStock": "Some plants in your cart are no longer in stock.",
       "unavailable": "Some plants in your cart are no longer available.",
       "invalidDetails": "Please check your order details.",
+      "rejected": "We could not verify your order. Please wait a few seconds and try again.",
+      "rateLimited": "This phone number has placed too many orders recently. Please try again in {minutes} minutes.",
+      "rateLimitedLater": "This phone number has placed too many orders recently. Please try again later.",
       "generic": "We could not place your order. Please try again."
     }
   },

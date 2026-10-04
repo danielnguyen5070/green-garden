@@ -303,7 +303,7 @@
       "unavailable": "Hiện không tải được đánh giá. Vui lòng thử lại sau.",
       "validation": "Vui lòng kiểm tra lại thông tin và thử lại.",
       "rateLimited": "Bạn thao tác quá nhanh. Vui lòng đợi một chút rồi thử lại.",
-      "spam": "Không xác minh được gửi đánh giá. Vui lòng thử lại."
+      "spam": "Không xác minh được đánh giá. Vui lòng đợi vài giây rồi thử lại."
     }
   },
   "plantDetail": {
@@ -454,6 +454,9 @@
       "outOfStock": "Sản phẩm trong giỏ hàng không còn đủ số lượng.",
       "unavailable": "Sản phẩm trong giỏ hàng không còn được bán.",
       "invalidDetails": "Vui lòng kiểm tra lại thông tin đặt hàng.",
+      "rejected": "Không xác minh được đơn hàng. Vui lòng đợi vài giây rồi thử lại.",
+      "rateLimited": "Số điện thoại này đã đặt quá nhiều đơn gần đây. Vui lòng thử lại sau {minutes} phút.",
+      "rateLimitedLater": "Số điện thoại này đã đặt quá nhiều đơn gần đây. Vui lòng thử lại sau.",
       "generic": "Không thể đặt hàng. Vui lòng thử lại."
     }
   },

@@ -11,6 +11,8 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 export class ApiError extends Error {
   readonly status: number;
   readonly detail: unknown;
+  /** Seconds from the `Retry-After` header, e.g. on `429`. */
+  retryAfterSeconds?: number;
 
   constructor(status: number, message: string, detail?: unknown) {
     super(message);
@@ -18,6 +20,13 @@ export class ApiError extends Error {
     this.status = status;
     this.detail = detail;
   }
+}
+
+/** `Retry-After` as whole seconds; HTTP-date values are not used by the API. */
+export function parseRetryAfter(value: string | null): number | undefined {
+  if (!value) return undefined;
+  const seconds = Number.parseInt(value, 10);
+  return Number.isFinite(seconds) && seconds > 0 ? seconds : undefined;
 }
 
 export function getErrorMessage(
@@ -35,8 +44,15 @@ export function getErrorMessage(
 
 export function parseApiErrorPayload(
   status: number,
-  payload: unknown
+  payload: unknown,
+  retryAfterSeconds?: number
 ): ApiError {
+  const error = buildApiError(status, payload);
+  error.retryAfterSeconds = retryAfterSeconds;
+  return error;
+}
+
+function buildApiError(status: number, payload: unknown): ApiError {
   if (!isRecord(payload)) {
     return new ApiError(status, defaultMessageForStatus(status), payload);
   }
@@ -102,12 +118,16 @@ function defaultMessageForStatus(status: number): string {
       return "Invalid request.";
     case 401:
       return "Your session has expired. Please sign in again.";
+    case 403:
+      return "Request rejected.";
     case 404:
       return "Resource not found.";
     case 409:
       return "Conflict with existing data.";
     case 422:
       return "Please check the form and try again.";
+    case 429:
+      return "Too many requests. Please try again later.";
     default:
       return "Something went wrong. Please try again.";
   }

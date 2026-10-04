@@ -1,5 +1,9 @@
 import { getApiUrl } from "@/lib/api/config";
-import { ApiError, parseApiErrorPayload } from "@/lib/api/errors";
+import {
+  ApiError,
+  parseApiErrorPayload,
+  parseRetryAfter,
+} from "@/lib/api/errors";
 
 type HttpMethod = "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
 
@@ -158,7 +162,11 @@ async function request<T>(
   const payload = await parseResponseBody(response);
 
   if (!response.ok) {
-    throw parseApiErrorPayload(response.status, payload);
+    throw parseApiErrorPayload(
+      response.status,
+      payload,
+      parseRetryAfter(response.headers.get("retry-after"))
+    );
   }
 
   return payload as T;

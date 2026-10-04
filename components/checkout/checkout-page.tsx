@@ -4,9 +4,11 @@ import { useCallback, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { CheckoutProgress } from "@/components/checkout/checkout-progress";
+import { HoneypotField } from "@/components/forms/honeypot-field";
 import { OrderSummary } from "@/components/checkout/order-summary";
 import { ShippingDetails } from "@/components/checkout/shipping-details";
 import { ShippingMethod } from "@/components/checkout/shipping-method";
+import { useBotSignals } from "@/hooks/use-bot-signals";
 import { useCartQuote } from "@/hooks/use-cart-quote";
 import { useRouter } from "@/i18n/navigation";
 import { createStorefrontOrder } from "@/lib/api/storefront";
@@ -31,15 +33,24 @@ function getErrorKey(error: unknown) {
   if (!(error instanceof ApiError)) return "generic";
 
   switch (error.status) {
+    case 403:
+      return "rejected";
     case 404:
       return "unavailable";
     case 409:
       return "outOfStock";
     case 422:
       return "invalidDetails";
+    case 429:
+      return error.retryAfterSeconds ? "rateLimited" : "rateLimitedLater";
     default:
       return "generic";
   }
+}
+
+function getRetryAfterMinutes(error: unknown) {
+  const seconds = error instanceof ApiError ? error.retryAfterSeconds : undefined;
+  return seconds ? Math.max(1, Math.ceil(seconds / 60)) : 0;
 }
 
 function CheckoutPageView() {
@@ -56,6 +67,7 @@ function CheckoutPageView() {
   const clearCart = useCartStore((state) => state.clearCart);
   const setLastOrder = useLastOrderStore((state) => state.setOrder);
   const cartQuote = useCartQuote();
+  const { honeypotRef, getBotSignals } = useBotSignals();
 
   // The customer only submits against a current backend quote they can see.
   const canSubmit =
@@ -114,7 +126,7 @@ function CheckoutPageView() {
 
     try {
       const order = await createStorefrontOrder(
-        toStorefrontOrderPayload(values, items),
+        toStorefrontOrderPayload(values, items, getBotSignals()),
       );
 
       setLastOrder({ order });
@@ -122,7 +134,11 @@ function CheckoutPageView() {
       clearCart();
       router.push("/order-success");
     } catch (error) {
-      toast.error(t(`errors.${getErrorKey(error)}`));
+      toast.error(
+        t(`errors.${getErrorKey(error)}`, {
+          minutes: getRetryAfterMinutes(error),
+        }),
+      );
       setSubmitting(false);
     }
   }
@@ -132,7 +148,8 @@ function CheckoutPageView() {
       <CheckoutProgress currentStep="shipping" className="mb-8 md:mb-9" />
 
       <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,24rem)] lg:gap-12 xl:gap-16">
-        <form className="min-w-0" onSubmit={handleSubmit} noValidate>
+        <form className="relative min-w-0" onSubmit={handleSubmit} noValidate>
+          <HoneypotField ref={honeypotRef} />
           <header className="max-w-xl">
             <h1 className="font-heading text-[2rem] leading-[1.15] font-bold tracking-tight text-foreground md:text-[2.5rem]">
               {t("title")}

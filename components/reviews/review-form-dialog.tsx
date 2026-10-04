@@ -2,6 +2,7 @@
 
 import { useId, useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
+import { HoneypotField } from "@/components/forms/honeypot-field";
 import { ReviewRatingInput } from "@/components/reviews/review-rating-input";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useBotSignals } from "@/hooks/use-bot-signals";
 import {
   createStorefrontPlantReview,
   createStorefrontReview,
@@ -42,17 +44,8 @@ function getSubmitErrorKey(error: unknown) {
       return "validation";
     case 429:
       return "rateLimited";
-    case 403: {
-      const detail = String(error.detail ?? error.message).toLowerCase();
-      if (
-        detail.includes("turnstile") ||
-        detail.includes("captcha") ||
-        detail.includes("spam")
-      ) {
-        return "spam";
-      }
-      return "generic";
-    }
+    case 403:
+      return "spam";
     case 502:
     case 503:
     case 504:
@@ -89,12 +82,15 @@ function ReviewFormDialog({
   const [content, setContent] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
+  const { honeypotRef, getBotSignals, reset: resetBotSignals } =
+    useBotSignals(open);
 
   function resetForm() {
     setName("");
     setRating(null);
     setContent("");
     setErrors({});
+    resetBotSignals();
   }
 
   function validate(): FormErrors {
@@ -146,6 +142,7 @@ function ReviewFormDialog({
 
     try {
       const payload = {
+        ...getBotSignals(),
         name: name.trim(),
         rating: rating!,
         content: content.trim(),
@@ -184,7 +181,8 @@ function ReviewFormDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <form className="grid gap-4" onSubmit={handleSubmit} noValidate>
+        <form className="relative grid gap-4" onSubmit={handleSubmit} noValidate>
+          <HoneypotField ref={honeypotRef} />
           <div className="grid gap-2">
             <Label htmlFor={nameId}>{tForm("name")}</Label>
             <Input

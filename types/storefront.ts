@@ -7,6 +7,7 @@
  * sent to the public site. List rows carry `updated_at` for sitemap `<lastmod>`.
  */
 
+import type { BotSignals } from "@/types/bot-signals";
 import type { OrderStatus } from "@/types/order";
 import type { PlantCareAttributes } from "@/types/plant-attributes";
 
@@ -147,7 +148,7 @@ export type StorefrontOrderItemRequest = {
   pot_size_id?: string | null;
 };
 
-export type CreateStorefrontOrderRequest = {
+export type CreateStorefrontOrderRequest = BotSignals & {
   customer: {
     name: string;
     phone: string;
