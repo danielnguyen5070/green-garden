@@ -57,6 +57,33 @@ export function OrderDetail({
           </dd>
         </div>
         <DetailField
+          label={copy.fields.paymentMethod}
+          value={copy.paymentMethods[order.payment_method]}
+        />
+        <div className="space-y-1">
+          <dt className="text-xs text-muted-foreground">
+            {copy.fields.paymentStatus}
+          </dt>
+          <dd>
+            <AdminStatusBadge
+              status={order.payment_status}
+              label={adminCopy.status[order.payment_status]}
+            />
+          </dd>
+        </div>
+        {order.payment_reference ? (
+          <DetailField
+            label={copy.fields.paymentReference}
+            value={order.payment_reference}
+          />
+        ) : null}
+        {order.paid_at ? (
+          <DetailField
+            label={copy.fields.paidAt}
+            value={formatAdminDate(order.paid_at)}
+          />
+        ) : null}
+        <DetailField
           label={copy.fields.customerName}
           value={order.customer.name}
         />

@@ -407,7 +407,15 @@ export const adminCopy = {
       subtotalAmount: "Subtotal",
       shippingFee: "Shipping",
       totalAmount: "Total",
-      totalHint: "Calculated by the backend in VND; this is what the customer pays on delivery.",
+      totalHint: "Calculated by the backend in VND; this is what the customer pays.",
+      paymentMethod: "Payment method",
+      paymentStatus: "Payment status",
+      paymentReference: "Transfer reference",
+      paidAt: "Paid at",
+    },
+    paymentMethods: {
+      cod: "Cash on delivery",
+      bank_transfer: "Bank transfer",
     },
     items: {
       title: "Items",

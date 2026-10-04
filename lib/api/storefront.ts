@@ -3,6 +3,7 @@ import type {
   CreateStorefrontOrderRequest,
   StorefrontCategoryListResponse,
   StorefrontOrderResponse,
+  StorefrontPaymentStatus,
   StorefrontPlantDetail,
   StorefrontPlantListResponse,
   StorefrontPlantSearchResponse,
@@ -162,8 +163,8 @@ export async function getStorefrontShippingPolicy(
 }
 
 /**
- * Places a cash-on-delivery order. No account, no token: the phone number in
- * the payload is the only identity the backend needs.
+ * Places a cash-on-delivery or bank-transfer order. No account, no token: the
+ * phone number in the payload is the only identity the backend needs.
  */
 export async function createStorefrontOrder(
   payload: CreateStorefrontOrderRequest,
@@ -173,6 +174,20 @@ export async function createStorefrontOrder(
     ...PUBLIC_REQUEST,
     signal: context.signal,
   });
+}
+
+/** Live payment state of a placed order, polled by the thank-you page. */
+export async function getStorefrontOrderPayment(
+  orderId: string,
+  context: RequestContext = {}
+): Promise<StorefrontPaymentStatus> {
+  return api.get<StorefrontPaymentStatus>(
+    `/storefront/orders/${encodeURIComponent(orderId)}/payment`,
+    {
+      ...PUBLIC_REQUEST,
+      signal: context.signal,
+    }
+  );
 }
 
 export async function getStorefrontPlantBySlug(

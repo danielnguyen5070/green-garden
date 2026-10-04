@@ -27,6 +27,15 @@ export function isOrderStatus(value: string): value is OrderStatus {
   return (ORDER_STATUSES as readonly string[]).includes(value);
 }
 
+export const PAYMENT_METHODS = ["cod", "bank_transfer"] as const;
+
+export type PaymentMethod = (typeof PAYMENT_METHODS)[number];
+
+/** `paid` is only set by a verified SePay bank transfer; COD stays `pending`. */
+export const PAYMENT_STATUSES = ["pending", "paid"] as const;
+
+export type PaymentStatus = (typeof PAYMENT_STATUSES)[number];
+
 /** Customer summary embedded in an order response. */
 export type OrderCustomer = {
   id: string;
@@ -55,6 +64,11 @@ export type Order = {
   total_amount: DecimalString;
   shipping_address: string;
   note: string | null;
+  payment_method: PaymentMethod;
+  payment_status: PaymentStatus;
+  /** Transfer content for bank-transfer orders; null for COD. */
+  payment_reference: string | null;
+  paid_at: string | null;
   customer: OrderCustomer;
   items: OrderItem[];
   created_at: string;

@@ -1,5 +1,6 @@
 import type { BotSignals } from "@/types/bot-signals";
 import type { CartItem } from "@/types/cart";
+import type { PaymentMethod } from "@/types/order";
 import type { CreateStorefrontOrderRequest } from "@/types/storefront";
 
 export type CheckoutFormField = "phone" | "name" | "address" | "note";
@@ -80,11 +81,13 @@ export function toStorefrontOrderPayload(
   values: CheckoutFormValues,
   items: CartItem[],
   botSignals: BotSignals,
+  paymentMethod: PaymentMethod = "cod",
 ): CreateStorefrontOrderRequest {
   const note = values.note.trim();
 
   return {
     ...botSignals,
+    payment_method: paymentMethod,
     customer: {
       name: values.name.trim(),
       phone: normalizePhone(values.phone.trim()),

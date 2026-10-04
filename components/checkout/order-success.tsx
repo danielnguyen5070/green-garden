@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { CheckIcon, WalletIcon } from "lucide-react";
+import { BankTransferPayment } from "@/components/checkout/bank-transfer-payment";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -105,15 +106,24 @@ function OrderSuccess() {
               </div>
             </dl>
 
-            <div className="mt-5 flex gap-2.5 rounded-xl border border-primary/15 bg-secondary/60 px-3.5 py-3 text-left">
-              <WalletIcon
-                className="mt-0.5 size-4 shrink-0 text-primary stroke-[1.5]"
-                aria-hidden="true"
+            {placed.order.payment_method === "bank_transfer" &&
+            placed.order.payment ? (
+              <BankTransferPayment
+                orderId={placed.order.id}
+                payment={placed.order.payment}
+                initialStatus={placed.order.payment_status}
               />
-              <p className="font-sans text-[0.75rem] leading-relaxed text-muted-foreground">
-                {t("codNotice")}
-              </p>
-            </div>
+            ) : (
+              <div className="mt-5 flex gap-2.5 rounded-xl border border-primary/15 bg-secondary/60 px-3.5 py-3 text-left">
+                <WalletIcon
+                  className="mt-0.5 size-4 shrink-0 text-primary stroke-[1.5]"
+                  aria-hidden="true"
+                />
+                <p className="font-sans text-[0.75rem] leading-relaxed text-muted-foreground">
+                  {t("codNotice")}
+                </p>
+              </div>
+            )}
 
             <Button
               size="lg"

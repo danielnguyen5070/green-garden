@@ -34,8 +34,9 @@ export const useLastOrderStore = create<LastOrderState>()(
     }),
     {
       name: "green-garden-last-order",
-      // Version 0 carried a client-side total with no subtotal or shipping.
-      version: 1,
+      // Version 0 carried a client-side total with no subtotal or shipping;
+      // version 1 had no payment method or bank-transfer details.
+      version: 2,
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({ order: state.order }),
       migrate: () => ({ order: null }),

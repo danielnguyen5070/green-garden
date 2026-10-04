@@ -15,6 +15,7 @@ import {
 } from "@/lib/storefront";
 import { useCartStore } from "@/store/cart.store";
 import { cn } from "@/lib/utils";
+import type { PaymentMethod } from "@/types/order";
 
 function SummarySkeleton() {
   return (
@@ -35,9 +36,11 @@ function SummarySkeleton() {
 function OrderSummary({
   className,
   cartQuote,
+  paymentMethod = "cod",
 }: {
   className?: string;
   cartQuote: UseCartQuoteResult;
+  paymentMethod?: PaymentMethod;
 }) {
   const t = useTranslations("checkout.orderSummary");
   const tCart = useTranslations("cart");
@@ -204,7 +207,9 @@ function OrderSummary({
           aria-hidden="true"
         />
         <p className="font-sans text-[0.75rem] leading-relaxed text-muted-foreground">
-          {t("secureNotice")}
+          {paymentMethod === "bank_transfer"
+            ? t("bankTransferNotice")
+            : t("secureNotice")}
         </p>
       </div>
     </aside>

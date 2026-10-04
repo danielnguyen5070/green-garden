@@ -8,7 +8,7 @@
  */
 
 import type { BotSignals } from "@/types/bot-signals";
-import type { OrderStatus } from "@/types/order";
+import type { OrderStatus, PaymentMethod, PaymentStatus } from "@/types/order";
 import type { PlantCareAttributes } from "@/types/plant-attributes";
 
 /** Money arrives as a decimal string so no precision is lost in transport. */
@@ -156,10 +156,27 @@ export type CreateStorefrontOrderRequest = BotSignals & {
   shipping_address: string;
   note?: string | null;
   items: StorefrontOrderItemRequest[];
+  /** Omitted means cash on delivery. */
+  payment_method?: PaymentMethod;
 };
 
 /** Every storefront amount is in VND. */
 export type StorefrontCurrency = "VND";
+
+/**
+ * Where and how much to transfer. `reference` must be the transfer content —
+ * it is how the backend matches the payment to the order.
+ */
+export type StorefrontBankTransferInfo = {
+  bank_code: string;
+  bank_name: string;
+  account_number: string;
+  account_holder: string | null;
+  amount: Decimal;
+  reference: string;
+  /** Ready-made VietQR image with the amount and reference filled in. */
+  qr_url: string;
+};
 
 /** Confirmation returned on 201 — the source of truth for the order total. */
 export type StorefrontOrderResponse = {
@@ -170,7 +187,23 @@ export type StorefrontOrderResponse = {
   subtotal_amount: Decimal;
   shipping_fee: Decimal;
   total_amount: Decimal;
+  payment_method: PaymentMethod;
+  payment_status: PaymentStatus;
+  payment_reference: string | null;
+  paid_at: string | null;
+  /** Set for bank-transfer orders, null for cash on delivery. */
+  payment: StorefrontBankTransferInfo | null;
   created_at: string;
+};
+
+/** Response from `GET /storefront/orders/{id}/payment`. */
+export type StorefrontPaymentStatus = {
+  order_id: string;
+  order_number: string;
+  payment_method: PaymentMethod;
+  payment_status: PaymentStatus;
+  paid_at: string | null;
+  payment: StorefrontBankTransferInfo | null;
 };
 
 /** A cart line for `POST /storefront/orders/quote`: the selection only. */

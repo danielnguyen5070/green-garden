@@ -427,6 +427,17 @@
       "free": "Free shipping",
       "freeShippingHint": "Add {amount} more to get free shipping."
     },
+    "paymentMethod": {
+      "title": "Payment method",
+      "cod": {
+        "title": "Cash on delivery (COD)",
+        "description": "Pay the courier in cash when your plants arrive."
+      },
+      "bankTransfer": {
+        "title": "Bank transfer",
+        "description": "Scan a VietQR code in the next step. Payment is confirmed automatically."
+      }
+    },
     "orderSummary": {
       "title": "Order Summary",
       "qty": "Qty: {count}",
@@ -436,7 +447,8 @@
       "total": "Total",
       "empty": "Your cart is empty",
       "shopPlants": "Shop plants →",
-      "secureNotice": "You only pay when your plants arrive. No payment up front."
+      "secureNotice": "You only pay when your plants arrive. No payment up front.",
+      "bankTransferNotice": "Click Continue to payment to get a VietQR code with the exact amount and transfer reference."
     },
     "secure": {
       "title": "Cash on delivery",
@@ -449,6 +461,12 @@
     },
     "placeOrder": "Complete checkout",
     "placingOrder": "Placing order...",
+    "continuePayment": "Continue to payment",
+    "preparingPayment": "Preparing payment...",
+    "bankTransferStep": {
+      "title": "Scan to pay",
+      "description": "Order {orderNumber} is confirmed as soon as we receive your payment."
+    },
     "errors": {
       "emptyCart": "Your cart is empty.",
       "outOfStock": "Some plants in your cart are no longer in stock.",
@@ -457,6 +475,7 @@
       "rejected": "We could not verify your order. Please wait a few seconds and try again.",
       "rateLimited": "This phone number has placed too many orders recently. Please try again in {minutes} minutes.",
       "rateLimitedLater": "This phone number has placed too many orders recently. Please try again later.",
+      "bankTransferUnavailable": "Bank transfer is temporarily unavailable. Please choose cash on delivery.",
       "generic": "We could not place your order. Please try again."
     }
   },
@@ -470,6 +489,23 @@
     "free": "Free",
     "total": "Total",
     "codNotice": "You pay when your plants arrive. No payment up front.",
+    "bankTransfer": {
+      "title": "Transfer to complete your order",
+      "description": "Open your banking app and scan the VietQR code below, or transfer using these details.",
+      "qrAlt": "VietQR code to pay for this order",
+      "bank": "Bank",
+      "accountHolder": "Account holder",
+      "accountNumber": "Account number",
+      "amount": "Amount",
+      "reference": "Transfer reference",
+      "referenceWarning": "Please transfer the exact amount and use {reference} as the transfer content so your order is confirmed automatically.",
+      "waiting": "Waiting for payment confirmation...",
+      "paidTitle": "Payment received",
+      "paidDescription": "Thank you! We've received your payment and will prepare your plants.",
+      "copy": "Copy {field}",
+      "copied": "Copied",
+      "copyFailed": "Could not copy. Please copy it manually."
+    },
     "continueShopping": "Continue shopping",
     "missingTitle": "No recent order found",
     "missingDescription": "We could not find a recent order on this device. If you just placed one, we will call you on the number you gave us.",

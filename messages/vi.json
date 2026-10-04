@@ -427,6 +427,17 @@
       "free": "Miễn phí vận chuyển",
       "freeShippingHint": "Thêm {amount} nữa để được miễn phí vận chuyển."
     },
+    "paymentMethod": {
+      "title": "Phương thức thanh toán",
+      "cod": {
+        "title": "Thanh toán khi nhận hàng (COD)",
+        "description": "Trả tiền mặt cho người giao hàng khi nhận được cây."
+      },
+      "bankTransfer": {
+        "title": "Chuyển khoản ngân hàng",
+        "description": "Quét mã VietQR ở bước tiếp theo. Đơn hàng được xác nhận thanh toán tự động."
+      }
+    },
     "orderSummary": {
       "title": "Tóm tắt đơn hàng",
       "qty": "SL: {count}",
@@ -436,7 +447,8 @@
       "total": "Tổng cộng",
       "empty": "Giỏ hàng trống",
       "shopPlants": "Xem cây giống →",
-      "secureNotice": "Bạn chỉ thanh toán khi nhận được cây. Không cần trả trước."
+      "secureNotice": "Bạn chỉ thanh toán khi nhận được cây. Không cần trả trước.",
+      "bankTransferNotice": "Bấm Tiếp tục thanh toán để nhận mã VietQR với đúng số tiền và nội dung chuyển khoản."
     },
     "secure": {
       "title": "Thanh toán khi nhận hàng",
@@ -449,6 +461,12 @@
     },
     "placeOrder": "Hoàn tất thanh toán",
     "placingOrder": "Đang đặt hàng...",
+    "continuePayment": "Tiếp tục thanh toán",
+    "preparingPayment": "Đang tạo mã thanh toán...",
+    "bankTransferStep": {
+      "title": "Quét mã để thanh toán",
+      "description": "Đơn hàng {orderNumber} sẽ được xác nhận ngay khi shop nhận được tiền."
+    },
     "errors": {
       "emptyCart": "Giỏ hàng của bạn đang trống.",
       "outOfStock": "Sản phẩm trong giỏ hàng không còn đủ số lượng.",
@@ -457,6 +475,7 @@
       "rejected": "Không xác minh được đơn hàng. Vui lòng đợi vài giây rồi thử lại.",
       "rateLimited": "Số điện thoại này đã đặt quá nhiều đơn gần đây. Vui lòng thử lại sau {minutes} phút.",
       "rateLimitedLater": "Số điện thoại này đã đặt quá nhiều đơn gần đây. Vui lòng thử lại sau.",
+      "bankTransferUnavailable": "Chuyển khoản ngân hàng tạm thời chưa khả dụng. Vui lòng chọn thanh toán khi nhận hàng.",
       "generic": "Không thể đặt hàng. Vui lòng thử lại."
     }
   },
@@ -470,6 +489,23 @@
     "free": "Miễn phí",
     "total": "Tổng cộng",
     "codNotice": "Bạn sẽ thanh toán khi nhận được cây. Không cần trả trước.",
+    "bankTransfer": {
+      "title": "Chuyển khoản để hoàn tất đơn hàng",
+      "description": "Mở ứng dụng ngân hàng và quét mã VietQR bên dưới, hoặc chuyển khoản theo thông tin sau.",
+      "qrAlt": "Mã VietQR thanh toán đơn hàng",
+      "bank": "Ngân hàng",
+      "accountHolder": "Chủ tài khoản",
+      "accountNumber": "Số tài khoản",
+      "amount": "Số tiền",
+      "reference": "Nội dung chuyển khoản",
+      "referenceWarning": "Vui lòng chuyển đúng số tiền và ghi đúng nội dung {reference} để đơn hàng được xác nhận tự động.",
+      "waiting": "Đang chờ xác nhận thanh toán...",
+      "paidTitle": "Đã nhận thanh toán",
+      "paidDescription": "Cảm ơn bạn! Shop đã nhận được tiền và sẽ chuẩn bị cây cho bạn.",
+      "copy": "Sao chép {field}",
+      "copied": "Đã sao chép",
+      "copyFailed": "Không thể sao chép. Vui lòng chép thủ công."
+    },
     "continueShopping": "Tiếp tục mua cây",
     "missingTitle": "Không tìm thấy đơn hàng",
     "missingDescription": "Chúng tôi không tìm thấy thông tin đơn hàng gần đây. Nếu bạn vừa đặt hàng, shop sẽ liên hệ với bạn qua số điện thoại đã cung cấp.",
