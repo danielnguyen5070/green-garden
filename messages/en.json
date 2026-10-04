@@ -511,7 +511,8 @@
       "everyDay": "Every day",
       "contactTitle": "Contact",
       "contactNote": "Message us on Zalo or SMS at {phone}. This number takes messages only, not voice calls.",
-      "zaloLink": "Chat on Zalo"
+      "zaloLink": "Chat on Zalo",
+      "mapTitle": "Map to the Ngoc Ngan Ben Tre nursery"
     }
   },
   "faq": {

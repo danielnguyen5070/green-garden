@@ -15,6 +15,9 @@ export const CONTACT_CONFIG = {
   youtubeUrl: "https://www.youtube.com/@ngocnganbentre",
   mapUrl:
     "https://www.google.com/maps/place/C%C3%A2y+gi%E1%BB%91ng+Ng%E1%BB%8Dc+Ng%C3%A2n+B%E1%BA%BFn+Tre/@10.2212835,106.2300361,17z",
+  /** Keyless embed; its host must stay allowed by `frame-src` in `next.config.ts`. */
+  mapEmbedUrl:
+    "https://www.google.com/maps/embed?origin=mfe&pb=!1m12!1m8!1m3!1d7852.9976526512792!2d106.2300361!3d10.2212835!3m2!1i1024!2i768!4f13.1!2m1!1zQ8OieSBnaeG7kW5nIE5n4buNYyBOZ8OibiBC4bq_biBUcmU!6i16",
 } as const;
 
 /** Must match the hours on the Google Business Profile. */
