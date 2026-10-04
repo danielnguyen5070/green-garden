@@ -122,8 +122,9 @@
       }
     },
     "categories": {
-      "title": "Mua theo danh mục",
-      "description": "Chọn nhóm cây bạn cần: cây ăn trái, hoa kiểng và nhiều loại cây giống khác từ Cái Mơn."
+      "title": "Cây ăn trái",
+      "description": "Cây giống ăn trái ghép chọn lọc từ nhà vườn Cái Mơn.",
+      "viewAll": "Xem tất cả cây ăn trái"
     },
     "about": {
       "title": "Về Ngọc Ngân Bến Tre",

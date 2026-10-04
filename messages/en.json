@@ -122,8 +122,9 @@
       }
     },
     "categories": {
-      "title": "Shop by category",
-      "description": "Pick the kind of plant you need: fruit trees, ornamentals and more seedlings from Cai Mon."
+      "title": "Fruit Trees",
+      "description": "Grafted fruit tree seedlings from Cai Mon nurseries.",
+      "viewAll": "View all fruit trees"
     },
     "about": {
       "title": "About Ngọc Ngân Bến Tre",
