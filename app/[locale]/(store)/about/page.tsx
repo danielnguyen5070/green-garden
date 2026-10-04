@@ -76,8 +76,8 @@ export default async function AboutPage({ params }: Props) {
       <JsonLd data={jsonLd} />
       <OwnerHero />
       <OwnerStory />
-      <OwnerPhilosophy />
       <VisitInfo />
+      <OwnerPhilosophy />
     </>
   );
 }

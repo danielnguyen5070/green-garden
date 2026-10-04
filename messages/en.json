@@ -498,7 +498,9 @@
     },
     "ownerPhilosophy": {
       "title": "Honor the land, love what you grow.",
-      "description": "As the familiar folk verse says: “Dear friend, do not leave fields fallow — every inch of land is an inch of gold.” That is the spirit Ngoc Ngan wants to share: respect the land, love the crops, and work with farmers to create lasting value from the gardens of home."
+      "verseLabel": "Vietnamese folk verse",
+      "verse": "Dear friend, do not leave fields fallow —\nevery inch of land is an inch of gold.",
+      "description": "That is the spirit Ngoc Ngan wants to share: respect the land, love the crops, and work with farmers to create lasting value from the gardens of home."
     },
     "visitInfo": {
       "title": "Visit the nursery",

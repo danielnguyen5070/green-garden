@@ -498,7 +498,9 @@
     },
     "ownerPhilosophy": {
       "title": "Trân trọng đất đai, yêu cây trồng.",
-      "description": "Như câu ca dao quen thuộc: “Ai ơi, đừng bỏ ruộng hoang, bao nhiêu tấc đất, tấc vàng bấy nhiêu.” Đó cũng là tinh thần mà Ngọc Ngân muốn lan tỏa: trân trọng đất đai, yêu cây trồng và cùng người nông dân tạo nên những giá trị bền vững từ chính mảnh vườn quê hương."
+      "verseLabel": "Ca dao Việt Nam",
+      "verse": "Ai ơi, đừng bỏ ruộng hoang,\nBao nhiêu tấc đất, tấc vàng bấy nhiêu.",
+      "description": "Đó cũng là tinh thần mà Ngọc Ngân muốn lan tỏa: trân trọng đất đai, yêu cây trồng và cùng người nông dân tạo nên những giá trị bền vững từ chính mảnh vườn quê hương."
     },
     "visitInfo": {
       "title": "Ghé thăm nhà vườn",
