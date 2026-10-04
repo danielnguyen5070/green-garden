@@ -12,7 +12,7 @@ async function fetchNavCategories(): Promise<StorefrontCategory[]> {
 /**
  * Active categories for site-wide links (header, footer, homepage). Throws
  * when the catalog is unavailable so a regenerating page keeps its cached
- * links; only `next build` falls back to an empty list.
+ * links; only an offline build falls back to an empty list.
  */
 function getNavCategories(): Promise<StorefrontCategory[]> {
   return withBuildFallback(fetchNavCategories(), []);

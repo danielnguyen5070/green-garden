@@ -157,7 +157,7 @@ async function fetchStorefrontReviewPreview(limit: number): Promise<{
  * first-page request as `/reviews`, so both pages share one cached response.
  * Never pages through all reviews: `summary` is null unless the API sends it.
  * Throws when the API is unreachable so a regenerating page keeps its cached
- * reviews; only `next build` gets null (do not invent ratings).
+ * reviews; only an offline build gets null (do not invent ratings).
  */
 export function loadStorefrontReviewPreview(limit: number) {
   return withBuildFallback(fetchStorefrontReviewPreview(limit), null);
@@ -184,7 +184,7 @@ async function fetchPlantReviews(slug: string): Promise<PlantReviewsData> {
 /**
  * First page of a plant's approved reviews plus its rating summary.
  * Throws when the API is unreachable so a regenerating page keeps its cached
- * stars and structured-data rating. Only `next build` gets null, which hides
+ * stars and structured-data rating. Only an offline build gets null, which hides
  * the section instead of showing invented ratings.
  */
 export function loadPlantReviews(

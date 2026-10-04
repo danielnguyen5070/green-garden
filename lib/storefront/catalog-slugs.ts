@@ -10,9 +10,10 @@ import { toIsoDate } from "@/lib/seo/url";
 /**
  * Every active plant and category, for the sitemap and `generateStaticParams`.
  * These throw when the API fails, even mid-pagination, so a sitemap
- * regeneration keeps the last complete copy instead of dropping products.
- * Only `next build` gets an empty list, so an unreachable catalog doesn't fail
- * the build; missing slugs then render on their first visit.
+ * regeneration keeps the last complete copy instead of dropping products, and
+ * `next build` fails rather than publish an empty sitemap. Only an offline
+ * build (`ALLOW_BUILD_WITHOUT_API=1`) gets an empty list; missing slugs then
+ * render on their first visit.
  */
 
 export type CatalogSlug = {
