@@ -1,6 +1,7 @@
 import { getApiUrl } from "@/lib/api/config";
 import {
   ApiError,
+  INVALID_RESPONSE_MESSAGE,
   parseApiErrorPayload,
   parseRetryAfter,
 } from "@/lib/api/errors";
@@ -51,6 +52,30 @@ async function parseResponseBody(response: Response): Promise<unknown> {
     return await response.json();
   } catch {
     return null;
+  }
+}
+
+/**
+ * The API answers every 2xx with JSON (or an empty 204). Anything else, such as
+ * an nginx or Cloudflare HTML page sent with 200, must never reach a page as
+ * data.
+ */
+async function parseSuccessBody(response: Response): Promise<unknown> {
+  if (response.status === 204) return null;
+
+  const contentType = response.headers.get("content-type") ?? "";
+  if (!contentType.includes("application/json")) {
+    throw new ApiError(response.status, INVALID_RESPONSE_MESSAGE, {
+      contentType: contentType || null,
+    });
+  }
+
+  try {
+    return await response.json();
+  } catch {
+    throw new ApiError(response.status, INVALID_RESPONSE_MESSAGE, {
+      contentType,
+    });
   }
 }
 
@@ -159,17 +184,15 @@ async function request<T>(
     throw parseApiErrorPayload(401, payload);
   }
 
-  const payload = await parseResponseBody(response);
-
   if (!response.ok) {
     throw parseApiErrorPayload(
       response.status,
-      payload,
+      await parseResponseBody(response),
       parseRetryAfter(response.headers.get("retry-after"))
     );
   }
 
-  return payload as T;
+  return (await parseSuccessBody(response)) as T;
 }
 
 export const api = {

@@ -8,6 +8,9 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
+/** A 2xx response that is not the JSON the caller expects, e.g. a proxy's HTML page. */
+export const INVALID_RESPONSE_MESSAGE = "Unexpected response from the server.";
+
 export class ApiError extends Error {
   readonly status: number;
   readonly detail: unknown;

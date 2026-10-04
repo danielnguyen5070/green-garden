@@ -1,4 +1,6 @@
 import { api } from "@/lib/api/client";
+import { ApiError, INVALID_RESPONSE_MESSAGE } from "@/lib/api/errors";
+import { isStorefrontSlug } from "@/lib/storefront/slug";
 import type {
   CreateStorefrontOrderRequest,
   StorefrontCategoryListResponse,
@@ -56,6 +58,45 @@ type RequestContext = {
   signal?: AbortSignal;
 };
 
+type GetOptions = NonNullable<Parameters<typeof api.get>[1]>;
+
+/**
+ * Catalog reads feed statically rendered pages, so a malformed 200 must throw:
+ * a regenerating page then keeps its last good copy instead of rendering it.
+ */
+function invalidResponse(path: string): ApiError {
+  return new ApiError(200, INVALID_RESPONSE_MESSAGE, { path });
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isListResponse(
+  value: unknown
+): value is { items: Record<string, unknown>[]; total: number } {
+  return (
+    isRecord(value) &&
+    Array.isArray(value.items) &&
+    value.items.every(isRecord) &&
+    typeof value.total === "number" &&
+    Number.isInteger(value.total) &&
+    value.total >= 0
+  );
+}
+
+async function getList<T>(path: string, options: GetOptions): Promise<T> {
+  const payload = await api.get<unknown>(path, options);
+  if (!isListResponse(payload)) throw invalidResponse(path);
+  return payload as T;
+}
+
+async function getRecord<T>(path: string, options: GetOptions): Promise<T> {
+  const payload = await api.get<unknown>(path, options);
+  if (!isRecord(payload)) throw invalidResponse(path);
+  return payload as T;
+}
+
 export type StorefrontPlantsParams = {
   page?: number;
   page_size?: number;
@@ -72,7 +113,7 @@ export type StorefrontPlantsParams = {
 export async function getStorefrontCategories(
   context: RequestContext = {}
 ): Promise<StorefrontCategoryListResponse> {
-  return api.get<StorefrontCategoryListResponse>("/storefront/categories", {
+  return getList<StorefrontCategoryListResponse>("/storefront/categories", {
     ...PUBLIC_REQUEST,
     signal: context.signal,
     revalidate: CATALOG_REVALIDATE_SECONDS,
@@ -86,7 +127,7 @@ export async function getStorefrontPlants(
   params: StorefrontPlantsParams = {},
   context: RequestContext = {}
 ): Promise<StorefrontPlantListResponse> {
-  return api.get<StorefrontPlantListResponse>("/storefront/plants", {
+  return getList<StorefrontPlantListResponse>("/storefront/plants", {
     ...PUBLIC_REQUEST,
     signal: context.signal,
     revalidate: CATALOG_REVALIDATE_SECONDS,
@@ -122,7 +163,7 @@ export async function searchStorefrontPlants(
   params: StorefrontPlantSearchParams,
   context: RequestContext = {}
 ): Promise<StorefrontPlantSearchResponse> {
-  return api.get<StorefrontPlantSearchResponse>("/storefront/plants/search", {
+  return getList<StorefrontPlantSearchResponse>("/storefront/plants/search", {
     ...PUBLIC_REQUEST,
     signal: context.signal,
     revalidate: CATALOG_REVALIDATE_SECONDS,
@@ -154,7 +195,7 @@ export async function quoteStorefrontCart(
 export async function getStorefrontShippingPolicy(
   context: RequestContext = {}
 ): Promise<StorefrontShippingPolicy> {
-  return api.get<StorefrontShippingPolicy>("/storefront/shipping-policy", {
+  return getRecord<StorefrontShippingPolicy>("/storefront/shipping-policy", {
     ...PUBLIC_REQUEST,
     signal: context.signal,
     revalidate: CATALOG_REVALIDATE_SECONDS,
@@ -194,16 +235,20 @@ export async function getStorefrontPlantBySlug(
   slug: string,
   context: RequestContext = {}
 ): Promise<StorefrontPlantDetail> {
-  return api.get<StorefrontPlantDetail>(
-    `/storefront/plants/${encodeURIComponent(slug)}`,
-    {
-      ...PUBLIC_REQUEST,
-      signal: context.signal,
-      revalidate: CATALOG_REVALIDATE_SECONDS,
-      // `slug` may be a variant or old slug, so `plants` also covers it.
-      tags: [CACHE_TAGS.plants, CACHE_TAGS.plant(slug)],
-    }
-  );
+  const path = `/storefront/plants/${encodeURIComponent(slug)}`;
+  const payload = await api.get<unknown>(path, {
+    ...PUBLIC_REQUEST,
+    signal: context.signal,
+    revalidate: CATALOG_REVALIDATE_SECONDS,
+    // `slug` may be a variant or old slug, so `plants` also covers it.
+    tags: [CACHE_TAGS.plants, CACHE_TAGS.plant(slug)],
+  });
+
+  // The canonical-slug redirect and every plant URL are built from `slug`.
+  if (!isRecord(payload) || !isStorefrontSlug(payload.slug)) {
+    throw invalidResponse(path);
+  }
+  return payload as StorefrontPlantDetail;
 }
 
 export type StorefrontReviewsParams = {
@@ -215,7 +260,7 @@ export async function getStorefrontReviews(
   params: StorefrontReviewsParams = {},
   context: RequestContext = {}
 ): Promise<StorefrontReviewListResponse> {
-  return api.get<StorefrontReviewListResponse>("/storefront/reviews", {
+  return getList<StorefrontReviewListResponse>("/storefront/reviews", {
     ...PUBLIC_REQUEST,
     signal: context.signal,
     revalidate: REVIEWS_REVALIDATE_SECONDS,
@@ -272,7 +317,7 @@ export async function getStorefrontPlantReviews(
   params: StorefrontReviewsParams = {},
   context: RequestContext = {}
 ): Promise<StorefrontReviewListResponse> {
-  return api.get<StorefrontReviewListResponse>(
+  return getList<StorefrontReviewListResponse>(
     `/storefront/plants/${encodeURIComponent(slug)}/reviews`,
     {
       ...PUBLIC_REQUEST,
