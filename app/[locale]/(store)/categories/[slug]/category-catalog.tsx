@@ -9,6 +9,7 @@ import {
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildCatalogMetadata } from "@/lib/seo/catalog-metadata";
 import { buildCategoryJsonLd } from "@/lib/seo/category-json-ld";
+import { toMetaDescription } from "@/lib/seo/meta-text";
 import {
   localizeOptionalText,
   localizeText,
@@ -49,8 +50,11 @@ async function buildCategoryCatalogMetadata(
 
   return buildCatalogMetadata({
     locale,
-    title: page > 1 ? t("pageTitle", { title: name, page }) : name,
-    description: metaDescription,
+    title:
+      page > 1
+        ? t("pageTitle", { title: name, page })
+        : t("category.metadataTitle", { category: name }),
+    description: toMetaDescription(metaDescription),
     categorySlug: category.slug,
     page,
     ogImageAlt: name,

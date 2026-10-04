@@ -198,13 +198,14 @@
   "plants": {
     "title": "Plants",
     "metadata": {
-      "title": "Plants",
+      "title": "Cai Mon Seedlings – Fruit Trees & Ornamentals",
       "description": "Browse Cai Mon seedlings, fruit trees, and ornamental plants from Ngoc Ngan Ben Tre. Search, filter by category, and sort the full catalog.",
       "ogImageAlt": "Ngoc Ngan Ben Tre plant catalog — Cai Mon seedlings and nursery stock",
       "keywords": "Cai Mon seedlings, plant catalog, Ben Tre nursery, fruit tree seedlings, ornamental plants"
     },
     "pageTitle": "{title} – Page {page}",
     "category": {
+      "metadataTitle": "{category} – Cai Mon Nursery Seedlings",
       "metadataDescription": "Browse {category} from Ngoc Ngan Ben Tre — healthy Cai Mon nursery stock with careful packing and nationwide delivery in Vietnam."
     },
     "featured": {
@@ -309,8 +310,9 @@
   "plantDetail": {
     "home": "Home",
     "breadcrumb": "Breadcrumb",
-    "metadataDescription": "{name} seedlings – {category}. Healthy nursery stock from Cai Mon – Ben Tre, carefully packed and delivered nationwide.",
-    "metadataDescriptionNoCategory": "{name} seedlings from a Cai Mon – Ben Tre nursery. Healthy stock, carefully packed and delivered nationwide.",
+    "metadataTitle": "{plant} – Nationwide Delivery",
+    "metadataDescription": "{plant} – {category}. Healthy nursery stock from Cai Mon – Ben Tre, carefully packed and delivered nationwide.",
+    "metadataDescriptionNoCategory": "{plant} from a Cai Mon – Ben Tre nursery. Healthy stock, carefully packed and delivered nationwide.",
     "featured": "Featured",
     "potSize": "Pot size",
     "sizeGuide": "Size Guide",
@@ -520,7 +522,7 @@
   },
   "about": {
     "metadata": {
-      "title": "About",
+      "title": "About Our Cai Mon Seedling Nursery",
       "description": "Ngoc Ngan Ben Tre — healthy Ben Tre seedlings and practical growing know-how for gardeners.",
       "ogImageAlt": "Ngoc Ngan Ben Tre nursery staff tending young saplings in a Ben Tre greenhouse",
       "keywords": "Ngoc Ngan Ben Tre, about, seedling nursery, Ben Tre growers, Cai Mon seedlings"
@@ -564,7 +566,7 @@
   },
   "faq": {
     "metadata": {
-      "title": "FAQ",
+      "title": "FAQ – Ordering & Growing Seedlings",
       "description": "Answers about Cai Mon seedlings, ordering, nationwide delivery, cash on delivery, planting, and plant care at Ngoc Ngan Ben Tre.",
       "ogImageAlt": "Ngoc Ngan Ben Tre FAQ — question mark over a sunlit seedling nursery",
       "keywords": "FAQ, Cai Mon seedlings, ordering, delivery, cash on delivery, plant care, Ngoc Ngan Ben Tre"

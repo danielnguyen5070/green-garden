@@ -13,11 +13,12 @@ async function buildPlantsCatalogMetadata(
   page: number
 ): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: "plants" });
-  const title = t("metadata.title");
-
   return buildCatalogMetadata({
     locale,
-    title: page > 1 ? t("pageTitle", { title, page }) : title,
+    title:
+      page > 1
+        ? t("pageTitle", { title: t("title"), page })
+        : t("metadata.title"),
     description: t("metadata.description"),
     keywords: t("metadata.keywords"),
     page,

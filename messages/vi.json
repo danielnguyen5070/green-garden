@@ -198,13 +198,14 @@
   "plants": {
     "title": "Cây giống",
     "metadata": {
-      "title": "Cây giống",
+      "title": "Cây giống Cái Mơn – Cây ăn trái, hoa kiểng",
       "description": "Xem cây giống Cái Mơn, cây ăn trái và hoa kiểng từ Ngọc Ngân Bến Tre. Tìm kiếm, lọc theo danh mục và sắp xếp toàn bộ danh mục.",
       "ogImageAlt": "Danh mục cây Ngọc Ngân Bến Tre — cây giống Cái Mơn và cây nhà vườn",
       "keywords": "cây giống Cái Mơn, danh mục cây, vườn ươm Bến Tre, cây ăn trái, hoa kiểng"
     },
     "pageTitle": "{title} – Trang {page}",
     "category": {
+      "metadataTitle": "{category} – Cây giống Cái Mơn",
       "metadataDescription": "Xem {category} tại Ngọc Ngân Bến Tre — cây giống Cái Mơn khỏe mạnh, đóng gói cẩn thận, giao hàng toàn quốc."
     },
     "featured": {
@@ -309,8 +310,9 @@
   "plantDetail": {
     "home": "Trang chủ",
     "breadcrumb": "Đường dẫn",
-    "metadataDescription": "Cây giống {name} – {category}. Cây khỏe từ nhà vườn Cái Mơn – Bến Tre, đóng gói cẩn thận, giao hàng toàn quốc.",
-    "metadataDescriptionNoCategory": "Cây giống {name} từ nhà vườn Cái Mơn – Bến Tre. Cây khỏe, đóng gói cẩn thận, giao hàng toàn quốc.",
+    "metadataTitle": "{plant} – Giao toàn quốc",
+    "metadataDescription": "{plant} – {category}. Cây khỏe từ nhà vườn Cái Mơn – Bến Tre, đóng gói cẩn thận, giao hàng toàn quốc.",
+    "metadataDescriptionNoCategory": "{plant} từ nhà vườn Cái Mơn – Bến Tre. Cây khỏe, đóng gói cẩn thận, giao hàng toàn quốc.",
     "featured": "Nổi bật",
     "potSize": "Cỡ chậu",
     "sizeGuide": "Hướng dẫn kích thước",
@@ -520,7 +522,7 @@
   },
   "about": {
     "metadata": {
-      "title": "Giới thiệu",
+      "title": "Giới thiệu nhà vườn cây giống Cái Mơn",
       "description": "Ngọc Ngân Bến Tre — nhà vườn cây giống Bến Tre, mang cây khỏe và kinh nghiệm trồng đến người yêu cây.",
       "ogImageAlt": "Đội ngũ Ngọc Ngân Bến Tre chăm sóc cây giống trong nhà vườn",
       "keywords": "Ngọc Ngân Bến Tre, giới thiệu, nhà vườn cây giống, Bến Tre, cây giống Cái Mơn"
@@ -564,7 +566,7 @@
   },
   "faq": {
     "metadata": {
-      "title": "Câu hỏi thường gặp",
+      "title": "Câu hỏi thường gặp khi mua cây giống",
       "description": "Giải đáp về cây giống Cái Mơn, cách đặt hàng, giao hàng toàn quốc, thanh toán khi nhận hàng, cách trồng và chăm sóc cây.",
       "ogImageAlt": "Câu hỏi thường gặp Ngọc Ngân Bến Tre — dấu hỏi trên nền nhà vườn cây giống",
       "keywords": "câu hỏi thường gặp, cây giống Cái Mơn, đặt hàng, giao hàng, COD, chăm sóc cây, Ngọc Ngân Bến Tre"

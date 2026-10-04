@@ -14,6 +14,7 @@ import {
   redirectToCanonicalPlantSlug,
 } from "@/lib/storefront/get-plant-by-slug";
 import { loadPlantReviews } from "@/lib/reviews";
+import { getPlantSearchName, toMetaDescription } from "@/lib/seo/meta-text";
 import { resolveOgImage } from "@/lib/seo/og-image";
 import { buildPlantJsonLd } from "@/lib/seo/plant-json-ld";
 import {
@@ -33,14 +34,17 @@ async function getFallbackDescription(
   locale: string
 ): Promise<string> {
   const t = await getTranslations({ locale, namespace: "plantDetail" });
-  const name = localizeText(plant.name, plant.name_vi, locale);
+  const plantName = getPlantSearchName(
+    localizeText(plant.name, plant.name_vi, locale),
+    locale
+  );
   const category = plant.category
     ? localizeText(plant.category.name, plant.category.name_vi, locale)
     : null;
 
   return category
-    ? t("metadataDescription", { name, category })
-    : t("metadataDescriptionNoCategory", { name });
+    ? t("metadataDescription", { plant: plantName, category })
+    : t("metadataDescriptionNoCategory", { plant: plantName });
 }
 
 /** Admin-set OG image, then the first product photo, then the site default. */
@@ -68,11 +72,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {};
   }
 
+  const t = await getTranslations({ locale, namespace: "plantDetail" });
   const name = localizeText(plant.name, plant.name_vi, locale);
-  const description =
+  const title = t("metadataTitle", {
+    plant: getPlantSearchName(name, locale),
+  });
+  const description = toMetaDescription(
     localizeTextStrict(plant.description, plant.description_vi, locale) ??
-    (await getFallbackDescription(plant, locale));
-  const ogTitle = `${name} | ${SITE_NAME}`;
+      (await getFallbackDescription(plant, locale))
+  );
+  const ogTitle = `${title} | ${SITE_NAME}`;
   const path = `/${locale}/plants/${plant.slug}`;
   const languages = {
     vi: `/vi/plants/${plant.slug}`,
@@ -82,7 +91,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const ogImage = resolvePlantOgImage(plant, name);
 
   return {
-    title: name,
+    title,
     description,
     alternates: {
       canonical: path,
