@@ -31,9 +31,9 @@ const COPY: Record<"en" | "vi", LocaleCopy> = {
       "Hi! I'm Ngọc Ngân Bến Tre AI 🌿\nAsk me about seedlings, care tips, delivery, or what's in stock today.",
     welcomeSuggestions: [
       {
-        id: "browse",
-        label: "Show popular plants",
-        value: "What are your most popular plants?",
+        id: "about",
+        label: "About the shop",
+        value: "Tell me about Ngọc Ngân Bến Tre.",
         variant: "primary",
       },
       {
@@ -55,9 +55,9 @@ const COPY: Record<"en" | "vi", LocaleCopy> = {
       "Xin chào! Mình là Ngọc Ngân Bến Tre AI 🌿\nBạn hỏi mình về cây giống, cách chăm, giao hàng, hoặc cây đang có nhé.",
     welcomeSuggestions: [
       {
-        id: "browse",
-        label: "Cây bán chạy",
-        value: "Cây nào đang bán chạy?",
+        id: "about",
+        label: "Về shop",
+        value: "Giới thiệu về shop Ngọc Ngân Bến Tre?",
         variant: "primary",
       },
       {
