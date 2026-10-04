@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import {
   ArrowRightIcon,
@@ -7,6 +8,7 @@ import {
   SproutIcon,
   type LucideIcon,
 } from "lucide-react";
+import { ABOUT_IMAGES } from "@/components/about/images";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
 import { Link } from "@/i18n/navigation";
@@ -26,10 +28,20 @@ async function HomeAboutSection({ className }: { className?: string }) {
     <section
       data-slot="home-about"
       aria-labelledby="home-about-heading"
-      className={cn("bg-background py-8 md:py-10", className)}
+      className={cn("bg-background py-12 md:py-16 lg:py-20", className)}
     >
       <Container>
-        <div className="grid gap-8 rounded-2xl bg-secondary px-6 py-10 md:px-10 md:py-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-12 lg:px-14">
+        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-muted shadow-elevated sm:aspect-[16/10] lg:aspect-[4/5]">
+            <Image
+              src={ABOUT_IMAGES.story}
+              alt={t("imageAlt")}
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 40vw"
+            />
+          </div>
+
           <div className="flex flex-col items-start">
             <h2
               id="home-about-heading"
@@ -37,14 +49,32 @@ async function HomeAboutSection({ className }: { className?: string }) {
             >
               {t("title")}
             </h2>
-            <p className="mt-3 max-w-xl font-sans text-body text-muted-foreground">
+            <p className="mt-4 max-w-2xl font-sans text-body text-muted-foreground">
               {t("description")}
             </p>
 
-            <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+            <ul className="mt-8 grid w-full list-none grid-cols-1 gap-x-8 gap-y-6 border-t border-border pt-8 sm:grid-cols-2">
+              {HIGHLIGHTS.map(({ key, icon: Icon }) => (
+                <li key={key} className="flex gap-3">
+                  <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <Icon className="size-5 stroke-[1.75]" aria-hidden="true" />
+                  </span>
+                  <div className="min-w-0">
+                    <h3 className="font-sans text-sm font-semibold tracking-tight text-foreground">
+                      {t(`highlights.${key}.title`)}
+                    </h3>
+                    <p className="mt-1 font-sans text-small leading-snug text-muted-foreground">
+                      {t(`highlights.${key}.description`)}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-10 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
               <Button
                 size="lg"
-                className="h-12 rounded-xl px-5 text-sm shadow-elevated"
+                className="h-12 rounded-xl px-5 text-sm shadow-elevated has-data-[icon=inline-end]:pr-5"
                 render={<Link href="/about" />}
                 nativeButton={false}
               >
@@ -62,27 +92,6 @@ async function HomeAboutSection({ className }: { className?: string }) {
               </Button>
             </div>
           </div>
-
-          <ul className="grid list-none grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
-            {HIGHLIGHTS.map(({ key, icon: Icon }) => (
-              <li
-                key={key}
-                className="flex gap-3 rounded-2xl border border-border/70 bg-card p-4 shadow-subtle"
-              >
-                <span className="mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <Icon className="size-4 stroke-[1.75]" aria-hidden="true" />
-                </span>
-                <div className="min-w-0">
-                  <h3 className="font-sans text-sm font-semibold tracking-tight text-foreground">
-                    {t(`highlights.${key}.title`)}
-                  </h3>
-                  <p className="mt-1 font-sans text-small leading-snug text-muted-foreground">
-                    {t(`highlights.${key}.description`)}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
         </div>
       </Container>
     </section>
