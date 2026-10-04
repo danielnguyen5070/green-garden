@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 function LogoMark({ className }: { className?: string }) {
   return (
     <Image
-      src="/images/logo-mark2.png"
+      src="/images/logo-mark.png"
       alt=""
       width={48}
       height={48}

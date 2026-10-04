@@ -37,7 +37,7 @@ function ChatHeader({
       <div className="flex min-w-0 items-center gap-2.5">
         <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary">
           <Image
-            src="/images/logo-mark2.png"
+            src="/images/logo-mark.png"
             alt=""
             width={32}
             height={32}

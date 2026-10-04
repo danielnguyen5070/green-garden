@@ -35,7 +35,7 @@ export function buildHomepageJsonLd({
         name: BUSINESS_DISPLAY_NAME,
         alternateName: [SITE_NAME, SITE_NAME_ASCII],
         url: SITE_URL,
-        logo: `${SITE_URL}/images/logo-mark2.png`,
+        logo: `${SITE_URL}/images/logo-mark.png`,
         image: [`${SITE_URL}/images/og-home.jpg`],
         description:
           "Cơ sở kinh doanh cây giống và hoa kiểng các loại. Cây giống, cây ăn trái và hoa kiểng từ Cái Mơn – Chợ Lách. Cây khỏe, đóng gói cẩn thận, giao toàn quốc.",
