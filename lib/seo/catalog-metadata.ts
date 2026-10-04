@@ -17,7 +17,7 @@ type CatalogMetadataInput = {
 };
 
 /**
- * Metadata for `/plants` and `/categories/{slug}`. Each `?page=N` is its own
+ * Metadata for `/plants` and `/categories/{slug}`. Each `/page/N` is its own
  * canonical URL (not page 1) so paginated products stay indexable.
  */
 export function buildCatalogMetadata({

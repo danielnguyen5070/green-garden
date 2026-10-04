@@ -2,6 +2,7 @@ import createMiddleware from "next-intl/middleware";
 import { type NextRequest, NextResponse } from "next/server";
 import { routing } from "./i18n/routing";
 import { hasAuthCookies } from "./lib/auth-cookies";
+import { parseLegacyCatalogPage } from "./lib/storefront/catalog";
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -33,6 +34,26 @@ function handleAdminAuth(request: NextRequest) {
   return NextResponse.next();
 }
 
+const LEGACY_CATALOG_PATH = /^((?:\/[a-z]{2})?\/(?:plants|categories\/[^/]+))\/?$/;
+
+/**
+ * Catalog pages moved from `?page=N` to `/page/N`; 308 old links (and any
+ * invalid `?page=` value, to the first page) so indexed URLs keep ranking.
+ */
+function redirectLegacyCatalogPage(request: NextRequest) {
+  const { pathname, searchParams } = request.nextUrl;
+  if (!searchParams.has("page")) return null;
+
+  const match = LEGACY_CATALOG_PATH.exec(pathname);
+  if (!match) return null;
+
+  const page = parseLegacyCatalogPage(searchParams.get("page"));
+  const url = request.nextUrl.clone();
+  url.pathname = page && page > 1 ? `${match[1]}/page/${page}` : match[1];
+  url.searchParams.delete("page");
+  return NextResponse.redirect(url, 308);
+}
+
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -49,6 +70,11 @@ export default async function proxy(request: NextRequest) {
 
   if (pathname.startsWith("/admin")) {
     return handleAdminAuth(request);
+  }
+
+  const legacyRedirect = redirectLegacyCatalogPage(request);
+  if (legacyRedirect) {
+    return legacyRedirect;
   }
 
   return intlMiddleware(request);

@@ -1,20 +1,12 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/config/site";
 import { routing, type AppLocale } from "@/i18n/routing";
-import {
-  getStorefrontCategories,
-  getStorefrontPlants,
-} from "@/lib/api/storefront";
 import { toIsoDate } from "@/lib/seo/url";
+import {
+  getAllCategorySlugs,
+  getAllPlantSlugs,
+} from "@/lib/storefront/catalog-slugs";
 import { getAllPosts } from "@/services/blog.service";
-
-/** Matches the storefront API `page_size` cap. */
-const PLANT_PAGE_SIZE = 100;
-
-type DatedSlug = {
-  slug: string;
-  updatedAt: string | undefined;
-};
 
 function localeUrl(locale: AppLocale, path: string): string {
   return path === "" ? `${SITE_URL}/${locale}` : `${SITE_URL}/${locale}${path}`;
@@ -57,62 +49,10 @@ function localizedEntries(
   }));
 }
 
-async function getAllCategories(): Promise<DatedSlug[]> {
-  try {
-    const { items } = await getStorefrontCategories();
-    return items
-      .filter((category) => Boolean(category.slug))
-      .map((category) => ({
-        slug: category.slug,
-        updatedAt: toIsoDate(category.updated_at),
-      }));
-  } catch {
-    // Catalog may be unavailable at build time; keep the remaining URLs.
-    return [];
-  }
-}
-
-async function getAllPlants(): Promise<DatedSlug[]> {
-  const plants: DatedSlug[] = [];
-  let page = 1;
-  let total = Number.POSITIVE_INFINITY;
-
-  try {
-    while ((page - 1) * PLANT_PAGE_SIZE < total) {
-      const response = await getStorefrontPlants({
-        page,
-        page_size: PLANT_PAGE_SIZE,
-      });
-
-      for (const plant of response.items) {
-        if (plant.slug) {
-          plants.push({
-            slug: plant.slug,
-            updatedAt: toIsoDate(plant.updated_at),
-          });
-        }
-      }
-
-      total = response.total;
-
-      if (response.items.length === 0) {
-        break;
-      }
-
-      page += 1;
-    }
-  } catch {
-    // Catalog may be unavailable at build time; keep static + blog URLs.
-    return plants;
-  }
-
-  return plants;
-}
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [categories, plants] = await Promise.all([
-    getAllCategories(),
-    getAllPlants(),
+    getAllCategorySlugs(),
+    getAllPlantSlugs(),
   ]);
 
   const postsByLocale = Object.fromEntries(

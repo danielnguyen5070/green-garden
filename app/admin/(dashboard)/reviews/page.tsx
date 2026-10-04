@@ -7,6 +7,7 @@ import { AdminSection } from "@/components/admin/admin-section";
 import { AdminStatusBadge } from "@/components/admin/admin-status-badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { refreshStorefront } from "@/app/admin/actions/revalidate";
 import { routing } from "@/i18n/routing";
 import { adminCopy } from "@/lib/admin-copy";
 import { formatAdminDate } from "@/lib/admin-format";
@@ -216,6 +217,10 @@ export default function AdminReviewsPage() {
       toast.success(
         status === "approved" ? copy.approvedSuccess : copy.rejectedSuccess
       );
+      void refreshStorefront({
+        entity: "reviews",
+        slugs: updated.plant ? [updated.plant.slug] : [],
+      });
 
       // Drop the row when the active filter no longer includes it.
       if (statusFilter !== "all" && statusFilter !== status) {

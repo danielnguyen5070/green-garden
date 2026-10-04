@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MoreHorizontal, Plus, Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { refreshStorefront } from "@/app/admin/actions/revalidate";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminSection } from "@/components/admin/admin-section";
 import { AdminStatusBadge } from "@/components/admin/admin-status-badge";
@@ -286,6 +287,8 @@ export default function AdminOrdersPage() {
       setDialogMode(null);
       toast.success(copy.createdSuccess);
       refresh(1);
+      // Orders move stock, which plant lists and detail pages show.
+      void refreshStorefront({ entity: "plants" });
     } catch (err) {
       // Surfaces backend stock and validation failures.
       const message = getErrorMessage(err);
@@ -305,6 +308,7 @@ export default function AdminOrdersPage() {
       setSelected(await updateOrderStatus(selected.id, { status }));
       toast.success(copy.statusSuccess);
       refresh(page);
+      void refreshStorefront({ entity: "plants" });
     } catch (err) {
       toast.error(getErrorMessage(err));
       // Re-sync the control with the server's actual state.

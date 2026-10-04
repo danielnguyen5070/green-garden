@@ -41,6 +41,7 @@ import {
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { notifyPlantToIndexNow } from "@/app/admin/actions/indexnow";
+import { refreshStorefront } from "@/app/admin/actions/revalidate";
 import { adminCopy } from "@/lib/admin-copy";
 import {
   formatAdminCurrency,
@@ -553,6 +554,7 @@ export default function AdminPlantsPage() {
       setSelected(null);
       toast.success(copy.createdSuccess);
       refresh(1);
+      void refreshStorefront({ entity: "plants", slugs: [plant.slug] });
       if (plant.is_active) {
         void notifyPlantToIndexNow(plant.slug);
       }
@@ -664,6 +666,10 @@ export default function AdminPlantsPage() {
       setSelected(null);
       toast.success(copy.updatedSuccess);
       refresh(page);
+      void refreshStorefront({
+        entity: "plants",
+        slugs: [plant.slug, previousSlug],
+      });
       if (plant.is_active) {
         void notifyPlantToIndexNow(
           plant.slug,
@@ -693,6 +699,7 @@ export default function AdminPlantsPage() {
         plant.is_active ? copy.deactivatedSuccess : copy.activatedSuccess
       );
       refresh(page);
+      void refreshStorefront({ entity: "plants", slugs: [updated.slug] });
       if (updated.is_active) {
         void notifyPlantToIndexNow(updated.slug);
       }
@@ -1646,7 +1653,13 @@ function PlantForm({
               plantId={plant.id}
               images={images}
               disabled={submitting}
-              onChange={setImages}
+              onChange={(next) => {
+                setImages(next);
+                void refreshStorefront({
+                  entity: "plants",
+                  slugs: [plant.slug],
+                });
+              }}
             />
           ) : (
             <p className="text-sm text-muted-foreground">
@@ -1662,7 +1675,13 @@ function PlantForm({
               plantId={plant.id}
               potSizes={potSizes}
               disabled={submitting}
-              onChange={setPotSizes}
+              onChange={(next) => {
+                setPotSizes(next);
+                void refreshStorefront({
+                  entity: "plants",
+                  slugs: [plant.slug],
+                });
+              }}
             />
           ) : (
             <p className="text-sm text-muted-foreground">

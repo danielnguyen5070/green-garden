@@ -8,6 +8,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
 import { getStorefrontShippingPolicy } from "@/lib/api/storefront";
+import { getAllPlantSlugs } from "@/lib/storefront/catalog-slugs";
 import {
   getPlantBySlugOrNull,
   redirectToCanonicalPlantSlug,
@@ -51,6 +52,12 @@ function resolvePlantOgImage(plant: StorefrontPlantDetail, name: string) {
   const primary = getPrimaryPlantImage(plant.images);
   const photo = primary?.type === "image" ? primary : null;
   return resolveOgImage(photo?.url, photo?.alt_text?.trim() || name);
+}
+
+/** Plants added after the build render on their first visit, then stay cached. */
+export async function generateStaticParams() {
+  const plants = await getAllPlantSlugs();
+  return plants.map(({ slug }) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

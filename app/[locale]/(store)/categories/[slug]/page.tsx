@@ -1,139 +1,40 @@
-import { Suspense } from "react";
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { Breadcrumbs } from "@/components/layout/breadcrumbs";
-import {
-  PlantListSection,
-  PlantListSkeleton,
-} from "@/components/plant/plant-list-section";
-import { JsonLd } from "@/components/seo/json-ld";
-import { buildCatalogMetadata } from "@/lib/seo/catalog-metadata";
-import { buildCategoryJsonLd } from "@/lib/seo/category-json-ld";
-import {
-  localizeOptionalText,
-  localizeText,
-  localizeTextStrict,
-} from "@/lib/storefront";
-import { parseCatalogPage } from "@/lib/storefront/catalog";
+import { getAllCategorySlugs } from "@/lib/storefront/catalog-slugs";
 import { getCategoryBySlugOrNull } from "@/lib/storefront/get-category-by-slug";
-import type { StorefrontCategory } from "@/types/storefront";
+import {
+  CategoryCatalog,
+  buildCategoryCatalogMetadata,
+} from "./category-catalog";
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
-  searchParams: Promise<{ page?: string | string[] }>;
 };
 
-async function getCategoryCopy(category: StorefrontCategory, locale: string) {
-  const t = await getTranslations({ locale, namespace: "plants" });
-  const name = localizeText(category.name, category.name_vi, locale);
-
-  return {
-    name,
-    description: localizeOptionalText(
-      category.description,
-      category.description_vi,
-      locale
-    ),
-    /** Never the other language's copy: metadata and schema declare `locale`. */
-    metaDescription:
-      localizeTextStrict(
-        category.description,
-        category.description_vi,
-        locale
-      ) ?? t("category.metadataDescription", { category: name }),
-  };
+/** Categories added after the build render on their first visit, then stay cached. */
+export async function generateStaticParams() {
+  const categories = await getAllCategorySlugs();
+  return categories.map(({ slug }) => ({ slug }));
 }
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
-  const page = parseCatalogPage((await searchParams).page);
   const category = await getCategoryBySlugOrNull(slug);
 
-  if (!category || page === null) {
+  if (!category) {
     return {};
   }
 
-  const t = await getTranslations({ locale, namespace: "plants" });
-  const { name, metaDescription } = await getCategoryCopy(category, locale);
-
-  return buildCatalogMetadata({
-    locale,
-    title: page > 1 ? t("pageTitle", { title: name, page }) : name,
-    description: metaDescription,
-    categorySlug: category.slug,
-    page,
-    ogImageAlt: name,
-    ogImageUrl: category.image_url,
-  });
+  return buildCategoryCatalogMetadata(category, locale, 1);
 }
 
-export default async function CategoryPage({ params, searchParams }: Props) {
+export default async function CategoryPage({ params }: Props) {
   const { locale, slug } = await params;
-  const page = parseCatalogPage((await searchParams).page);
   const category = await getCategoryBySlugOrNull(slug);
 
-  if (!category || page === null) {
+  if (!category) {
     notFound();
   }
 
-  const t = await getTranslations({ locale, namespace: "plants" });
-  const tDetail = await getTranslations({ locale, namespace: "plantDetail" });
-  const { name, description, metaDescription } = await getCategoryCopy(
-    category,
-    locale
-  );
-  const sectionClassName = "pb-16 md:pb-20 lg:pb-24";
-
-  const jsonLd = buildCategoryJsonLd({
-    locale,
-    slug: category.slug,
-    name,
-    description: metaDescription,
-    homeLabel: tDetail("home"),
-    plantsLabel: t("title"),
-  });
-
-  const breadcrumb = (
-    <Breadcrumbs
-      label={tDetail("breadcrumb")}
-      className="mb-6 md:mb-8"
-      items={[
-        { label: tDetail("home"), href: "/" },
-        { label: t("title"), href: "/plants" },
-        { label: name },
-      ]}
-    />
-  );
-
-  return (
-    <>
-      <JsonLd data={jsonLd} />
-      <Suspense
-        fallback={
-          <PlantListSkeleton
-            title={name}
-            breadcrumb={breadcrumb}
-            headingAs="h1"
-            frameId="plants"
-            className={sectionClassName}
-          />
-        }
-      >
-        <PlantListSection
-          title={name}
-          description={description}
-          breadcrumb={breadcrumb}
-          category={category}
-          page={page}
-          headingAs="h1"
-          frameId="plants"
-          className={sectionClassName}
-        />
-      </Suspense>
-    </>
-  );
+  return <CategoryCatalog category={category} locale={locale} page={1} />;
 }

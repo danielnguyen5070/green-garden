@@ -1,31 +1,18 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { notFound } from "next/navigation";
 import {
   PlantListSection,
   PlantListSkeleton,
 } from "@/components/plant/plant-list-section";
 import { buildCatalogMetadata } from "@/lib/seo/catalog-metadata";
-import { parseCatalogPage } from "@/lib/storefront/catalog";
 
-type Props = {
-  params: Promise<{ locale: string }>;
-  searchParams: Promise<{ page?: string | string[] }>;
-};
-
-export async function generateMetadata({
-  params,
-  searchParams,
-}: Props): Promise<Metadata> {
-  const { locale } = await params;
-  const page = parseCatalogPage((await searchParams).page);
+/** Shared by `/plants` and `/plants/page/N`. */
+async function buildPlantsCatalogMetadata(
+  locale: string,
+  page: number
+): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: "plants" });
-
-  if (page === null) {
-    return {};
-  }
-
   const title = t("metadata.title");
 
   return buildCatalogMetadata({
@@ -38,13 +25,7 @@ export async function generateMetadata({
   });
 }
 
-export default async function PlantsPage({ searchParams }: Props) {
-  const page = parseCatalogPage((await searchParams).page);
-
-  if (page === null) {
-    notFound();
-  }
-
+async function PlantsCatalog({ page }: { page: number }) {
   const t = await getTranslations("plants");
   const sectionClassName = "pb-16 md:pb-20 lg:pb-24";
 
@@ -69,3 +50,5 @@ export default async function PlantsPage({ searchParams }: Props) {
     </Suspense>
   );
 }
+
+export { PlantsCatalog, buildPlantsCatalogMetadata };

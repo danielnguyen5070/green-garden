@@ -14,6 +14,8 @@ type RequestOptions = {
   skipAuthRedirect?: boolean;
   /** Data Cache lifetime in seconds when the call runs on the server. */
   revalidate?: number | false;
+  /** Data Cache tags, invalidated on demand by `revalidateTag` / `updateTag`. */
+  tags?: string[];
 };
 
 let refreshPromise: Promise<boolean> | null = null;
@@ -108,6 +110,7 @@ async function request<T>(
     skipAuthRefresh = false,
     skipAuthRedirect = false,
     revalidate,
+    tags,
   } = options;
 
   const headers: HeadersInit = {
@@ -124,7 +127,10 @@ async function request<T>(
     headers,
     body: body === undefined ? undefined : JSON.stringify(body),
     signal,
-    next: revalidate === undefined ? undefined : { revalidate },
+    next:
+      revalidate === undefined && tags === undefined
+        ? undefined
+        : { revalidate, tags },
   });
 
   if (

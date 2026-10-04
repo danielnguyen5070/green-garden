@@ -74,8 +74,26 @@ async function PlantListSkeleton({
 }
 
 /**
+ * The page of plants `PlantListSection` renders. Routes call it before
+ * streaming starts so an out-of-range page gets a real 404; the identical
+ * request is deduplicated with the section's own.
+ */
+function getCatalogPagePlants(
+  page: number,
+  category: StorefrontCategory | null
+) {
+  return getStorefrontPlants({
+    page,
+    page_size: STOREFRONT_PLANTS_PAGE_SIZE,
+    category_id: category?.id,
+    sort: "created_at",
+    order: "desc",
+  });
+}
+
+/**
  * Storefront catalog with search, category links, sort, and load more.
- * Renders the category and `?page=` named in the URL so each page is
+ * Renders the category and `/page/N` named in the URL so each page is
  * crawlable on its own.
  */
 async function PlantListSection({
@@ -101,13 +119,7 @@ async function PlantListSection({
   const sectionTitle = title ?? t("title");
 
   const [plants, categories] = await Promise.all([
-    getStorefrontPlants({
-      page,
-      page_size: STOREFRONT_PLANTS_PAGE_SIZE,
-      category_id: category?.id,
-      sort: "created_at",
-      order: "desc",
-    }).catch(() => null),
+    getCatalogPagePlants(page, category).catch(() => null),
     getStorefrontCategories().catch(() => null),
   ]);
 
@@ -149,4 +161,4 @@ async function PlantListSection({
   );
 }
 
-export { PlantListSection, PlantListSkeleton };
+export { PlantListSection, PlantListSkeleton, getCatalogPagePlants };

@@ -45,7 +45,7 @@ function PlantList({
   categories: StorefrontCategory[];
   /** Category the URL is scoped to (`/categories/{slug}`), if any. */
   category?: StorefrontCategory | null;
-  /** `?page=` the server rendered. */
+  /** `/page/N` the server rendered. */
   initialPage?: number;
   /** Section heading; defaults to `home.products.title`. */
   title?: string;

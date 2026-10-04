@@ -41,7 +41,7 @@ export type UseStorefrontPlantsResult = {
   sortOption: StorefrontPlantSortOption;
   /** Page of the last loaded batch; "Load more" links to `page + 1`. */
   page: number;
-  /** First page shown in the grid; above 1 only on a `?page=N` landing. */
+  /** First page shown in the grid; above 1 only on a `/page/N` landing. */
   firstPage: number;
   isSearching: boolean;
   isLoading: boolean;
@@ -100,7 +100,7 @@ async function fetchAllPlantsForSearch(params: {
 
 /**
  * Keeps the catalog grid in sync with `GET /storefront/plants`. The page named
- * in the URL (category + `?page=`) is rendered on the server and reused as-is,
+ * in the URL (category + `/page/N`) is rendered on the server and reused as-is,
  * so the default view costs no browser request; sort and "load more" stay on
  * the API. Text search is matched on the client with diacritic folding so
  * queries like `lan` hit `Lan Hồ Điệp`.

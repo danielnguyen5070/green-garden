@@ -18,6 +18,7 @@ import type {
   StorefrontReviewListResponse,
 } from "@/types/storefront-review";
 import type { AppLocale } from "@/i18n/routing";
+import { CACHE_TAGS } from "@/lib/storefront/cache-tags";
 
 /**
  * Storefront endpoints are public. Opting out of the shared client's refresh
@@ -29,8 +30,11 @@ const PUBLIC_REQUEST = {
   skipAuthRedirect: true,
 } as const;
 
-/** Catalog data changes rarely; a short Data Cache window is plenty. */
-const CATALOG_REVALIDATE_SECONDS = 60;
+/**
+ * Admin edits and FastAPI webhooks invalidate catalog tags on demand; this
+ * window is only a safety net for a missed notification.
+ */
+const CATALOG_REVALIDATE_SECONDS = 6 * 60 * 60;
 
 /** Cards per Homepage page, and per "Load more" step. */
 export const STOREFRONT_PLANTS_PAGE_SIZE = 8;
@@ -44,8 +48,8 @@ export const STOREFRONT_REVIEWS_PAGE_SIZE = 8;
 /** Approved reviews per plant detail page load / "Load more" step. */
 export const STOREFRONT_PLANT_REVIEWS_PAGE_SIZE = 6;
 
-/** Reviews change when admins moderate; keep a short Data Cache window. */
-const REVIEWS_REVALIDATE_SECONDS = 60;
+/** Moderation invalidates review tags on demand; same safety net as the catalog. */
+const REVIEWS_REVALIDATE_SECONDS = 6 * 60 * 60;
 
 type RequestContext = {
   signal?: AbortSignal;
@@ -71,6 +75,7 @@ export async function getStorefrontCategories(
     ...PUBLIC_REQUEST,
     signal: context.signal,
     revalidate: CATALOG_REVALIDATE_SECONDS,
+    tags: [CACHE_TAGS.categories],
     // The backend already limits this to active categories.
     query: { page: 1, page_size: STOREFRONT_PLANTS_MAX_PAGE_SIZE },
   });
@@ -84,6 +89,7 @@ export async function getStorefrontPlants(
     ...PUBLIC_REQUEST,
     signal: context.signal,
     revalidate: CATALOG_REVALIDATE_SECONDS,
+    tags: [CACHE_TAGS.plants],
     query: {
       page: params.page ?? 1,
       page_size: params.page_size ?? STOREFRONT_PLANTS_PAGE_SIZE,
@@ -119,6 +125,7 @@ export async function searchStorefrontPlants(
     ...PUBLIC_REQUEST,
     signal: context.signal,
     revalidate: CATALOG_REVALIDATE_SECONDS,
+    tags: [CACHE_TAGS.plants],
     query: {
       q: params.q,
       locale: params.locale,
@@ -150,6 +157,7 @@ export async function getStorefrontShippingPolicy(
     ...PUBLIC_REQUEST,
     signal: context.signal,
     revalidate: CATALOG_REVALIDATE_SECONDS,
+    tags: [CACHE_TAGS.shippingPolicy],
   });
 }
 
@@ -177,6 +185,8 @@ export async function getStorefrontPlantBySlug(
       ...PUBLIC_REQUEST,
       signal: context.signal,
       revalidate: CATALOG_REVALIDATE_SECONDS,
+      // `slug` may be a variant or old slug, so `plants` also covers it.
+      tags: [CACHE_TAGS.plants, CACHE_TAGS.plant(slug)],
     }
   );
 }
@@ -194,6 +204,7 @@ export async function getStorefrontReviews(
     ...PUBLIC_REQUEST,
     signal: context.signal,
     revalidate: REVIEWS_REVALIDATE_SECONDS,
+    tags: [CACHE_TAGS.reviews],
     query: {
       page: params.page ?? 1,
       page_size: params.page_size ?? STOREFRONT_REVIEWS_PAGE_SIZE,
@@ -252,6 +263,7 @@ export async function getStorefrontPlantReviews(
       ...PUBLIC_REQUEST,
       signal: context.signal,
       revalidate: REVIEWS_REVALIDATE_SECONDS,
+      tags: [CACHE_TAGS.reviews, CACHE_TAGS.plantReviews(slug)],
       query: {
         page: params.page ?? 1,
         page_size: params.page_size ?? STOREFRONT_PLANT_REVIEWS_PAGE_SIZE,

@@ -46,6 +46,7 @@ import {
   updateCategoryStatus,
 } from "@/lib/api/categories";
 import { getErrorMessage } from "@/lib/api/errors";
+import { refreshStorefront } from "@/app/admin/actions/revalidate";
 import { adminCopy } from "@/lib/admin-copy";
 import { toast } from "@/lib/toast";
 import type {
@@ -260,6 +261,7 @@ export default function AdminCategoriesPage() {
       setSelected(null);
       toast.success(adminCopy.categories.createdSuccess);
       refresh(1);
+      void refreshStorefront({ entity: "categories" });
     } catch (err) {
       setFormError(getErrorMessage(err));
     } finally {
@@ -321,6 +323,7 @@ export default function AdminCategoriesPage() {
       setSelected(null);
       toast.success(adminCopy.categories.updatedSuccess);
       refresh(page);
+      void refreshStorefront({ entity: "categories" });
     } catch (err) {
       setFormError(getErrorMessage(err));
     } finally {
@@ -340,6 +343,7 @@ export default function AdminCategoriesPage() {
           : adminCopy.categories.activatedSuccess
       );
       refresh(page);
+      void refreshStorefront({ entity: "categories" });
     } catch (err) {
       toast.error(getErrorMessage(err));
     } finally {
