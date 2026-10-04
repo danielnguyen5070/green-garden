@@ -41,6 +41,9 @@ export const STOREFRONT_PLANTS_MAX_PAGE_SIZE = 100;
 /** Approved reviews per Reviews page load / "Load more" step. */
 export const STOREFRONT_REVIEWS_PAGE_SIZE = 8;
 
+/** Approved reviews per plant detail page load / "Load more" step. */
+export const STOREFRONT_PLANT_REVIEWS_PAGE_SIZE = 6;
+
 /** Reviews change when admins moderate; keep a short Data Cache window. */
 const REVIEWS_REVALIDATE_SECONDS = 60;
 
@@ -235,4 +238,39 @@ export async function createStorefrontReview(
     ...PUBLIC_REQUEST,
     signal: context.signal,
   });
+}
+
+/** Approved reviews of one plant, with that plant's rating summary. */
+export async function getStorefrontPlantReviews(
+  slug: string,
+  params: StorefrontReviewsParams = {},
+  context: RequestContext = {}
+): Promise<StorefrontReviewListResponse> {
+  return api.get<StorefrontReviewListResponse>(
+    `/storefront/plants/${encodeURIComponent(slug)}/reviews`,
+    {
+      ...PUBLIC_REQUEST,
+      signal: context.signal,
+      revalidate: REVIEWS_REVALIDATE_SECONDS,
+      query: {
+        page: params.page ?? 1,
+        page_size: params.page_size ?? STOREFRONT_PLANT_REVIEWS_PAGE_SIZE,
+      },
+    }
+  );
+}
+
+export async function createStorefrontPlantReview(
+  slug: string,
+  payload: StorefrontReviewCreateRequest,
+  context: RequestContext = {}
+): Promise<StorefrontReview> {
+  return api.post<StorefrontReview>(
+    `/storefront/plants/${encodeURIComponent(slug)}/reviews`,
+    payload,
+    {
+      ...PUBLIC_REQUEST,
+      signal: context.signal,
+    }
+  );
 }

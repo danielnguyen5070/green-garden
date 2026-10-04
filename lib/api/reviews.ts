@@ -2,6 +2,7 @@ import { api } from "@/lib/api/client";
 import type {
   Review,
   ReviewListResponse,
+  ReviewScope,
   ReviewStatus,
   ReviewStatusUpdateRequest,
 } from "@/types/review";
@@ -12,6 +13,8 @@ export type ListReviewsParams = {
   /** Matches reviewer name or content. */
   search?: string;
   status?: ReviewStatus;
+  scope?: ReviewScope;
+  plant_id?: string;
 };
 
 export async function listReviews(
@@ -25,6 +28,8 @@ export async function listReviews(
       page_size: params.page_size ?? 20,
       search: params.search,
       status: params.status,
+      scope: params.scope,
+      plant_id: params.plant_id,
     },
   });
 }

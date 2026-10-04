@@ -6,6 +6,9 @@ import { PlantGallery } from "@/components/plant/plant-gallery";
 import { PlantCareSpecs } from "@/components/plant/plant-care-specs";
 import { PlantPageViews } from "@/components/plant/plant-page-views";
 import { PlantPurchase } from "@/components/plant/plant-purchase";
+import { PlantReviews } from "@/components/plant/plant-reviews";
+import { ReviewStars } from "@/components/reviews/review-stars";
+import type { PlantReviewsData } from "@/lib/reviews";
 import {
   getActivePotSizes,
   getLocalizedPlant,
@@ -17,7 +20,14 @@ import {
 import { getCatalogHref } from "@/lib/storefront/catalog";
 import type { StorefrontPlantDetail } from "@/types/storefront";
 
-async function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
+async function PlantDetail({
+  plant,
+  reviews,
+}: {
+  plant: StorefrontPlantDetail;
+  /** `null` when reviews could not be loaded; the reviews UI is hidden. */
+  reviews: PlantReviewsData | null;
+}) {
   const [t, tPlants, locale] = await Promise.all([
     getTranslations("plantDetail"),
     getTranslations("plants"),
@@ -37,6 +47,9 @@ async function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
   const categoryName = plant.category
     ? localizeText(plant.category.name, plant.category.name_vi, locale)
     : null;
+
+  const ratingSummary =
+    reviews && reviews.summary.total_reviews > 0 ? reviews.summary : null;
 
   const images = sortPlantImages(plant.images);
   const potSizes = getActivePotSizes(plant.pot_sizes).map((size) => ({
@@ -80,6 +93,26 @@ async function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
               {name}
             </h1>
 
+            {ratingSummary ? (
+              <a
+                href="#reviews"
+                data-slot="plant-rating"
+                className="mt-2 inline-flex w-fit items-center gap-2 rounded font-sans text-small text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                aria-label={t("reviews.ratingLinkLabel", {
+                  rating: ratingSummary.average_rating.toFixed(1),
+                  count: ratingSummary.total_reviews,
+                })}
+              >
+                <ReviewStars rating={ratingSummary.average_rating} size="sm" />
+                <span className="font-medium text-foreground tabular-nums">
+                  {ratingSummary.average_rating.toFixed(1)}
+                </span>
+                <span>
+                  {t("reviews.count", { count: ratingSummary.total_reviews })}
+                </span>
+              </a>
+            ) : null}
+
             <Suspense fallback={null}>
               <PlantPageViews
                 locale={locale}
@@ -111,6 +144,17 @@ async function PlantDetail({ plant }: { plant: StorefrontPlantDetail }) {
               {longDescription}
             </div>
           </div>
+        ) : null}
+
+        {reviews ? (
+          <PlantReviews
+            plantSlug={plant.slug}
+            plantName={name}
+            initialReviews={reviews.reviews}
+            initialTotal={reviews.total}
+            summary={reviews.summary}
+            className="mt-12 border-t border-border pt-10 md:mt-14 md:pt-12 lg:mt-16"
+          />
         ) : null}
       </Container>
     </section>

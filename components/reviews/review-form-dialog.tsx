@@ -15,7 +15,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { createStorefrontReview } from "@/lib/api/storefront";
+import {
+  createStorefrontPlantReview,
+  createStorefrontReview,
+} from "@/lib/api/storefront";
 import { ApiError } from "@/lib/api/errors";
 import { toast } from "@/lib/toast";
 import {
@@ -62,9 +65,16 @@ function getSubmitErrorKey(error: unknown) {
 function ReviewFormDialog({
   open,
   onOpenChange,
+  plantSlug,
+  title,
+  description,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Submits a review of this plant instead of a website-wide shop review. */
+  plantSlug?: string;
+  title?: string;
+  description?: string;
 }) {
   const t = useTranslations("reviews");
   const tForm = useTranslations("reviews.form");
@@ -135,11 +145,16 @@ function ReviewFormDialog({
     setSubmitting(true);
 
     try {
-      await createStorefrontReview({
+      const payload = {
         name: name.trim(),
         rating: rating!,
         content: content.trim(),
-      });
+      };
+      if (plantSlug) {
+        await createStorefrontPlantReview(plantSlug, payload);
+      } else {
+        await createStorefrontReview(payload);
+      }
       resetForm();
       onOpenChange(false);
       toast.success(t("submitSuccess"), {
@@ -163,8 +178,10 @@ function ReviewFormDialog({
     >
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{tForm("title")}</DialogTitle>
-          <DialogDescription>{tForm("description")}</DialogDescription>
+          <DialogTitle>{title ?? tForm("title")}</DialogTitle>
+          <DialogDescription>
+            {description ?? tForm("description")}
+          </DialogDescription>
         </DialogHeader>
 
         <form className="grid gap-4" onSubmit={handleSubmit} noValidate>

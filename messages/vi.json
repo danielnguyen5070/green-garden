@@ -384,6 +384,14 @@
     "related": {
       "title": "Bạn có thể cũng thích",
       "viewAll": "Xem tất cả"
+    },
+    "reviews": {
+      "title": "Đánh giá của khách hàng",
+      "empty": "Chưa có đánh giá nào cho cây này. Hãy là người đầu tiên chia sẻ trải nghiệm.",
+      "count": "({count} đánh giá)",
+      "ratingLinkLabel": "Được đánh giá {rating}/5 từ {count} lượt. Xem đánh giá",
+      "formTitle": "Đánh giá {name}",
+      "formDescription": "Chia sẻ cảm nhận của bạn về {name}. Không cần tài khoản."
     }
   },
   "checkout": {

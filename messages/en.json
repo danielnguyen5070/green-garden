@@ -384,6 +384,14 @@
     "related": {
       "title": "You Might Also Like",
       "viewAll": "View all"
+    },
+    "reviews": {
+      "title": "Customer reviews",
+      "empty": "No reviews for this plant yet. Be the first to share your experience.",
+      "count": "({count, plural, one {# review} other {# reviews}})",
+      "ratingLinkLabel": "Rated {rating} out of 5 from {count, plural, one {# review} other {# reviews}}. See reviews",
+      "formTitle": "Review {name}",
+      "formDescription": "Share how your {name} is doing. No account needed."
     }
   },
   "checkout": {

@@ -1,5 +1,6 @@
 import { SITE_URL } from "@/config/site";
 import { CART_CURRENCY, parseMoney } from "@/lib/cart";
+import type { PlantReviewsData } from "@/lib/reviews";
 import {
   BRAND_ID,
   BUSINESS_DISPLAY_NAME,
@@ -31,7 +32,38 @@ type PlantJsonLdInput = {
   shippingPolicy: StorefrontShippingPolicy | null;
   /** Used when the plant has no description in `locale`. */
   fallbackDescription: string;
+  /** Approved reviews; `null` when they could not be loaded. */
+  reviews: PlantReviewsData | null;
 };
+
+/** Google only needs a sample of individual reviews next to the aggregate. */
+const MAX_SCHEMA_REVIEWS = 5;
+
+function buildReviewSchema(reviews: PlantReviewsData | null) {
+  if (!reviews || reviews.summary.total_reviews === 0) return null;
+
+  return {
+    aggregateRating: {
+      "@type": "AggregateRating" as const,
+      ratingValue: reviews.summary.average_rating.toFixed(1),
+      reviewCount: reviews.summary.total_reviews,
+      bestRating: 5,
+      worstRating: 1,
+    },
+    review: reviews.reviews.slice(0, MAX_SCHEMA_REVIEWS).map((review) => ({
+      "@type": "Review" as const,
+      author: { "@type": "Person" as const, name: review.name },
+      datePublished: review.created_at.slice(0, 10),
+      reviewBody: review.content,
+      reviewRating: {
+        "@type": "Rating" as const,
+        ratingValue: review.rating,
+        bestRating: 5,
+        worstRating: 1,
+      },
+    })),
+  };
+}
 
 /**
  * Offer-level shipping for merchant listings.
@@ -98,9 +130,8 @@ function buildMerchantReturnPolicy(locale: string) {
  *   single Offer at the base price when the plant has no sizes. Omitted when
  *   the plant has no VND price, because it cannot be ordered. Every offer
  *   shares the plant-level availability, since stock is not tracked per size.
- *
- * Omits optional fields we cannot represent accurately yet: `review`,
- * `aggregateRating`.
+ * - `aggregateRating` / `review` → only when the plant has approved reviews,
+ *   using the newest few from the first page.
  */
 export function buildPlantJsonLd({
   locale,
@@ -109,6 +140,7 @@ export function buildPlantJsonLd({
   plantsLabel,
   shippingPolicy,
   fallbackDescription,
+  reviews,
 }: PlantJsonLdInput) {
   const { name, price: basePrice } = getLocalizedPlant(plant, locale);
   // Prefer long-form copy for Product schema; `inLanguage` rules out the
@@ -173,6 +205,8 @@ export function buildPlantJsonLd({
           )
         : buildOffer(getPotSizeUnitPrice(basePrice, null));
 
+  const reviewSchema = buildReviewSchema(reviews);
+
   const plantsUrl = `${SITE_URL}/${locale}/plants`;
   const breadcrumbTrail = [
     { name: homeLabel, item: `${SITE_URL}/${locale}` },
@@ -212,6 +246,7 @@ export function buildPlantJsonLd({
         ...(categoryName ? { category: categoryName } : {}),
         brand: { "@id": BRAND_ID },
         ...(offers ? { offers } : {}),
+        ...(reviewSchema ?? {}),
         mainEntityOfPage: {
           "@type": "WebPage",
           "@id": pageUrl,

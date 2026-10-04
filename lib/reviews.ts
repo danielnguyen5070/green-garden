@@ -1,5 +1,7 @@
 import {
+  STOREFRONT_PLANT_REVIEWS_PAGE_SIZE,
   STOREFRONT_REVIEWS_PAGE_SIZE,
+  getStorefrontPlantReviews,
   getStorefrontReviews,
 } from "@/lib/api/storefront";
 import type {
@@ -153,6 +155,35 @@ export async function loadStorefrontReviewPreview(limit: number): Promise<{
     return {
       summary: hasApiSummary ? resolveReviewSummary(page) : null,
       reviews,
+    };
+  } catch {
+    return null;
+  }
+}
+
+export type PlantReviewsData = {
+  reviews: StorefrontReview[];
+  total: number;
+  summary: StorefrontReviewSummary;
+};
+
+/**
+ * First page of a plant's approved reviews plus its rating summary.
+ * Returns null when the API is unreachable, so the page can hide the section
+ * instead of showing invented ratings.
+ */
+export async function loadPlantReviews(
+  slug: string
+): Promise<PlantReviewsData | null> {
+  try {
+    const page = await getStorefrontPlantReviews(slug, {
+      page: 1,
+      page_size: STOREFRONT_PLANT_REVIEWS_PAGE_SIZE,
+    });
+    return {
+      reviews: page.items,
+      total: page.total,
+      summary: resolveReviewSummary(page),
     };
   } catch {
     return null;

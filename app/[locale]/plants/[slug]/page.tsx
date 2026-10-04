@@ -12,6 +12,7 @@ import {
   getPlantBySlugOrNull,
   redirectToCanonicalPlantSlug,
 } from "@/lib/storefront/get-plant-by-slug";
+import { loadPlantReviews } from "@/lib/reviews";
 import { resolveOgImage } from "@/lib/seo/og-image";
 import { buildPlantJsonLd } from "@/lib/seo/plant-json-ld";
 import {
@@ -109,13 +110,15 @@ export default async function PlantDetailPage({ params }: Props) {
 
   redirectToCanonicalPlantSlug(locale, slug, plant);
 
-  const [t, tPlants, shippingPolicy, fallbackDescription] = await Promise.all([
-    getTranslations({ locale, namespace: "plantDetail" }),
-    getTranslations({ locale, namespace: "plants" }),
-    // Structured data can go without shipping details; the page cannot fail.
-    getStorefrontShippingPolicy().catch(() => null),
-    getFallbackDescription(plant, locale),
-  ]);
+  const [t, tPlants, shippingPolicy, fallbackDescription, reviews] =
+    await Promise.all([
+      getTranslations({ locale, namespace: "plantDetail" }),
+      getTranslations({ locale, namespace: "plants" }),
+      // Structured data can go without shipping details; the page cannot fail.
+      getStorefrontShippingPolicy().catch(() => null),
+      getFallbackDescription(plant, locale),
+      loadPlantReviews(plant.slug),
+    ]);
   const jsonLd = buildPlantJsonLd({
     locale,
     plant,
@@ -123,12 +126,13 @@ export default async function PlantDetailPage({ params }: Props) {
     plantsLabel: tPlants("title"),
     shippingPolicy,
     fallbackDescription,
+    reviews,
   });
 
   return (
     <>
       <JsonLd data={jsonLd} />
-      <PlantDetail plant={plant} />
+      <PlantDetail plant={plant} reviews={reviews} />
       <Suspense fallback={null}>
         <RelatedPlants plant={plant} />
       </Suspense>

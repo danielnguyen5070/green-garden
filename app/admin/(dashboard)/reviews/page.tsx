@@ -1,19 +1,20 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Search, Star } from "lucide-react";
+import { ExternalLink, Search, Star } from "lucide-react";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminSection } from "@/components/admin/admin-section";
 import { AdminStatusBadge } from "@/components/admin/admin-status-badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { routing } from "@/i18n/routing";
 import { adminCopy } from "@/lib/admin-copy";
 import { formatAdminDate } from "@/lib/admin-format";
 import { getErrorMessage } from "@/lib/api/errors";
 import { listReviews, updateReviewStatus } from "@/lib/api/reviews";
 import { toast } from "@/lib/toast";
-import type { Review, ReviewStatus } from "@/types/review";
-import { REVIEW_STATUSES } from "@/types/review";
+import type { Review, ReviewScope, ReviewStatus } from "@/types/review";
+import { REVIEW_SCOPES, REVIEW_STATUSES } from "@/types/review";
 import { cn } from "@/lib/utils";
 
 const PAGE_SIZE = 20;
@@ -30,6 +31,60 @@ const STATUS_FILTERS: { value: StatusFilter; label: string }[] = [
     label: adminCopy.status[status],
   })),
 ];
+
+type ScopeFilter = "all" | ReviewScope;
+
+const SCOPE_FILTERS: { value: ScopeFilter; label: string }[] = [
+  { value: "all", label: copy.all },
+  ...REVIEW_SCOPES.map((scope) => ({
+    value: scope,
+    label: copy.scope[scope],
+  })),
+];
+
+function FilterButtons<T extends string>({
+  label,
+  filters,
+  value,
+  loading,
+  onChange,
+}: {
+  label: string;
+  filters: { value: T; label: string }[];
+  value: T;
+  loading: boolean;
+  onChange: (next: T) => void;
+}) {
+  return (
+    <div
+      className="flex flex-wrap items-center gap-2"
+      role="group"
+      aria-label={label}
+    >
+      {filters.map((filter) => {
+        const isActive = value === filter.value;
+
+        return (
+          <Button
+            key={filter.value}
+            type="button"
+            size="sm"
+            variant={isActive ? "default" : "outline"}
+            className={cn(
+              "h-8",
+              !isActive && "bg-background text-foreground hover:bg-muted"
+            )}
+            aria-pressed={isActive}
+            disabled={loading && isActive}
+            onClick={() => onChange(filter.value)}
+          >
+            {filter.label}
+          </Button>
+        );
+      })}
+    </div>
+  );
+}
 
 function ReviewStars({ rating }: { rating: number }) {
   const safeRating = Math.min(5, Math.max(0, Math.round(rating)));
@@ -67,13 +122,15 @@ export default function AdminReviewsPage() {
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [scopeFilter, setScopeFilter] = useState<ScopeFilter>("all");
   const [statusPendingId, setStatusPendingId] = useState<string | null>(null);
 
   const totalPages = useMemo(
     () => Math.max(1, Math.ceil(total / PAGE_SIZE)),
     [total]
   );
-  const isFiltered = search !== "" || statusFilter !== "all";
+  const isFiltered =
+    search !== "" || statusFilter !== "all" || scopeFilter !== "all";
 
   useEffect(() => {
     if (searchInput.trim() === search) return;
@@ -98,6 +155,7 @@ export default function AdminReviewsPage() {
             page_size: PAGE_SIZE,
             search: search || undefined,
             status: statusFilter === "all" ? undefined : statusFilter,
+            scope: scopeFilter === "all" ? undefined : scopeFilter,
           },
           { signal: controller.signal }
         );
@@ -122,7 +180,7 @@ export default function AdminReviewsPage() {
 
     void fetchReviews();
     return () => controller.abort();
-  }, [page, search, statusFilter, reloadToken]);
+  }, [page, search, statusFilter, scopeFilter, reloadToken]);
 
   function refresh(nextPage = page) {
     setLoading(true);
@@ -134,6 +192,13 @@ export default function AdminReviewsPage() {
     if (next === statusFilter) return;
     setLoading(true);
     setStatusFilter(next);
+    setPage(1);
+  }
+
+  function applyScopeFilter(next: ScopeFilter) {
+    if (next === scopeFilter) return;
+    setLoading(true);
+    setScopeFilter(next);
     setPage(1);
   }
 
@@ -186,33 +251,21 @@ export default function AdminReviewsPage() {
             />
           </div>
 
-          <div
-            className="flex flex-wrap items-center gap-2"
-            role="group"
-            aria-label={copy.filtersLabel}
-          >
-            {STATUS_FILTERS.map((filter) => {
-              const isActive = statusFilter === filter.value;
+          <FilterButtons
+            label={copy.filtersLabel}
+            filters={STATUS_FILTERS}
+            value={statusFilter}
+            loading={loading}
+            onChange={applyStatusFilter}
+          />
 
-              return (
-                <Button
-                  key={filter.value}
-                  type="button"
-                  size="sm"
-                  variant={isActive ? "default" : "outline"}
-                  className={cn(
-                    "h-8",
-                    !isActive && "bg-background text-foreground hover:bg-muted"
-                  )}
-                  aria-pressed={isActive}
-                  disabled={loading && isActive}
-                  onClick={() => applyStatusFilter(filter.value)}
-                >
-                  {filter.label}
-                </Button>
-              );
-            })}
-          </div>
+          <FilterButtons
+            label={copy.scopeFiltersLabel}
+            filters={SCOPE_FILTERS}
+            value={scopeFilter}
+            loading={loading}
+            onChange={applyScopeFilter}
+          />
         </div>
 
         {showInitialLoading ? (
@@ -252,6 +305,28 @@ export default function AdminReviewsPage() {
                           label={adminCopy.status[review.status]}
                         />
                       </div>
+                      {review.plant ? (
+                        <p className="flex flex-wrap items-center gap-1 text-sm text-muted-foreground">
+                          <span>{copy.plantReview}</span>
+                          <a
+                            href={`/${routing.defaultLocale}/plants/${review.plant.slug}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={copy.viewPlant(review.plant.name)}
+                            className="inline-flex items-center gap-1 font-medium text-foreground underline-offset-4 hover:underline"
+                          >
+                            {review.plant.name}
+                            <ExternalLink
+                              aria-hidden="true"
+                              className="size-3.5"
+                            />
+                          </a>
+                        </p>
+                      ) : (
+                        <p className="text-sm text-muted-foreground">
+                          {copy.shopReview}
+                        </p>
+                      )}
                       <p className="whitespace-pre-wrap text-sm text-foreground">
                         {review.content}
                       </p>
