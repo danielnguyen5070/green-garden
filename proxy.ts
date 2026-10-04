@@ -34,14 +34,29 @@ function handleAdminAuth(request: NextRequest) {
   return NextResponse.next();
 }
 
-const LEGACY_CATALOG_PATH = /^((?:\/[a-z]{2})?\/(?:plants|categories\/[^/]+))\/?$/;
+/** Case-insensitive so next-intl can still fix the casing of `/VI/...`. */
+const LOCALE_PREFIX = new RegExp(`^/(?:${routing.locales.join("|")})(?:/|$)`, "i");
+
+const LEGACY_CATALOG_PATH = /^(\/[a-z]{2}\/(?:plants|categories\/[^/]+))\/?$/;
+
+/**
+ * Unprefixed paths (`/`, `/plants/x`) belong to the default locale. next-intl
+ * redirects them with a temporary 307, which leaves Google treating the bare
+ * domain as its own URL; a permanent redirect hands its signals to `/vi`.
+ */
+function withLocalePrefix(pathname: string): string {
+  if (LOCALE_PREFIX.test(pathname)) return pathname;
+  return pathname === "/"
+    ? `/${routing.defaultLocale}`
+    : `/${routing.defaultLocale}${pathname}`;
+}
 
 /**
  * Catalog pages moved from `?page=N` to `/page/N`; 308 old links (and any
  * invalid `?page=` value, to the first page) so indexed URLs keep ranking.
  */
-function redirectLegacyCatalogPage(request: NextRequest) {
-  const { pathname, searchParams } = request.nextUrl;
+function redirectLegacyCatalogPage(request: NextRequest, pathname: string) {
+  const { searchParams } = request.nextUrl;
   if (!searchParams.has("page")) return null;
 
   const match = LEGACY_CATALOG_PATH.exec(pathname);
@@ -72,9 +87,18 @@ export default async function proxy(request: NextRequest) {
     return handleAdminAuth(request);
   }
 
-  const legacyRedirect = redirectLegacyCatalogPage(request);
+  // One hop to the final URL, even for an unprefixed legacy `?page=` link.
+  const localizedPathname = withLocalePrefix(pathname);
+
+  const legacyRedirect = redirectLegacyCatalogPage(request, localizedPathname);
   if (legacyRedirect) {
     return legacyRedirect;
+  }
+
+  if (localizedPathname !== pathname) {
+    const url = request.nextUrl.clone();
+    url.pathname = localizedPathname;
+    return NextResponse.redirect(url, 308);
   }
 
   return intlMiddleware(request);
