@@ -11,7 +11,7 @@ async function OwnerPhilosophy({ className }: { className?: string }) {
     <Section
       data-slot="owner-philosophy"
       aria-label={t("title")}
-      className={cn("bg-background !py-12 md:!py-16 lg:!py-20", className)}
+      className={cn("bg-background !py-20 md:!py-24 lg:!py-32", className)}
     >
       <Container>
         <div className="relative isolate overflow-hidden rounded-3xl bg-primary px-6 py-14 text-center text-primary-foreground shadow-elevated md:px-12 md:py-20 lg:py-24">

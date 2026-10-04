@@ -45,7 +45,7 @@ async function VisitInfo({ className }: { className?: string }) {
     <Section
       data-slot="visit-info"
       aria-labelledby="visit-info-heading"
-      className={cn("bg-secondary !py-12 md:!py-16 lg:!py-20", className)}
+      className={cn("bg-secondary !py-20 md:!py-24 lg:!py-32", className)}
     >
       <Container>
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
