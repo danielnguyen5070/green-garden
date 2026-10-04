@@ -74,11 +74,13 @@ Plant pages use absolute URLs of the form `https://www.ngocnganbentre.vn/{locale
 
 ### VI
 
+- [Cây Giống Cái Mơn Bến Tre – Vùng Đất Nổi Tiếng Với Nghề Cây Giống](https://www.ngocnganbentre.vn/vi/blog/cai-mon-ben-tre-seedlings): Cây giống — Vì sao Cái Mơn – Chợ Lách nổi tiếng về cây giống, các loại cây giống phổ biến, nên chọn cây ghép hay cây chiết và kinh nghiệm chọn cây giống khỏe. — 2026-10-04
 - [Các giống ổi phổ biến và đặc điểm từng giống](https://www.ngocnganbentre.vn/vi/blog/guava-varieties): Cây giống — Tìm hiểu ổi lê Đài Loan, ổi nữ hoàng, ổi xá lị, ổi tím Malaysia, các dòng ổi không hạt và ổi ruột đỏ Ruby để chọn cây giống phù hợp với khu vườn của bạn. — 2026-09-17
 - [Cây giống sầu đâu: lá làm gỏi, hoa xào ngon và vị thuốc quen thuộc](https://www.ngocnganbentre.vn/vi/blog/sau-dau-seedlings): Chăm sóc — Những điều rút ra từ video giới thiệu cây giống sầu đâu: kích thước cây, công dụng trong bếp và lợi ích chăm sóc truyền thống. — 2026-09-13
 
 ### EN
 
+- [Cai Mon, Ben Tre Seedlings – A Region Famous for Its Nursery Trade](https://www.ngocnganbentre.vn/en/blog/cai-mon-ben-tre-seedlings): Seedlings — Why Cai Mon – Cho Lach is known for seedlings, which seedlings are common there, grafted versus air-layered plants, and how to pick a healthy seedling. — 2026-10-04
 - [Popular guava varieties and what sets each one apart](https://www.ngocnganbentre.vn/en/blog/guava-varieties): Seedlings — A look at Taiwan pear guava, Queen guava, xá lị guava, Malaysian purple guava, the seedless lines and red-fleshed Ruby guava to help you pick the right seedling for your garden. — 2026-09-17
 - [Neem seedlings: salad greens, stir-fried flowers, and familiar folk remedies](https://www.ngocnganbentre.vn/en/blog/sau-dau-seedlings): Plant care — Takeaways from a short nursery video on neem (sầu đâu) seedlings: plant size, kitchen uses, and traditional care benefits. — 2026-09-13
 
