@@ -36,7 +36,7 @@ async function NewsletterSection({ className }: { className?: string }) {
 
             <Button
               size="lg"
-              className="mt-8 h-11 rounded bg-[#0068ff] px-6 font-sans text-sm text-white shadow-elevated hover:bg-[#0068ff]/90"
+              className="mt-8 h-11 rounded px-6 font-sans text-sm shadow-elevated"
               render={
                 <a
                   href={CONTACT_CONFIG.zaloGroupUrl}
