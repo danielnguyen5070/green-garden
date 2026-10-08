@@ -1,23 +1,19 @@
 import { cache } from "react";
 import { permanentRedirect } from "next/navigation";
-import { ApiError } from "@/lib/api/errors";
+import { ApiError, ErrorCode } from "@/lib/api/errors";
 import { getStorefrontPlantBySlug } from "@/lib/api/storefront";
 import { isStorefrontSlug } from "@/lib/storefront/slug";
 import type { StorefrontPlantDetail } from "@/types/storefront";
 
 /**
- * The `detail` FastAPI sends for `PlantNotFoundError` (unknown or inactive
- * plant). The API has no machine-readable error code, and a 404 from nginx,
- * Cloudflare or an unknown route (`"Not Found"`) must not pass as a missing
- * plant, so this exact string is the only accepted signal.
+ * Only the API's `PLANT_NOT_FOUND` code (unknown or inactive plant) counts. A
+ * 404 from nginx, Cloudflare or an unknown route carries no code or the
+ * generic `NOT_FOUND` one, and must not pass as a missing plant.
  */
-const PLANT_NOT_FOUND_DETAIL = "Plant not found";
-
 function isPlantNotFound(error: unknown): boolean {
   return (
     error instanceof ApiError &&
-    error.status === 404 &&
-    error.detail === PLANT_NOT_FOUND_DETAIL
+    error.errorCode === ErrorCode.PLANT_NOT_FOUND
   );
 }
 

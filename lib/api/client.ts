@@ -2,8 +2,7 @@ import { getApiUrl } from "@/lib/api/config";
 import {
   ApiError,
   INVALID_RESPONSE_MESSAGE,
-  parseApiErrorPayload,
-  parseRetryAfter,
+  parseApiError,
 } from "@/lib/api/errors";
 
 type HttpMethod = "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
@@ -39,22 +38,6 @@ function buildUrl(
   return url.toString();
 }
 
-async function parseResponseBody(response: Response): Promise<unknown> {
-  if (response.status === 204) return null;
-
-  const contentType = response.headers.get("content-type") ?? "";
-  if (!contentType.includes("application/json")) {
-    const text = await response.text();
-    return text || null;
-  }
-
-  try {
-    return await response.json();
-  } catch {
-    return null;
-  }
-}
-
 /**
  * The API answers every 2xx with JSON (or an empty 204). Anything else, such as
  * an nginx or Cloudflare HTML page sent with 200, must never reach a page as
@@ -64,9 +47,11 @@ async function parseSuccessBody(response: Response): Promise<unknown> {
   if (response.status === 204) return null;
 
   const contentType = response.headers.get("content-type") ?? "";
+  const requestId = response.headers.get("x-request-id") ?? undefined;
   if (!contentType.includes("application/json")) {
     throw new ApiError(response.status, INVALID_RESPONSE_MESSAGE, {
-      contentType: contentType || null,
+      error: { contentType: contentType || null },
+      requestId,
     });
   }
 
@@ -74,7 +59,8 @@ async function parseSuccessBody(response: Response): Promise<unknown> {
     return await response.json();
   } catch {
     throw new ApiError(response.status, INVALID_RESPONSE_MESSAGE, {
-      contentType,
+      error: { contentType },
+      requestId,
     });
   }
 }
@@ -180,16 +166,11 @@ async function request<T>(
       await clearSessionAndRedirectToLogin();
     }
 
-    const payload = await parseResponseBody(response);
-    throw parseApiErrorPayload(401, payload);
+    throw await parseApiError(response);
   }
 
   if (!response.ok) {
-    throw parseApiErrorPayload(
-      response.status,
-      await parseResponseBody(response),
-      parseRetryAfter(response.headers.get("retry-after"))
-    );
+    throw await parseApiError(response);
   }
 
   return (await parseSuccessBody(response)) as T;

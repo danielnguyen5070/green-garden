@@ -40,7 +40,7 @@ import {
 } from "@/components/ui/table";
 import { adminCopy } from "@/lib/admin-copy";
 import { formatAdminCurrency, formatAdminDate } from "@/lib/admin-format";
-import { getErrorMessage } from "@/lib/api/errors";
+import { ApiError, ErrorCode, getErrorMessage } from "@/lib/api/errors";
 import {
   createOrder,
   getOrder,
@@ -69,6 +69,24 @@ const copy = adminCopy.orders;
 type DialogMode = "create" | "detail" | null;
 type StatusFilter = "all" | OrderStatus;
 
+/** Create failures caused by stale stock or catalog data in the picker. */
+function getCreateErrorMessage(error: unknown): string | null {
+  if (!(error instanceof ApiError)) return null;
+
+  switch (error.errorCode) {
+    case ErrorCode.INSUFFICIENT_STOCK:
+      return copy.createErrors.insufficientStock;
+    case ErrorCode.PLANT_UNAVAILABLE:
+    case ErrorCode.PLANT_NOT_FOUND:
+      return copy.createErrors.plantUnavailable;
+    case ErrorCode.POT_SIZE_UNAVAILABLE:
+    case ErrorCode.PLANT_POT_SIZE_NOT_FOUND:
+      return copy.createErrors.potSizeUnavailable;
+    default:
+      return null;
+  }
+}
+
 export default function AdminOrdersPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -88,6 +106,7 @@ export default function AdminOrdersPage() {
   const [dateTo, setDateTo] = useState("");
 
   const [plants, setPlants] = useState<AdminPlantListItem[]>([]);
+  const [plantsReloadToken, setPlantsReloadToken] = useState(0);
 
   const [dialogMode, setDialogMode] = useState<DialogMode>(null);
   const [selected, setSelected] = useState<Order | null>(null);
@@ -145,7 +164,7 @@ export default function AdminOrdersPage() {
 
     void fetchPlants();
     return () => controller.abort();
-  }, []);
+  }, [plantsReloadToken]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -290,10 +309,13 @@ export default function AdminOrdersPage() {
       // Orders move stock, which plant lists and detail pages show.
       void refreshStorefront({ entity: "plants" });
     } catch (err) {
-      // Surfaces backend stock and validation failures.
-      const message = getErrorMessage(err);
+      const staleCatalogMessage = getCreateErrorMessage(err);
+      const message = staleCatalogMessage ?? getErrorMessage(err);
       setFormError(message);
       toast.error(message);
+      if (staleCatalogMessage) {
+        setPlantsReloadToken((token) => token + 1);
+      }
     } finally {
       setSubmitting(false);
     }

@@ -65,7 +65,7 @@ type GetOptions = NonNullable<Parameters<typeof api.get>[1]>;
  * a regenerating page then keeps its last good copy instead of rendering it.
  */
 function invalidResponse(path: string): ApiError {
-  return new ApiError(200, INVALID_RESPONSE_MESSAGE, { path });
+  return new ApiError(200, INVALID_RESPONSE_MESSAGE, { error: { path } });
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

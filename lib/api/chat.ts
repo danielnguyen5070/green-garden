@@ -1,5 +1,5 @@
 import { getApiUrl } from "@/lib/api/config";
-import { ApiError, parseApiErrorPayload } from "@/lib/api/errors";
+import { parseApiError } from "@/lib/api/errors";
 import type {
   ChatApiMessage,
   ChatStreamEvent,
@@ -74,20 +74,6 @@ function consumeSseBuffer(
   return rest;
 }
 
-async function parseErrorResponse(response: Response): Promise<ApiError> {
-  const contentType = response.headers.get("content-type") ?? "";
-  if (contentType.includes("application/json")) {
-    try {
-      const payload: unknown = await response.json();
-      return parseApiErrorPayload(response.status, payload);
-    } catch {
-      // Fall through to status default.
-    }
-  }
-
-  return parseApiErrorPayload(response.status, null);
-}
-
 /**
  * POST `/api/v1/chat/stream` and deliver SSE events via callbacks.
  * Conversation history stays client-side; the browser never talks to DeepSeek.
@@ -121,7 +107,7 @@ export async function streamChat(
   }
 
   if (!response.ok) {
-    throw await parseErrorResponse(response);
+    throw await parseApiError(response);
   }
 
   if (!response.body) {

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { login } from "@/lib/api/auth";
-import { ApiError, getErrorMessage } from "@/lib/api/errors";
+import { ApiError, ErrorCode, getErrorMessage } from "@/lib/api/errors";
 import { adminCopy } from "@/lib/admin-copy";
 import { toast } from "@/lib/toast";
 
@@ -36,9 +36,15 @@ function AdminLoginForm({ redirectTo }: AdminLoginFormProps) {
       router.replace(redirectTo);
       router.refresh();
     } catch (err) {
-      if (err instanceof ApiError && err.status === 401) {
+      if (
+        err instanceof ApiError &&
+        err.errorCode === ErrorCode.INVALID_CREDENTIALS
+      ) {
         toast.error(adminCopy.login.error);
-      } else if (err instanceof ApiError && err.status === 422) {
+      } else if (
+        err instanceof ApiError &&
+        err.errorCode === ErrorCode.VALIDATION_ERROR
+      ) {
         toast.error(getErrorMessage(err, adminCopy.login.validationError));
       } else {
         toast.error(getErrorMessage(err, adminCopy.login.networkError));

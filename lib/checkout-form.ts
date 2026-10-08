@@ -73,6 +73,31 @@ export function isCheckoutFormValid(values: CheckoutFormValues) {
   return Object.keys(validateCheckoutForm(values)).length === 0;
 }
 
+/** Order payload fields, as the API names them in validation errors. */
+const PAYLOAD_FIELD_TO_FORM_FIELD: Record<string, CheckoutFormField> = {
+  "customer.phone": "phone",
+  "customer.name": "name",
+  shipping_address: "address",
+  note: "note",
+};
+
+/**
+ * Maps the API's field errors (see `getFieldErrors`) onto the form. The API's
+ * English text is not shown; each field gets its own localized message key.
+ */
+export function toCheckoutFormErrors(
+  fieldErrors: Record<string, string>,
+): CheckoutFormErrors {
+  const errors: CheckoutFormErrors = {};
+
+  for (const name of Object.keys(fieldErrors)) {
+    const field = PAYLOAD_FIELD_TO_FORM_FIELD[name];
+    if (field) errors[field] = `${field}Invalid`;
+  }
+
+  return errors;
+}
+
 /**
  * Builds the order payload from the form and the cart. Prices and totals are
  * deliberately left out — the backend prices the order from the catalogue.

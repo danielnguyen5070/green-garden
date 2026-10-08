@@ -21,7 +21,7 @@ import {
   createStorefrontPlantReview,
   createStorefrontReview,
 } from "@/lib/api/storefront";
-import { ApiError } from "@/lib/api/errors";
+import { ApiError, ErrorCode, getErrorReference } from "@/lib/api/errors";
 import { toast } from "@/lib/toast";
 import {
   STOREFRONT_REVIEW_CONTENT_MAX,
@@ -39,13 +39,17 @@ type FormErrors = {
 function getSubmitErrorKey(error: unknown) {
   if (!(error instanceof ApiError)) return "generic";
 
-  switch (error.status) {
-    case 422:
+  switch (error.errorCode) {
+    case ErrorCode.VALIDATION_ERROR:
       return "validation";
-    case 429:
+    case ErrorCode.RATE_LIMITED:
       return "rateLimited";
-    case 403:
+    case ErrorCode.SUBMISSION_REJECTED:
       return "spam";
+  }
+
+  // Gateways in front of the API answer without an error code.
+  switch (error.status) {
     case 502:
     case 503:
     case 504:
@@ -72,6 +76,7 @@ function ReviewFormDialog({
   const t = useTranslations("reviews");
   const tForm = useTranslations("reviews.form");
   const tErrors = useTranslations("reviews.errors");
+  const tCommon = useTranslations("common");
 
   const nameId = useId();
   const ratingId = useId();
@@ -158,7 +163,13 @@ function ReviewFormDialog({
         description: t("submitSuccessDescription"),
       });
     } catch (error) {
-      toast.error(tErrors(getSubmitErrorKey(error)));
+      const reference = getErrorReference(error);
+      toast.error(
+        tErrors(getSubmitErrorKey(error)),
+        reference
+          ? { description: tCommon("errorReference", { id: reference }) }
+          : undefined
+      );
     } finally {
       setSubmitting(false);
     }

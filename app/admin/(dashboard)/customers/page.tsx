@@ -229,7 +229,7 @@ export default function AdminCustomersPage() {
       toast.success(copy.createdSuccess);
       refresh(1);
     } catch (err) {
-      // Surfaces the backend's 409 duplicate-phone detail.
+      // Surfaces the backend's duplicate-phone message (409, CUSTOMER_PHONE_TAKEN).
       const message = getErrorMessage(err);
       setFormError(message);
       toast.error(message);

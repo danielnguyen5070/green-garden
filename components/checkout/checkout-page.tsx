@@ -14,11 +14,17 @@ import { useBotSignals } from "@/hooks/use-bot-signals";
 import { useCartQuote } from "@/hooks/use-cart-quote";
 import { useRouter } from "@/i18n/navigation";
 import { createStorefrontOrder } from "@/lib/api/storefront";
-import { ApiError } from "@/lib/api/errors";
+import {
+  ApiError,
+  ErrorCode,
+  getErrorReference,
+  getFieldErrors,
+} from "@/lib/api/errors";
 import {
   CHECKOUT_FORM_FIELDS,
   EMPTY_CHECKOUT_FORM,
   isCheckoutFormValid,
+  toCheckoutFormErrors,
   toStorefrontOrderPayload,
   validateCheckoutField,
   validateCheckoutForm,
@@ -81,18 +87,21 @@ function BankTransferStep({ order }: { order: StorefrontOrderResponse }) {
 function getErrorKey(error: unknown) {
   if (!(error instanceof ApiError)) return "generic";
 
-  switch (error.status) {
-    case 403:
+  switch (error.errorCode) {
+    case ErrorCode.SUBMISSION_REJECTED:
       return "rejected";
-    case 404:
+    case ErrorCode.PLANT_NOT_FOUND:
+    case ErrorCode.PLANT_POT_SIZE_NOT_FOUND:
+    case ErrorCode.POT_SIZE_UNAVAILABLE:
+    case ErrorCode.PLANT_UNAVAILABLE:
       return "unavailable";
-    case 409:
+    case ErrorCode.INSUFFICIENT_STOCK:
       return "outOfStock";
-    case 422:
+    case ErrorCode.VALIDATION_ERROR:
       return "invalidDetails";
-    case 429:
+    case ErrorCode.RATE_LIMITED:
       return error.retryAfterSeconds ? "rateLimited" : "rateLimitedLater";
-    case 503:
+    case ErrorCode.SERVICE_UNAVAILABLE:
       return "bankTransferUnavailable";
     default:
       return "generic";
@@ -107,6 +116,7 @@ function getRetryAfterMinutes(error: unknown) {
 function CheckoutPageView() {
   const t = useTranslations("checkout");
   const tCart = useTranslations("cart");
+  const tCommon = useTranslations("common");
   const router = useRouter();
 
   const [values, setValues] = useState<CheckoutFormValues>(EMPTY_CHECKOUT_FORM);
@@ -192,12 +202,30 @@ function CheckoutPageView() {
         router.push("/order-success");
       }
     } catch (error) {
+      const serverErrors = toCheckoutFormErrors(getFieldErrors(error));
+      const firstServerInvalid = CHECKOUT_FORM_FIELDS.find((field) =>
+        Boolean(serverErrors[field]),
+      );
+      if (firstServerInvalid) {
+        setErrors(serverErrors);
+      }
+
+      const reference = getErrorReference(error);
       toast.error(
         t(`errors.${getErrorKey(error)}`, {
           minutes: getRetryAfterMinutes(error),
         }),
+        reference
+          ? { description: tCommon("errorReference", { id: reference }) }
+          : undefined,
       );
       setSubmitting(false);
+      if (firstServerInvalid) {
+        // The inputs re-enable on the next render, so focus after it.
+        requestAnimationFrame(() => {
+          document.getElementById(`checkout-${firstServerInvalid}`)?.focus();
+        });
+      }
     }
   }
 

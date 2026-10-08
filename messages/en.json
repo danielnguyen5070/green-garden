@@ -21,7 +21,8 @@
     "viewAll": "View all",
     "addToCart": "Add to cart",
     "contactForPrice": "Contact for price",
-    "cartWithCount": "Cart, {count, plural, =0 {empty} one {# item} other {# items}}"
+    "cartWithCount": "Cart, {count, plural, =0 {empty} one {# item} other {# items}}",
+    "errorReference": "Error reference: {id}"
   },
   "status": {
     "notFound": {
@@ -418,7 +419,10 @@
         "nameRequired": "Please enter your full name.",
         "nameTooShort": "That name is too short.",
         "addressRequired": "Please enter your delivery address.",
-        "addressTooShort": "That address is too short. Include street, ward, district and province."
+        "addressTooShort": "That address is too short. Include street, ward, district and province.",
+        "nameInvalid": "Please check your full name.",
+        "addressInvalid": "Please check your delivery address.",
+        "noteInvalid": "Please shorten or edit your note."
       }
     },
     "shippingMethod": {

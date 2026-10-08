@@ -391,6 +391,14 @@ export const adminCopy = {
     reset: "Reset filters",
     createdSuccess: "Order created.",
     statusSuccess: "Order status updated.",
+    createErrors: {
+      insufficientStock:
+        "Not enough stock for one or more plants. Lower the quantity and try again.",
+      plantUnavailable:
+        "One or more plants can no longer be ordered. Remove them and try again.",
+      potSizeUnavailable:
+        "A selected pot size is no longer available. Choose another pot size.",
+    },
     pageInfo: (page: number, totalPages: number, total: number) =>
       `Page ${page}/${totalPages} · ${total} orders`,
     itemCount: (count: number) => (count === 1 ? "1 item" : `${count} items`),
