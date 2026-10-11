@@ -12,6 +12,65 @@ type StreamChatOptions = {
   handlers: ChatStreamHandlers;
 };
 
+/** DeepSeek tool-call markup, e.g. `<｜DSML｜invoke ...>` or `<｜tool▁calls▁begin｜>`. */
+const TOOL_MARKUP_RE = /<\s*\/?\s*[|｜]+\s*(?:DSML|tool)/i;
+const PARTIAL_MARKUP_RE = /<\s*\/?\s*([|｜]*)\s*([A-Za-z]{0,4})$/;
+const MARKUP_WORDS = ["dsml", "tool"];
+
+/** Remove everything from the first tool-call marker onward. */
+export function stripToolMarkup(text: string): string {
+  const match = TOOL_MARKUP_RE.exec(text);
+  return match ? text.slice(0, match.index) : text;
+}
+
+function partialMarkupStart(text: string): number {
+  const index = text.lastIndexOf("<");
+  if (index === -1) return -1;
+  const match = PARTIAL_MARKUP_RE.exec(text.slice(index));
+  if (!match || match.index !== 0) return -1;
+  const [, bars, word] = match;
+  const lowered = word.toLowerCase();
+  if (lowered && (!bars || !MARKUP_WORDS.some((w) => w.startsWith(lowered)))) {
+    return -1;
+  }
+  return index;
+}
+
+/**
+ * Streaming filter that drops tool-call markup split across tokens. Once a
+ * marker is seen, the rest of the stream is suppressed.
+ */
+export function createToolMarkupFilter() {
+  let pending = "";
+  let suppressed = false;
+
+  return {
+    push(token: string): string {
+      if (suppressed) return "";
+      const text = pending + token;
+      pending = "";
+
+      const match = TOOL_MARKUP_RE.exec(text);
+      if (match) {
+        suppressed = true;
+        return text.slice(0, match.index);
+      }
+
+      const holdFrom = partialMarkupStart(text);
+      if (holdFrom !== -1) {
+        pending = text.slice(holdFrom);
+        return text.slice(0, holdFrom);
+      }
+      return text;
+    },
+    flush(): string {
+      const rest = suppressed ? "" : pending;
+      pending = "";
+      return rest;
+    },
+  };
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
@@ -118,13 +177,20 @@ export async function streamChat(
   const decoder = new TextDecoder();
   let buffer = "";
   let finished = false;
+  const markupFilter = createToolMarkupFilter();
+
+  const flushMarkupFilter = () => {
+    const rest = markupFilter.flush();
+    if (rest) handlers.onToken(rest);
+  };
 
   const handleEvent = (event: ChatStreamEvent) => {
     if (finished) return;
 
     if (event.type === "token" || event.type === "chunk") {
-      if (event.content) {
-        handlers.onToken(event.content);
+      const safe = event.content ? markupFilter.push(event.content) : "";
+      if (safe) {
+        handlers.onToken(safe);
       }
       return;
     }
@@ -137,6 +203,7 @@ export async function streamChat(
 
     if (event.type === "done") {
       finished = true;
+      flushMarkupFilter();
       handlers.onDone();
     }
   };
@@ -156,6 +223,7 @@ export async function streamChat(
 
     if (!finished) {
       // Stream closed without a terminal event — treat as complete.
+      flushMarkupFilter();
       handlers.onDone();
     }
   } catch (error) {
@@ -173,9 +241,12 @@ export function toChatApiMessages(
   messages: Array<{ role: ChatApiMessage["role"]; content: string }>
 ): ChatApiMessage[] {
   return messages
-    .filter((message) => message.content.trim().length > 0)
     .map((message) => ({
       role: message.role,
-      content: message.content.trim(),
-    }));
+      content: (message.role === "assistant"
+        ? stripToolMarkup(message.content)
+        : message.content
+      ).trim(),
+    }))
+    .filter((message) => message.content.length > 0);
 }
