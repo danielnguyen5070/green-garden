@@ -64,7 +64,7 @@ export NEXT_PUBLIC_API_URL=http://localhost:8000
 npx playwright install chromium
 ```
 
-Optional: `E2E_PLANT_SLUG`, `E2E_CHECKOUT_PHONE`, `E2E_CHECKOUT_NAME`, `E2E_CHECKOUT_ADDRESS`, `PLAYWRIGHT_BASE_URL`. For a non-local staging API only, set `E2E_ALLOW_REMOTE=1`. Production hosts are refused.
+Optional: `E2E_PLANT_SLUG`, `E2E_CATEGORY_SLUG`, `E2E_CHECKOUT_PHONE`, `E2E_CHECKOUT_NAME`, `E2E_CHECKOUT_ADDRESS`, `PLAYWRIGHT_BASE_URL`. For a non-local staging API only, set `E2E_ALLOW_REMOTE=1`. Production hosts are refused. Category pagination (“Xem thêm” / page 2) needs more plants than one page (8).
 
 Admin auth E2E (`tests/e2e/admin-auth.spec.ts`) also requires `E2E_ADMIN_EMAIL` and `E2E_ADMIN_PASSWORD`. Put them in gitignored `.env.local` (same format as Next env files — `KEY=value`, no `export`):
 

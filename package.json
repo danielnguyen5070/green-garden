@@ -9,7 +9,7 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:headed": "E2E_SLOW_MO=1000 playwright test --headed",
     "test:e2e:ui": "playwright test --ui",
     "generate:llms": "npx tsx scripts/generate-llms.ts",
     "export:faq": "npx tsx scripts/export-faq.ts"

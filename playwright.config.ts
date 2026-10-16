@@ -21,6 +21,10 @@ export default defineConfig({
     baseURL,
     trace: "on-first-retry",
     screenshot: "only-on-failure",
+    // CLI has no --slow-mo; use E2E_SLOW_MO=500 (ms) when watching headed runs.
+    launchOptions: {
+      slowMo: Number(process.env.E2E_SLOW_MO || 0) || 0,
+    },
   },
   projects: [
     {
