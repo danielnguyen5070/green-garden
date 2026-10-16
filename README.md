@@ -66,10 +66,21 @@ npx playwright install chromium
 
 Optional: `E2E_PLANT_SLUG`, `E2E_CHECKOUT_PHONE`, `E2E_CHECKOUT_NAME`, `E2E_CHECKOUT_ADDRESS`, `PLAYWRIGHT_BASE_URL`. For a non-local staging API only, set `E2E_ALLOW_REMOTE=1`. Production hosts are refused.
 
+Admin auth E2E (`tests/e2e/admin-auth.spec.ts`) also requires `E2E_ADMIN_EMAIL` and `E2E_ADMIN_PASSWORD`. Put them in gitignored `.env.local` (same format as Next env files — `KEY=value`, no `export`):
+
+```bash
+E2E_API_URL=http://localhost:8000
+E2E_ADMIN_EMAIL=admin@example.com
+E2E_ADMIN_PASSWORD=your-test-password
+```
+
+Or export them in the shell before `npm run test:e2e`. Playwright loads `.env.local` via `playwright.config.ts`.
+
 Notes:
 
 - Checkout bot protection rejects submits faster than 3 seconds; the suite waits before placing the order.
 - Prefer a dedicated `E2E_CHECKOUT_PHONE` that is not already an inactive customer in the test DB (default `0370000099`).
+- Never commit admin credentials; use a local/test admin account only.
 
 ### Run
 

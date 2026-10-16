@@ -1,4 +1,8 @@
+import { loadEnvConfig } from "@next/env";
 import { defineConfig, devices } from "@playwright/test";
+
+// Load `.env*` the same way Next does so E2E_* from `.env.local` is available.
+loadEnvConfig(process.cwd());
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL?.trim() || "http://localhost:3000";
 const apiURL =

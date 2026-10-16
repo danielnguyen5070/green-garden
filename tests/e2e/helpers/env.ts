@@ -44,6 +44,20 @@ export function getCheckoutFixtures() {
   };
 }
 
+/** Admin credentials for E2E — required; never hardcode secrets in the repo. */
+export function getAdminCredentials() {
+  const email = process.env.E2E_ADMIN_EMAIL?.trim();
+  const password = process.env.E2E_ADMIN_PASSWORD?.trim();
+
+  if (!email || !password) {
+    throw new Error(
+      "Set E2E_ADMIN_EMAIL and E2E_ADMIN_PASSWORD to a local/test admin account before running admin E2E tests.",
+    );
+  }
+
+  return { email, password };
+}
+
 /**
  * Refuse production and unapproved remote APIs so COD orders never hit live data.
  */
