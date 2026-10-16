@@ -5,6 +5,8 @@ export const E2E_PLANTS_PAGE_SIZE = 8;
 
 type StorefrontPlantListItem = {
   slug: string;
+  name: string;
+  name_vi: string | null;
   stock: number;
   price_vi: string | null;
   default_pot_size?: { id: string } | null;
@@ -45,10 +47,26 @@ function isOrderableListItem(plant: StorefrontPlantListItem): boolean {
  * Poll the storefront plants list until the API answers, then return an
  * orderable plant slug (from E2E_PLANT_SLUG or the first matching list item).
  */
+export type E2ePlant = {
+  apiUrl: string;
+  plantSlug: string;
+  nameEn: string;
+  nameVi: string;
+};
+
+function toE2ePlant(apiUrl: string, plant: StorefrontPlantListItem): E2ePlant {
+  return {
+    apiUrl,
+    plantSlug: plant.slug,
+    nameEn: plant.name,
+    nameVi: plant.name_vi?.trim() || plant.name,
+  };
+}
+
 export async function waitForApiAndResolvePlant(options?: {
   timeoutMs?: number;
   intervalMs?: number;
-}): Promise<{ apiUrl: string; plantSlug: string }> {
+}): Promise<E2ePlant> {
   const apiUrl = assertSafeE2eApiUrl(getE2eApiUrl());
   const timeoutMs = options?.timeoutMs ?? 30_000;
   const intervalMs = options?.intervalMs ?? 1_000;
@@ -75,15 +93,19 @@ export async function waitForApiAndResolvePlant(options?: {
             lastError = new Error(
               `E2E_PLANT_SLUG="${preferredSlug}" is not in stock with a VND price.`,
             );
+          } else if (preferred) {
+            return toE2ePlant(apiUrl, preferred);
           } else {
-            // Prefer the configured slug even if it is not on page 1; the PDP
-            // will fail clearly if the plant is missing.
-            return { apiUrl, plantSlug: preferredSlug };
+            // Prefer the configured slug even if it is not on page 1; fetch detail.
+            const detail = await fetchJson<StorefrontPlantListItem>(
+              `${apiV1Base(apiUrl)}/storefront/plants/${encodeURIComponent(preferredSlug)}`,
+            );
+            return toE2ePlant(apiUrl, detail);
           }
         } else {
           const orderable = items.find(isOrderableListItem);
           if (orderable) {
-            return { apiUrl, plantSlug: orderable.slug };
+            return toE2ePlant(apiUrl, orderable);
           }
 
           lastError = new Error(
