@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { getApiBaseUrl } from "./lib/api/config";
-import nextConfig from "./next.config";
+import { getApiBaseUrl } from "@/lib/api/config";
+import nextConfig from "@/next.config";
 
 async function headersFor(source: string): Promise<Map<string, string>> {
   const rules = (await nextConfig.headers?.()) ?? [];
