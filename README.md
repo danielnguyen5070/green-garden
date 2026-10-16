@@ -44,6 +44,47 @@ The FAQ page and the chatbot use the same questions and answers. The page reads 
 
 If the chatbot still gives the old answer, step 3 or the `green-garden-api` push was probably skipped. Run `./scripts/update_vps.sh --reindex` to force a re-index.
 
+## E2E tests (Playwright)
+
+The COD purchase flow lives under `tests/e2e/`. It talks to a real storefront API and **creates a real order**, so only run it against a local or dedicated test database — never production.
+
+### Prerequisites
+
+1. Start **green-garden-api** on a test/local database with at least one in-stock plant that has a VND price.
+2. Point the app at that API (no trailing slash):
+
+```bash
+export E2E_API_URL=http://localhost:8000
+export NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+3. Install the Chromium browser used by Playwright (once per machine):
+
+```bash
+npx playwright install chromium
+```
+
+Optional: `E2E_PLANT_SLUG`, `E2E_CHECKOUT_PHONE`, `E2E_CHECKOUT_NAME`, `E2E_CHECKOUT_ADDRESS`, `PLAYWRIGHT_BASE_URL`. For a non-local staging API only, set `E2E_ALLOW_REMOTE=1`. Production hosts are refused.
+
+Notes:
+
+- Checkout bot protection rejects submits faster than 3 seconds; the suite waits before placing the order.
+- Prefer a dedicated `E2E_CHECKOUT_PHONE` that is not already an inactive customer in the test DB (default `0370000099`).
+
+### Run
+
+```bash
+npm run test:e2e
+```
+
+This starts (or reuses) `npm run dev` and runs the suite. Interactive mode:
+
+```bash
+npm run test:e2e:ui
+```
+
+Unit tests remain `npm test` (Vitest under `tests/unit/`).
+
 ## Project structure
 
 ```text
@@ -62,6 +103,9 @@ green-garden/
 │   └── api/              # Central API client for admin
 ├── services/
 ├── store/
+├── tests/
+│   ├── unit/             # Vitest
+│   └── e2e/              # Playwright
 ├── types/
 └── public/
 ```

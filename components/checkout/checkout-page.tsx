@@ -289,6 +289,7 @@ function CheckoutPageView() {
           <Button
             type="submit"
             size="lg"
+            data-testid="place-order"
             disabled={!canSubmit}
             className="mt-8 h-12 w-full rounded-xl font-sans text-sm font-semibold md:mt-10"
           >

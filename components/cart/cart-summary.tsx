@@ -142,6 +142,7 @@ function CartSummary({ cartQuote }: { cartQuote: UseCartQuoteResult }) {
         type="button"
         size="lg"
         className="mt-4 h-11 w-full rounded-xl font-sans text-sm font-semibold"
+        data-testid="cart-checkout"
         onClick={handleCheckout}
       >
         {t("checkout")}

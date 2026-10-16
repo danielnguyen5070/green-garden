@@ -66,7 +66,10 @@ function OrderSuccess() {
                 <dt className="font-sans text-small text-muted-foreground">
                   {t("orderNumber")}
                 </dt>
-                <dd className="font-sans text-sm font-semibold tracking-tight text-foreground">
+                <dd
+                  data-testid="order-number"
+                  className="font-sans text-sm font-semibold tracking-tight text-foreground"
+                >
                   {placed.order.order_number}
                 </dd>
               </div>
