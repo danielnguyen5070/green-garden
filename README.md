@@ -88,10 +88,30 @@ Notes:
 npm run test:e2e
 ```
 
-This starts (or reuses) `npm run dev` and runs the suite. Interactive mode:
+This starts (or reuses) `npm run dev` and runs the suite headless (fast). Interactive UI mode:
 
 ```bash
 npm run test:e2e:ui
+```
+
+Watch the browser (always 700ms `slowMo`):
+
+```bash
+npm run test:e2e:headed
+```
+
+### Debugging failures
+
+On failure Playwright keeps a screenshot, video, and trace under `test-results/`. Open the HTML report:
+
+```bash
+npm run test:e2e:report
+```
+
+In the report, open a failed test → **Traces** to step through actions, network, and DOM. From the CLI you can also inspect a trace file:
+
+```bash
+npx playwright show-trace test-results/**/trace.zip
 ```
 
 Unit tests remain `npm test` (Vitest under `tests/unit/`).

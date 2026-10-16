@@ -32,68 +32,80 @@ test.describe("COD purchase flow", () => {
     test.setTimeout(90_000);
     const checkout = getCheckoutFixtures();
 
-    await page.goto("/vi/plants");
-    await expect(page.locator('[data-slot="plant-card"]').first()).toBeVisible({
-      timeout: 30_000,
+    await test.step("1. Open plant catalog", async () => {
+      await page.goto("/vi/plants");
+      await expect(page.locator('[data-slot="plant-card"]').first()).toBeVisible({
+        timeout: 30_000,
+      });
     });
 
-    await page.goto(`/vi/plants/${plantSlug}`);
-    await expect(page.locator('[data-slot="plant-detail"]')).toBeVisible({
-      timeout: 30_000,
+    await test.step("2. Open product detail page", async () => {
+      await page.goto(`/vi/plants/${plantSlug}`);
+      await expect(page.locator('[data-slot="plant-detail"]')).toBeVisible({
+        timeout: 30_000,
+      });
     });
 
-    const addToCart = page.getByTestId("add-to-cart");
-    await expect(addToCart).toBeEnabled();
-    await addToCart.click();
+    await test.step("3. Add plant to cart", async () => {
+      const addToCart = page.getByTestId("add-to-cart");
+      await expect(addToCart).toBeEnabled();
+      await addToCart.click();
+    });
 
-    const cartCheckout = page.getByTestId("cart-checkout");
-    await expect(cartCheckout).toBeVisible({ timeout: 15_000 });
-    // Quote must finish loading so checkout stays orderable.
-    await expect(page.locator('[data-slot="cart-summary"]')).toBeVisible();
-    await cartCheckout.click();
+    await test.step("4. Open checkout from cart drawer", async () => {
+      const cartCheckout = page.getByTestId("cart-checkout");
+      await expect(cartCheckout).toBeVisible({ timeout: 15_000 });
+      await expect(page.locator('[data-slot="cart-summary"]')).toBeVisible();
+      await cartCheckout.click();
+      await expect(page).toHaveURL(/\/vi\/checkout\/?$/);
+      await expect(page.locator('[data-slot="checkout-page"]')).toBeVisible();
+    });
 
-    await expect(page).toHaveURL(/\/vi\/checkout\/?$/);
-    await expect(page.locator('[data-slot="checkout-page"]')).toBeVisible();
+    await test.step("5. Fill shipping details for COD", async () => {
+      // Bot protection rejects submissions faster than 3s (form_elapsed_ms).
+      const checkoutReadyAt = Date.now();
 
-    // Bot protection rejects submissions faster than 3s (form_elapsed_ms).
-    const checkoutReadyAt = Date.now();
+      await page.locator("#checkout-phone").fill(checkout.phone);
+      await page.locator("#checkout-name").fill(checkout.name);
+      await page.locator("#checkout-address").fill(checkout.address);
 
-    await page.locator("#checkout-phone").fill(checkout.phone);
-    await page.locator("#checkout-name").fill(checkout.name);
-    await page.locator("#checkout-address").fill(checkout.address);
+      await expect(
+        page.locator('input[name="payment-method"][value="cod"]'),
+      ).toBeChecked();
 
-    // COD is the default payment method; leave the honeypot empty.
-    await expect(
-      page.locator('input[name="payment-method"][value="cod"]'),
-    ).toBeChecked();
+      const placeOrder = page.getByTestId("place-order");
+      await expect(placeOrder).toBeEnabled({ timeout: 30_000 });
 
-    const placeOrder = page.getByTestId("place-order");
-    await expect(placeOrder).toBeEnabled({ timeout: 30_000 });
+      await page.waitForFunction(
+        (startedAt) => Date.now() - startedAt >= 3_500,
+        checkoutReadyAt,
+      );
+    });
 
-    const remainingMs = 3_500 - (Date.now() - checkoutReadyAt);
-    if (remainingMs > 0) {
-      await page.waitForTimeout(remainingMs);
-    }
+    await test.step("6. Place order and verify success", async () => {
+      const placeOrder = page.getByTestId("place-order");
+      const orderResponse = page.waitForResponse(
+        (response) =>
+          response.url().includes("/storefront/orders") &&
+          response.request().method() === "POST",
+      );
+      await placeOrder.click();
+      const created = await orderResponse;
+      expect(
+        created.ok(),
+        `POST /storefront/orders failed: ${created.status()} ${await created.text()}`,
+      ).toBeTruthy();
 
-    const orderResponse = page.waitForResponse(
-      (response) =>
-        response.url().includes("/storefront/orders") &&
-        response.request().method() === "POST",
-    );
-    await placeOrder.click();
-    const created = await orderResponse;
-    expect(
-      created.ok(),
-      `POST /storefront/orders failed: ${created.status()} ${await created.text()}`,
-    ).toBeTruthy();
+      await expect(page).toHaveURL(/\/vi\/order-success\/?$/, {
+        timeout: 60_000,
+      });
+      await expect(
+        page.getByRole("heading", { name: "Đặt hàng thành công!" }),
+      ).toBeVisible();
 
-    await expect(page).toHaveURL(/\/vi\/order-success\/?$/, { timeout: 60_000 });
-    await expect(
-      page.getByRole("heading", { name: "Đặt hàng thành công!" }),
-    ).toBeVisible();
-
-    const orderNumber = page.getByTestId("order-number");
-    await expect(orderNumber).toBeVisible();
-    await expect(orderNumber).toHaveText(/\S+/);
+      const orderNumber = page.getByTestId("order-number");
+      await expect(orderNumber).toBeVisible();
+      await expect(orderNumber).toHaveText(/\S+/);
+    });
   });
 });

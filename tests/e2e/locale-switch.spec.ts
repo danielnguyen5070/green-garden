@@ -21,32 +21,42 @@ test.describe("Locale switching", () => {
   test("switches plants catalog between vi and en", async ({ page }) => {
     test.setTimeout(60_000);
 
-    await page.goto("/vi/plants");
-    await expect(page).toHaveURL(/\/vi\/plants\/?$/);
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Cây giống");
-    await expect(page.getByRole("navigation", { name: "Primary" })).toContainText(
-      "Cây giống",
-    );
-    await expect(page.getByRole("button", { name: "Ngôn ngữ" })).toContainText(
-      "VI",
-    );
+    await test.step("1. Open Vietnamese plant catalog", async () => {
+      await page.goto("/vi/plants");
+      await expect(page).toHaveURL(/\/vi\/plants\/?$/);
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+        "Cây giống",
+      );
+      await expect(
+        page.getByRole("navigation", { name: "Primary" }),
+      ).toContainText("Cây giống");
+      await expect(page.getByRole("button", { name: "Ngôn ngữ" })).toContainText(
+        "VI",
+      );
+    });
 
-    await switchLocale(page, "EN");
-    await expect(page).toHaveURL(/\/en\/plants\/?$/);
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Plants");
-    await expect(page.getByRole("navigation", { name: "Primary" })).toContainText(
-      "Plants",
-    );
-    await expect(page.getByRole("button", { name: "Language" })).toContainText(
-      "EN",
-    );
+    await test.step("2. Switch locale to English", async () => {
+      await switchLocale(page, "EN");
+      await expect(page).toHaveURL(/\/en\/plants\/?$/);
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText("Plants");
+      await expect(
+        page.getByRole("navigation", { name: "Primary" }),
+      ).toContainText("Plants");
+      await expect(page.getByRole("button", { name: "Language" })).toContainText(
+        "EN",
+      );
+    });
 
-    await switchLocale(page, "VI");
-    await expect(page).toHaveURL(/\/vi\/plants\/?$/);
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Cây giống");
-    await expect(page.getByRole("button", { name: "Ngôn ngữ" })).toContainText(
-      "VI",
-    );
+    await test.step("3. Switch locale back to Vietnamese", async () => {
+      await switchLocale(page, "VI");
+      await expect(page).toHaveURL(/\/vi\/plants\/?$/);
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+        "Cây giống",
+      );
+      await expect(page.getByRole("button", { name: "Ngôn ngữ" })).toContainText(
+        "VI",
+      );
+    });
   });
 
   test("keeps the same plant slug when switching locale on the PDP", async ({
@@ -54,37 +64,53 @@ test.describe("Locale switching", () => {
   }) => {
     test.setTimeout(60_000);
 
-    await page.goto(`/vi/plants/${plant.plantSlug}`);
-    await expect(page.locator('[data-slot="plant-detail"]')).toBeVisible({
-      timeout: 30_000,
+    await test.step("1. Open product detail in Vietnamese", async () => {
+      await page.goto(`/vi/plants/${plant.plantSlug}`);
+      await expect(page.locator('[data-slot="plant-detail"]')).toBeVisible({
+        timeout: 30_000,
+      });
+      await expect(page.getByRole("heading", { level: 1 })).toContainText(
+        plant.nameVi,
+      );
     });
-    await expect(page.getByRole("heading", { level: 1 })).toContainText(
-      plant.nameVi,
-    );
 
-    await switchLocale(page, "EN");
-    await expect(page).toHaveURL(
-      new RegExp(`/en/plants/${plant.plantSlug}/?$`),
-    );
-    await expect(page.locator('[data-slot="plant-detail"]')).toBeVisible({
-      timeout: 30_000,
+    await test.step("2. Switch to English product page", async () => {
+      await switchLocale(page, "EN");
+      await expect(page).toHaveURL(
+        new RegExp(`/en/plants/${plant.plantSlug}/?$`),
+      );
+      await expect(page.locator('[data-slot="plant-detail"]')).toBeVisible({
+        timeout: 30_000,
+      });
+      await expect(page.getByRole("heading", { level: 1 })).toContainText(
+        plant.nameEn,
+      );
     });
-    await expect(page.getByRole("heading", { level: 1 })).toContainText(
-      plant.nameEn,
-    );
   });
 
   test("redirects unprefixed /plants to /vi/plants", async ({ page }) => {
-    await page.goto("/plants");
-    await expect(page).toHaveURL(/\/vi\/plants\/?$/);
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Cây giống");
+    await test.step("1. Open unprefixed /plants", async () => {
+      await page.goto("/plants");
+    });
+
+    await test.step("2. Verify redirect to Vietnamese catalog", async () => {
+      await expect(page).toHaveURL(/\/vi\/plants\/?$/);
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+        "Cây giống",
+      );
+    });
   });
 
   test("keeps admin login unprefixed", async ({ page }) => {
-    await page.goto("/admin/login");
-    await expect(page).toHaveURL(/\/admin\/login\/?$/);
-    expect(page.url()).not.toMatch(/\/(vi|en)\//);
-    await expect(page.getByText("Admin sign in")).toBeVisible();
-    await expect(page.locator("#email")).toBeVisible();
+    await test.step("1. Open /admin/login", async () => {
+      await page.goto("/admin/login");
+    });
+
+    await test.step("2. Verify admin URL stays without locale prefix", async () => {
+      await expect(page).toHaveURL(/\/admin\/login\/?$/);
+      expect(page.url()).not.toMatch(/\/(vi|en)\//);
+      await expect(page.getByText("Admin sign in")).toBeVisible();
+      await expect(page.locator("#email")).toBeVisible();
+    });
   });
 });

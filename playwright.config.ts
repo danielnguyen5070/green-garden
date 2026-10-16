@@ -10,20 +10,30 @@ const apiURL =
   process.env.NEXT_PUBLIC_API_URL?.trim() ||
   "http://localhost:8000";
 
+// Workers reload this file without CLI flags in argv, so persist --headed for them.
+if (process.argv.includes("--headed")) {
+  process.env.PW_HEADED = "1";
+}
+const headed = process.env.PW_HEADED === "1";
+
 export default defineConfig({
   testDir: "tests/e2e",
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   workers: 1,
-  reporter: [["list"], ["html", { open: "never" }]],
+  reporter: [
+    ["list"],
+    ["html", { open: "never", outputFolder: "playwright-report" }],
+  ],
   use: {
     baseURL,
-    trace: "on-first-retry",
     screenshot: "only-on-failure",
-    // CLI has no --slow-mo; use E2E_SLOW_MO=500 (ms) when watching headed runs.
+    video: "retain-on-failure",
+    trace: "retain-on-failure",
     launchOptions: {
-      slowMo: Number(process.env.E2E_SLOW_MO || 0) || 0,
+      // Visible runs: 700ms between actions. Headless stays fast.
+      slowMo: headed ? 700 : 0,
     },
   },
   projects: [
