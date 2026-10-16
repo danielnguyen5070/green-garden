@@ -71,7 +71,7 @@ function buildReviewSchema(reviews: PlantReviewsData | null) {
  *
  * Lists the standard fee from the backend shipping policy, the same one
  * checkout charges; free shipping still applies when the order subtotal is
- * above the threshold.
+ * at or above the threshold.
  *
  * Transit: 3–5 business days (Vietnam Post / J&T), matching checkout copy.
  */

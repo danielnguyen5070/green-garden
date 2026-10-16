@@ -244,7 +244,7 @@ export type StorefrontQuoteResponse = {
   subtotal_amount: Decimal;
   shipping_fee: Decimal;
   total_amount: Decimal;
-  /** Shipping is free when the subtotal is strictly above this. */
+  /** Shipping is free when the subtotal is at or above this. */
   free_shipping_above: Decimal;
   amount_to_free_shipping: Decimal;
 };

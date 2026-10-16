@@ -625,7 +625,7 @@
       },
       "multiplePlants": {
         "question": "Mua nhiều cây một lúc có tiết kiệm phí ship không?",
-        "answer": "Có. Bạn thêm bao nhiêu cây tùy ý vào giỏ và thanh toán trong một đơn, chỉ tính phí vận chuyển một lần. Đơn trên 500.000₫ còn được miễn phí vận chuyển."
+        "answer": "Có. Bạn thêm bao nhiêu cây tùy ý vào giỏ và thanh toán trong một đơn, chỉ tính phí vận chuyển một lần. Đơn từ 500.000₫ trở lên còn được miễn phí vận chuyển."
       },
       "deliveryTime": {
         "question": "Đặt cây giống online bao lâu thì nhận được?",
@@ -633,7 +633,7 @@
       },
       "shippingCost": {
         "question": "Phí ship cây giống bao nhiêu, có được miễn phí không?",
-        "answer": "Đơn trên 500.000₫ được miễn phí vận chuyển. Các đơn còn lại có phí cố định 50.000₫, hiển thị rõ ở phần Tóm tắt đơn hàng trước khi bạn đặt."
+        "answer": "Đơn từ 500.000₫ trở lên được miễn phí vận chuyển. Các đơn còn lại có phí cố định 50.000₫, hiển thị rõ ở phần Tóm tắt đơn hàng trước khi bạn đặt."
       },
       "nationwide": {
         "question": "Cây giống Cái Mơn có giao đi tỉnh không?",
