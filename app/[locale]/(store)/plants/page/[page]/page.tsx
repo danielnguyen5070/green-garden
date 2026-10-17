@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import {
-  getAllPlantSlugs,
-  getExtraCatalogPages,
-} from "@/lib/storefront/catalog-slugs";
 import { parseCatalogPageSegment } from "@/lib/storefront/catalog";
+import { getExtraCatalogPages } from "@/lib/storefront/catalog-slugs";
 import { requireCatalogPage } from "@/lib/storefront/require-catalog-page";
+import { getAllPlantSlugs } from "@/services/plant.service";
 import {
   PlantsCatalog,
   buildPlantsCatalogMetadata,

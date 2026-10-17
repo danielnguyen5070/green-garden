@@ -1,6 +1,6 @@
 import { SITE_URL } from "@/config/site";
 import { CART_CURRENCY, parseMoney } from "@/lib/cart";
-import type { PlantReviewsData } from "@/lib/reviews";
+import type { PlantReviewsData } from "@/services/review.service";
 import {
   BRAND_ID,
   BUSINESS_DISPLAY_NAME,

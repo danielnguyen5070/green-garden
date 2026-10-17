@@ -4,17 +4,7 @@ import { Container } from "@/components/layout/container";
 import { ReviewsSection } from "@/components/reviews/reviews-section";
 import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
-import {
-  STOREFRONT_REVIEWS_PAGE_SIZE,
-  getAllStorefrontReviews,
-  getStorefrontReviews,
-} from "@/lib/api/storefront";
-import { resolveReviewSummary } from "@/lib/reviews";
-import { withBuildFallback } from "@/lib/storefront/build-fallback";
-import type {
-  StorefrontReview,
-  StorefrontReviewSummary,
-} from "@/types/storefront-review";
+import { loadReviewsPageData } from "@/services/review.service";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -69,37 +59,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-async function loadReviewsPageData(): Promise<{
-  reviews: StorefrontReview[];
-  total: number;
-  summary: StorefrontReviewSummary;
-}> {
-  const page = await getStorefrontReviews({
-    page: 1,
-    page_size: STOREFRONT_REVIEWS_PAGE_SIZE,
-  });
-
-  const hasApiSummary =
-    typeof page.average_rating === "number" &&
-    page.rating_distribution != null;
-
-  const allForSummary = hasApiSummary
-    ? null
-    : await withBuildFallback(getAllStorefrontReviews(), page.items);
-
-  const summary = resolveReviewSummary(page, allForSummary ?? page.items);
-
-  return {
-    reviews: page.items,
-    total: page.total,
-    summary,
-  };
-}
-
 export default async function ReviewsPage() {
   const [t, data] = await Promise.all([
     getTranslations("reviews"),
-    withBuildFallback(loadReviewsPageData(), null),
+    loadReviewsPageData(),
   ]);
 
   return (

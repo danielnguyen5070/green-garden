@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllCategorySlugs } from "@/lib/storefront/catalog-slugs";
-import { getCategoryBySlugOrNull } from "@/lib/storefront/get-category-by-slug";
+import {
+  getAllCategorySlugs,
+  getCategoryBySlugOrNull,
+} from "@/services/category.service";
 import {
   CategoryCatalog,
   buildCategoryCatalogMetadata,

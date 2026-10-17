@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Container } from "@/components/layout/container";
-import { getNavCategories } from "@/lib/storefront/get-nav-categories";
+import { getNavCategories } from "@/services/category.service";
 import { cn } from "@/lib/utils";
 import { HeaderActions } from "./header/header-actions";
 import { Logo } from "./header/logo";

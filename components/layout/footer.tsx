@@ -9,7 +9,7 @@ import { CONTACT_CONFIG } from "@/config/contact";
 import { Link } from "@/i18n/navigation";
 import { localizeText } from "@/lib/storefront";
 import { getCatalogHref } from "@/lib/storefront/catalog";
-import { getNavCategories } from "@/lib/storefront/get-nav-categories";
+import { getNavCategories } from "@/services/category.service";
 import { getVisitsPageviews } from "@/lib/vercel-web-analytics";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/layout/container";

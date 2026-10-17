@@ -9,7 +9,7 @@ import { MediaImagePreload } from "@/components/ui/media-image-preload";
 import { Container } from "@/components/layout/container";
 import { CONTACT_CONFIG } from "@/config/contact";
 import { Link } from "@/i18n/navigation";
-import { loadStorefrontReviewPreview } from "@/lib/reviews";
+import { loadStorefrontReviewPreview } from "@/services/review.service";
 import { cn } from "@/lib/utils";
 
 /** Shared by the `<Image>` and its preload so both resolve the same candidate. */

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import type { BlogPostMeta } from "@/types/blog";
-import { getPostImage } from "@/lib/blog";
+import { getPostImage } from "@/services/blog.service";
 import { cn } from "@/lib/utils";
 
 function formatDate(date: string, locale = "en") {

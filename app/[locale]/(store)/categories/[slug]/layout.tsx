@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getCategoryBySlugOrNull } from "@/lib/storefront/get-category-by-slug";
+import { getCategoryBySlugOrNull } from "@/services/category.service";
 
 type Props = {
   children: React.ReactNode;

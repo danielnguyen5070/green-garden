@@ -8,12 +8,12 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
 import { getStorefrontShippingPolicy } from "@/lib/api/storefront";
-import { getAllPlantSlugs } from "@/lib/storefront/catalog-slugs";
 import {
+  getAllPlantSlugs,
   getPlantBySlugOrNull,
   redirectToCanonicalPlantSlug,
-} from "@/lib/storefront/get-plant-by-slug";
-import { loadPlantReviews } from "@/lib/reviews";
+} from "@/services/plant.service";
+import { loadPlantReviews } from "@/services/review.service";
 import { getPlantSearchName, toMetaDescription } from "@/lib/seo/meta-text";
 import { resolveOgImage } from "@/lib/seo/og-image";
 import { buildPlantJsonLd } from "@/lib/seo/plant-json-ld";

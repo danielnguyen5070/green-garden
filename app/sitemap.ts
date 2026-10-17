@@ -2,11 +2,9 @@ import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/config/site";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { toIsoDate } from "@/lib/seo/url";
-import {
-  getAllCategorySlugs,
-  getAllPlantSlugs,
-} from "@/lib/storefront/catalog-slugs";
 import { getAllPosts } from "@/services/blog.service";
+import { getAllCategorySlugs } from "@/services/category.service";
+import { getAllPlantSlugs } from "@/services/plant.service";
 
 function localeUrl(locale: AppLocale, path: string): string {
   return path === "" ? `${SITE_URL}/${locale}` : `${SITE_URL}/${locale}${path}`;

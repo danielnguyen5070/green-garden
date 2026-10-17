@@ -6,7 +6,7 @@ import { ReviewStars } from "@/components/reviews/review-stars";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "@/i18n/navigation";
-import { loadStorefrontReviewPreview } from "@/lib/reviews";
+import { loadStorefrontReviewPreview } from "@/services/review.service";
 import { cn } from "@/lib/utils";
 
 /** Three on desktop; the third is hidden on the two-column tablet grid. */

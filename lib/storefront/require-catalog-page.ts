@@ -1,6 +1,6 @@
 import { notFound, permanentRedirect } from "next/navigation";
-import { getCatalogPagePlants } from "@/components/plant/plant-list-section";
 import { getCatalogPath, parseCatalogPageSegment } from "@/lib/storefront/catalog";
+import { getCatalogPagePlants } from "@/services/plant.service";
 import type { StorefrontCategory } from "@/types/storefront";
 
 /**

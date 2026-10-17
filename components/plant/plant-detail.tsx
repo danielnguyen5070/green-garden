@@ -9,7 +9,7 @@ import { PlantPageViews } from "@/components/plant/plant-page-views";
 import { PlantPurchase } from "@/components/plant/plant-purchase";
 import { PlantReviews } from "@/components/plant/plant-reviews";
 import { ReviewStars } from "@/components/reviews/review-stars";
-import type { PlantReviewsData } from "@/lib/reviews";
+import type { PlantReviewsData } from "@/services/review.service";
 import {
   getActivePotSizes,
   getLocalizedPlant,

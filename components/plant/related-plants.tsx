@@ -4,25 +4,23 @@ import { ArrowRightIcon } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { Link } from "@/i18n/navigation";
 import {
-  STOREFRONT_PLANTS_MAX_PAGE_SIZE,
-  getStorefrontPlants,
-} from "@/lib/api/storefront";
-import {
   formatStorefrontPrice,
   getCardPrice,
   getLocalizedPlant,
   getPlantCardImage,
   localizeText,
 } from "@/lib/storefront";
-import { withBuildFallback } from "@/lib/storefront/build-fallback";
 import { getCatalogHref } from "@/lib/storefront/catalog";
+import {
+  RELATED_PLANTS_LIMIT,
+  loadRelatedCategoryPlants,
+  pickRelatedNeighbours,
+} from "@/services/plant.service";
 import type {
   StorefrontPlantDetail,
   StorefrontPlantListItem,
 } from "@/types/storefront";
 import { cn } from "@/lib/utils";
-
-const RELATED_LIMIT = 4;
 
 function RelatedPlantCard({
   plant,
@@ -79,26 +77,6 @@ function RelatedPlantCard({
 }
 
 /**
- * The `limit` plants after `plantId` in catalog order, wrapping to the start.
- * Every product in a category gets inbound links from its neighbours instead
- * of every page linking to the same newest few.
- */
-function pickNeighbours(
-  items: StorefrontPlantListItem[],
-  plantId: string,
-  limit: number
-): StorefrontPlantListItem[] {
-  // With the current plant removed, its own index points at the next neighbour.
-  const start = Math.max(
-    items.findIndex((item) => item.id === plantId),
-    0
-  );
-  const others = items.filter((item) => item.id !== plantId);
-
-  return [...others.slice(start), ...others.slice(0, start)].slice(0, limit);
-}
-
-/**
  * One listing request scoped to the plant's own category (in catalog order),
  * rather than a detail lookup per card.
  */
@@ -117,18 +95,14 @@ async function RelatedPlants({
     getTranslations("plantDetail.related"),
     getTranslations("common"),
     getLocale(),
-    withBuildFallback(
-      getStorefrontPlants({
-        category_id: plant.category.id,
-        page_size: STOREFRONT_PLANTS_MAX_PAGE_SIZE,
-        sort: "created_at",
-        order: "desc",
-      }),
-      null
-    ),
+    loadRelatedCategoryPlants(plant.category.id),
   ]);
 
-  const plants = pickNeighbours(response?.items ?? [], plant.id, RELATED_LIMIT);
+  const plants = pickRelatedNeighbours(
+    response?.items ?? [],
+    plant.id,
+    RELATED_PLANTS_LIMIT
+  );
 
   if (plants.length === 0) {
     return null;

@@ -10,6 +10,3 @@ export function getApiUrl(path: string): string {
   const normalized = path.startsWith("/") ? path : `/${path}`;
   return `${getApiBaseUrl()}${API_PREFIX}${normalized}`;
 }
-
-export const AUTH_ACCESS_COOKIE = "gg_access_token";
-export const AUTH_REFRESH_COOKIE = "gg_refresh_token";

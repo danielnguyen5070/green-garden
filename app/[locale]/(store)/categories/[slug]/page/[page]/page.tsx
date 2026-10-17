@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  getAllPlantSlugs,
-  getExtraCatalogPages,
-} from "@/lib/storefront/catalog-slugs";
 import { parseCatalogPageSegment } from "@/lib/storefront/catalog";
-import { getCategoryBySlugOrNull } from "@/lib/storefront/get-category-by-slug";
+import { getExtraCatalogPages } from "@/lib/storefront/catalog-slugs";
 import { requireCatalogPage } from "@/lib/storefront/require-catalog-page";
+import { getCategoryBySlugOrNull } from "@/services/category.service";
+import { getAllPlantSlugs } from "@/services/plant.service";
 import {
   CategoryCatalog,
   buildCategoryCatalogMetadata,

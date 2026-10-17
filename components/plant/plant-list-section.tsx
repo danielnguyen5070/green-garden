@@ -7,9 +7,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
   STOREFRONT_PLANTS_PAGE_SIZE,
   getStorefrontCategories,
-  getStorefrontPlants,
 } from "@/lib/api/storefront";
 import { withBuildFallback } from "@/lib/storefront/build-fallback";
+import { getCatalogPagePlants } from "@/services/plant.service";
 import type { StorefrontCategory } from "@/types/storefront";
 
 const SKELETON_CARDS = Array.from(
@@ -72,24 +72,6 @@ async function PlantListSkeleton({
       </div>
     </PlantListFrame>
   );
-}
-
-/**
- * The page of plants `PlantListSection` renders. Routes call it before
- * streaming starts so an out-of-range page gets a real 404; the identical
- * request is deduplicated with the section's own.
- */
-function getCatalogPagePlants(
-  page: number,
-  category: StorefrontCategory | null
-) {
-  return getStorefrontPlants({
-    page,
-    page_size: STOREFRONT_PLANTS_PAGE_SIZE,
-    category_id: category?.id,
-    sort: "created_at",
-    order: "desc",
-  });
 }
 
 /**
@@ -161,4 +143,4 @@ async function PlantListSection({
   );
 }
 
-export { PlantListSection, PlantListSkeleton, getCatalogPagePlants };
+export { PlantListSection, PlantListSkeleton };

@@ -3,7 +3,7 @@ import { StoreChrome } from "@/components/layout/store-chrome";
 import {
   getPlantBySlugOrNull,
   redirectToCanonicalPlantSlug,
-} from "@/lib/storefront/get-plant-by-slug";
+} from "@/services/plant.service";
 
 type Props = {
   children: React.ReactNode;

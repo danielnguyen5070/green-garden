@@ -1,10 +1,3 @@
-import {
-  STOREFRONT_PLANT_REVIEWS_PAGE_SIZE,
-  STOREFRONT_REVIEWS_PAGE_SIZE,
-  getStorefrontPlantReviews,
-  getStorefrontReviews,
-} from "@/lib/api/storefront";
-import { withBuildFallback } from "@/lib/storefront/build-fallback";
 import type {
   StorefrontRatingDistribution,
   StorefrontReview,
@@ -126,72 +119,11 @@ export function resolveReviewSummary(
   return buildReviewSummaryFromItems(fallbackItems, total);
 }
 
-async function fetchStorefrontReviewPreview(limit: number): Promise<{
-  summary: StorefrontReviewSummary | null;
-  reviews: StorefrontReview[];
-}> {
-  const page = await getStorefrontReviews({
-    page: 1,
-    page_size: STOREFRONT_REVIEWS_PAGE_SIZE,
-  });
-
-  const hasApiSummary =
-    typeof page.average_rating === "number" &&
-    page.rating_distribution != null;
-
-  const reviews = [...page.items]
-    .sort(
-      (a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    )
-    .slice(0, limit);
-
-  return {
-    summary: hasApiSummary ? resolveReviewSummary(page) : null,
-    reviews,
-  };
-}
-
-/**
- * Summary plus the newest few reviews for the homepage section. Sends the same
- * first-page request as `/reviews`, so both pages share one cached response.
- * Never pages through all reviews: `summary` is null unless the API sends it.
- * Throws when the API is unreachable so a regenerating page keeps its cached
- * reviews; only an offline build gets null (do not invent ratings).
- */
-export function loadStorefrontReviewPreview(limit: number) {
-  return withBuildFallback(fetchStorefrontReviewPreview(limit), null);
-}
-
 export type PlantReviewsData = {
   reviews: StorefrontReview[];
   total: number;
   summary: StorefrontReviewSummary;
 };
-
-async function fetchPlantReviews(slug: string): Promise<PlantReviewsData> {
-  const page = await getStorefrontPlantReviews(slug, {
-    page: 1,
-    page_size: STOREFRONT_PLANT_REVIEWS_PAGE_SIZE,
-  });
-  return {
-    reviews: page.items,
-    total: page.total,
-    summary: resolveReviewSummary(page),
-  };
-}
-
-/**
- * First page of a plant's approved reviews plus its rating summary.
- * Throws when the API is unreachable so a regenerating page keeps its cached
- * stars and structured-data rating. Only an offline build gets null, which hides
- * the section instead of showing invented ratings.
- */
-export function loadPlantReviews(
-  slug: string
-): Promise<PlantReviewsData | null> {
-  return withBuildFallback(fetchPlantReviews(slug), null);
-}
 
 export function formatRelativeReviewDate(
   iso: string,

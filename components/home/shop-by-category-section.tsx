@@ -4,19 +4,13 @@ import { Container } from "@/components/layout/container";
 import { PlantCard } from "@/components/plant/plant-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "@/i18n/navigation";
-import { getStorefrontPlants } from "@/lib/api/storefront";
 import { localizeOptionalText, localizeText } from "@/lib/storefront";
-import { withBuildFallback } from "@/lib/storefront/build-fallback";
 import { getCatalogHref } from "@/lib/storefront/catalog";
-import { getCategoryBySlugOrNull } from "@/lib/storefront/get-category-by-slug";
-import type {
-  StorefrontCategory,
-  StorefrontPlantListItem,
-} from "@/types/storefront";
+import {
+  FRUIT_TREES_PRODUCT_LIMIT,
+  loadFruitTrees,
+} from "@/services/plant.service";
 import { cn } from "@/lib/utils";
-
-const FRUIT_TREES_SLUG = "fruit-trees";
-const FRUIT_TREES_PRODUCT_LIMIT = 4;
 
 const SKELETON_CARDS = Array.from(
   { length: FRUIT_TREES_PRODUCT_LIMIT },
@@ -59,27 +53,6 @@ async function ShopByCategorySkeleton() {
   );
 }
 
-async function loadFruitTrees(): Promise<{
-  category: StorefrontCategory;
-  plants: StorefrontPlantListItem[];
-} | null> {
-  const category = await getCategoryBySlugOrNull(FRUIT_TREES_SLUG);
-  if (!category) return null;
-
-  const { items } = await getStorefrontPlants({
-    category_id: category.id,
-    page: 1,
-    page_size: FRUIT_TREES_PRODUCT_LIMIT,
-    sort: "created_at",
-    order: "desc",
-  });
-
-  return {
-    category,
-    plants: items.slice(0, FRUIT_TREES_PRODUCT_LIMIT),
-  };
-}
-
 /**
  * Homepage teaser for the Fruit Trees category: a description with a link to
  * `/categories/fruit-trees`, followed by a few of its newest plants.
@@ -88,7 +61,7 @@ async function ShopByCategorySection({ className }: { className?: string }) {
   const [t, locale, data] = await Promise.all([
     getTranslations("home.categories"),
     getLocale(),
-    withBuildFallback(loadFruitTrees(), null),
+    loadFruitTrees(),
   ]);
 
   if (data === null) {

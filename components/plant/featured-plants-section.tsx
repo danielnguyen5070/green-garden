@@ -4,13 +4,11 @@ import { PlantCard } from "@/components/plant/plant-card";
 import { Container } from "@/components/layout/container";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "@/i18n/navigation";
-import { getStorefrontPlants } from "@/lib/api/storefront";
-import { withBuildFallback } from "@/lib/storefront/build-fallback";
-import type { StorefrontPlantListItem } from "@/types/storefront";
+import {
+  FEATURED_PLANTS_LIMIT,
+  loadFeaturedPlants,
+} from "@/services/plant.service";
 import { cn } from "@/lib/utils";
-
-/** Compact homepage strip — not the full catalog. */
-export const FEATURED_PLANTS_LIMIT = 4;
 
 const SKELETON_CARDS = Array.from(
   { length: FEATURED_PLANTS_LIMIT },
@@ -52,36 +50,13 @@ async function FeaturedPlantsSkeleton() {
   );
 }
 
-async function loadFeaturedPlants(): Promise<StorefrontPlantListItem[]> {
-  const featured = await getStorefrontPlants({
-    page: 1,
-    page_size: FEATURED_PLANTS_LIMIT,
-    is_featured: true,
-    sort: "created_at",
-    order: "desc",
-  });
-
-  if (featured.items.length > 0) {
-    return featured.items.slice(0, FEATURED_PLANTS_LIMIT);
-  }
-
-  // Keep the homepage populated when nothing is marked featured yet.
-  const fallback = await getStorefrontPlants({
-    page: 1,
-    page_size: FEATURED_PLANTS_LIMIT,
-    sort: "created_at",
-    order: "desc",
-  });
-  return fallback.items.slice(0, FEATURED_PLANTS_LIMIT);
-}
-
 /**
  * Smaller homepage catalog teaser that links visitors to `/plants`.
  */
 async function FeaturedPlantsSection({ className }: { className?: string }) {
   const [t, plants] = await Promise.all([
     getTranslations("plants.featured"),
-    withBuildFallback(loadFeaturedPlants(), null),
+    loadFeaturedPlants(),
   ]);
 
   if (plants === null) {
