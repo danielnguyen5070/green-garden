@@ -116,13 +116,12 @@ async function PlantListSection({
   frameId?: string;
   className?: string;
 } = {}) {
-  const t = await getTranslations("home.products");
-  const sectionTitle = title ?? t("title");
-
-  const [plants, categories] = await Promise.all([
+  const [t, plants, categories] = await Promise.all([
+    getTranslations("home.products"),
     withBuildFallback(getCatalogPagePlants(page, category), null),
     withBuildFallback(getStorefrontCategories(), null),
   ]);
+  const sectionTitle = title ?? t("title");
 
   if (plants && page > 1 && plants.items.length === 0) {
     notFound();

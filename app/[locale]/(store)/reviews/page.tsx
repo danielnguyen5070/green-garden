@@ -97,8 +97,10 @@ async function loadReviewsPageData(): Promise<{
 }
 
 export default async function ReviewsPage() {
-  const t = await getTranslations("reviews");
-  const data = await withBuildFallback(loadReviewsPageData(), null);
+  const [t, data] = await Promise.all([
+    getTranslations("reviews"),
+    withBuildFallback(loadReviewsPageData(), null),
+  ]);
 
   return (
     <section

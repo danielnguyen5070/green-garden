@@ -79,8 +79,10 @@ async function loadFeaturedPlants(): Promise<StorefrontPlantListItem[]> {
  * Smaller homepage catalog teaser that links visitors to `/plants`.
  */
 async function FeaturedPlantsSection({ className }: { className?: string }) {
-  const t = await getTranslations("plants.featured");
-  const plants = await withBuildFallback(loadFeaturedPlants(), null);
+  const [t, plants] = await Promise.all([
+    getTranslations("plants.featured"),
+    withBuildFallback(loadFeaturedPlants(), null),
+  ]);
 
   if (plants === null) {
     return (
