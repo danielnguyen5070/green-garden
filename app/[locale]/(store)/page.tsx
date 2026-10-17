@@ -85,18 +85,25 @@ export default async function HomePage({ params }: Props) {
   return (
     <>
       <JsonLd data={jsonLd} />
+      
       <Hero />
+      
       <Suspense fallback={<FeaturedPlantsSkeleton />}>
         <FeaturedPlantsSection />
       </Suspense>
+      
       <Suspense fallback={<ShopByCategorySkeleton />}>
         <ShopByCategorySection />
       </Suspense>
+      
       <HomeAboutSection />
+      
       <LatestGuidesSection />
+      
       <Suspense fallback={<CustomerReviewsSkeleton />}>
         <CustomerReviewsSection />
       </Suspense>
+      
       <NewsletterSection />
     </>
   );
