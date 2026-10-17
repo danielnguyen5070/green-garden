@@ -1,54 +1,43 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
 import { CheckCircle2Icon, CopyIcon, LoaderCircleIcon } from "lucide-react";
 import { getStorefrontOrderPayment } from "@/lib/api/storefront";
+import {
+  getPaymentRefetchInterval,
+} from "@/lib/payment-poll";
+import { queryKeys } from "@/lib/query/keys";
 import { formatStorefrontPrice } from "@/lib/storefront";
 import { toast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import type { PaymentStatus } from "@/types/order";
 import type { StorefrontBankTransferInfo } from "@/types/storefront";
 
-const POLL_INTERVAL_MS = 5000;
-// Stop asking once the customer has clearly left the page open and walked away.
-const MAX_POLL_DURATION_MS = 30 * 60 * 1000;
-
 function useLivePaymentStatus(orderId: string, initial: PaymentStatus) {
-  const [status, setStatus] = useState<PaymentStatus>(initial);
+  const startedAtRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    if (status === "paid") return;
+  const query = useQuery({
+    queryKey: queryKeys.payment.status(orderId),
+    queryFn: async ({ signal }) => {
+      const result = await getStorefrontOrderPayment(orderId, { signal });
+      return result.payment_status;
+    },
+    initialData: initial,
+    enabled: initial !== "paid" && orderId.length > 0,
+    refetchInterval: (queryState) => {
+      startedAtRef.current ??= Date.now();
+      return getPaymentRefetchInterval(
+        queryState.state.data ?? initial,
+        startedAtRef.current
+      );
+    },
+    refetchIntervalInBackground: false,
+    retry: false,
+  });
 
-    const controller = new AbortController();
-    const startedAt = Date.now();
-    let timer: ReturnType<typeof setTimeout> | undefined;
-
-    async function poll() {
-      try {
-        const result = await getStorefrontOrderPayment(orderId, {
-          signal: controller.signal,
-        });
-        if (result.payment_status === "paid") {
-          setStatus("paid");
-          return;
-        }
-      } catch {
-        if (controller.signal.aborted) return;
-      }
-      if (Date.now() - startedAt < MAX_POLL_DURATION_MS) {
-        timer = setTimeout(poll, POLL_INTERVAL_MS);
-      }
-    }
-
-    timer = setTimeout(poll, POLL_INTERVAL_MS);
-    return () => {
-      controller.abort();
-      clearTimeout(timer);
-    };
-  }, [orderId, status]);
-
-  return status;
+  return query.data ?? initial;
 }
 
 function CopyableRow({

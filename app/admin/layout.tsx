@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { QueryProvider } from "@/components/providers/query-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { adminCopy } from "@/lib/admin-copy";
 import { fontVariables } from "@/lib/fonts";
@@ -21,7 +22,7 @@ export default function AdminRootLayout({
   return (
     <html lang="en" className={`${fontVariables} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">
-        {children}
+        <QueryProvider>{children}</QueryProvider>
         <Toaster />
       </body>
     </html>

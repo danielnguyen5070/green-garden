@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { PencilIcon } from "lucide-react";
 import { ReviewFormDialog } from "@/components/reviews/review-form-dialog";
@@ -14,11 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  STOREFRONT_REVIEWS_PAGE_SIZE,
-  getStorefrontReviews,
-} from "@/lib/api/storefront";
-import { ApiError } from "@/lib/api/errors";
+import { useStorefrontReviews } from "@/hooks/use-storefront-reviews";
 import { toast } from "@/lib/toast";
 import type {
   StorefrontReview,
@@ -39,13 +35,25 @@ function ReviewsSection({
   const t = useTranslations("reviews");
   const tErrors = useTranslations("reviews.errors");
 
-  const [reviews, setReviews] = useState(initialReviews);
-  const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(initialTotal);
-  const [loadingMore, setLoadingMore] = useState(false);
+  const {
+    reviews,
+    total,
+    hasMore,
+    isFetchingNextPage,
+    isError,
+    fetchNextPage,
+  } = useStorefrontReviews({
+    initial: { items: initialReviews, total: initialTotal },
+  });
+
   const [formOpen, setFormOpen] = useState(false);
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [sortOption, setSortOption] = useState<SortOption>("newest");
+
+  useEffect(() => {
+    if (!isError) return;
+    toast.error(tErrors("generic"));
+  }, [isError, tErrors]);
 
   const visibleReviews = useMemo(() => {
     const filtered =
@@ -60,38 +68,13 @@ function ReviewsSection({
     });
   }, [reviews, selectedRating, sortOption]);
 
-  const hasMore = reviews.length < total;
   const isFiltered = selectedRating != null;
   const listCount = isFiltered ? visibleReviews.length : total;
+  const loadingMore = isFetchingNextPage;
 
-  async function handleLoadMore() {
+  function handleLoadMore() {
     if (loadingMore || !hasMore) return;
-
-    setLoadingMore(true);
-    const nextPage = page + 1;
-
-    try {
-      const response = await getStorefrontReviews({
-        page: nextPage,
-        page_size: STOREFRONT_REVIEWS_PAGE_SIZE,
-      });
-      setReviews((current) => {
-        const seen = new Set(current.map((item) => item.id));
-        const appended = response.items.filter((item) => !seen.has(item.id));
-        return [...current, ...appended];
-      });
-      setTotal(response.total);
-      setPage(nextPage);
-    } catch (error) {
-      const key =
-        error instanceof ApiError &&
-        (error.status === 502 || error.status === 503 || error.status === 504)
-          ? "unavailable"
-          : "generic";
-      toast.error(tErrors(key));
-    } finally {
-      setLoadingMore(false);
-    }
+    fetchNextPage();
   }
 
   return (
@@ -184,9 +167,7 @@ function ReviewsSection({
                   variant="outline"
                   className="mt-4 rounded-xl"
                   disabled={loadingMore}
-                  onClick={() => {
-                    void handleLoadMore();
-                  }}
+                  onClick={handleLoadMore}
                 >
                   {loadingMore ? t("loadingMore") : t("loadMore")}
                 </Button>
@@ -213,9 +194,7 @@ function ReviewsSection({
                 size="lg"
                 className="h-11 rounded-xl border-border bg-card px-6 shadow-subtle"
                 disabled={loadingMore}
-                onClick={() => {
-                  void handleLoadMore();
-                }}
+                onClick={handleLoadMore}
               >
                 {loadingMore ? t("loadingMore") : t("loadMore")}
               </Button>

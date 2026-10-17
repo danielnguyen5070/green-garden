@@ -1,12 +1,19 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   STOREFRONT_PLANTS_MAX_PAGE_SIZE,
   STOREFRONT_PLANTS_PAGE_SIZE,
   getStorefrontPlants,
 } from "@/lib/api/storefront";
 import { plantMatchesSearch } from "@/lib/plant-search";
+import { queryKeys } from "@/lib/query/keys";
 import type {
   StorefrontPlantListItem,
   StorefrontPlantListResponse,
@@ -98,6 +105,17 @@ async function fetchAllPlantsForSearch(params: {
   return items;
 }
 
+function applyFeaturedSort(
+  items: StorefrontPlantListItem[],
+  sortOption: StorefrontPlantSortOption
+): StorefrontPlantListItem[] {
+  if (sortOption !== "featured") return items;
+  // Stable sort, so the API's ordering is preserved within each group.
+  return [...items].sort(
+    (a, b) => Number(b.is_featured) - Number(a.is_featured)
+  );
+}
+
 /**
  * Keeps the catalog grid in sync with `GET /storefront/plants`. The page named
  * in the URL (category + `/page/N`) is rendered on the server and reused as-is,
@@ -115,19 +133,11 @@ export function useStorefrontPlants({
   categoryId?: string;
   initialPage?: number;
 }): UseStorefrontPlantsResult {
-  const initialResponse = useRef(initial);
-
+  const queryClient = useQueryClient();
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
-  const [sortOption, setSortOption] = useState(DEFAULT_SORT);
+  const [sortOption, setSortOptionState] = useState(DEFAULT_SORT);
   const [firstPage, setFirstPage] = useState(initialPage);
-  const [page, setPage] = useState(initialPage);
-  const [reloadToken, setReloadToken] = useState(0);
-
-  const [items, setItems] = useState(initial.items);
-  const [total, setTotal] = useState(initial.total);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasError, setHasError] = useState(false);
 
   // Typing should not turn every keystroke into a request.
   useEffect(() => {
@@ -137,122 +147,131 @@ export function useStorefrontPlants({
     const timer = setTimeout(() => {
       setSearch(next);
       setFirstPage(1);
-      setPage(1);
     }, SEARCH_DEBOUNCE_MS);
 
     return () => clearTimeout(timer);
   }, [searchInput, search]);
 
   const isSearching = search.length > 0;
+  const { sort, order } = SORT_PARAMS[sortOption];
 
-  const isServerRenderedQuery =
-    page === initialPage &&
-    firstPage === initialPage &&
-    !isSearching &&
-    sortOption === DEFAULT_SORT &&
-    reloadToken === 0;
+  const isDefaultBrowse =
+    !isSearching && sortOption === DEFAULT_SORT && firstPage === initialPage;
 
-  useEffect(() => {
-    if (isServerRenderedQuery) {
-      setItems(initialResponse.current.items);
-      setTotal(initialResponse.current.total);
-      setIsLoading(false);
-      setHasError(false);
-      return;
-    }
+  const listKey = queryKeys.plants.list({
+    categoryId,
+    sortOption,
+    startPage: firstPage,
+  });
 
-    const controller = new AbortController();
-    const { sort, order } = SORT_PARAMS[sortOption];
-
-    setIsLoading(true);
-    setHasError(false);
-
-    const request = isSearching
-      ? fetchAllPlantsForSearch({
+  const listQuery = useInfiniteQuery({
+    queryKey: listKey,
+    queryFn: ({ pageParam, signal }) =>
+      getStorefrontPlants(
+        {
+          page: pageParam,
+          page_size: STOREFRONT_PLANTS_PAGE_SIZE,
           category_id: categoryId,
           sort,
           order,
-          signal: controller.signal,
-        }).then((allItems) => {
-          const matched = allItems.filter((plant) =>
-            plantMatchesSearch(plant, search)
-          );
-          setItems(matched);
-          setTotal(matched.length);
-        })
-      : getStorefrontPlants(
-          {
-            page,
-            page_size: STOREFRONT_PLANTS_PAGE_SIZE,
-            category_id: categoryId,
-            sort,
-            order,
-          },
-          { signal: controller.signal }
-        ).then((response) => {
-          setItems((current) =>
-            page > firstPage ? [...current, ...response.items] : response.items
-          );
-          setTotal(response.total);
-        });
+        },
+        { signal }
+      ),
+    initialPageParam: firstPage,
+    getNextPageParam: (lastPage, _pages, lastPageParam) => {
+      const loaded = lastPageParam * STOREFRONT_PLANTS_PAGE_SIZE;
+      return loaded < lastPage.total ? lastPageParam + 1 : undefined;
+    },
+    enabled: !isSearching,
+    initialData: isDefaultBrowse
+      ? {
+          pages: [initial],
+          pageParams: [initialPage],
+        }
+      : undefined,
+    placeholderData: keepPreviousData,
+  });
 
-    request
-      .catch(() => {
-        if (controller.signal.aborted) return;
-        setHasError(true);
-      })
-      .finally(() => {
-        if (controller.signal.aborted) return;
-        setIsLoading(false);
+  const searchQuery = useQuery({
+    queryKey: queryKeys.plants.search({
+      categoryId,
+      sortOption,
+      q: search,
+    }),
+    queryFn: async ({ signal }) => {
+      const allItems = await fetchAllPlantsForSearch({
+        category_id: categoryId,
+        sort,
+        order,
+        signal,
       });
+      const matched = allItems.filter((plant) =>
+        plantMatchesSearch(plant, search)
+      );
+      return { items: matched, total: matched.length };
+    },
+    enabled: isSearching,
+    placeholderData: keepPreviousData,
+  });
 
-    return () => controller.abort();
-  }, [
-    isServerRenderedQuery,
-    isSearching,
-    page,
-    firstPage,
-    search,
-    categoryId,
-    sortOption,
-    reloadToken,
-  ]);
+  const browseItems = useMemo(
+    () => listQuery.data?.pages.flatMap((page) => page.items) ?? [],
+    [listQuery.data]
+  );
+  const browseTotal = listQuery.data?.pages.at(-1)?.total ?? initial.total;
+  const browsePage =
+    listQuery.data?.pageParams.at(-1) ?? firstPage;
+
+  const total = isSearching ? (searchQuery.data?.total ?? 0) : browseTotal;
+  const page = isSearching ? 1 : Number(browsePage);
+
+  const activeQuery = isSearching ? searchQuery : listQuery;
+  const isLoading = activeQuery.isFetching;
+  const hasError = activeQuery.isError;
 
   const plants = useMemo(() => {
-    if (sortOption !== "featured") return items;
-    // Stable sort, so the API's ordering is preserved within each group.
-    return [...items].sort(
-      (a, b) => Number(b.is_featured) - Number(a.is_featured)
-    );
-  }, [items, sortOption]);
+    const items = isSearching
+      ? (searchQuery.data?.items ?? [])
+      : browseItems;
+    return applyFeaturedSort(items, sortOption);
+  }, [browseItems, isSearching, searchQuery.data?.items, sortOption]);
 
   const handleSearchInput = useCallback((value: string) => {
     setSearchInput(value);
   }, []);
 
   const handleSortChange = useCallback((option: StorefrontPlantSortOption) => {
-    setSortOption(option);
+    setSortOptionState(option);
     setFirstPage(1);
-    setPage(1);
   }, []);
 
   const loadMore = useCallback(() => {
-    if (isSearching) return;
-    setPage((current) => current + 1);
-  }, [isSearching]);
+    if (isSearching || listQuery.isFetchingNextPage) return;
+    void listQuery.fetchNextPage();
+  }, [isSearching, listQuery]);
 
   /** Back to exactly what the URL server-rendered. */
   const clearFilters = useCallback(() => {
     setSearchInput("");
     setSearch("");
-    setSortOption(DEFAULT_SORT);
+    setSortOptionState(DEFAULT_SORT);
     setFirstPage(initialPage);
-    setPage(initialPage);
-  }, [initialPage]);
+    queryClient.setQueryData(
+      queryKeys.plants.list({
+        categoryId,
+        sortOption: DEFAULT_SORT,
+        startPage: initialPage,
+      }),
+      {
+        pages: [initial],
+        pageParams: [initialPage],
+      }
+    );
+  }, [categoryId, initial, initialPage, queryClient]);
 
   const retry = useCallback(() => {
-    setReloadToken((token) => token + 1);
-  }, []);
+    void activeQuery.refetch();
+  }, [activeQuery]);
 
   return {
     plants,
@@ -265,7 +284,10 @@ export function useStorefrontPlants({
     isLoading,
     hasError,
     // Search loads the full filtered set in one pass; pagination stays for browse.
-    hasMore: !isSearching && page * STOREFRONT_PLANTS_PAGE_SIZE < total,
+    hasMore:
+      !isSearching &&
+      (listQuery.hasNextPage ??
+        page * STOREFRONT_PLANTS_PAGE_SIZE < total),
     setSearchInput: handleSearchInput,
     setSortOption: handleSortChange,
     loadMore,

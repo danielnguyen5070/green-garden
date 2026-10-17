@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { BankTransferPayment } from "@/components/checkout/bank-transfer-payment";
@@ -122,7 +123,6 @@ function CheckoutPageView() {
   const [values, setValues] = useState<CheckoutFormValues>(EMPTY_CHECKOUT_FORM);
   const [errors, setErrors] = useState<CheckoutFormErrors>({});
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
-  const [submitting, setSubmitting] = useState(false);
 
   const items = useCartStore((state) => state.items);
   const hasHydrated = useCartStore((state) => state.hasHydrated);
@@ -132,6 +132,48 @@ function CheckoutPageView() {
   const setLastOrder = useLastOrderStore((state) => state.setOrder);
   const cartQuote = useCartQuote();
   const { honeypotRef, getBotSignals } = useBotSignals();
+
+  const createOrderMutation = useMutation({
+    mutationFn: () =>
+      createStorefrontOrder(
+        toStorefrontOrderPayload(values, items, getBotSignals(), paymentMethod)
+      ),
+    onSuccess: (order) => {
+      setLastOrder({ order });
+      // Only now is the order safely on the backend.
+      clearCart();
+      if (!awaitsBankTransfer(order)) {
+        router.push("/order-success");
+      }
+    },
+    onError: (error) => {
+      const serverErrors = toCheckoutFormErrors(getFieldErrors(error));
+      const firstServerInvalid = CHECKOUT_FORM_FIELDS.find((field) =>
+        Boolean(serverErrors[field])
+      );
+      if (firstServerInvalid) {
+        setErrors(serverErrors);
+      }
+
+      const reference = getErrorReference(error);
+      toast.error(
+        t(`errors.${getErrorKey(error)}`, {
+          minutes: getRetryAfterMinutes(error),
+        }),
+        reference
+          ? { description: tCommon("errorReference", { id: reference }) }
+          : undefined
+      );
+      if (firstServerInvalid) {
+        // The inputs re-enable on the next render, so focus after it.
+        requestAnimationFrame(() => {
+          document.getElementById(`checkout-${firstServerInvalid}`)?.focus();
+        });
+      }
+    },
+  });
+
+  const submitting = createOrderMutation.isPending;
 
   // The customer only submits against a current backend quote they can see.
   const canSubmit =
@@ -148,10 +190,10 @@ function CheckoutPageView() {
       setValues((current) => ({ ...current, [field]: value }));
       // Clearing as the customer types keeps the message from nagging mid-fix.
       setErrors((current) =>
-        current[field] ? { ...current, [field]: undefined } : current,
+        current[field] ? { ...current, [field]: undefined } : current
       );
     },
-    [],
+    []
   );
 
   const handleBlur = useCallback(
@@ -161,10 +203,10 @@ function CheckoutPageView() {
         [field]: validateCheckoutField(field, values),
       }));
     },
-    [values],
+    [values]
   );
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (submitting) return;
@@ -173,7 +215,7 @@ function CheckoutPageView() {
     setErrors(nextErrors);
 
     const firstInvalid = CHECKOUT_FORM_FIELDS.find((field) =>
-      Boolean(nextErrors[field]),
+      Boolean(nextErrors[field])
     );
 
     if (firstInvalid) {
@@ -186,47 +228,7 @@ function CheckoutPageView() {
       return;
     }
 
-    setSubmitting(true);
-
-    try {
-      const order = await createStorefrontOrder(
-        toStorefrontOrderPayload(values, items, getBotSignals(), paymentMethod),
-      );
-
-      setLastOrder({ order });
-      // Only now is the order safely on the backend.
-      clearCart();
-      if (awaitsBankTransfer(order)) {
-        setSubmitting(false);
-      } else {
-        router.push("/order-success");
-      }
-    } catch (error) {
-      const serverErrors = toCheckoutFormErrors(getFieldErrors(error));
-      const firstServerInvalid = CHECKOUT_FORM_FIELDS.find((field) =>
-        Boolean(serverErrors[field]),
-      );
-      if (firstServerInvalid) {
-        setErrors(serverErrors);
-      }
-
-      const reference = getErrorReference(error);
-      toast.error(
-        t(`errors.${getErrorKey(error)}`, {
-          minutes: getRetryAfterMinutes(error),
-        }),
-        reference
-          ? { description: tCommon("errorReference", { id: reference }) }
-          : undefined,
-      );
-      setSubmitting(false);
-      if (firstServerInvalid) {
-        // The inputs re-enable on the next render, so focus after it.
-        requestAnimationFrame(() => {
-          document.getElementById(`checkout-${firstServerInvalid}`)?.focus();
-        });
-      }
-    }
+    createOrderMutation.mutate();
   }
 
   // An unpaid transfer whose cart is already cleared survives a refresh here.

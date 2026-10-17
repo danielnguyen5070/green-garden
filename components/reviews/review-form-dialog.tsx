@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { HoneypotField } from "@/components/forms/honeypot-field";
 import { ReviewRatingInput } from "@/components/reviews/review-rating-input";
@@ -18,10 +19,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useBotSignals } from "@/hooks/use-bot-signals";
 import {
+  STOREFRONT_PLANT_REVIEWS_PAGE_SIZE,
+  STOREFRONT_REVIEWS_PAGE_SIZE,
   createStorefrontPlantReview,
   createStorefrontReview,
 } from "@/lib/api/storefront";
 import { ApiError, ErrorCode, getErrorReference } from "@/lib/api/errors";
+import { queryKeys } from "@/lib/query/keys";
 import { toast } from "@/lib/toast";
 import {
   STOREFRONT_REVIEW_CONTENT_MAX,
@@ -82,11 +86,11 @@ function ReviewFormDialog({
   const ratingId = useId();
   const contentId = useId();
 
+  const queryClient = useQueryClient();
   const [name, setName] = useState("");
   const [rating, setRating] = useState<number | null>(null);
   const [content, setContent] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
-  const [submitting, setSubmitting] = useState(false);
   const { honeypotRef, getBotSignals, reset: resetBotSignals } =
     useBotSignals(open);
 
@@ -97,6 +101,52 @@ function ReviewFormDialog({
     setErrors({});
     resetBotSignals();
   }
+
+  const submitMutation = useMutation({
+    mutationFn: async () => {
+      const payload = {
+        ...getBotSignals(),
+        name: name.trim(),
+        rating: rating!,
+        content: content.trim(),
+      };
+      if (plantSlug) {
+        return createStorefrontPlantReview(plantSlug, payload);
+      }
+      return createStorefrontReview(payload);
+    },
+    onSuccess: async () => {
+      if (plantSlug) {
+        await queryClient.invalidateQueries({
+          queryKey: queryKeys.reviews.plant(plantSlug, {
+            pageSize: STOREFRONT_PLANT_REVIEWS_PAGE_SIZE,
+          }),
+        });
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: queryKeys.reviews.storefront({
+            pageSize: STOREFRONT_REVIEWS_PAGE_SIZE,
+          }),
+        });
+      }
+      resetForm();
+      onOpenChange(false);
+      toast.success(t("submitSuccess"), {
+        description: t("submitSuccessDescription"),
+      });
+    },
+    onError: (error) => {
+      const reference = getErrorReference(error);
+      toast.error(
+        tErrors(getSubmitErrorKey(error)),
+        reference
+          ? { description: tCommon("errorReference", { id: reference }) }
+          : undefined
+      );
+    },
+  });
+
+  const submitting = submitMutation.isPending;
 
   function validate(): FormErrors {
     const next: FormErrors = {};
@@ -143,36 +193,7 @@ function ReviewFormDialog({
       return;
     }
 
-    setSubmitting(true);
-
-    try {
-      const payload = {
-        ...getBotSignals(),
-        name: name.trim(),
-        rating: rating!,
-        content: content.trim(),
-      };
-      if (plantSlug) {
-        await createStorefrontPlantReview(plantSlug, payload);
-      } else {
-        await createStorefrontReview(payload);
-      }
-      resetForm();
-      onOpenChange(false);
-      toast.success(t("submitSuccess"), {
-        description: t("submitSuccessDescription"),
-      });
-    } catch (error) {
-      const reference = getErrorReference(error);
-      toast.error(
-        tErrors(getSubmitErrorKey(error)),
-        reference
-          ? { description: tCommon("errorReference", { id: reference }) }
-          : undefined
-      );
-    } finally {
-      setSubmitting(false);
-    }
+    submitMutation.mutate();
   }
 
   return (

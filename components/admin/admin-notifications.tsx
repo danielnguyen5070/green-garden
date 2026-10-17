@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bell } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,7 @@ import {
   markAllNotificationsRead,
   markNotificationRead,
 } from "@/lib/api/notifications";
+import { queryKeys } from "@/lib/query/keys";
 import { toast } from "@/lib/toast";
 import type { AdminNotification } from "@/types/notification";
 import { cn } from "@/lib/utils";
@@ -40,99 +42,108 @@ function unreadFromList(
 
 function AdminNotifications({ className }: { className?: string }) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
-  const [items, setItems] = useState<AdminNotification[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [markingAll, setMarkingAll] = useState(false);
 
-  const fetchNotifications = useCallback(async (signal?: AbortSignal) => {
-    try {
+  const notificationsQuery = useQuery({
+    queryKey: queryKeys.admin.notifications,
+    queryFn: async ({ signal }) => {
       const response = await listNotifications(
         { page: 1, page_size: PAGE_SIZE },
         { signal }
       );
-      if (signal?.aborted) return;
-      setItems(response.items);
-      setUnreadCount(unreadFromList(response.items, response.unread_count));
-    } catch (error) {
-      if (signal?.aborted) return;
-      // Quiet on background poll; surface errors when the user opens the menu.
-      throw error;
-    }
-  }, []);
+      return {
+        items: response.items,
+        unreadCount: unreadFromList(response.items, response.unread_count),
+      };
+    },
+    refetchInterval: POLL_INTERVAL_MS,
+    refetchIntervalInBackground: false,
+  });
 
-  useEffect(() => {
-    const controller = new AbortController();
+  const items = notificationsQuery.data?.items ?? [];
+  const unreadCount = notificationsQuery.data?.unreadCount ?? 0;
 
-    void fetchNotifications(controller.signal).catch(() => {
-      // Initial badge fetch failures stay silent until the dropdown opens.
-    });
+  const markAllMutation = useMutation({
+    mutationFn: () => markAllNotificationsRead(),
+    onSuccess: () => {
+      queryClient.setQueryData(
+        queryKeys.admin.notifications,
+        (current: { items: AdminNotification[]; unreadCount: number } | undefined) => {
+          if (!current) return current;
+          return {
+            items: current.items.map((item) =>
+              item.is_read ? item : { ...item, is_read: true }
+            ),
+            unreadCount: 0,
+          };
+        }
+      );
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error));
+    },
+  });
 
-    const interval = window.setInterval(() => {
-      void fetchNotifications().catch(() => {
-        // Ignore transient poll errors.
+  const markOneMutation = useMutation({
+    mutationFn: (notification: AdminNotification) =>
+      markNotificationRead(notification.id),
+    onMutate: async (notification) => {
+      await queryClient.cancelQueries({
+        queryKey: queryKeys.admin.notifications,
       });
-    }, POLL_INTERVAL_MS);
+      const previous = queryClient.getQueryData<{
+        items: AdminNotification[];
+        unreadCount: number;
+      }>(queryKeys.admin.notifications);
 
-    return () => {
-      controller.abort();
-      window.clearInterval(interval);
-    };
-  }, [fetchNotifications]);
+      queryClient.setQueryData(
+        queryKeys.admin.notifications,
+        (current: { items: AdminNotification[]; unreadCount: number } | undefined) => {
+          if (!current) return current;
+          return {
+            items: current.items.map((item) =>
+              item.id === notification.id ? { ...item, is_read: true } : item
+            ),
+            unreadCount: Math.max(0, current.unreadCount - 1),
+          };
+        }
+      );
+
+      return { previous };
+    },
+    onError: (error, _notification, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(
+          queryKeys.admin.notifications,
+          context.previous
+        );
+      }
+      toast.error(getErrorMessage(error));
+    },
+  });
 
   async function handleOpenChange(nextOpen: boolean) {
     setOpen(nextOpen);
     if (!nextOpen) return;
 
-    setLoading(true);
     try {
-      await fetchNotifications();
+      await notificationsQuery.refetch();
     } catch (error) {
       toast.error(getErrorMessage(error, copy.loadError));
-    } finally {
-      setLoading(false);
     }
   }
 
   async function handleMarkAllAsRead() {
-    if (markingAll || unreadCount === 0) return;
-    setMarkingAll(true);
-    try {
-      await markAllNotificationsRead();
-      setItems((current) =>
-        current.map((item) =>
-          item.is_read ? item : { ...item, is_read: true }
-        )
-      );
-      setUnreadCount(0);
-    } catch (error) {
-      toast.error(getErrorMessage(error));
-    } finally {
-      setMarkingAll(false);
-    }
+    if (markAllMutation.isPending || unreadCount === 0) return;
+    markAllMutation.mutate();
   }
 
   async function handleNotificationClick(notification: AdminNotification) {
     if (!notification.is_read) {
-      // Optimistic local update so the badge clears immediately.
-      setItems((current) =>
-        current.map((item) =>
-          item.id === notification.id ? { ...item, is_read: true } : item
-        )
-      );
-      setUnreadCount((count) => Math.max(0, count - 1));
-
       try {
-        await markNotificationRead(notification.id);
-      } catch (error) {
-        setItems((current) =>
-          current.map((item) =>
-            item.id === notification.id ? { ...item, is_read: false } : item
-          )
-        );
-        setUnreadCount((count) => count + 1);
-        toast.error(getErrorMessage(error));
+        await markOneMutation.mutateAsync(notification);
+      } catch {
         return;
       }
     }
@@ -140,10 +151,14 @@ function AdminNotifications({ className }: { className?: string }) {
     setOpen(false);
 
     if (notification.type === "new_order" && notification.entity_id) {
-      router.push(`/admin/orders?order=${encodeURIComponent(notification.entity_id)}`);
+      router.push(
+        `/admin/orders?order=${encodeURIComponent(notification.entity_id)}`
+      );
     }
   }
 
+  const loading = notificationsQuery.isFetching && items.length === 0;
+  const markingAll = markAllMutation.isPending;
   const badgeLabel =
     unreadCount > 0 ? copy.unreadCount(unreadCount) : undefined;
   const badgeText = unreadCount > 99 ? "99+" : String(unreadCount);

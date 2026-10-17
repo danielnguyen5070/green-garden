@@ -1,17 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { PencilIcon } from "lucide-react";
 import { ReviewFormDialog } from "@/components/reviews/review-form-dialog";
 import { ReviewMasonryList } from "@/components/reviews/review-masonry-list";
 import { ReviewSummary } from "@/components/reviews/review-summary";
 import { Button } from "@/components/ui/button";
-import {
-  STOREFRONT_PLANT_REVIEWS_PAGE_SIZE,
-  getStorefrontPlantReviews,
-} from "@/lib/api/storefront";
-import { ApiError } from "@/lib/api/errors";
+import { usePlantReviews } from "@/hooks/use-plant-reviews";
 import { toast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import type {
@@ -38,12 +34,24 @@ function PlantReviews({
   const tReviews = useTranslations("reviews");
   const tErrors = useTranslations("reviews.errors");
 
-  const [reviews, setReviews] = useState(initialReviews);
-  const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(initialTotal);
-  const [loadingMore, setLoadingMore] = useState(false);
+  const {
+    reviews,
+    hasMore,
+    isFetchingNextPage,
+    isError,
+    fetchNextPage,
+  } = usePlantReviews({
+    plantSlug,
+    initial: { items: initialReviews, total: initialTotal },
+  });
+
   const [formOpen, setFormOpen] = useState(false);
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!isError) return;
+    toast.error(tErrors("generic"));
+  }, [isError, tErrors]);
 
   const visibleReviews = useMemo(
     () =>
@@ -53,36 +61,11 @@ function PlantReviews({
     [reviews, selectedRating]
   );
 
-  const hasMore = reviews.length < total;
+  const loadingMore = isFetchingNextPage;
 
-  async function handleLoadMore() {
+  function handleLoadMore() {
     if (loadingMore || !hasMore) return;
-
-    setLoadingMore(true);
-    const nextPage = page + 1;
-
-    try {
-      const response = await getStorefrontPlantReviews(plantSlug, {
-        page: nextPage,
-        page_size: STOREFRONT_PLANT_REVIEWS_PAGE_SIZE,
-      });
-      setReviews((current) => {
-        const seen = new Set(current.map((item) => item.id));
-        const appended = response.items.filter((item) => !seen.has(item.id));
-        return [...current, ...appended];
-      });
-      setTotal(response.total);
-      setPage(nextPage);
-    } catch (error) {
-      const key =
-        error instanceof ApiError &&
-        (error.status === 502 || error.status === 503 || error.status === 504)
-          ? "unavailable"
-          : "generic";
-      toast.error(tErrors(key));
-    } finally {
-      setLoadingMore(false);
-    }
+    fetchNextPage();
   }
 
   const loadMoreButton = hasMore ? (
@@ -91,9 +74,7 @@ function PlantReviews({
       variant="outline"
       className="rounded-xl"
       disabled={loadingMore}
-      onClick={() => {
-        void handleLoadMore();
-      }}
+      onClick={handleLoadMore}
     >
       {loadingMore ? tReviews("loadingMore") : tReviews("loadMore")}
     </Button>
