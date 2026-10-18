@@ -6,7 +6,7 @@ import { getAllPlantSlugs } from "@/services/plant.service";
 import {
   PlantsCatalog,
   buildPlantsCatalogMetadata,
-} from "../../plants-catalog";
+} from "../../_components/plants-catalog";
 
 type Props = {
   params: Promise<{ locale: string; page: string }>;

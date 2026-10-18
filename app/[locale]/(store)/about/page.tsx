@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { OwnerHero } from "@/components/about/owner-hero";
-import { OwnerPhilosophy } from "@/components/about/owner-philosophy";
-import { OwnerStory } from "@/components/about/owner-story";
-import { VisitInfo } from "@/components/about/visit-info";
+import { OwnerHero } from "@/app/[locale]/(store)/about/_components/owner-hero";
+import { OwnerPhilosophy } from "@/app/[locale]/(store)/about/_components/owner-philosophy";
+import { OwnerStory } from "@/app/[locale]/(store)/about/_components/owner-story";
+import { VisitInfo } from "@/app/[locale]/(store)/about/_components/visit-info";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";

@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   useAdminCategoriesList,
   useCreateCategory,
-} from "@/hooks/use-admin-categories";
+} from "@/app/admin/_hooks/use-admin-categories";
 import { queryKeys } from "@/lib/query/keys";
 import {
   createQueryWrapper,

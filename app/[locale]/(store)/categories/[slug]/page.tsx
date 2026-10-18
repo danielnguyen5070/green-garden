@@ -7,7 +7,7 @@ import {
 import {
   CategoryCatalog,
   buildCategoryCatalogMetadata,
-} from "./category-catalog";
+} from "./_components/category-catalog";
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;

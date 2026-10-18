@@ -2,9 +2,9 @@
 
 import { useCallback, useMemo, useState, type SubmitEvent } from "react";
 import { MoreHorizontal, Plus } from "lucide-react";
-import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { AdminSection } from "@/components/admin/admin-section";
-import { AdminStatusBadge } from "@/components/admin/admin-status-badge";
+import { AdminPageHeader } from "@/app/admin/_components/admin-page-header";
+import { AdminSection } from "@/app/admin/_components/admin-section";
+import { AdminStatusBadge } from "@/app/admin/_components/admin-status-badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -37,10 +37,10 @@ import {
   useUpdateAdmin,
   useUpdateAdminPassword,
   useUpdateAdminStatus,
-} from "@/hooks/use-admin-admins";
+} from "@/app/admin/(dashboard)/admins/_hooks/use-admin-admins";
 import { getErrorMessage } from "@/lib/api/errors";
-import { adminCopy } from "@/lib/admin-copy";
-import { formatAdminDate } from "@/lib/admin-format";
+import { adminCopy } from "@/app/admin/_lib/admin-copy";
+import { formatAdminDate } from "@/app/admin/_lib/admin-format";
 import { toast } from "@/lib/toast";
 import type { Admin } from "@/types/admin";
 

@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   fetchAdminPlantDetail,
   useCreatePlantImage,
-} from "@/hooks/use-admin-plants";
+} from "@/app/admin/_hooks/use-admin-plants";
 import { queryKeys } from "@/lib/query/keys";
 import {
   createQueryWrapper,

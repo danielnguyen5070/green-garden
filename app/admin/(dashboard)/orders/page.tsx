@@ -4,11 +4,11 @@ import { useEffect, useMemo, useState } from "react";
 import { MoreHorizontal, Plus, Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { refreshStorefront } from "@/app/admin/actions/revalidate";
-import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { AdminSection } from "@/components/admin/admin-section";
-import { AdminStatusBadge } from "@/components/admin/admin-status-badge";
-import { OrderCreateForm } from "@/components/admin/order-create-form";
-import { OrderDetail } from "@/components/admin/order-detail";
+import { AdminPageHeader } from "@/app/admin/_components/admin-page-header";
+import { AdminSection } from "@/app/admin/_components/admin-section";
+import { AdminStatusBadge } from "@/app/admin/_components/admin-status-badge";
+import { OrderCreateForm } from "@/app/admin/(dashboard)/orders/_components/order-create-form";
+import { OrderDetail } from "@/app/admin/(dashboard)/orders/_components/order-detail";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -43,11 +43,11 @@ import {
   useAdminOrdersList,
   useCreateOrder,
   useUpdateOrderStatus,
-} from "@/hooks/use-admin-orders";
-import { useAdminPlantPicker } from "@/hooks/use-admin-plants";
-import { useQueryErrorToast } from "@/hooks/use-query-error-toast";
-import { adminCopy } from "@/lib/admin-copy";
-import { formatAdminCurrency, formatAdminDate } from "@/lib/admin-format";
+} from "@/app/admin/(dashboard)/orders/_hooks/use-admin-orders";
+import { useAdminPlantPicker } from "@/app/admin/_hooks/use-admin-plants";
+import { useQueryErrorToast } from "@/app/admin/_hooks/use-query-error-toast";
+import { adminCopy } from "@/app/admin/_lib/admin-copy";
+import { formatAdminCurrency, formatAdminDate } from "@/app/admin/_lib/admin-format";
 import { ApiError, ErrorCode, getErrorMessage } from "@/lib/api/errors";
 import { toast } from "@/lib/toast";
 import {

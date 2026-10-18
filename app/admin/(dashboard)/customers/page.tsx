@@ -2,14 +2,19 @@
 
 import { useCallback, useEffect, useMemo, useState, type SubmitEvent } from "react";
 import { MoreHorizontal, Plus, Search } from "lucide-react";
-import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { AdminSection } from "@/components/admin/admin-section";
-import { AdminStatusBadge } from "@/components/admin/admin-status-badge";
+import { AdminPageHeader } from "@/app/admin/_components/admin-page-header";
+import { AdminSection } from "@/app/admin/_components/admin-section";
+import { AdminStatusBadge } from "@/app/admin/_components/admin-status-badge";
+import { CustomerDetail } from "@/app/admin/(dashboard)/customers/_components/customer-detail";
+import { CustomerForm } from "@/app/admin/(dashboard)/customers/_components/customer-form";
+import {
+  readForm,
+  validateForm,
+} from "@/app/admin/(dashboard)/customers/_lib/customer-form";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -21,7 +26,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -39,15 +43,14 @@ import {
 } from "@/components/ui/table";
 import {
   useAdminCustomerDetail,
-  useAdminCustomerOrders,
   useAdminCustomersList,
   useCreateCustomer,
   useUpdateCustomer,
   useUpdateCustomerStatus,
-} from "@/hooks/use-admin-customers";
-import { useQueryErrorToast } from "@/hooks/use-query-error-toast";
-import { adminCopy } from "@/lib/admin-copy";
-import { formatAdminCurrency, formatAdminDate } from "@/lib/admin-format";
+} from "@/app/admin/(dashboard)/customers/_hooks/use-admin-customers";
+import { useQueryErrorToast } from "@/app/admin/_hooks/use-query-error-toast";
+import { adminCopy } from "@/app/admin/_lib/admin-copy";
+import { formatAdminDate } from "@/app/admin/_lib/admin-format";
 import { getErrorMessage } from "@/lib/api/errors";
 import { toast } from "@/lib/toast";
 import type {
@@ -68,34 +71,6 @@ const copy = adminCopy.customers;
 
 type DialogMode = "create" | "edit" | "detail" | null;
 type StatusFilter = "all" | "active" | "inactive";
-
-type CustomerFormValues = {
-  name: string;
-  phone: string;
-  email: string;
-};
-
-function readForm(form: HTMLFormElement): CustomerFormValues {
-  const formData = new FormData(form);
-  return {
-    name: String(formData.get("name") ?? "").trim(),
-    phone: String(formData.get("phone") ?? "").trim(),
-    email: String(formData.get("email") ?? "").trim(),
-  };
-}
-
-function isValidEmail(value: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
-
-/** Client-side guardrails; the backend stays the source of truth. */
-function validateForm(values: CustomerFormValues): string | null {
-  if (!values.name || values.name.length > 255) return copy.invalidName;
-  if (!values.phone || values.phone.length > 32) return copy.invalidPhone;
-  // Email is optional, but must be well-formed when provided.
-  if (values.email && !isValidEmail(values.email)) return copy.invalidEmail;
-  return null;
-}
 
 export default function AdminCustomersPage() {
   const [page, setPage] = useState(1);
@@ -539,218 +514,5 @@ export default function AdminCustomersPage() {
         </DialogContent>
       </Dialog>
     </>
-  );
-}
-
-type CustomerFormProps = {
-  mode: "create" | "edit";
-  customer?: Customer;
-  submitting: boolean;
-  error: string | null;
-  onSubmit: (event: SubmitEvent<HTMLFormElement>) => void;
-  onCancel: () => void;
-};
-
-function CustomerForm({
-  mode,
-  customer,
-  submitting,
-  error,
-  onSubmit,
-  onCancel,
-}: CustomerFormProps) {
-  const prefix = mode === "create" ? "create" : "edit";
-
-  return (
-    <form onSubmit={onSubmit} className="flex min-h-0 flex-col gap-4" noValidate>
-      {/* Scrolls on its own so the header and footer stay in view. */}
-      <div className="-mx-1 min-h-0 flex-1 space-y-4 overflow-y-auto px-1">
-        <div className="space-y-2">
-          <Label htmlFor={`${prefix}-name`}>{copy.fields.name}</Label>
-          <Input
-            id={`${prefix}-name`}
-            name="name"
-            required
-            maxLength={255}
-            defaultValue={customer?.name}
-            disabled={submitting}
-            className="h-11 rounded-full"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor={`${prefix}-phone`}>{copy.fields.phone}</Label>
-          <Input
-            id={`${prefix}-phone`}
-            name="phone"
-            type="tel"
-            inputMode="tel"
-            required
-            maxLength={32}
-            defaultValue={customer?.phone}
-            disabled={submitting}
-            className="h-11 rounded-full"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor={`${prefix}-email`}>{copy.fields.email}</Label>
-          <Input
-            id={`${prefix}-email`}
-            name="email"
-            type="email"
-            inputMode="email"
-            defaultValue={customer?.email ?? ""}
-            disabled={submitting}
-            className="h-11 rounded-full"
-          />
-          <p className="text-xs text-muted-foreground">
-            {copy.fields.emailHint}
-          </p>
-        </div>
-      </div>
-
-      {error ? (
-        <p role="alert" className="text-sm text-destructive">
-          {error}
-        </p>
-      ) : null}
-
-      <DialogFooter>
-        <Button
-          type="button"
-          variant="outline"
-          className="rounded-full"
-          disabled={submitting}
-          onClick={onCancel}
-        >
-          {adminCopy.common.cancel}
-        </Button>
-        <Button
-          type="submit"
-          disabled={submitting}
-          className="w-24 rounded-full"
-        >
-          {submitting
-            ? adminCopy.common.saving
-            : mode === "create"
-              ? adminCopy.common.create
-              : adminCopy.common.save}
-        </Button>
-      </DialogFooter>
-    </form>
-  );
-}
-
-function CustomerDetail({ customer }: { customer: Customer }) {
-  const {
-    items: orders,
-    total: orderTotal,
-    loading: ordersLoading,
-    error: ordersError,
-    isError: ordersIsError,
-  } = useAdminCustomerOrders(customer.id);
-
-  const ordersErrorMessage = ordersIsError
-    ? getErrorMessage(ordersError, copy.orders.loadError)
-    : null;
-
-  return (
-    <div className="-mx-1 min-h-0 flex-1 space-y-6 overflow-y-auto px-1">
-      <dl className="grid gap-4 sm:grid-cols-2">
-        <DetailField label={copy.fields.name} value={customer.name} />
-        <DetailField label={copy.fields.phone} value={customer.phone} />
-        <DetailField label={copy.fields.email} value={customer.email || "—"} />
-        <div className="space-y-1">
-          <dt className="text-xs text-muted-foreground">
-            {copy.fields.status}
-          </dt>
-          <dd>
-            <AdminStatusBadge
-              status={customer.is_active ? "active" : "inactive"}
-              label={
-                customer.is_active
-                  ? adminCopy.status.active
-                  : adminCopy.status.inactive
-              }
-            />
-          </dd>
-        </div>
-        <DetailField
-          label={copy.fields.created}
-          value={formatAdminDate(customer.created_at)}
-        />
-        <DetailField
-          label={copy.fields.updated}
-          value={formatAdminDate(customer.updated_at)}
-        />
-      </dl>
-
-      <section className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-medium">{copy.orders.title}</h3>
-          {!ordersLoading && !ordersErrorMessage && orderTotal > 0 ? (
-            <span className="text-xs text-muted-foreground">
-              {copy.orders.viewAll(orderTotal)}
-            </span>
-          ) : null}
-        </div>
-
-        {ordersLoading ? (
-          <p className="text-sm text-muted-foreground">
-            {adminCopy.common.loading}
-          </p>
-        ) : ordersErrorMessage ? (
-          <p role="alert" className="text-sm text-destructive">
-            {ordersErrorMessage}
-          </p>
-        ) : orders.length === 0 ? (
-          <p className="text-sm text-muted-foreground">{copy.orders.empty}</p>
-        ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{adminCopy.orders.table.orderNumber}</TableHead>
-                <TableHead>{adminCopy.orders.table.items}</TableHead>
-                <TableHead>{adminCopy.orders.table.total}</TableHead>
-                <TableHead>{adminCopy.orders.table.status}</TableHead>
-                <TableHead>{adminCopy.orders.table.date}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {orders.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell className="font-medium">
-                    {order.order_number}
-                  </TableCell>
-                  <TableCell>{order.items.length}</TableCell>
-                  <TableCell>
-                    {formatAdminCurrency(order.total_amount, order.currency)}
-                  </TableCell>
-                  <TableCell>
-                    <AdminStatusBadge
-                      status={order.status}
-                      label={adminCopy.status[order.status]}
-                    />
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {formatAdminDate(order.created_at)}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </section>
-    </div>
-  );
-}
-
-function DetailField({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="space-y-1">
-      <dt className="text-xs text-muted-foreground">{label}</dt>
-      <dd className="text-sm">{value}</dd>
-    </div>
   );
 }

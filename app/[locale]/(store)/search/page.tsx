@@ -4,12 +4,12 @@ import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/layout/container";
-import { SearchForm } from "@/components/search/search-form";
+import { SearchForm } from "@/app/[locale]/(store)/search/_components/search-form";
 import {
   BlogSearchResults,
   ProductSearchResults,
   ProductSearchSkeleton,
-} from "@/components/search/search-results";
+} from "@/app/[locale]/(store)/search/_components/search-results";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { searchPosts } from "@/services/blog.service";
 

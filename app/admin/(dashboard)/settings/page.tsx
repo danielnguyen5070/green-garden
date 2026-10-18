@@ -1,6 +1,6 @@
-import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { AdminSection } from "@/components/admin/admin-section";
-import { adminCopy } from "@/lib/admin-copy";
+import { AdminPageHeader } from "@/app/admin/_components/admin-page-header";
+import { AdminSection } from "@/app/admin/_components/admin-section";
+import { adminCopy } from "@/app/admin/_lib/admin-copy";
 
 export default function AdminSettingsPage() {
   return (

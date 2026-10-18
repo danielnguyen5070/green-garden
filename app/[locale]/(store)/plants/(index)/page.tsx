@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import {
   PlantsCatalog,
   buildPlantsCatalogMetadata,
-} from "../plants-catalog";
+} from "../_components/plants-catalog";
 
 type Props = {
   params: Promise<{ locale: string }>;

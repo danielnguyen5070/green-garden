@@ -1,4 +1,4 @@
-import { CheckoutLayout } from "@/components/checkout/checkout-layout";
+import { CheckoutLayout } from "@/app/[locale]/(checkout)/_components/checkout-layout";
 
 export default function CheckoutRouteLayout({
   children,

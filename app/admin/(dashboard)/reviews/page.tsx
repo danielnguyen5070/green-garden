@@ -2,20 +2,20 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ExternalLink, Search, Star } from "lucide-react";
-import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { AdminSection } from "@/components/admin/admin-section";
-import { AdminStatusBadge } from "@/components/admin/admin-status-badge";
+import { AdminPageHeader } from "@/app/admin/_components/admin-page-header";
+import { AdminSection } from "@/app/admin/_components/admin-section";
+import { AdminStatusBadge } from "@/app/admin/_components/admin-status-badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { refreshStorefront } from "@/app/admin/actions/revalidate";
 import { routing } from "@/i18n/routing";
-import { adminCopy } from "@/lib/admin-copy";
-import { formatAdminDate } from "@/lib/admin-format";
+import { adminCopy } from "@/app/admin/_lib/admin-copy";
+import { formatAdminDate } from "@/app/admin/_lib/admin-format";
 import {
   useAdminReviewsList,
   useInvalidateAdminReviews,
   useUpdateReviewStatus,
-} from "@/hooks/use-admin-reviews";
+} from "@/app/admin/(dashboard)/reviews/_hooks/use-admin-reviews";
 import { getErrorMessage } from "@/lib/api/errors";
 import { toast } from "@/lib/toast";
 import type { Review, ReviewScope, ReviewStatus } from "@/types/review";

@@ -2,14 +2,19 @@
 
 import { useCallback, useEffect, useMemo, useState, type SubmitEvent } from "react";
 import { MoreHorizontal, Plus, Search } from "lucide-react";
-import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { AdminSection } from "@/components/admin/admin-section";
-import { AdminStatusBadge } from "@/components/admin/admin-status-badge";
+import { AdminPageHeader } from "@/app/admin/_components/admin-page-header";
+import { AdminSection } from "@/app/admin/_components/admin-section";
+import { AdminStatusBadge } from "@/app/admin/_components/admin-status-badge";
+import { CategoryForm } from "@/app/admin/(dashboard)/categories/_components/category-form";
+import {
+  readForm,
+  validateForm,
+  type CategoryFormValues,
+} from "@/app/admin/(dashboard)/categories/_lib/category-form";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -21,7 +26,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -37,18 +41,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Textarea } from "@/components/ui/textarea";
 import {
   useAdminCategoriesList,
   useAdminCategoryDetail,
   useCreateCategory,
   useUpdateCategory,
   useUpdateCategoryStatus,
-} from "@/hooks/use-admin-categories";
-import { useQueryErrorToast } from "@/hooks/use-query-error-toast";
+} from "@/app/admin/_hooks/use-admin-categories";
+import { useQueryErrorToast } from "@/app/admin/_hooks/use-query-error-toast";
 import { getErrorMessage } from "@/lib/api/errors";
 import { refreshStorefront } from "@/app/admin/actions/revalidate";
-import { adminCopy } from "@/lib/admin-copy";
+import { adminCopy } from "@/app/admin/_lib/admin-copy";
 import { toast } from "@/lib/toast";
 import type {
   Category,
@@ -64,67 +67,6 @@ const FORM_DIALOG_CLASS =
 
 type DialogMode = "create" | "edit" | null;
 type StatusFilter = "all" | "active" | "inactive";
-
-type CategoryFormValues = {
-  name: string;
-  name_vi: string;
-  slug: string;
-  description: string;
-  description_vi: string;
-  image_url: string;
-  sort_order: string;
-  is_active: boolean;
-};
-
-function readForm(form: HTMLFormElement): CategoryFormValues {
-  const formData = new FormData(form);
-  return {
-    name: String(formData.get("name") ?? "").trim(),
-    name_vi: String(formData.get("name_vi") ?? "").trim(),
-    slug: String(formData.get("slug") ?? "").trim(),
-    description: String(formData.get("description") ?? "").trim(),
-    description_vi: String(formData.get("description_vi") ?? "").trim(),
-    image_url: String(formData.get("image_url") ?? "").trim(),
-    sort_order: String(formData.get("sort_order") ?? "").trim(),
-    is_active: formData.get("is_active") === "on",
-  };
-}
-
-/** Client-side guardrails; the backend stays the source of truth. */
-function validateForm(values: CategoryFormValues): string | null {
-  if (!values.name || values.name.length > 255) {
-    return adminCopy.categories.invalidName;
-  }
-  // Vietnamese name is optional; only its length is constrained.
-  if (values.name_vi.length > 255) {
-    return adminCopy.categories.invalidNameVi;
-  }
-  if (!values.slug || values.slug.length > 255) {
-    return adminCopy.categories.invalidSlug;
-  }
-
-  const sortOrder = Number(values.sort_order);
-  if (
-    !Number.isInteger(sortOrder) ||
-    sortOrder < 0 ||
-    values.sort_order.length === 0
-  ) {
-    return adminCopy.categories.invalidSortOrder;
-  }
-
-  if (values.image_url) {
-    try {
-      const url = new URL(values.image_url);
-      if (url.protocol !== "http:" && url.protocol !== "https:") {
-        return adminCopy.categories.invalidImageUrl;
-      }
-    } catch {
-      return adminCopy.categories.invalidImageUrl;
-    }
-  }
-
-  return null;
-}
 
 export default function AdminCategoriesPage() {
   const [page, setPage] = useState(1);
@@ -592,183 +534,5 @@ export default function AdminCategoriesPage() {
         </DialogContent>
       </Dialog>
     </>
-  );
-}
-
-type CategoryFormProps = {
-  mode: "create" | "edit";
-  category?: Category;
-  submitting: boolean;
-  error: string | null;
-  onSubmit: (event: SubmitEvent<HTMLFormElement>) => void;
-  onCancel: () => void;
-};
-
-function CategoryForm({
-  mode,
-  category,
-  submitting,
-  error,
-  onSubmit,
-  onCancel,
-}: CategoryFormProps) {
-  const prefix = mode === "create" ? "create" : "edit";
-
-  return (
-    <form onSubmit={onSubmit} className="flex min-h-0 flex-col gap-4" noValidate>
-      {/* Scrolls on its own so the header and footer stay in view. */}
-      <div className="-mx-1 min-h-0 flex-1 space-y-4 overflow-y-auto px-1">
-        <div className="space-y-2">
-          <Label htmlFor={`${prefix}-name`}>
-            {adminCopy.categories.table.name}
-          </Label>
-          <Input
-            id={`${prefix}-name`}
-            name="name"
-            required
-            maxLength={255}
-            defaultValue={category?.name}
-            disabled={submitting}
-            className="h-11 rounded-full"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor={`${prefix}-name-vi`}>
-            {adminCopy.categories.nameVi}
-          </Label>
-          <Input
-            id={`${prefix}-name-vi`}
-            name="name_vi"
-            maxLength={255}
-            defaultValue={category?.name_vi ?? ""}
-            disabled={submitting}
-            className="h-11 rounded-full"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor={`${prefix}-slug`}>
-            {adminCopy.categories.table.slug}
-          </Label>
-          <Input
-            id={`${prefix}-slug`}
-            name="slug"
-            required
-            maxLength={255}
-            defaultValue={category?.slug}
-            disabled={submitting}
-            className="h-11 rounded-full"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor={`${prefix}-description`}>
-            {adminCopy.categories.table.description}
-          </Label>
-          <Textarea
-            id={`${prefix}-description`}
-            name="description"
-            defaultValue={category?.description ?? ""}
-            disabled={submitting}
-            className="rounded-lg"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor={`${prefix}-description-vi`}>
-            {adminCopy.categories.descriptionVi}
-          </Label>
-          <Textarea
-            id={`${prefix}-description-vi`}
-            name="description_vi"
-            defaultValue={category?.description_vi ?? ""}
-            disabled={submitting}
-            className="rounded-lg"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor={`${prefix}-image-url`}>
-            {adminCopy.categories.imageUrl}
-          </Label>
-          <Input
-            id={`${prefix}-image-url`}
-            name="image_url"
-            type="url"
-            inputMode="url"
-            defaultValue={category?.image_url ?? ""}
-            disabled={submitting}
-            className="h-11 rounded-full"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor={`${prefix}-sort-order`}>
-            {adminCopy.categories.table.sortOrder}
-          </Label>
-          <Input
-            id={`${prefix}-sort-order`}
-            name="sort_order"
-            type="number"
-            min={0}
-            step={1}
-            defaultValue={category?.sort_order ?? 0}
-            disabled={submitting}
-            className="h-11 rounded-full"
-          />
-        </div>
-
-        {mode === "create" ? (
-          <div className="flex items-start gap-2">
-            <input
-              id={`${prefix}-is-active`}
-              name="is_active"
-              type="checkbox"
-              defaultChecked
-              disabled={submitting}
-              className="mt-0.5 size-4 accent-primary"
-            />
-            <div className="space-y-1">
-              <Label htmlFor={`${prefix}-is-active`}>
-                {adminCopy.categories.active}
-              </Label>
-              <p className="text-xs text-muted-foreground">
-                {adminCopy.categories.activeHint}
-              </p>
-            </div>
-          </div>
-        ) : null}
-      </div>
-
-      {error ? (
-        <p role="alert" className="text-sm text-destructive">
-          {error}
-        </p>
-      ) : null}
-
-      <DialogFooter>
-        <Button
-          type="button"
-          variant="outline"
-          className="rounded-full"
-          disabled={submitting}
-          onClick={onCancel}
-        >
-          {adminCopy.common.cancel}
-        </Button>
-        <Button
-          type="submit"
-          disabled={submitting}
-          className="w-24 rounded-full"
-        >
-          {submitting
-            ? adminCopy.common.saving
-            : mode === "create"
-              ? adminCopy.common.create
-              : adminCopy.common.save}
-        </Button>
-      </DialogFooter>
-    </form>
   );
 }

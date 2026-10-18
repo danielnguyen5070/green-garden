@@ -4,15 +4,15 @@ import { getTranslations } from "next-intl/server";
 import {
   CustomerReviewsSection,
   CustomerReviewsSkeleton,
-} from "@/components/home/customer-reviews-section";
-import { Hero } from "@/components/home/hero";
-import { HomeAboutSection } from "@/components/home/home-about-section";
-import { LatestGuidesSection } from "@/components/home/latest-guides-section";
-import { NewsletterSection } from "@/components/home/newsletter-section";
+} from "@/app/[locale]/(store)/_components/home/customer-reviews-section";
+import { Hero } from "@/app/[locale]/(store)/_components/home/hero";
+import { HomeAboutSection } from "@/app/[locale]/(store)/_components/home/home-about-section";
+import { LatestGuidesSection } from "@/app/[locale]/(store)/_components/home/latest-guides-section";
+import { NewsletterSection } from "@/app/[locale]/(store)/_components/home/newsletter-section";
 import {
   ShopByCategorySection,
   ShopByCategorySkeleton,
-} from "@/components/home/shop-by-category-section";
+} from "@/app/[locale]/(store)/_components/home/shop-by-category-section";
 import {
   FeaturedPlantsSection,
   FeaturedPlantsSkeleton,

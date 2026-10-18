@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   useAdminReviewsList,
   useUpdateReviewStatus,
-} from "@/hooks/use-admin-reviews";
+} from "@/app/admin/(dashboard)/reviews/_hooks/use-admin-reviews";
 import { queryKeys } from "@/lib/query/keys";
 import {
   createQueryWrapper,

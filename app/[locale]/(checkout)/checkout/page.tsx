@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { CheckoutPageView } from "@/components/checkout/checkout-page";
+import { CheckoutPageView } from "@/app/[locale]/(checkout)/_components/checkout-page";
 
 type Props = {
   params: Promise<{ locale: string }>;

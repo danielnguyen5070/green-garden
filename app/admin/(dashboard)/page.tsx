@@ -2,13 +2,13 @@
 
 import { Banknote, Leaf, ShoppingBag, Users } from "lucide-react";
 import Link from "next/link";
-import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { AdminSection } from "@/components/admin/admin-section";
-import { AdminStatCard } from "@/components/admin/admin-stat-card";
-import { AdminStatusBadge } from "@/components/admin/admin-status-badge";
-import { OverviewRevenueChart } from "@/components/admin/overview-revenue-chart";
-import { OverviewSkeleton } from "@/components/admin/overview-skeleton";
-import { OverviewStatusChart } from "@/components/admin/overview-status-chart";
+import { AdminPageHeader } from "@/app/admin/_components/admin-page-header";
+import { AdminSection } from "@/app/admin/_components/admin-section";
+import { AdminStatCard } from "@/app/admin/(dashboard)/_components/admin-stat-card";
+import { AdminStatusBadge } from "@/app/admin/_components/admin-status-badge";
+import { OverviewRevenueChart } from "@/app/admin/(dashboard)/_components/overview-revenue-chart";
+import { OverviewSkeleton } from "@/app/admin/(dashboard)/_components/overview-skeleton";
+import { OverviewStatusChart } from "@/app/admin/(dashboard)/_components/overview-status-chart";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -18,14 +18,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useOverview } from "@/hooks/use-overview";
-import { adminCopy } from "@/lib/admin-copy";
+import { useOverview } from "@/app/admin/(dashboard)/_hooks/use-overview";
+import { adminCopy } from "@/app/admin/_lib/admin-copy";
 import {
   formatAdminCurrency,
   formatAdminDate,
   formatAdminNumber,
   type AdminCurrency,
-} from "@/lib/admin-format";
+} from "@/app/admin/_lib/admin-format";
 import { cn } from "@/lib/utils";
 import type { SalesPeriodStats } from "@/types/overview";
 

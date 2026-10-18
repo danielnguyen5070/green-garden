@@ -8,7 +8,7 @@ import { getAllPlantSlugs } from "@/services/plant.service";
 import {
   CategoryCatalog,
   buildCategoryCatalogMetadata,
-} from "../../category-catalog";
+} from "../../_components/category-catalog";
 
 type Props = {
   params: Promise<{ locale: string; slug: string; page: string }>;

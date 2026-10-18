@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { OrderSuccess } from "@/components/checkout/order-success";
+import { OrderSuccess } from "@/app/[locale]/(checkout)/_components/order-success";
 
 type Props = {
   params: Promise<{ locale: string }>;

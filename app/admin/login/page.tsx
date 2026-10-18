@@ -6,9 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { adminCopy } from "@/lib/admin-copy";
+import { adminCopy } from "@/app/admin/_lib/admin-copy";
 import { getSafeAdminRedirect } from "@/lib/auth-cookies";
-import { AdminLoginForm } from "./login-form";
+import { AdminLoginForm } from "./_components/login-form";
 
 type Props = {
   searchParams: Promise<{ redirect?: string }>;

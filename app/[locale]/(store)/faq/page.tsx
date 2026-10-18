@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { FaqContact } from "@/components/faq/faq-contact";
-import { FaqContent } from "@/components/faq/faq-content";
+import { FaqContact } from "@/app/[locale]/(store)/faq/_components/faq-contact";
+import { FaqContent } from "@/app/[locale]/(store)/faq/_components/faq-content";
 import { JsonLd } from "@/components/seo/json-ld";
 import { FAQ_ITEMS, type FaqEntry } from "@/config/faq";
 import { SITE_NAME } from "@/config/site";

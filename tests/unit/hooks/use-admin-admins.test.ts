@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   useAdminAdminsList,
   useCreateAdmin,
-} from "@/hooks/use-admin-admins";
+} from "@/app/admin/(dashboard)/admins/_hooks/use-admin-admins";
 import { queryKeys } from "@/lib/query/keys";
 import {
   createQueryWrapper,
