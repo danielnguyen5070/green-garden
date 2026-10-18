@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/layout/container";
 import { formatDate } from "@/components/blog/blog-card";
-import { MdxContent } from "@/components/blog/mdx-content";
+import { MdxContent } from "@/app/[locale]/(store)/blog/[slug]/_components/mdx-content";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_NAME } from "@/config/site";
 import { Link } from "@/i18n/navigation";

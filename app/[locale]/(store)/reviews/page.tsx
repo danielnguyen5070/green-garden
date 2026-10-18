@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/layout/container";
-import { ReviewsSection } from "@/components/reviews/reviews-section";
+import { ReviewsSection } from "@/app/[locale]/(store)/reviews/_components/reviews-section";
 import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
 import { loadReviewsPageData } from "@/services/review.service";

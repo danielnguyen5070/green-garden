@@ -2,12 +2,12 @@ import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { Container } from "@/components/layout/container";
-import { PlantGallery } from "@/components/plant/plant-gallery";
-import { PlantCareSpecs } from "@/components/plant/plant-care-specs";
-import { PlantLongDescription } from "@/components/plant/plant-long-description";
-import { PlantPageViews } from "@/components/plant/plant-page-views";
-import { PlantPurchase } from "@/components/plant/plant-purchase";
-import { PlantReviews } from "@/components/plant/plant-reviews";
+import { PlantCareSpecs } from "./plant-care-specs";
+import { PlantGallery } from "./plant-gallery";
+import { PlantLongDescription } from "./plant-long-description";
+import { PlantPageViews } from "./plant-page-views";
+import { PlantPurchase } from "./plant-purchase";
+import { PlantReviews } from "./plant-reviews";
 import { ReviewStars } from "@/components/reviews/review-stars";
 import type { PlantReviewsData } from "@/services/review.service";
 import {

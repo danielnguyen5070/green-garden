@@ -1,4 +1,4 @@
-import { PlantDetailSkeleton } from "@/components/plant/plant-detail-skeleton";
+import { PlantDetailSkeleton } from "@/app/[locale]/plants/[slug]/_components/plant-detail-skeleton";
 
 export default function PlantDetailLoading() {
   return <PlantDetailSkeleton />;
