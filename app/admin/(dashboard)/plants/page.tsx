@@ -6,7 +6,6 @@ import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminSection } from "@/components/admin/admin-section";
 import { AdminStatusBadge } from "@/components/admin/admin-status-badge";
 import { PlantImagesSection } from "@/components/admin/plant-images-section";
-import { PlantPotSizesSection } from "@/components/admin/plant-pot-sizes-section";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -68,7 +67,6 @@ import type {
   AdminPlantImage,
   AdminPlantListItem,
   AdminPlantOrder,
-  AdminPlantPotSize,
   AdminPlantSort,
   AdminPlantUpdateRequest,
 } from "@/types/admin-plant";
@@ -1107,9 +1105,6 @@ function PlantForm({
   const [care, setCare] = useState<CareFormState>(() => careStateFromPlant(plant));
   // Nested resources save immediately, so they live outside the form submit.
   const [images, setImages] = useState<AdminPlantImage[]>(plant?.images ?? []);
-  const [potSizes, setPotSizes] = useState<AdminPlantPotSize[]>(
-    plant?.pot_sizes ?? []
-  );
 
   const selectedCategory = categories.find(
     (category) => category.id === categoryId
@@ -1607,27 +1602,6 @@ function PlantForm({
           )}
         </section>
 
-        <section className="space-y-3">
-          <h3 className="text-sm font-medium">{copy.sections.potSizes}</h3>
-          {plant ? (
-            <PlantPotSizesSection
-              plantId={plant.id}
-              potSizes={potSizes}
-              disabled={submitting}
-              onChange={(next) => {
-                setPotSizes(next);
-                void refreshStorefront({
-                  entity: "plants",
-                  slugs: [plant.slug],
-                });
-              }}
-            />
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              {copy.potSizes.availableAfterCreate}
-            </p>
-          )}
-        </section>
       </div>
 
       {error ? (

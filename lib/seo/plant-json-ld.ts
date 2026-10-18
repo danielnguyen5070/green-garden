@@ -10,9 +10,7 @@ import {
 import { toPlainText } from "@/lib/seo/meta-text";
 import { toAbsoluteUrl } from "@/lib/seo/url";
 import {
-  getActivePotSizes,
   getLocalizedPlant,
-  getPotSizeUnitPrice,
   getPrimaryPlantImage,
   isPlantInStock,
   localizeText,
@@ -123,14 +121,12 @@ function buildMerchantReturnPolicy(locale: string) {
 }
 
 /**
- * Plant detail @graph: Brand, Product (+ Offers), BreadcrumbList.
+ * Plant detail @graph: Brand, Product (+ Offer), BreadcrumbList.
  *
  * - `brand` → `#brand` (Brand with a real name) — never `#localbusiness`
  * - `seller` → `#localbusiness` (the shop LocalBusiness on the homepage)
- * - `offers` → one VND Offer per active pot size (default size first), or a
- *   single Offer at the base price when the plant has no sizes. Omitted when
- *   the plant has no VND price, because it cannot be ordered. Every offer
- *   shares the plant-level availability, since stock is not tracked per size.
+ * - `offers` → a single Offer at the plant's VND price; omitted when the
+ *   plant has no VND price, because it cannot be ordered.
  * - `aggregateRating` / `review` → only when the plant has approved reviews,
  *   using the newest few from the first page.
  */
@@ -160,8 +156,6 @@ export function buildPlantJsonLd({
     ? "https://schema.org/InStock"
     : "https://schema.org/OutOfStock";
 
-  const potSizes = getActivePotSizes(plant.pot_sizes);
-
   const imageUrls = sortPlantImages(plant.images)
     .filter((image) => image.type === "image")
     .map((image) => toAbsoluteUrl(image.url));
@@ -185,9 +179,8 @@ export function buildPlantJsonLd({
     : null;
   const hasMerchantReturnPolicy = buildMerchantReturnPolicy(locale);
 
-  const buildOffer = (price: number, sizeName?: string) => ({
+  const buildOffer = (price: number) => ({
     "@type": "Offer" as const,
-    ...(sizeName ? { name: sizeName } : {}),
     price: price.toFixed(0),
     priceCurrency: CART_CURRENCY,
     availability,
@@ -197,15 +190,7 @@ export function buildPlantJsonLd({
     hasMerchantReturnPolicy,
   });
 
-  // Unit prices must match what `PlantDetail` shows and checkout charges.
-  const offers =
-    basePrice === null
-      ? null
-      : potSizes.length > 0
-        ? potSizes.map((size) =>
-            buildOffer(getPotSizeUnitPrice(basePrice, size), size.name)
-          )
-        : buildOffer(getPotSizeUnitPrice(basePrice, null));
+  const offers = basePrice === null ? null : buildOffer(basePrice);
 
   const reviewSchema = buildReviewSchema(reviews);
 

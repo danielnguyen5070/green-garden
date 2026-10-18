@@ -92,8 +92,6 @@ function getErrorKey(error: unknown) {
     case ErrorCode.SUBMISSION_REJECTED:
       return "rejected";
     case ErrorCode.PLANT_NOT_FOUND:
-    case ErrorCode.PLANT_POT_SIZE_NOT_FOUND:
-    case ErrorCode.POT_SIZE_UNAVAILABLE:
     case ErrorCode.PLANT_UNAVAILABLE:
       return "unavailable";
     case ErrorCode.INSUFFICIENT_STOCK:

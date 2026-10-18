@@ -67,7 +67,6 @@ export function useCartQuote(): UseCartQuoteResult {
           items: debounced.items.map((item) => ({
             plant_id: item.plantId,
             quantity: item.quantity,
-            pot_size_id: item.potSizeId ?? null,
           })),
         },
         { signal }

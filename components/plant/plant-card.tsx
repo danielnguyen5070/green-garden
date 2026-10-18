@@ -38,10 +38,7 @@ function PlantCard({
   function handleAddToCart(event: MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
     event.stopPropagation();
-    addItem({
-      plantId: plant.id,
-      potSizeId: plant.default_pot_size?.id,
-    });
+    addItem({ plantId: plant.id });
   }
 
   function handleFavorite(event: MouseEvent<HTMLButtonElement>) {

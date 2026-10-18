@@ -11,7 +11,6 @@ import { PlantReviews } from "@/components/plant/plant-reviews";
 import { ReviewStars } from "@/components/reviews/review-stars";
 import type { PlantReviewsData } from "@/services/review.service";
 import {
-  getActivePotSizes,
   getLocalizedPlant,
   isPlantInStock,
   localizeOptionalTextEither,
@@ -53,11 +52,6 @@ async function PlantDetail({
     reviews && reviews.summary.total_reviews > 0 ? reviews.summary : null;
 
   const images = sortPlantImages(plant.images);
-  const potSizes = getActivePotSizes(plant.pot_sizes).map((size) => ({
-    id: size.id,
-    name: size.name,
-    price_adjustment_vi: size.price_adjustment_vi,
-  }));
 
   return (
     <section
@@ -125,7 +119,6 @@ async function PlantDetail({
             <PlantPurchase
               plantId={plant.id}
               basePrice={basePrice}
-              potSizes={potSizes}
               inStock={isPlantInStock(plant)}
             >
               {description ? (

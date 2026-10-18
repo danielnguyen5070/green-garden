@@ -119,7 +119,6 @@ export function OrderDetail({
             <TableHeader>
               <TableRow>
                 <TableHead>{copy.items.plant}</TableHead>
-                <TableHead>{copy.items.potSize}</TableHead>
                 <TableHead>{copy.items.quantity}</TableHead>
                 <TableHead>{copy.items.unitPrice}</TableHead>
               </TableRow>
@@ -129,9 +128,6 @@ export function OrderDetail({
                 <TableRow key={item.id}>
                   <TableCell className="font-medium">
                     {item.plant_name}
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {item.pot_size || "—"}
                   </TableCell>
                   <TableCell>{item.quantity}</TableCell>
                   <TableCell>

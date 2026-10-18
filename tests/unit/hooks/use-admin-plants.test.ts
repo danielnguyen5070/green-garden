@@ -5,18 +5,16 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   fetchAdminPlantDetail,
   useCreatePlantImage,
-  useCreatePlantPotSize,
 } from "@/hooks/use-admin-plants";
 import { queryKeys } from "@/lib/query/keys";
 import {
   createQueryWrapper,
   createTestQueryClient,
 } from "@/tests/unit/hooks/test-utils";
-import type { AdminPlant, AdminPlantImage, AdminPlantPotSize } from "@/types/admin-plant";
+import type { AdminPlant, AdminPlantImage } from "@/types/admin-plant";
 
 const getPlant = vi.fn();
 const createPlantImage = vi.fn();
-const createPlantPotSize = vi.fn();
 
 vi.mock("@/lib/api/plants", () => ({
   getPlant: (...args: unknown[]) => getPlant(...args),
@@ -27,9 +25,6 @@ vi.mock("@/lib/api/plants", () => ({
   createPlantImage: (...args: unknown[]) => createPlantImage(...args),
   updatePlantImage: vi.fn(),
   deletePlantImage: vi.fn(),
-  createPlantPotSize: (...args: unknown[]) => createPlantPotSize(...args),
-  updatePlantPotSize: vi.fn(),
-  deletePlantPotSize: vi.fn(),
 }));
 
 vi.mock("@/lib/toast", () => ({
@@ -74,7 +69,6 @@ function plant(overrides: Partial<AdminPlant> = {}): AdminPlant {
     pet_safe: null,
     beginner_friendly: null,
     images: [],
-    pot_sizes: [],
     created_at: "2026-01-01T00:00:00Z",
     updated_at: "2026-01-01T00:00:00Z",
     ...overrides,
@@ -171,58 +165,5 @@ describe("useCreatePlantImage", () => {
     expect(keys).toContainEqual(queryKeys.admin.plants.detail("p1"));
     expect(keys).toContainEqual(queryKeys.admin.plants.all);
     expect(keys).not.toContainEqual(queryKeys.admin.admins.all);
-  });
-});
-
-describe("useCreatePlantPotSize", () => {
-  beforeEach(() => {
-    createPlantPotSize.mockReset();
-  });
-
-  it("calls createPlantPotSize and invalidates only plant caches", async () => {
-    const created = {
-      id: "ps1",
-      plant_id: "p1",
-      name: "Large",
-      price_adjustment: "0",
-      price_adjustment_vi: null,
-      sort_order: 0,
-      is_active: true,
-      created_at: "2026-01-01T00:00:00Z",
-      updated_at: "2026-01-01T00:00:00Z",
-    } satisfies AdminPlantPotSize;
-    createPlantPotSize.mockResolvedValue(created);
-
-    const client = createTestQueryClient();
-    const invalidateSpy = vi.spyOn(client, "invalidateQueries");
-
-    const { result } = renderHook(() => useCreatePlantPotSize(), {
-      wrapper: createQueryWrapper(client),
-    });
-
-    await result.current.mutateAsync({
-      plantId: "p1",
-      data: {
-        name: "Large",
-        price_adjustment: "0",
-        price_adjustment_vi: null,
-        sort_order: 0,
-        is_active: true,
-      },
-    });
-
-    expect(createPlantPotSize).toHaveBeenCalledWith(
-      "p1",
-      expect.objectContaining({ name: "Large" })
-    );
-
-    await waitFor(() => {
-      expect(invalidateSpy).toHaveBeenCalled();
-    });
-
-    const keys = invalidateSpy.mock.calls.map((call) => call[0]?.queryKey);
-    expect(keys).toContainEqual(queryKeys.admin.plants.detail("p1"));
-    expect(keys).toContainEqual(queryKeys.admin.plants.all);
-    expect(keys).not.toContainEqual(queryKeys.admin.overview);
   });
 });

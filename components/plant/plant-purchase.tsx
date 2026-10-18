@@ -10,46 +10,24 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
-  PlantOptions,
-  type PotSizeOption,
-} from "@/components/plant/plant-options";
-import {
   formatStorefrontPrice,
-  getPotSizeAdjustment,
-  getPotSizeUnitPrice,
 } from "@/lib/storefront";
 import { useCartStore } from "@/store/cart.store";
-import type { StorefrontPlantPotSize } from "@/types/storefront";
 import { cn } from "@/lib/utils";
 
-export type PurchasePotSize = Pick<
-  StorefrontPlantPotSize,
-  "id" | "name" | "price_adjustment_vi"
->;
-
-/** Signed label such as `+50.000 ₫`; zero adjustments are not worth the noise. */
-function formatAdjustment(amount: number, locale: string): string | null {
-  if (amount === 0) return null;
-  const sign = amount > 0 ? "+" : "−";
-  return `${sign}${formatStorefrontPrice(Math.abs(amount), locale)}`;
-}
-
 /**
- * The interactive part of the plant detail page: price for the selected pot
- * size, size options, quantity and add to cart. `children` is the
- * server-rendered description, shown between the price and the options.
+ * The interactive part of the plant detail page: price, quantity and add to
+ * cart. `children` is the server-rendered description, shown between the price
+ * and the quantity controls.
  */
 function PlantPurchase({
   plantId,
   basePrice,
-  potSizes,
   inStock,
   children,
 }: {
   plantId: string;
   basePrice: number | null;
-  /** Active sizes, already sorted. */
-  potSizes: PurchasePotSize[];
   inStock: boolean;
   children?: React.ReactNode;
 }) {
@@ -58,55 +36,25 @@ function PlantPurchase({
   const locale = useLocale();
   const addItem = useCartStore((state) => state.addItem);
 
-  const [selectedSizeId, setSelectedSizeId] = useState(potSizes[0]?.id ?? "");
   const [quantity, setQuantity] = useState(1);
   const [favorited, setFavorited] = useState(false);
 
-  const selectedSize =
-    potSizes.find((size) => size.id === selectedSizeId) ?? potSizes[0] ?? null;
-
-  const sizeOptions: PotSizeOption[] = potSizes.map((size) => ({
-    id: size.id,
-    label: size.name,
-    adjustmentLabel: formatAdjustment(getPotSizeAdjustment(size), locale),
-  }));
-
-  // Both the base price and the adjustment come from the backend; the only
-  // arithmetic here is adding the two amounts it already decided on. The cart
-  // stores only the selection and is re-priced by the backend quote.
-  const unitPrice =
-    basePrice === null ? null : getPotSizeUnitPrice(basePrice, selectedSize);
-  const lineTotal = unitPrice === null ? null : unitPrice * quantity;
-  const canAddToCart = inStock && unitPrice !== null;
+  const lineTotal = basePrice === null ? null : basePrice * quantity;
+  const canAddToCart = inStock && basePrice !== null;
 
   function handleAddToCart() {
-    addItem({
-      plantId,
-      potSizeId: selectedSize?.id,
-      quantity,
-    });
+    addItem({ plantId, quantity });
   }
 
   return (
     <>
       <p className="mt-5 font-sans text-xl font-semibold tracking-tight text-foreground">
-        {unitPrice === null
+        {basePrice === null
           ? tCommon("contactForPrice")
-          : formatStorefrontPrice(unitPrice, locale)}
+          : formatStorefrontPrice(basePrice, locale)}
       </p>
 
       {children}
-
-      {sizeOptions.length > 0 ? (
-        <>
-          <div className="my-7 border-t border-border" />
-          <PlantOptions
-            potSizes={sizeOptions}
-            selectedSizeId={selectedSize?.id ?? ""}
-            onSizeChange={setSelectedSizeId}
-          />
-        </>
-      ) : null}
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
         <div

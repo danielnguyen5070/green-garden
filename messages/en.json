@@ -315,8 +315,6 @@
     "metadataDescription": "{plant} – {category}. Healthy nursery stock from Cai Mon – Ben Tre, carefully packed and delivered nationwide.",
     "metadataDescriptionNoCategory": "{plant} from a Cai Mon – Ben Tre nursery. Healthy stock, carefully packed and delivered nationwide.",
     "featured": "Featured",
-    "potSize": "Pot size",
-    "sizeGuide": "Size Guide",
     "quantity": "Quantity",
     "increaseQuantity": "Increase quantity",
     "decreaseQuantity": "Decrease quantity",
@@ -674,10 +672,6 @@
       "plantSize": {
         "question": "How tall are the seedlings when they ship?",
         "answer": "It varies by variety, but most seedlings are around 40–80cm tall when they ship. Exact height and details are listed in each plant's description."
-      },
-      "potSize": {
-        "question": "Can I choose a bigger or smaller plant?",
-        "answer": "Yes. Where size options are offered, you can choose one on the product page before adding the plant to your cart. The price updates to match the size you pick."
       },
       "plantsWithPots": {
         "question": "Do the seedlings come with a pot?",

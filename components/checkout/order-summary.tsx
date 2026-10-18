@@ -141,10 +141,6 @@ function OrderSummary({
                               count: line.max_quantity,
                             })}
                           </p>
-                        ) : line?.pot_size_name ? (
-                          <p className="mt-0.5 font-sans text-small text-muted-foreground">
-                            {line.pot_size_name}
-                          </p>
                         ) : null}
                         <p className="mt-1 font-sans text-small text-muted-foreground">
                           {t("qty", { count: item.quantity })}

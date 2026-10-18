@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type SubmitEvent } from "react";
+import { useState, type SubmitEvent } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
@@ -14,21 +14,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useAdminPlantForOrder } from "@/hooks/use-admin-orders";
-import { useQueryErrorToast } from "@/hooks/use-query-error-toast";
 import { adminCopy } from "@/lib/admin-copy";
 import type { AdminPlantListItem } from "@/types/admin-plant";
 import type { OrderCreateRequest, OrderItemCreateRequest } from "@/types/order";
 
 const copy = adminCopy.orders;
-const NO_POT_SIZE = "__none__";
 
 type DraftItem = {
   /** Stable key so rows survive reordering and removal. */
   key: string;
   plant_id: string;
   quantity: string;
-  pot_size_id: string;
 };
 
 type OrderCreateFormProps = {
@@ -49,7 +45,6 @@ function createDraftItem(): DraftItem {
     key: crypto.randomUUID(),
     plant_id: "",
     quantity: "1",
-    pot_size_id: NO_POT_SIZE,
   };
 }
 
@@ -70,17 +65,6 @@ function OrderItemRow({
   onUpdate,
   onRemove,
 }: OrderItemRowProps) {
-  const plantId = item.plant_id || null;
-  const { data: plantDetail, error: plantError } =
-    useAdminPlantForOrder(plantId);
-
-  useQueryErrorToast(plantError);
-
-  const potSizes = useMemo(
-    () => plantDetail?.pot_sizes.filter((potSize) => potSize.is_active) ?? [],
-    [plantDetail]
-  );
-
   const plant = plants.find((candidate) => candidate.id === item.plant_id);
 
   return (
@@ -91,10 +75,7 @@ function OrderItemRow({
           disabled={submitting}
           onValueChange={(value) => {
             if (value == null) return;
-            onUpdate(item.key, {
-              plant_id: value as string,
-              pot_size_id: NO_POT_SIZE,
-            });
+            onUpdate(item.key, { plant_id: value as string });
           }}
         >
           <SelectTrigger
@@ -147,35 +128,6 @@ function OrderItemRow({
             }
           />
         </div>
-
-        <Select
-          value={item.pot_size_id}
-          disabled={submitting || potSizes.length === 0}
-          onValueChange={(value) => {
-            if (value == null) return;
-            onUpdate(item.key, { pot_size_id: value as string });
-          }}
-        >
-          <SelectTrigger
-            className="w-full flex-1"
-            aria-label={copy.items.potSize}
-          >
-            <SelectValue>
-              {item.pot_size_id === NO_POT_SIZE
-                ? copy.items.noPotSize
-                : (potSizes.find((potSize) => potSize.id === item.pot_size_id)
-                    ?.name ?? copy.items.noPotSize)}
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={NO_POT_SIZE}>{copy.items.noPotSize}</SelectItem>
-            {potSizes.map((potSize) => (
-              <SelectItem key={potSize.id} value={potSize.id}>
-                {potSize.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
       </div>
     </li>
   );
@@ -242,7 +194,6 @@ export function OrderCreateForm({
       payloadItems.push({
         plant_id: item.plant_id,
         quantity,
-        pot_size_id: item.pot_size_id === NO_POT_SIZE ? null : item.pot_size_id,
       });
     }
 

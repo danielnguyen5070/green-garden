@@ -58,25 +58,6 @@ export type StorefrontPlantDetailImage = StorefrontPlantImage & {
   created_at: string;
 };
 
-export type StorefrontPlantPotSize = {
-  id: string;
-  plant_id: string;
-  name: string;
-  price_adjustment: Decimal;
-  price_adjustment_vi: Decimal | null;
-  sort_order: number;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-};
-
-/** The pot size a card's "Add to cart" sells: the plant's first active one. */
-export type StorefrontPotSizeSummary = {
-  id: string;
-  name: string;
-  price_adjustment_vi: Decimal | null;
-};
-
 /**
  * Listing row. Carries everything a product card renders, so a catalogue page
  * never has to call the detail endpoint per card.
@@ -97,7 +78,6 @@ export type StorefrontPlantListItem = {
   is_featured: boolean;
   category?: StorefrontCategorySummary | null;
   images?: StorefrontPlantImage[];
-  default_pot_size?: StorefrontPotSizeSummary | null;
   updated_at?: string;
 };
 
@@ -132,7 +112,6 @@ export type StorefrontPlantDetail = {
   og_image_url: string | null;
   category?: StorefrontCategorySummary | null;
   images?: StorefrontPlantDetailImage[];
-  pot_sizes?: StorefrontPlantPotSize[];
 } & PlantCareAttributes;
 
 /**
@@ -144,8 +123,6 @@ export type StorefrontPlantDetail = {
 export type StorefrontOrderItemRequest = {
   plant_id: string;
   quantity: number;
-  /** Without one, the backend sells the plant's first active pot size. */
-  pot_size_id?: string | null;
 };
 
 export type CreateStorefrontOrderRequest = BotSignals & {
@@ -210,7 +187,6 @@ export type StorefrontPaymentStatus = {
 export type StorefrontQuoteItemRequest = {
   plant_id: string;
   quantity: number;
-  pot_size_id?: string | null;
 };
 
 export type StorefrontQuoteRequest = {
@@ -219,19 +195,17 @@ export type StorefrontQuoteRequest = {
 
 /**
  * One priced cart line, in request order. An unavailable line (unknown or
- * inactive plant, no VND price, pot size off sale) costs nothing and may have
- * null catalogue fields. `max_quantity` is the plant's current stock.
+ * inactive plant, no VND price) costs nothing and may have null catalogue
+ * fields. `max_quantity` is the plant's current stock.
  */
 export type StorefrontQuoteLine = {
   plant_id: string;
-  pot_size_id: string | null;
   quantity: number;
   available: boolean;
   slug: string | null;
   name: string | null;
   name_vi: string | null;
   image_url: string | null;
-  pot_size_name: string | null;
   unit_price: Decimal;
   line_total: Decimal;
   max_quantity: number;

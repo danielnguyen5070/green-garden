@@ -8,7 +8,6 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { createOrder, getOrder, listOrders, updateOrderStatus } from "@/lib/api/orders";
-import { getPlant } from "@/lib/api/plants";
 import { useQueryErrorToast } from "@/hooks/use-query-error-toast";
 import { queryKeys, type AdminOrderListKeyParams } from "@/lib/query/keys";
 import type {
@@ -95,21 +94,6 @@ export function useAdminOrderDetail(id: string | null) {
     refetch: () => {
       void query.refetch();
     },
-  };
-}
-
-/** Pot sizes for a plant line item in the order create form. */
-export function useAdminPlantForOrder(plantId: string | null) {
-  const query = useQuery({
-    queryKey: queryKeys.admin.plants.detail(plantId ?? ""),
-    queryFn: ({ signal }) => getPlant(plantId!, { signal }),
-    enabled: !!plantId,
-  });
-
-  return {
-    data: query.data ?? null,
-    loading: !!plantId && (query.isPending || query.isFetching),
-    error: query.error,
   };
 }
 

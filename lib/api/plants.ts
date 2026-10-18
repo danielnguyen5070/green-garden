@@ -7,9 +7,6 @@ import type {
   AdminPlantImageUpdateRequest,
   AdminPlantListResponse,
   AdminPlantOrder,
-  AdminPlantPotSize,
-  AdminPlantPotSizeCreateRequest,
-  AdminPlantPotSizeUpdateRequest,
   AdminPlantSort,
   AdminPlantStatusUpdateRequest,
   AdminPlantUpdateRequest,
@@ -106,35 +103,4 @@ export async function deletePlantImage(
   imageId: string
 ): Promise<void> {
   await api.delete<void>(`/plants/${plantId}/images/${imageId}`);
-}
-
-export async function listPlantPotSizes(
-  plantId: string
-): Promise<AdminPlantPotSize[]> {
-  return api.get<AdminPlantPotSize[]>(`/plants/${plantId}/pot-sizes`);
-}
-
-export async function createPlantPotSize(
-  plantId: string,
-  data: AdminPlantPotSizeCreateRequest
-): Promise<AdminPlantPotSize> {
-  return api.post<AdminPlantPotSize>(`/plants/${plantId}/pot-sizes`, data);
-}
-
-export async function updatePlantPotSize(
-  plantId: string,
-  sizeId: string,
-  data: AdminPlantPotSizeUpdateRequest
-): Promise<AdminPlantPotSize> {
-  return api.patch<AdminPlantPotSize>(
-    `/plants/${plantId}/pot-sizes/${sizeId}`,
-    data
-  );
-}
-
-export async function deletePlantPotSize(
-  plantId: string,
-  sizeId: string
-): Promise<void> {
-  await api.delete<void>(`/plants/${plantId}/pot-sizes/${sizeId}`);
 }

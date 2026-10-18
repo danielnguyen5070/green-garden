@@ -1,9 +1,5 @@
 import { formatVnd, parseMoney } from "@/lib/cart";
-import type {
-  StorefrontPlantImage,
-  StorefrontPlantPotSize,
-  StorefrontPotSizeSummary,
-} from "@/types/storefront";
+import type { StorefrontPlantImage } from "@/types/storefront";
 
 /** Shown when a plant has no image of its own. */
 export const PLANT_IMAGE_PLACEHOLDER = "/images/plants/placeholder.svg";
@@ -78,28 +74,17 @@ export function getVndPrice(priceVi: string | null | undefined): number | null {
   return priceVi?.trim() ? parseMoney(priceVi) : null;
 }
 
-/** A missing VND adjustment costs nothing extra, exactly as checkout prices it. */
-export function getPotSizeAdjustment(
-  size: Pick<StorefrontPlantPotSize | StorefrontPotSizeSummary, "price_adjustment_vi">
-): number {
-  return parseMoney(size.price_adjustment_vi);
-}
-
 /**
- * Unit price of a plant in a pot size: the one sum the card, detail page and
- * Product JSON-LD all show, matching what checkout charges.
+ * The VND price shown on catalogue cards and used by "Add to cart".
+ * Returns `null` when the plant has no VND price and cannot be ordered.
  */
-export function getPotSizeUnitPrice(
-  basePrice: number,
-  size:
-    | Pick<StorefrontPlantPotSize | StorefrontPotSizeSummary, "price_adjustment_vi">
-    | null
-    | undefined
-): number {
-  return size ? basePrice + getPotSizeAdjustment(size) : basePrice;
+export function getCardPrice(plant: {
+  price_vi: string | null;
+}): number | null {
+  return getVndPrice(plant.price_vi);
 }
 
-/** Stock is tracked per plant; every pot size shares it. */
+/** Stock is tracked per plant. */
 export function isPlantInStock(
   plant: { in_stock: boolean } | { stock: number }
 ): boolean {
@@ -140,19 +125,6 @@ export function getLocalizedPlant(plant: LocalizablePlant, locale: string) {
 }
 
 /**
- * What a catalogue card sells: the base VND price plus the default pot size,
- * the same line "Add to cart" puts in the cart and checkout charges.
- */
-export function getCardPrice(plant: {
-  price_vi: string | null;
-  default_pot_size?: StorefrontPotSizeSummary | null;
-}): number | null {
-  const base = getVndPrice(plant.price_vi);
-  if (base === null) return null;
-  return getPotSizeUnitPrice(base, plant.default_pot_size);
-}
-
-/**
  * Generic over the image shape because the listing and detail endpoints return
  * the same media fields with different amounts of bookkeeping around them.
  */
@@ -187,12 +159,4 @@ export function getPlantCardImage(
     src: primary?.url ?? PLANT_IMAGE_PLACEHOLDER,
     alt: primary?.alt_text?.trim() || localizedName,
   };
-}
-
-export function getActivePotSizes(
-  potSizes: StorefrontPlantPotSize[] | undefined
-): StorefrontPlantPotSize[] {
-  return (potSizes ?? [])
-    .filter((size) => size.is_active)
-    .sort((a, b) => a.sort_order - b.sort_order || a.name.localeCompare(b.name));
 }

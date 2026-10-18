@@ -315,8 +315,6 @@
     "metadataDescription": "{plant} – {category}. Cây khỏe từ nhà vườn Cái Mơn – Bến Tre, đóng gói cẩn thận, giao hàng toàn quốc.",
     "metadataDescriptionNoCategory": "{plant} từ nhà vườn Cái Mơn – Bến Tre. Cây khỏe, đóng gói cẩn thận, giao hàng toàn quốc.",
     "featured": "Nổi bật",
-    "potSize": "Cỡ chậu",
-    "sizeGuide": "Hướng dẫn kích thước",
     "quantity": "Số lượng",
     "increaseQuantity": "Tăng số lượng",
     "decreaseQuantity": "Giảm số lượng",
@@ -674,10 +672,6 @@
       "plantSize": {
         "question": "Cây giống gửi đi cao khoảng bao nhiêu?",
         "answer": "Tùy giống, phần lớn cây giống cao khoảng 40–80cm khi gửi đi. Chiều cao và đặc điểm cụ thể được ghi trong phần mô tả của từng cây."
-      },
-      "potSize": {
-        "question": "Có chọn được cây lớn hay cây nhỏ không?",
-        "answer": "Có. Với những cây có nhiều lựa chọn, bạn chọn cỡ ngay trên trang sản phẩm trước khi thêm vào giỏ. Giá hiển thị theo đúng cỡ bạn chọn."
       },
       "plantsWithPots": {
         "question": "Cây giống có kèm chậu không?",

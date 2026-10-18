@@ -35,19 +35,7 @@ export type AdminPlantImage = {
   created_at: string;
 };
 
-export type AdminPlantPotSize = {
-  id: string;
-  plant_id: string;
-  name: string;
-  price_adjustment: DecimalString;
-  price_adjustment_vi: DecimalString | null;
-  sort_order: number;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-};
-
-/** Full plant from `GET /plants/{id}`, including nested images and pot sizes. */
+/** Full plant from `GET /plants/{id}`, including nested images. */
 export type AdminPlant = {
   id: string;
   category_id: string;
@@ -67,12 +55,11 @@ export type AdminPlant = {
   is_featured: boolean;
   is_active: boolean;
   images: AdminPlantImage[];
-  pot_sizes: AdminPlantPotSize[];
   created_at: string;
   updated_at: string;
 } & PlantCareAttributes;
 
-/** Row from `GET /plants`; omits description, images, pot sizes and care detail. */
+/** Row from `GET /plants`; omits description, images and care detail. */
 export type AdminPlantListItem = Omit<
   AdminPlant,
   | "description"
@@ -80,7 +67,6 @@ export type AdminPlantListItem = Omit<
   | "long_description"
   | "long_description_vi"
   | "images"
-  | "pot_sizes"
   | "plant_type"
   | "difficulty"
   | "growth_rate"
@@ -155,20 +141,4 @@ export type AdminPlantImageUpdateRequest = {
   type?: PlantImageType | null;
   alt_text?: string | null;
   sort_order?: number | null;
-};
-
-export type AdminPlantPotSizeCreateRequest = {
-  name: string;
-  price_adjustment?: DecimalInput;
-  price_adjustment_vi?: DecimalInput | null;
-  sort_order?: number;
-  is_active?: boolean;
-};
-
-export type AdminPlantPotSizeUpdateRequest = {
-  name?: string | null;
-  price_adjustment?: DecimalInput | null;
-  price_adjustment_vi?: DecimalInput | null;
-  sort_order?: number | null;
-  is_active?: boolean | null;
 };

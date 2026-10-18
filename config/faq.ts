@@ -53,7 +53,6 @@ export const FAQ_ITEMS: readonly FaqItemConfig[] = [
   { id: "losingLeaves", categoryId: "care" },
   { id: "graftedSeedlings", categoryId: "plants" },
   { id: "plantSize", categoryId: "plants" },
-  { id: "potSize", categoryId: "plants" },
   { id: "plantsWithPots", categoryId: "plants" },
   { id: "returnPolicy", categoryId: "returns" },
   { id: "damagedPlant", categoryId: "returns" },

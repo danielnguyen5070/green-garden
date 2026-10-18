@@ -78,9 +78,6 @@ function getCreateErrorMessage(error: unknown): string | null {
     case ErrorCode.PLANT_UNAVAILABLE:
     case ErrorCode.PLANT_NOT_FOUND:
       return copy.createErrors.plantUnavailable;
-    case ErrorCode.POT_SIZE_UNAVAILABLE:
-    case ErrorCode.PLANT_POT_SIZE_NOT_FOUND:
-      return copy.createErrors.potSizeUnavailable;
     default:
       return null;
   }

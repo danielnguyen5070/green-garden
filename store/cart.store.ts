@@ -22,12 +22,11 @@ type CartState = {
   totalItems: () => number;
 };
 
-const CART_STORAGE_VERSION = 1;
+const CART_STORAGE_VERSION = 2;
 
 /**
- * Version 0 lines also stored a name, image and a bare `price` in whichever
- * currency the locale showed. Only the selection survives; lines that end up
- * identical are merged.
+ * Migrates persisted cart items from any prior version. Lines that share the
+ * same plantId are merged, and legacy `potSizeId` fields are dropped.
  */
 function migrateCartItems(persisted: unknown): CartItem[] {
   const rawItems =
@@ -39,19 +38,15 @@ function migrateCartItems(persisted: unknown): CartItem[] {
   const merged = new Map<string, CartItem>();
   for (const raw of rawItems) {
     if (!raw || typeof raw !== "object") continue;
-    const { plantId, potSizeId, quantity } = raw as Record<string, unknown>;
+    const { plantId, quantity } = raw as Record<string, unknown>;
     if (typeof plantId !== "string" || !plantId) continue;
 
-    const line = {
-      plantId,
-      potSizeId: typeof potSizeId === "string" && potSizeId ? potSizeId : undefined,
-    };
-    const id = getCartLineId(line);
+    const id = getCartLineId({ plantId });
     const count = Math.max(1, Math.floor(Number(quantity) || 1));
     const existing = merged.get(id);
     merged.set(id, {
       id,
-      ...line,
+      plantId,
       quantity: (existing?.quantity ?? 0) + count,
     });
   }
@@ -86,7 +81,6 @@ export const useCartStore = create<CartState>()(
           const nextItem: CartItem = {
             id: lineId,
             plantId: plant.plantId,
-            potSizeId: plant.potSizeId,
             quantity,
           };
 

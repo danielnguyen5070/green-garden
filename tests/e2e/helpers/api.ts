@@ -9,7 +9,6 @@ type StorefrontPlantListItem = {
   name_vi: string | null;
   stock: number;
   price_vi: string | null;
-  default_pot_size?: { id: string } | null;
 };
 
 type StorefrontPlantListResponse = {

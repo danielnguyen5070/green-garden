@@ -34,7 +34,6 @@ function quoteResponse(): StorefrontQuoteResponse {
     lines: [
       {
         plant_id: "p1",
-        pot_size_id: null,
         quantity: 1,
         unit_price: "100000",
         line_total: "100000",
@@ -44,7 +43,6 @@ function quoteResponse(): StorefrontQuoteResponse {
         name_vi: "Xoài",
         slug: "mango",
         image_url: null,
-        pot_size_name: null,
       },
     ],
   };

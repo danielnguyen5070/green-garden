@@ -178,8 +178,7 @@ export async function searchStorefrontPlants(
 
 /**
  * Prices the cart exactly as checkout will, without creating an order. The
- * cart holds only plant, pot size and quantity; everything shown comes from
- * here.
+ * cart holds only plant and quantity; everything shown comes from here.
  */
 export async function quoteStorefrontCart(
   payload: StorefrontQuoteRequest,

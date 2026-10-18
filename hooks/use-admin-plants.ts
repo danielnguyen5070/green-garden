@@ -10,14 +10,11 @@ import {
 import {
   createPlant,
   createPlantImage,
-  createPlantPotSize,
   deletePlantImage,
-  deletePlantPotSize,
   getPlant,
   listPlants,
   updatePlant,
   updatePlantImage,
-  updatePlantPotSize,
   updatePlantStatus,
 } from "@/lib/api/plants";
 import { useQueryErrorToast } from "@/hooks/use-query-error-toast";
@@ -27,8 +24,6 @@ import type {
   AdminPlantImageCreateRequest,
   AdminPlantImageUpdateRequest,
   AdminPlantOrder,
-  AdminPlantPotSizeCreateRequest,
-  AdminPlantPotSizeUpdateRequest,
   AdminPlantSort,
   AdminPlantStatusUpdateRequest,
   AdminPlantUpdateRequest,
@@ -264,50 +259,6 @@ export function useDeletePlantImage() {
       plantId: string;
       imageId: string;
     }) => deletePlantImage(plantId, imageId),
-    onSuccess: (_data, variables) => invalidate(variables.plantId),
-  });
-}
-
-export function useCreatePlantPotSize() {
-  const invalidate = useInvalidatePlantDetail();
-  return useMutation({
-    mutationFn: ({
-      plantId,
-      data,
-    }: {
-      plantId: string;
-      data: AdminPlantPotSizeCreateRequest;
-    }) => createPlantPotSize(plantId, data),
-    onSuccess: (_data, variables) => invalidate(variables.plantId),
-  });
-}
-
-export function useUpdatePlantPotSize() {
-  const invalidate = useInvalidatePlantDetail();
-  return useMutation({
-    mutationFn: ({
-      plantId,
-      sizeId,
-      data,
-    }: {
-      plantId: string;
-      sizeId: string;
-      data: AdminPlantPotSizeUpdateRequest;
-    }) => updatePlantPotSize(plantId, sizeId, data),
-    onSuccess: (_data, variables) => invalidate(variables.plantId),
-  });
-}
-
-export function useDeletePlantPotSize() {
-  const invalidate = useInvalidatePlantDetail();
-  return useMutation({
-    mutationFn: ({
-      plantId,
-      sizeId,
-    }: {
-      plantId: string;
-      sizeId: string;
-    }) => deletePlantPotSize(plantId, sizeId),
     onSuccess: (_data, variables) => invalidate(variables.plantId),
   });
 }

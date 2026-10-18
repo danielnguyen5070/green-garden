@@ -170,7 +170,6 @@ export const adminCopy = {
       care: "Care & suitability",
       pricing: "Pricing & inventory",
       images: "Images",
-      potSizes: "Pot sizes",
     },
     fields: {
       category: "Category",
@@ -315,29 +314,6 @@ export const adminCopy = {
       invalidUrl: "Media URL must be a valid URL.",
       availableAfterCreate: "Images can be added after the plant is created.",
     },
-    potSizes: {
-      title: "Pot sizes",
-      description:
-        "The VND adjustment is added on top of the VND selling price. The first active size is the default.",
-      empty: "No pot sizes yet.",
-      name: "Name",
-      adjustment: "Legacy adjustment (USD, not charged)",
-      adjustmentVi: "Adjustment (VND)",
-      add: "Add pot size",
-      adding: "Adding...",
-      delete: "Delete pot size",
-      activate: "Activate",
-      deactivate: "Deactivate",
-      addedSuccess: "Pot size added.",
-      updatedSuccess: "Pot size updated.",
-      deletedSuccess: "Pot size deleted.",
-      moveUp: "Move up",
-      moveDown: "Move down",
-      invalidName: "Pot size name is required (1-100 characters).",
-      invalidAdjustment: "Adjustment must be a number of 0 or more.",
-      availableAfterCreate:
-        "Pot sizes can be added after the plant is created.",
-    },
   },
   categories: {
     title: "Categories",
@@ -396,8 +372,6 @@ export const adminCopy = {
         "Not enough stock for one or more plants. Lower the quantity and try again.",
       plantUnavailable:
         "One or more plants can no longer be ordered. Remove them and try again.",
-      potSizeUnavailable:
-        "A selected pot size is no longer available. Choose another pot size.",
     },
     pageInfo: (page: number, totalPages: number, total: number) =>
       `Page ${page}/${totalPages} · ${total} orders`,
@@ -428,14 +402,12 @@ export const adminCopy = {
     items: {
       title: "Items",
       plant: "Plant",
-      potSize: "Pot size",
       quantity: "Qty",
       unitPrice: "Unit price",
       empty: "No items on this order.",
       add: "Add item",
       remove: "Remove item",
       selectPlant: "Select a plant",
-      noPotSize: "Default pot size",
       priceHint:
         "Prices (VND), shipping and stock are resolved by the backend, exactly as on the storefront.",
       required: "Add at least one item.",
