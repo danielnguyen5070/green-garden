@@ -16,7 +16,7 @@ import {
 import {
   FeaturedPlantsSection,
   FeaturedPlantsSkeleton,
-} from "@/components/plant/featured-plants-section";
+} from "@/app/[locale]/(store)/_components/home/featured-plants-section";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
