@@ -212,7 +212,6 @@ function buildLlmsTxt(plants: PlantListItem[], postsVi: BlogMeta[]): string {
       `${SITE_URL}/llms-full.txt`,
       "Longer business, catalog, FAQ, and content summary"
     ),
-    link("Cart", `${SITE_URL}/vi/cart`, "Shopping cart"),
     link("Checkout", `${SITE_URL}/vi/checkout`, "Checkout (phone, name, address)"),
     link("Facebook", CONTACT_CONFIG.facebookUrl),
     link("TikTok", CONTACT_CONFIG.tiktokUrl),
@@ -279,7 +278,6 @@ function buildLlmsFullTxt(
     link("Blog index EN", `${SITE_URL}/en/blog`),
     link("Search VI", `${SITE_URL}/vi/search`),
     link("Search EN", `${SITE_URL}/en/search`),
-    link("Cart VI", `${SITE_URL}/vi/cart`),
     link("Checkout VI", `${SITE_URL}/vi/checkout`),
     link("Sitemap", `${SITE_URL}/sitemap.xml`),
     link("Robots", `${SITE_URL}/robots.txt`),

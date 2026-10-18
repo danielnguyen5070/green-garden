@@ -27,3 +27,9 @@ Route-specific or route-family UI belongs under that route’s private folder:
 - `app/[locale]/(store)/_components/<feature>/` when shared within the store group only (e.g. `catalog/`)
 
 Do **not** add new homepage-, detail-, admin-, or checkout-only sections to root `components/`.
+
+## Plant detail outside `(store)`
+
+Keep `app/[locale]/plants/[slug]/` **outside** the `(store)` route group.
+
+That layout resolves the plant (and canonical slug redirect) **before** mounting `StoreChrome`. A missing slug can therefore render the locale `not-found` without Header/Footer. Nesting the detail route under `(store)` would wrap failed lookups in store chrome and break that standalone 404 behavior.

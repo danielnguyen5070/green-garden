@@ -39,7 +39,6 @@ Contact is by Zalo or SMS (no voice calls). Cash on delivery and bank transfer a
 ## Optional
 
 - [Full LLM context](https://www.ngocnganbentre.vn/llms-full.txt): Longer business, catalog, FAQ, and content summary
-- [Cart](https://www.ngocnganbentre.vn/vi/cart): Shopping cart
 - [Checkout](https://www.ngocnganbentre.vn/vi/checkout): Checkout (phone, name, address)
 - [Facebook](https://www.facebook.com/ngan.nguyenngockim.77)
 - [TikTok](https://www.tiktok.com/@ngocnganbentre)

@@ -49,7 +49,6 @@ Ngọc Ngân Bến Tre sells and supplies seedlings, selecting healthy plants of
 - [Blog index EN](https://www.ngocnganbentre.vn/en/blog)
 - [Search VI](https://www.ngocnganbentre.vn/vi/search)
 - [Search EN](https://www.ngocnganbentre.vn/en/search)
-- [Cart VI](https://www.ngocnganbentre.vn/vi/cart)
 - [Checkout VI](https://www.ngocnganbentre.vn/vi/checkout)
 - [Sitemap](https://www.ngocnganbentre.vn/sitemap.xml)
 - [Robots](https://www.ngocnganbentre.vn/robots.txt)

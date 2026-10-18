@@ -99,6 +99,10 @@ test.describe("COD purchase flow", () => {
       await expect(page).toHaveURL(/\/vi\/order-success\/?$/, {
         timeout: 60_000,
       });
+      // Order success stays on store chrome (not checkout header/footer).
+      await expect(
+        page.getByRole("navigation", { name: "Primary" }),
+      ).toBeVisible();
       await expect(
         page.getByRole("heading", { name: "Đặt hàng thành công!" }),
       ).toBeVisible();
