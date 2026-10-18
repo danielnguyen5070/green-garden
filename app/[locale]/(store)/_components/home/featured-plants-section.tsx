@@ -23,7 +23,7 @@ async function FeaturedPlantsSkeleton() {
       id="featured-plants"
       data-slot="featured-plants"
       aria-labelledby="featured-plants-heading"
-      className="bg-background py-8 md:py-10"
+      className="bg-background pt-4 pb-8 md:pt-6 md:pb-10"
     >
       <Container>
         <header className="flex flex-wrap items-end justify-between gap-3">
@@ -65,7 +65,7 @@ async function FeaturedPlantsSection({ className }: { className?: string }) {
         id="featured-plants"
         data-slot="featured-plants"
         aria-labelledby="featured-plants-heading"
-        className={cn("bg-background py-8 md:py-10", className)}
+        className={cn("bg-background pt-4 pb-8 md:pt-6 md:pb-10", className)}
       >
         <Container>
           <h2
@@ -93,7 +93,7 @@ async function FeaturedPlantsSection({ className }: { className?: string }) {
       id="featured-plants"
       data-slot="featured-plants"
       aria-labelledby="featured-plants-heading"
-      className={cn("bg-background py-8 md:py-10", className)}
+      className={cn("bg-background pt-4 pb-8 md:pt-6 md:pb-10", className)}
     >
       <Container>
         <div className="flex flex-wrap items-end justify-between gap-3">
