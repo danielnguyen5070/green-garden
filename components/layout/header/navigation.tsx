@@ -47,7 +47,7 @@ function CategoriesMenu({
       <div className="invisible absolute top-full left-0 z-50 pt-3 group-focus-within:visible group-hover:visible group-data-closed:!invisible">
         <ul
           aria-label={listLabel}
-          className="min-w-56 rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10"
+          className="flex min-w-56 flex-col gap-1 rounded-lg bg-popover px-1 py-2 text-popover-foreground shadow-md ring-1 ring-foreground/10"
         >
           <li>
             <Link
