@@ -42,21 +42,24 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { notifyPlantToIndexNow } from "@/app/admin/actions/indexnow";
 import { refreshStorefront } from "@/app/admin/actions/revalidate";
+import { useAdminCategoryOptions } from "@/hooks/use-admin-categories";
+import {
+  useAdminPlantDetail,
+  useAdminPlantsList,
+  useCreatePlant,
+  useInvalidatePlantDetail,
+  useUpdatePlant,
+  useUpdatePlantStatus,
+} from "@/hooks/use-admin-plants";
+import { useQueryErrorToast } from "@/hooks/use-query-error-toast";
 import { adminCopy } from "@/lib/admin-copy";
 import {
   formatAdminCurrency,
   formatAdminDate,
   isSameDecimal,
 } from "@/lib/admin-format";
-import { listCategories } from "@/lib/api/categories";
 import { getErrorMessage } from "@/lib/api/errors";
-import {
-  createPlant,
-  getPlant,
-  listPlants,
-  updatePlant,
-  updatePlantStatus,
-} from "@/lib/api/plants";
+import { getPlant } from "@/lib/api/plants";
 import { toast } from "@/lib/toast";
 import type { Category } from "@/types/category";
 import type {
@@ -92,9 +95,6 @@ import {
 
 const PAGE_SIZE = 20;
 const FILTER_DEBOUNCE_MS = 350;
-const CATEGORY_PAGE_SIZE = 100;
-/** Guards against an unbounded crawl if the category count ever explodes. */
-const CATEGORY_MAX_PAGES = 10;
 /** Caps the dialog to the viewport so the form body can scroll on short screens. */
 const FORM_DIALOG_CLASS =
   "sm:max-w-2xl max-h-[calc(100dvh-2rem)] grid-rows-[auto_minmax(0,1fr)]";
@@ -309,11 +309,7 @@ function nextNullableBool(
 }
 
 export default function AdminPlantsPage() {
-  const [plants, setPlants] = useState<AdminPlantListItem[]>([]);
   const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
-  const [reloadToken, setReloadToken] = useState(0);
-  const [loading, setLoading] = useState(true);
 
   const [searchInput, setSearchInput] = useState("");
   const [minPriceInput, setMinPriceInput] = useState("");
@@ -329,14 +325,49 @@ export default function AdminPlantsPage() {
   const [sort, setSort] = useState<AdminPlantSort>("created_at");
   const [order, setOrder] = useState<AdminPlantOrder>("desc");
 
-  const [categories, setCategories] = useState<Category[]>([]);
-
   const [dialogMode, setDialogMode] = useState<DialogMode>(null);
-  const [selected, setSelected] = useState<AdminPlant | null>(null);
-  const [detailLoading, setDetailLoading] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const [editPlantId, setEditPlantId] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
-  const [statusPendingId, setStatusPendingId] = useState<string | null>(null);
+
+  const onEmptyPage = useCallback((current: number) => {
+    setPage(Math.max(1, current - 1));
+  }, []);
+
+  const { items: categories } = useAdminCategoryOptions();
+
+  const {
+    items: plants,
+    total,
+    loading,
+    isFetching,
+  } = useAdminPlantsList({
+    page,
+    search: filters.search,
+    categoryId: categoryFilter === "all" ? null : categoryFilter,
+    isActive: statusFilter === "all" ? null : statusFilter === "active",
+    isFeatured:
+      featuredFilter === "all" ? null : featuredFilter === "featured",
+    minPrice: filters.minPrice,
+    maxPrice: filters.maxPrice,
+    sort,
+    order,
+    onEmptyPage,
+  });
+
+  const detailQuery = useAdminPlantDetail(
+    dialogMode === "edit" ? editPlantId : null
+  );
+  const selected = detailQuery.data;
+
+  const createMutation = useCreatePlant();
+  const updateMutation = useUpdatePlant();
+  const statusMutation = useUpdatePlantStatus();
+
+  const submitting = createMutation.isPending || updateMutation.isPending;
+  const statusPendingId =
+    statusMutation.isPending && statusMutation.variables
+      ? statusMutation.variables.id
+      : null;
 
   const totalPages = useMemo(
     () => Math.max(1, Math.ceil(total / PAGE_SIZE)),
@@ -356,7 +387,6 @@ export default function AdminPlantsPage() {
 
   /** Any filter change restarts from the first page. */
   const applyFilterChange = useCallback((apply: () => void) => {
-    setLoading(true);
     apply();
     setPage(1);
   }, []);
@@ -382,94 +412,17 @@ export default function AdminPlantsPage() {
     return () => clearTimeout(timeout);
   }, [searchInput, minPriceInput, maxPriceInput, filters, applyFilterChange]);
 
-  // The form's category dropdown is driven by the Categories API, never hardcoded.
-  useEffect(() => {
-    const controller = new AbortController();
+  useQueryErrorToast(
+    dialogMode === "edit" && detailQuery.isError ? detailQuery.error : null
+  );
+  // Close the edit dialog when the detail query fails (adjust during render).
+  if (dialogMode === "edit" && detailQuery.isError) {
+    setDialogMode(null);
+    setEditPlantId(null);
+  }
 
-    async function fetchCategories() {
-      try {
-        const collected: Category[] = [];
-        for (let current = 1; current <= CATEGORY_MAX_PAGES; current += 1) {
-          const response = await listCategories(
-            { page: current, page_size: CATEGORY_PAGE_SIZE },
-            { signal: controller.signal }
-          );
-          collected.push(...response.items);
-          if (collected.length >= response.total || response.items.length === 0) {
-            break;
-          }
-        }
-        if (controller.signal.aborted) return;
-        setCategories(collected);
-      } catch (err) {
-        if (controller.signal.aborted) return;
-        toast.error(getErrorMessage(err, copy.categoriesLoadError));
-      }
-    }
-
-    void fetchCategories();
-    return () => controller.abort();
-  }, []);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    async function fetchPlants() {
-      try {
-        const response = await listPlants(
-          {
-            page,
-            page_size: PAGE_SIZE,
-            search: filters.search || undefined,
-            min_price: filters.minPrice || undefined,
-            max_price: filters.maxPrice || undefined,
-            category_id: categoryFilter === "all" ? undefined : categoryFilter,
-            is_active:
-              statusFilter === "all" ? undefined : statusFilter === "active",
-            is_featured:
-              featuredFilter === "all"
-                ? undefined
-                : featuredFilter === "featured",
-            sort,
-            order,
-          },
-          { signal: controller.signal }
-        );
-        if (controller.signal.aborted) return;
-        // A page can empty out after a status change or filter narrows results.
-        if (response.items.length === 0 && page > 1) {
-          setPage((current) => Math.max(1, current - 1));
-          return;
-        }
-        setPlants(response.items);
-        setTotal(response.total);
-      } catch (err) {
-        if (controller.signal.aborted) return;
-        toast.error(getErrorMessage(err));
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
-      }
-    }
-
-    void fetchPlants();
-    return () => controller.abort();
-  }, [
-    page,
-    filters,
-    categoryFilter,
-    statusFilter,
-    featuredFilter,
-    sort,
-    order,
-    reloadToken,
-  ]);
-
-  function refresh(nextPage = page) {
-    setLoading(true);
+  function goToPage(nextPage: number) {
     setPage(nextPage);
-    setReloadToken((token) => token + 1);
   }
 
   function resetFilters() {
@@ -487,32 +440,21 @@ export default function AdminPlantsPage() {
   }
 
   function openCreate() {
-    setSelected(null);
+    setEditPlantId(null);
     setFormError(null);
     setDialogMode("create");
   }
 
-  async function openEdit(plant: AdminPlantListItem) {
-    setSelected(null);
+  function openEdit(plant: AdminPlantListItem) {
     setFormError(null);
+    setEditPlantId(plant.id);
     setDialogMode("edit");
-    setDetailLoading(true);
-
-    try {
-      setSelected(await getPlant(plant.id));
-    } catch (err) {
-      setDialogMode(null);
-      toast.error(getErrorMessage(err));
-      refresh(page);
-    } finally {
-      setDetailLoading(false);
-    }
   }
 
   function closeDialog() {
     if (submitting) return;
     setDialogMode(null);
-    setSelected(null);
+    setEditPlantId(null);
     setFormError(null);
   }
 
@@ -547,21 +489,18 @@ export default function AdminPlantsPage() {
     };
 
     setFormError(null);
-    setSubmitting(true);
     try {
-      const plant = await createPlant(payload);
+      const plant = await createMutation.mutateAsync(payload);
       setDialogMode(null);
-      setSelected(null);
+      setEditPlantId(null);
       toast.success(copy.createdSuccess);
-      refresh(1);
+      goToPage(1);
       void refreshStorefront({ entity: "plants", slugs: [plant.slug] });
       if (plant.is_active) {
         void notifyPlantToIndexNow(plant.slug);
       }
     } catch (err) {
       setFormError(getErrorMessage(err));
-    } finally {
-      setSubmitting(false);
     }
   }
 
@@ -659,13 +598,14 @@ export default function AdminPlantsPage() {
 
     const previousSlug = selected.slug;
     setFormError(null);
-    setSubmitting(true);
     try {
-      const plant = await updatePlant(selected.id, changes);
+      const plant = await updateMutation.mutateAsync({
+        id: selected.id,
+        data: changes,
+      });
       setDialogMode(null);
-      setSelected(null);
+      setEditPlantId(null);
       toast.success(copy.updatedSuccess);
-      refresh(page);
       void refreshStorefront({
         entity: "plants",
         slugs: [plant.slug, previousSlug],
@@ -678,13 +618,10 @@ export default function AdminPlantsPage() {
       }
     } catch (err) {
       setFormError(getErrorMessage(err));
-    } finally {
-      setSubmitting(false);
     }
   }
 
   async function handleToggleStatus(plant: AdminPlantListItem) {
-    setStatusPendingId(plant.id);
     try {
       // List items omit descriptions, so activation checks the full record.
       if (!plant.is_active && !hasVietnameseCopy(await getPlant(plant.id))) {
@@ -692,21 +629,19 @@ export default function AdminPlantsPage() {
         return;
       }
 
-      const updated = await updatePlantStatus(plant.id, {
-        is_active: !plant.is_active,
+      const updated = await statusMutation.mutateAsync({
+        id: plant.id,
+        data: { is_active: !plant.is_active },
       });
       toast.success(
         plant.is_active ? copy.deactivatedSuccess : copy.activatedSuccess
       );
-      refresh(page);
       void refreshStorefront({ entity: "plants", slugs: [updated.slug] });
       if (updated.is_active) {
         void notifyPlantToIndexNow(updated.slug);
       }
     } catch (err) {
       toast.error(getErrorMessage(err));
-    } finally {
-      setStatusPendingId(null);
     }
   }
 
@@ -932,8 +867,8 @@ export default function AdminPlantsPage() {
           </p>
         ) : (
           <div
-            aria-busy={loading}
-            className={loading ? "opacity-60 transition-opacity" : undefined}
+            aria-busy={isFetching}
+            className={isFetching ? "opacity-60 transition-opacity" : undefined}
           >
             <Table>
               <TableHeader>
@@ -1028,7 +963,7 @@ export default function AdminPlantsPage() {
                             <DropdownMenuItem
                               className="cursor-pointer"
                               onClick={() => {
-                                void openEdit(plant);
+                                openEdit(plant);
                               }}
                             >
                               {adminCopy.common.edit}
@@ -1066,8 +1001,8 @@ export default function AdminPlantsPage() {
                 type="button"
                 variant="outline"
                 size="sm"
-                disabled={page <= 1 || loading}
-                onClick={() => refresh(page - 1)}
+                disabled={page <= 1 || isFetching}
+                onClick={() => goToPage(page - 1)}
               >
                 {adminCopy.common.previous}
               </Button>
@@ -1075,8 +1010,8 @@ export default function AdminPlantsPage() {
                 type="button"
                 variant="outline"
                 size="sm"
-                disabled={page >= totalPages || loading}
-                onClick={() => refresh(page + 1)}
+                disabled={page >= totalPages || isFetching}
+                onClick={() => goToPage(page + 1)}
               >
                 {adminCopy.common.next}
               </Button>
@@ -1117,7 +1052,7 @@ export default function AdminPlantsPage() {
           <DialogHeader>
             <DialogTitle>{copy.editTitle}</DialogTitle>
           </DialogHeader>
-          {detailLoading || !selected ? (
+          {detailQuery.loading || !selected ? (
             <p className="text-sm text-muted-foreground">
               {adminCopy.common.loading}
             </p>
@@ -1161,6 +1096,7 @@ function PlantForm({
   onSubmit,
   onCancel,
 }: PlantFormProps) {
+  const invalidatePlantDetail = useInvalidatePlantDetail();
   const prefix = mode === "create" ? "create" : "edit";
   const [categoryId, setCategoryId] = useState(plant?.category_id ?? "");
   const [ogImageUrl, setOgImageUrl] = useState(plant?.og_image_url ?? "");
@@ -1655,6 +1591,7 @@ function PlantForm({
               disabled={submitting}
               onChange={(next) => {
                 setImages(next);
+                void invalidatePlantDetail(plant.id);
                 void refreshStorefront({
                   entity: "plants",
                   slugs: [plant.slug],
@@ -1677,6 +1614,7 @@ function PlantForm({
               disabled={submitting}
               onChange={(next) => {
                 setPotSizes(next);
+                void invalidatePlantDetail(plant.id);
                 void refreshStorefront({
                   entity: "plants",
                   slugs: [plant.slug],

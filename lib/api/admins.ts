@@ -15,9 +15,11 @@ export type ListAdminsParams = {
 };
 
 export async function listAdmins(
-  params: ListAdminsParams = {}
+  params: ListAdminsParams = {},
+  options: { signal?: AbortSignal } = {}
 ): Promise<AdminListResponse> {
   return api.get<AdminListResponse>("/admins", {
+    signal: options.signal,
     query: {
       page: params.page ?? 1,
       page_size: params.page_size ?? 20,

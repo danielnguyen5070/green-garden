@@ -30,8 +30,11 @@ export async function listCategories(
   });
 }
 
-export async function getCategory(id: string): Promise<Category> {
-  return api.get<Category>(`/categories/${id}`);
+export async function getCategory(
+  id: string,
+  options: { signal?: AbortSignal } = {}
+): Promise<Category> {
+  return api.get<Category>(`/categories/${id}`, { signal: options.signal });
 }
 
 export async function createCategory(

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type SubmitEvent } from "react";
+import { useCallback, useMemo, useState, type SubmitEvent } from "react";
 import { MoreHorizontal, Plus } from "lucide-react";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminSection } from "@/components/admin/admin-section";
@@ -32,67 +32,51 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  createAdmin,
-  listAdmins,
-  updateAdmin,
-  updateAdminPassword,
-  updateAdminStatus,
-} from "@/lib/api/admins";
+  useAdminAdminsList,
+  useCreateAdmin,
+  useUpdateAdmin,
+  useUpdateAdminPassword,
+  useUpdateAdminStatus,
+} from "@/hooks/use-admin-admins";
 import { getErrorMessage } from "@/lib/api/errors";
 import { adminCopy } from "@/lib/admin-copy";
 import { formatAdminDate } from "@/lib/admin-format";
 import { toast } from "@/lib/toast";
 import type { Admin } from "@/types/admin";
 
-const PAGE_SIZE = 20;
-
 type DialogMode = "create" | "edit" | "password" | null;
 
 export default function AdminAdminsPage() {
-  const [admins, setAdmins] = useState<Admin[]>([]);
   const [page, setPage] = useState(1);
-  const [reloadToken, setReloadToken] = useState(0);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
   const [dialogMode, setDialogMode] = useState<DialogMode>(null);
   const [selected, setSelected] = useState<Admin | null>(null);
-  const [submitting, setSubmitting] = useState(false);
+
+  const onEmptyPage = useCallback((current: number) => {
+    setPage(Math.max(1, current - 1));
+  }, []);
+
+  const { items: admins, total, loading } = useAdminAdminsList({
+    page,
+    onEmptyPage,
+  });
+
+  const createMutation = useCreateAdmin();
+  const updateMutation = useUpdateAdmin();
+  const passwordMutation = useUpdateAdminPassword();
+  const statusMutation = useUpdateAdminStatus();
+
+  const submitting =
+    createMutation.isPending ||
+    updateMutation.isPending ||
+    passwordMutation.isPending;
 
   const totalPages = useMemo(
-    () => Math.max(1, Math.ceil(total / PAGE_SIZE)),
+    () => Math.max(1, Math.ceil(total / 20)),
     [total]
   );
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    async function fetchAdmins() {
-      try {
-        const response = await listAdmins({
-          page,
-          page_size: PAGE_SIZE,
-        });
-        if (controller.signal.aborted) return;
-        setAdmins(response.items);
-        setTotal(response.total);
-      } catch (err) {
-        if (controller.signal.aborted) return;
-        toast.error(getErrorMessage(err));
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
-      }
-    }
-
-    void fetchAdmins();
-    return () => controller.abort();
-  }, [page, reloadToken]);
-
-  function refresh(nextPage = page) {
-    setLoading(true);
+  function goToPage(nextPage: number) {
     setPage(nextPage);
-    setReloadToken((token) => token + 1);
   }
 
   function openCreate() {
@@ -119,20 +103,17 @@ export default function AdminAdminsPage() {
   async function handleCreate(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    setSubmitting(true);
     try {
-      await createAdmin({
+      await createMutation.mutateAsync({
         name: String(formData.get("name") ?? "").trim(),
         email: String(formData.get("email") ?? "").trim(),
         password: String(formData.get("password") ?? ""),
       });
       setDialogMode(null);
       toast.success(adminCopy.admins.createdSuccess);
-      refresh(1);
+      goToPage(1);
     } catch (err) {
       toast.error(getErrorMessage(err));
-    } finally {
-      setSubmitting(false);
     }
   }
 
@@ -140,19 +121,18 @@ export default function AdminAdminsPage() {
     event.preventDefault();
     if (!selected) return;
     const formData = new FormData(event.currentTarget);
-    setSubmitting(true);
     try {
-      await updateAdmin(selected.id, {
-        name: String(formData.get("name") ?? "").trim(),
-        email: String(formData.get("email") ?? "").trim(),
+      await updateMutation.mutateAsync({
+        id: selected.id,
+        data: {
+          name: String(formData.get("name") ?? "").trim(),
+          email: String(formData.get("email") ?? "").trim(),
+        },
       });
       setDialogMode(null);
       toast.success(adminCopy.admins.updatedSuccess);
-      refresh(page);
     } catch (err) {
       toast.error(getErrorMessage(err));
-    } finally {
-      setSubmitting(false);
     }
   }
 
@@ -160,25 +140,27 @@ export default function AdminAdminsPage() {
     event.preventDefault();
     if (!selected) return;
     const formData = new FormData(event.currentTarget);
-    setSubmitting(true);
     try {
-      const result = await updateAdminPassword(selected.id, {
-        password: String(formData.get("password") ?? ""),
+      const result = await passwordMutation.mutateAsync({
+        id: selected.id,
+        data: {
+          password: String(formData.get("password") ?? ""),
+        },
       });
       setDialogMode(null);
       toast.success(result.message || adminCopy.admins.passwordSuccess);
     } catch (err) {
       toast.error(getErrorMessage(err));
-    } finally {
-      setSubmitting(false);
     }
   }
 
   async function handleToggleStatus(admin: Admin) {
     try {
-      await updateAdminStatus(admin.id, { is_active: !admin.is_active });
+      await statusMutation.mutateAsync({
+        id: admin.id,
+        data: { is_active: !admin.is_active },
+      });
       toast.success(adminCopy.admins.statusSuccess);
-      refresh(page);
     } catch (err) {
       toast.error(getErrorMessage(err));
     }
@@ -290,7 +272,7 @@ export default function AdminAdminsPage() {
                 variant="outline"
                 size="sm"
                 disabled={page <= 1 || loading}
-                onClick={() => refresh(page - 1)}
+                onClick={() => goToPage(page - 1)}
               >
                 {adminCopy.common.previous}
               </Button>
@@ -299,7 +281,7 @@ export default function AdminAdminsPage() {
                 variant="outline"
                 size="sm"
                 disabled={page >= totalPages || loading}
-                onClick={() => refresh(page + 1)}
+                onClick={() => goToPage(page + 1)}
               >
                 {adminCopy.common.next}
               </Button>

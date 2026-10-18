@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type SubmitEvent } from "react";
+import { useCallback, useEffect, useMemo, useState, type SubmitEvent } from "react";
 import { MoreHorizontal, Plus, Search } from "lucide-react";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminSection } from "@/components/admin/admin-section";
@@ -37,28 +37,27 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  useAdminCustomerDetail,
+  useAdminCustomerOrders,
+  useAdminCustomersList,
+  useCreateCustomer,
+  useUpdateCustomer,
+  useUpdateCustomerStatus,
+} from "@/hooks/use-admin-customers";
+import { useQueryErrorToast } from "@/hooks/use-query-error-toast";
 import { adminCopy } from "@/lib/admin-copy";
 import { formatAdminCurrency, formatAdminDate } from "@/lib/admin-format";
-import {
-  createCustomer,
-  getCustomer,
-  listCustomers,
-  updateCustomer,
-  updateCustomerStatus,
-} from "@/lib/api/customers";
 import { getErrorMessage } from "@/lib/api/errors";
-import { listOrders } from "@/lib/api/orders";
 import { toast } from "@/lib/toast";
 import type {
   Customer,
   CustomerCreateRequest,
   CustomerUpdateRequest,
 } from "@/types/customer";
-import type { Order } from "@/types/order";
 
 const PAGE_SIZE = 20;
 const SEARCH_DEBOUNCE_MS = 350;
-const ORDER_HISTORY_PAGE_SIZE = 20;
 /** Caps the dialog to the viewport so the body can scroll on short screens. */
 const FORM_DIALOG_CLASS =
   "sm:max-w-md max-h-[calc(100dvh-2rem)] grid-rows-[auto_minmax(0,1fr)]";
@@ -99,20 +98,57 @@ function validateForm(values: CustomerFormValues): string | null {
 }
 
 export default function AdminCustomersPage() {
-  const [customers, setCustomers] = useState<Customer[]>([]);
   const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
-  const [reloadToken, setReloadToken] = useState(0);
-  const [loading, setLoading] = useState(true);
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [dialogMode, setDialogMode] = useState<DialogMode>(null);
-  const [selected, setSelected] = useState<Customer | null>(null);
-  const [detailLoading, setDetailLoading] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const [detailCustomerId, setDetailCustomerId] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [statusPendingId, setStatusPendingId] = useState<string | null>(null);
+
+  const isActive = useMemo(
+    (): boolean | null =>
+      statusFilter === "all"
+        ? null
+        : statusFilter === "active",
+    [statusFilter]
+  );
+
+  const onEmptyPage = useCallback(() => {
+    setPage((current) => Math.max(1, current - 1));
+  }, []);
+
+  const {
+    items: customers,
+    total,
+    loading,
+    isFetching,
+  } = useAdminCustomersList({
+    page,
+    search,
+    isActive,
+    onEmptyPage,
+  });
+
+  const detailQueryEnabled =
+    dialogMode === "edit" || dialogMode === "detail";
+  const {
+    data: detailCustomer,
+    loading: detailQueryLoading,
+    isError: detailIsError,
+    error: detailError,
+  } = useAdminCustomerDetail(detailQueryEnabled ? detailCustomerId : null);
+
+  const detailLoading =
+    detailQueryEnabled && !detailCustomer && detailQueryLoading;
+
+  const createMutation = useCreateCustomer();
+  const updateMutation = useUpdateCustomer();
+  const statusMutation = useUpdateCustomerStatus();
+
+  const submitting =
+    createMutation.isPending || updateMutation.isPending;
 
   const totalPages = useMemo(
     () => Math.max(1, Math.ceil(total / PAGE_SIZE)),
@@ -124,7 +160,6 @@ export default function AdminCustomersPage() {
     if (searchInput.trim() === search) return;
 
     const timeout = setTimeout(() => {
-      setLoading(true);
       setSearch(searchInput.trim());
       setPage(1);
     }, SEARCH_DEBOUNCE_MS);
@@ -132,76 +167,31 @@ export default function AdminCustomersPage() {
     return () => clearTimeout(timeout);
   }, [searchInput, search]);
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    async function fetchCustomers() {
-      try {
-        const response = await listCustomers(
-          {
-            page,
-            page_size: PAGE_SIZE,
-            search: search || undefined,
-            is_active:
-              statusFilter === "all" ? undefined : statusFilter === "active",
-          },
-          { signal: controller.signal }
-        );
-        if (controller.signal.aborted) return;
-        // A page can empty out after a status change or filter narrows results.
-        if (response.items.length === 0 && page > 1) {
-          setPage((current) => Math.max(1, current - 1));
-          return;
-        }
-        setCustomers(response.items);
-        setTotal(response.total);
-      } catch (err) {
-        if (controller.signal.aborted) return;
-        toast.error(getErrorMessage(err));
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
-      }
-    }
-
-    void fetchCustomers();
-    return () => controller.abort();
-  }, [page, search, statusFilter, reloadToken]);
-
-  function refresh(nextPage = page) {
-    setLoading(true);
-    setPage(nextPage);
-    setReloadToken((token) => token + 1);
+  useQueryErrorToast(
+    detailQueryEnabled && detailIsError ? detailError : null
+  );
+  // Close detail/edit when the detail query fails (adjust during render).
+  if (detailQueryEnabled && detailIsError && detailCustomerId) {
+    setDialogMode(null);
+    setDetailCustomerId(null);
   }
 
   function openCreate() {
-    setSelected(null);
+    setDetailCustomerId(null);
     setFormError(null);
     setDialogMode("create");
   }
 
-  async function openDetailDialog(customer: Customer, mode: "edit" | "detail") {
-    setSelected(null);
+  function openDetailDialog(customer: Customer, mode: "edit" | "detail") {
     setFormError(null);
+    setDetailCustomerId(customer.id);
     setDialogMode(mode);
-    setDetailLoading(true);
-
-    try {
-      setSelected(await getCustomer(customer.id));
-    } catch (err) {
-      setDialogMode(null);
-      toast.error(getErrorMessage(err));
-      refresh(page);
-    } finally {
-      setDetailLoading(false);
-    }
   }
 
   function closeDialog() {
     if (submitting) return;
     setDialogMode(null);
-    setSelected(null);
+    setDetailCustomerId(null);
     setFormError(null);
   }
 
@@ -221,26 +211,23 @@ export default function AdminCustomersPage() {
     };
 
     setFormError(null);
-    setSubmitting(true);
     try {
-      await createCustomer(payload);
+      await createMutation.mutateAsync(payload);
       setDialogMode(null);
-      setSelected(null);
+      setDetailCustomerId(null);
       toast.success(copy.createdSuccess);
-      refresh(1);
+      setPage(1);
     } catch (err) {
       // Surfaces the backend's duplicate-phone message (409, CUSTOMER_PHONE_TAKEN).
       const message = getErrorMessage(err);
       setFormError(message);
       toast.error(message);
-    } finally {
-      setSubmitting(false);
     }
   }
 
   async function handleEdit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!selected) return;
+    if (!detailCustomer) return;
 
     const values = readForm(event.currentTarget);
     const invalid = validateForm(values);
@@ -251,11 +238,11 @@ export default function AdminCustomersPage() {
 
     // PATCH is partial: omitted fields keep their value, explicit null clears.
     const changes: CustomerUpdateRequest = {};
-    if (values.name !== selected.name) changes.name = values.name;
-    if (values.phone !== selected.phone) changes.phone = values.phone;
+    if (values.name !== detailCustomer.name) changes.name = values.name;
+    if (values.phone !== detailCustomer.phone) changes.phone = values.phone;
 
     const nextEmail = values.email || null;
-    if (nextEmail !== selected.email) changes.email = nextEmail;
+    if (nextEmail !== detailCustomer.email) changes.email = nextEmail;
 
     if (Object.keys(changes).length === 0) {
       closeDialog();
@@ -263,32 +250,28 @@ export default function AdminCustomersPage() {
     }
 
     setFormError(null);
-    setSubmitting(true);
     try {
-      await updateCustomer(selected.id, changes);
+      await updateMutation.mutateAsync({ id: detailCustomer.id, data: changes });
       setDialogMode(null);
-      setSelected(null);
+      setDetailCustomerId(null);
       toast.success(copy.updatedSuccess);
-      refresh(page);
     } catch (err) {
       const message = getErrorMessage(err);
       setFormError(message);
       toast.error(message);
-    } finally {
-      setSubmitting(false);
     }
   }
 
   async function handleToggleStatus(customer: Customer) {
     setStatusPendingId(customer.id);
     try {
-      await updateCustomerStatus(customer.id, {
-        is_active: !customer.is_active,
+      await statusMutation.mutateAsync({
+        id: customer.id,
+        data: { is_active: !customer.is_active },
       });
       toast.success(
         customer.is_active ? copy.deactivatedSuccess : copy.activatedSuccess
       );
-      refresh(page);
     } catch (err) {
       toast.error(getErrorMessage(err));
     } finally {
@@ -331,7 +314,6 @@ export default function AdminCustomersPage() {
             value={statusFilter}
             onValueChange={(value) => {
               if (value == null) return;
-              setLoading(true);
               setStatusFilter(value as StatusFilter);
               setPage(1);
             }}
@@ -368,8 +350,8 @@ export default function AdminCustomersPage() {
           </p>
         ) : (
           <div
-            aria-busy={loading}
-            className={loading ? "opacity-60 transition-opacity" : undefined}
+            aria-busy={isFetching}
+            className={isFetching ? "opacity-60 transition-opacity" : undefined}
           >
             <Table>
               <TableHeader>
@@ -425,7 +407,7 @@ export default function AdminCustomersPage() {
                           <DropdownMenuItem
                             className="cursor-pointer"
                             onClick={() => {
-                              void openDetailDialog(customer, "detail");
+                              openDetailDialog(customer, "detail");
                             }}
                           >
                             {adminCopy.common.view}
@@ -433,7 +415,7 @@ export default function AdminCustomersPage() {
                           <DropdownMenuItem
                             className="cursor-pointer"
                             onClick={() => {
-                              void openDetailDialog(customer, "edit");
+                              openDetailDialog(customer, "edit");
                             }}
                           >
                             {adminCopy.common.edit}
@@ -470,8 +452,8 @@ export default function AdminCustomersPage() {
                 type="button"
                 variant="outline"
                 size="sm"
-                disabled={page <= 1 || loading}
-                onClick={() => refresh(page - 1)}
+                disabled={page <= 1 || isFetching}
+                onClick={() => setPage(page - 1)}
               >
                 {adminCopy.common.previous}
               </Button>
@@ -479,8 +461,8 @@ export default function AdminCustomersPage() {
                 type="button"
                 variant="outline"
                 size="sm"
-                disabled={page >= totalPages || loading}
-                onClick={() => refresh(page + 1)}
+                disabled={page >= totalPages || isFetching}
+                onClick={() => setPage(page + 1)}
               >
                 {adminCopy.common.next}
               </Button>
@@ -519,15 +501,15 @@ export default function AdminCustomersPage() {
           <DialogHeader>
             <DialogTitle>{copy.editTitle}</DialogTitle>
           </DialogHeader>
-          {detailLoading || !selected ? (
+          {detailLoading || !detailCustomer ? (
             <p className="text-sm text-muted-foreground">
               {adminCopy.common.loading}
             </p>
           ) : (
             <CustomerForm
-              key={selected.id}
+              key={detailCustomer.id}
               mode="edit"
-              customer={selected}
+              customer={detailCustomer}
               submitting={submitting}
               error={formError}
               onSubmit={handleEdit}
@@ -547,12 +529,12 @@ export default function AdminCustomersPage() {
           <DialogHeader>
             <DialogTitle>{copy.detailTitle}</DialogTitle>
           </DialogHeader>
-          {detailLoading || !selected ? (
+          {detailLoading || !detailCustomer ? (
             <p className="text-sm text-muted-foreground">
               {adminCopy.common.loading}
             </p>
           ) : (
-            <CustomerDetail key={selected.id} customer={selected} />
+            <CustomerDetail key={detailCustomer.id} customer={detailCustomer} />
           )}
         </DialogContent>
       </Dialog>
@@ -661,37 +643,17 @@ function CustomerForm({
 }
 
 function CustomerDetail({ customer }: { customer: Customer }) {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [orderTotal, setOrderTotal] = useState(0);
-  const [ordersLoading, setOrdersLoading] = useState(true);
-  const [ordersError, setOrdersError] = useState<string | null>(null);
+  const {
+    items: orders,
+    total: orderTotal,
+    loading: ordersLoading,
+    error: ordersError,
+    isError: ordersIsError,
+  } = useAdminCustomerOrders(customer.id);
 
-  // Order history reuses the Orders API filtered by customer_id.
-  useEffect(() => {
-    const controller = new AbortController();
-
-    async function fetchOrders() {
-      try {
-        const response = await listOrders(
-          { customer_id: customer.id, page_size: ORDER_HISTORY_PAGE_SIZE },
-          { signal: controller.signal }
-        );
-        if (controller.signal.aborted) return;
-        setOrders(response.items);
-        setOrderTotal(response.total);
-      } catch (err) {
-        if (controller.signal.aborted) return;
-        setOrdersError(getErrorMessage(err, copy.orders.loadError));
-      } finally {
-        if (!controller.signal.aborted) {
-          setOrdersLoading(false);
-        }
-      }
-    }
-
-    void fetchOrders();
-    return () => controller.abort();
-  }, [customer.id]);
+  const ordersErrorMessage = ordersIsError
+    ? getErrorMessage(ordersError, copy.orders.loadError)
+    : null;
 
   return (
     <div className="-mx-1 min-h-0 flex-1 space-y-6 overflow-y-auto px-1">
@@ -727,7 +689,7 @@ function CustomerDetail({ customer }: { customer: Customer }) {
       <section className="space-y-3">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-medium">{copy.orders.title}</h3>
-          {!ordersLoading && !ordersError && orderTotal > 0 ? (
+          {!ordersLoading && !ordersErrorMessage && orderTotal > 0 ? (
             <span className="text-xs text-muted-foreground">
               {copy.orders.viewAll(orderTotal)}
             </span>
@@ -738,9 +700,9 @@ function CustomerDetail({ customer }: { customer: Customer }) {
           <p className="text-sm text-muted-foreground">
             {adminCopy.common.loading}
           </p>
-        ) : ordersError ? (
+        ) : ordersErrorMessage ? (
           <p role="alert" className="text-sm text-destructive">
-            {ordersError}
+            {ordersErrorMessage}
           </p>
         ) : orders.length === 0 ? (
           <p className="text-sm text-muted-foreground">{copy.orders.empty}</p>

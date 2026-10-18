@@ -30,8 +30,11 @@ export async function listCustomers(
   });
 }
 
-export async function getCustomer(id: string): Promise<Customer> {
-  return api.get<Customer>(`/customers/${id}`);
+export async function getCustomer(
+  id: string,
+  options: { signal?: AbortSignal } = {}
+): Promise<Customer> {
+  return api.get<Customer>(`/customers/${id}`, { signal: options.signal });
 }
 
 export async function createCustomer(

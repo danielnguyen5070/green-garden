@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type SubmitEvent } from "react";
+import { useMemo, useState, type SubmitEvent } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
@@ -14,11 +14,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useAdminPlantForOrder } from "@/hooks/use-admin-orders";
+import { useQueryErrorToast } from "@/hooks/use-query-error-toast";
 import { adminCopy } from "@/lib/admin-copy";
-import { getErrorMessage } from "@/lib/api/errors";
-import { getPlant } from "@/lib/api/plants";
-import { toast } from "@/lib/toast";
-import type { AdminPlantListItem, AdminPlantPotSize } from "@/types/admin-plant";
+import type { AdminPlantListItem } from "@/types/admin-plant";
 import type { OrderCreateRequest, OrderItemCreateRequest } from "@/types/order";
 
 const copy = adminCopy.orders;
@@ -54,6 +53,134 @@ function createDraftItem(): DraftItem {
   };
 }
 
+type OrderItemRowProps = {
+  item: DraftItem;
+  plants: AdminPlantListItem[];
+  submitting: boolean;
+  canRemove: boolean;
+  onUpdate: (key: string, changes: Partial<DraftItem>) => void;
+  onRemove: (key: string) => void;
+};
+
+function OrderItemRow({
+  item,
+  plants,
+  submitting,
+  canRemove,
+  onUpdate,
+  onRemove,
+}: OrderItemRowProps) {
+  const plantId = item.plant_id || null;
+  const { data: plantDetail, error: plantError } =
+    useAdminPlantForOrder(plantId);
+
+  useQueryErrorToast(plantError);
+
+  const potSizes = useMemo(
+    () => plantDetail?.pot_sizes.filter((potSize) => potSize.is_active) ?? [],
+    [plantDetail]
+  );
+
+  const plant = plants.find((candidate) => candidate.id === item.plant_id);
+
+  return (
+    <li className="space-y-2 rounded-lg border border-border p-2">
+      <div className="flex items-center gap-2">
+        <Select
+          value={item.plant_id}
+          disabled={submitting}
+          onValueChange={(value) => {
+            if (value == null) return;
+            onUpdate(item.key, {
+              plant_id: value as string,
+              pot_size_id: NO_POT_SIZE,
+            });
+          }}
+        >
+          <SelectTrigger
+            className="w-full flex-1"
+            aria-label={copy.items.plant}
+          >
+            <SelectValue>
+              {plant ? (
+                plant.name
+              ) : (
+                <span className="text-muted-foreground">
+                  {copy.items.selectPlant}
+                </span>
+              )}
+            </SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {plants.map((candidate) => (
+              <SelectItem key={candidate.id} value={candidate.id}>
+                {candidate.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          aria-label={copy.items.remove}
+          disabled={submitting || !canRemove}
+          onClick={() => onRemove(item.key)}
+        >
+          <Trash2 className="text-destructive" />
+        </Button>
+      </div>
+
+      <div className="flex gap-2">
+        <div className="w-24">
+          <Input
+            type="number"
+            min={1}
+            step={1}
+            value={item.quantity}
+            disabled={submitting}
+            aria-label={copy.items.quantity}
+            placeholder={copy.items.quantity}
+            onChange={(event) =>
+              onUpdate(item.key, { quantity: event.target.value })
+            }
+          />
+        </div>
+
+        <Select
+          value={item.pot_size_id}
+          disabled={submitting || potSizes.length === 0}
+          onValueChange={(value) => {
+            if (value == null) return;
+            onUpdate(item.key, { pot_size_id: value as string });
+          }}
+        >
+          <SelectTrigger
+            className="w-full flex-1"
+            aria-label={copy.items.potSize}
+          >
+            <SelectValue>
+              {item.pot_size_id === NO_POT_SIZE
+                ? copy.items.noPotSize
+                : (potSizes.find((potSize) => potSize.id === item.pot_size_id)
+                    ?.name ?? copy.items.noPotSize)}
+            </SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={NO_POT_SIZE}>{copy.items.noPotSize}</SelectItem>
+            {potSizes.map((potSize) => (
+              <SelectItem key={potSize.id} value={potSize.id}>
+                {potSize.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    </li>
+  );
+}
+
 export function OrderCreateForm({
   plants,
   submitting,
@@ -63,32 +190,11 @@ export function OrderCreateForm({
   onCancel,
 }: OrderCreateFormProps) {
   const [items, setItems] = useState<DraftItem[]>([createDraftItem()]);
-  /** Pot sizes come from plant detail, fetched once per selected plant. */
-  const [potSizesByPlant, setPotSizesByPlant] = useState<
-    Record<string, AdminPlantPotSize[]>
-  >({});
 
   function updateItem(key: string, changes: Partial<DraftItem>) {
     setItems((current) =>
       current.map((item) => (item.key === key ? { ...item, ...changes } : item))
     );
-  }
-
-  async function handlePlantChange(key: string, plantId: string) {
-    // Changing the plant invalidates any pot size picked for the old one.
-    updateItem(key, { plant_id: plantId, pot_size_id: NO_POT_SIZE });
-
-    if (potSizesByPlant[plantId]) return;
-
-    try {
-      const plant = await getPlant(plantId);
-      setPotSizesByPlant((current) => ({
-        ...current,
-        [plantId]: plant.pot_sizes.filter((potSize) => potSize.is_active),
-      }));
-    } catch (err) {
-      toast.error(getErrorMessage(err));
-    }
   }
 
   function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
@@ -238,118 +344,21 @@ export function OrderCreateForm({
           </p>
 
           <ul className="space-y-2">
-            {items.map((item) => {
-              const plant = plants.find(
-                (candidate) => candidate.id === item.plant_id
-              );
-              const potSizes = potSizesByPlant[item.plant_id] ?? [];
-
-              return (
-                <li
-                  key={item.key}
-                  className="space-y-2 rounded-lg border border-border p-2"
-                >
-                  <div className="flex items-center gap-2">
-                    <Select
-                      value={item.plant_id}
-                      disabled={submitting}
-                      onValueChange={(value) => {
-                        if (value == null) return;
-                        void handlePlantChange(item.key, value as string);
-                      }}
-                    >
-                      <SelectTrigger
-                        className="w-full flex-1"
-                        aria-label={copy.items.plant}
-                      >
-                        <SelectValue>
-                          {plant ? (
-                            plant.name
-                          ) : (
-                            <span className="text-muted-foreground">
-                              {copy.items.selectPlant}
-                            </span>
-                          )}
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent>
-                        {plants.map((candidate) => (
-                          <SelectItem key={candidate.id} value={candidate.id}>
-                            {candidate.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon-sm"
-                      aria-label={copy.items.remove}
-                      disabled={submitting || items.length === 1}
-                      onClick={() =>
-                        setItems((current) =>
-                          current.filter(
-                            (candidate) => candidate.key !== item.key
-                          )
-                        )
-                      }
-                    >
-                      <Trash2 className="text-destructive" />
-                    </Button>
-                  </div>
-
-                  <div className="flex gap-2">
-                    <div className="w-24">
-                      <Input
-                        type="number"
-                        min={1}
-                        step={1}
-                        value={item.quantity}
-                        disabled={submitting}
-                        aria-label={copy.items.quantity}
-                        placeholder={copy.items.quantity}
-                        onChange={(event) =>
-                          updateItem(item.key, { quantity: event.target.value })
-                        }
-                      />
-                    </div>
-
-                    <Select
-                      value={item.pot_size_id}
-                      disabled={submitting || potSizes.length === 0}
-                      onValueChange={(value) => {
-                        if (value == null) return;
-                        updateItem(item.key, { pot_size_id: value as string });
-                      }}
-                    >
-                      <SelectTrigger
-                        className="w-full flex-1"
-                        aria-label={copy.items.potSize}
-                      >
-                        <SelectValue>
-                          {item.pot_size_id === NO_POT_SIZE
-                            ? copy.items.noPotSize
-                            : (potSizes.find(
-                                (potSize) => potSize.id === item.pot_size_id
-                              )?.name ?? copy.items.noPotSize)}
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value={NO_POT_SIZE}>
-                          {copy.items.noPotSize}
-                        </SelectItem>
-                        {potSizes.map((potSize) => (
-                          <SelectItem key={potSize.id} value={potSize.id}>
-                            {potSize.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </li>
-              );
-            })}
+            {items.map((item) => (
+              <OrderItemRow
+                key={item.key}
+                item={item}
+                plants={plants}
+                submitting={submitting}
+                canRemove={items.length > 1}
+                onUpdate={updateItem}
+                onRemove={(key) =>
+                  setItems((current) =>
+                    current.filter((candidate) => candidate.key !== key)
+                  )
+                }
+              />
+            ))}
           </ul>
 
           <Button

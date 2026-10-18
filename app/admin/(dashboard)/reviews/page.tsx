@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ExternalLink, Search, Star } from "lucide-react";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminSection } from "@/components/admin/admin-section";
@@ -11,8 +11,12 @@ import { refreshStorefront } from "@/app/admin/actions/revalidate";
 import { routing } from "@/i18n/routing";
 import { adminCopy } from "@/lib/admin-copy";
 import { formatAdminDate } from "@/lib/admin-format";
+import {
+  useAdminReviewsList,
+  useInvalidateAdminReviews,
+  useUpdateReviewStatus,
+} from "@/hooks/use-admin-reviews";
 import { getErrorMessage } from "@/lib/api/errors";
-import { listReviews, updateReviewStatus } from "@/lib/api/reviews";
 import { toast } from "@/lib/toast";
 import type { Review, ReviewScope, ReviewStatus } from "@/types/review";
 import { REVIEW_SCOPES, REVIEW_STATUSES } from "@/types/review";
@@ -115,16 +119,37 @@ function ReviewStars({ rating }: { rating: number }) {
 }
 
 export default function AdminReviewsPage() {
-  const [reviews, setReviews] = useState<Review[]>([]);
   const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
-  const [reloadToken, setReloadToken] = useState(0);
-  const [loading, setLoading] = useState(true);
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [scopeFilter, setScopeFilter] = useState<ScopeFilter>("all");
-  const [statusPendingId, setStatusPendingId] = useState<string | null>(null);
+
+  const onEmptyPage = useCallback((current: number) => {
+    setPage(Math.max(1, current - 1));
+  }, []);
+
+  const {
+    items: reviews,
+    total,
+    loading,
+    isFetching,
+    listKey,
+  } = useAdminReviewsList({
+    page,
+    search,
+    status: statusFilter === "all" ? null : statusFilter,
+    scope: scopeFilter === "all" ? null : scopeFilter,
+    onEmptyPage,
+  });
+
+  const statusMutation = useUpdateReviewStatus(listKey);
+  const invalidateReviews = useInvalidateAdminReviews();
+
+  const statusPendingId =
+    statusMutation.isPending && statusMutation.variables
+      ? statusMutation.variables.id
+      : null;
 
   const totalPages = useMemo(
     () => Math.max(1, Math.ceil(total / PAGE_SIZE)),
@@ -137,7 +162,6 @@ export default function AdminReviewsPage() {
     if (searchInput.trim() === search) return;
 
     const timeout = setTimeout(() => {
-      setLoading(true);
       setSearch(searchInput.trim());
       setPage(1);
     }, SEARCH_DEBOUNCE_MS);
@@ -145,60 +169,18 @@ export default function AdminReviewsPage() {
     return () => clearTimeout(timeout);
   }, [searchInput, search]);
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    async function fetchReviews() {
-      try {
-        const response = await listReviews(
-          {
-            page,
-            page_size: PAGE_SIZE,
-            search: search || undefined,
-            status: statusFilter === "all" ? undefined : statusFilter,
-            scope: scopeFilter === "all" ? undefined : scopeFilter,
-          },
-          { signal: controller.signal }
-        );
-        if (controller.signal.aborted) return;
-
-        if (response.items.length === 0 && page > 1) {
-          setPage((current) => Math.max(1, current - 1));
-          return;
-        }
-
-        setReviews(response.items);
-        setTotal(response.total);
-      } catch (err) {
-        if (controller.signal.aborted) return;
-        toast.error(getErrorMessage(err));
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
-      }
-    }
-
-    void fetchReviews();
-    return () => controller.abort();
-  }, [page, search, statusFilter, scopeFilter, reloadToken]);
-
-  function refresh(nextPage = page) {
-    setLoading(true);
+  function goToPage(nextPage: number) {
     setPage(nextPage);
-    setReloadToken((token) => token + 1);
   }
 
   function applyStatusFilter(next: StatusFilter) {
     if (next === statusFilter) return;
-    setLoading(true);
     setStatusFilter(next);
     setPage(1);
   }
 
   function applyScopeFilter(next: ScopeFilter) {
     if (next === scopeFilter) return;
-    setLoading(true);
     setScopeFilter(next);
     setPage(1);
   }
@@ -207,13 +189,11 @@ export default function AdminReviewsPage() {
     review: Review,
     status: Extract<ReviewStatus, "approved" | "rejected">
   ) {
-    setStatusPendingId(review.id);
-
     try {
-      const updated = await updateReviewStatus(review.id, { status });
-      setReviews((current) =>
-        current.map((item) => (item.id === updated.id ? updated : item))
-      );
+      const updated = await statusMutation.mutateAsync({
+        id: review.id,
+        data: { status },
+      });
       toast.success(
         status === "approved" ? copy.approvedSuccess : copy.rejectedSuccess
       );
@@ -224,12 +204,10 @@ export default function AdminReviewsPage() {
 
       // Drop the row when the active filter no longer includes it.
       if (statusFilter !== "all" && statusFilter !== status) {
-        refresh(page);
+        void invalidateReviews();
       }
     } catch (err) {
       toast.error(getErrorMessage(err));
-    } finally {
-      setStatusPendingId(null);
     }
   }
 
@@ -283,10 +261,10 @@ export default function AdminReviewsPage() {
           </p>
         ) : (
           <div
-            aria-busy={loading}
+            aria-busy={isFetching}
             className={cn(
               "space-y-3",
-              loading && "opacity-60 transition-opacity"
+              isFetching && "opacity-60 transition-opacity"
             )}
           >
             {reviews.map((review) => {
@@ -382,8 +360,8 @@ export default function AdminReviewsPage() {
                 type="button"
                 variant="outline"
                 size="sm"
-                disabled={page <= 1 || loading}
-                onClick={() => refresh(page - 1)}
+                disabled={page <= 1 || isFetching}
+                onClick={() => goToPage(page - 1)}
               >
                 {adminCopy.common.previous}
               </Button>
@@ -391,8 +369,8 @@ export default function AdminReviewsPage() {
                 type="button"
                 variant="outline"
                 size="sm"
-                disabled={page >= totalPages || loading}
-                onClick={() => refresh(page + 1)}
+                disabled={page >= totalPages || isFetching}
+                onClick={() => goToPage(page + 1)}
               >
                 {adminCopy.common.next}
               </Button>

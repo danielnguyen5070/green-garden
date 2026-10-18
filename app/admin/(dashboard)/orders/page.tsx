@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MoreHorizontal, Plus, Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { refreshStorefront } from "@/app/admin/actions/revalidate";
@@ -38,18 +38,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  useAdminOrderDetail,
+  useAdminOrdersList,
+  useCreateOrder,
+  useUpdateOrderStatus,
+} from "@/hooks/use-admin-orders";
+import { useAdminPlantPicker } from "@/hooks/use-admin-plants";
+import { useQueryErrorToast } from "@/hooks/use-query-error-toast";
 import { adminCopy } from "@/lib/admin-copy";
 import { formatAdminCurrency, formatAdminDate } from "@/lib/admin-format";
 import { ApiError, ErrorCode, getErrorMessage } from "@/lib/api/errors";
-import {
-  createOrder,
-  getOrder,
-  listOrders,
-  updateOrderStatus,
-} from "@/lib/api/orders";
-import { listPlants } from "@/lib/api/plants";
 import { toast } from "@/lib/toast";
-import type { AdminPlantListItem } from "@/types/admin-plant";
 import {
   ORDER_STATUSES,
   type Order,
@@ -59,7 +59,6 @@ import {
 
 const PAGE_SIZE = 20;
 const SEARCH_DEBOUNCE_MS = 350;
-const PLANT_PICKER_PAGE_SIZE = 100;
 /** Caps the dialog to the viewport so the body can scroll on short screens. */
 const DIALOG_CLASS =
   "sm:max-w-2xl max-h-[calc(100dvh-2rem)] grid-rows-[auto_minmax(0,1fr)]";
@@ -91,29 +90,77 @@ export default function AdminOrdersPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderIdFromQuery = searchParams.get("order");
-  const openedOrderQueryRef = useRef<string | null>(null);
 
-  const [orders, setOrders] = useState<Order[]>([]);
   const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
-  const [reloadToken, setReloadToken] = useState(0);
-  const [loading, setLoading] = useState(true);
-
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
 
-  const [plants, setPlants] = useState<AdminPlantListItem[]>([]);
-  const [plantsReloadToken, setPlantsReloadToken] = useState(0);
-
-  const [dialogMode, setDialogMode] = useState<DialogMode>(null);
-  const [selected, setSelected] = useState<Order | null>(null);
-  const [detailLoading, setDetailLoading] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  /** Manual dialog overrides URL deep-links until dismissed. */
+  const [manualDialog, setManualDialog] = useState<{
+    mode: DialogMode;
+    orderId: string | null;
+  }>({ mode: null, orderId: null });
+  /** URL order ids the user has closed so they do not reopen immediately. */
+  const [dismissedUrlOrder, setDismissedUrlOrder] = useState<string | null>(
+    null
+  );
   const [formError, setFormError] = useState<string | null>(null);
-  const [statusPending, setStatusPending] = useState(false);
+  const [detailLoadFailedId, setDetailLoadFailedId] = useState<string | null>(
+    null
+  );
+
+  const urlOpensDetail =
+    !!orderIdFromQuery &&
+    orderIdFromQuery !== dismissedUrlOrder &&
+    orderIdFromQuery !== detailLoadFailedId;
+
+  const dialogMode: DialogMode =
+    manualDialog.mode ?? (urlOpensDetail ? "detail" : null);
+  const detailOrderId =
+    dialogMode === "detail"
+      ? (manualDialog.orderId ?? (urlOpensDetail ? orderIdFromQuery : null))
+      : null;
+
+  const onEmptyPage = () => {
+    setPage((current) => Math.max(1, current - 1));
+  };
+
+  const {
+    items: orders,
+    total,
+    loading,
+    isFetching,
+  } = useAdminOrdersList({
+    page,
+    search,
+    status: statusFilter === "all" ? null : statusFilter,
+    dateFrom,
+    dateTo,
+    onEmptyPage,
+  });
+
+  const { items: plants, refetch: refetchPlants } = useAdminPlantPicker();
+
+  const detailQueryEnabled = dialogMode === "detail" && !!detailOrderId;
+  const {
+    data: detailOrder,
+    loading: detailQueryLoading,
+    isError: detailIsError,
+    error: detailError,
+    refetch: refetchDetailOrder,
+  } = useAdminOrderDetail(detailQueryEnabled ? detailOrderId : null);
+
+  const detailLoading =
+    detailQueryEnabled && !detailOrder && detailQueryLoading;
+
+  const createMutation = useCreateOrder();
+  const updateStatusMutation = useUpdateOrderStatus();
+
+  const submitting = createMutation.isPending;
+  const statusPending = updateStatusMutation.isPending;
 
   const totalPages = useMemo(
     () => Math.max(1, Math.ceil(total / PAGE_SIZE)),
@@ -122,12 +169,10 @@ export default function AdminOrdersPage() {
   const isFiltered =
     search !== "" || statusFilter !== "all" || dateFrom !== "" || dateTo !== "";
 
-  /** Any filter change restarts from the first page. */
-  const applyFilterChange = useCallback((apply: () => void) => {
-    setLoading(true);
+  function applyFilterChange(apply: () => void) {
     apply();
     setPage(1);
-  }, []);
+  }
 
   useEffect(() => {
     if (searchInput.trim() === search) return;
@@ -137,78 +182,31 @@ export default function AdminOrdersPage() {
     }, SEARCH_DEBOUNCE_MS);
 
     return () => clearTimeout(timeout);
-  }, [searchInput, search, applyFilterChange]);
+  }, [searchInput, search]);
 
-  // The order form's plant picker is driven by the Plants API, never hardcoded.
-  useEffect(() => {
-    const controller = new AbortController();
+  useQueryErrorToast(
+    detailQueryEnabled && detailIsError ? detailError : null
+  );
 
-    async function fetchPlants() {
-      try {
-        const response = await listPlants(
-          {
-            page_size: PLANT_PICKER_PAGE_SIZE,
-            is_active: true,
-            sort: "name",
-            order: "asc",
-          },
-          { signal: controller.signal }
-        );
-        if (controller.signal.aborted) return;
-        setPlants(response.items);
-      } catch (err) {
-        if (controller.signal.aborted) return;
-        toast.error(getErrorMessage(err, copy.plantsLoadError));
-      }
+  // Remember failed detail loads so URL deep-links do not reopen them.
+  if (
+    detailQueryEnabled &&
+    detailIsError &&
+    detailOrderId &&
+    detailLoadFailedId !== detailOrderId
+  ) {
+    setDetailLoadFailedId(detailOrderId);
+    setManualDialog({ mode: null, orderId: null });
+    if (orderIdFromQuery === detailOrderId) {
+      setDismissedUrlOrder(orderIdFromQuery);
     }
-
-    void fetchPlants();
-    return () => controller.abort();
-  }, [plantsReloadToken]);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    async function fetchOrders() {
-      try {
-        const response = await listOrders(
-          {
-            page,
-            page_size: PAGE_SIZE,
-            search: search || undefined,
-            status: statusFilter === "all" ? undefined : statusFilter,
-            date_from: dateFrom || undefined,
-            date_to: dateTo || undefined,
-          },
-          { signal: controller.signal }
-        );
-        if (controller.signal.aborted) return;
-        // A page can empty out after a filter narrows the results.
-        if (response.items.length === 0 && page > 1) {
-          setPage((current) => Math.max(1, current - 1));
-          return;
-        }
-        setOrders(response.items);
-        setTotal(response.total);
-      } catch (err) {
-        if (controller.signal.aborted) return;
-        toast.error(getErrorMessage(err));
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
-      }
-    }
-
-    void fetchOrders();
-    return () => controller.abort();
-  }, [page, search, statusFilter, dateFrom, dateTo, reloadToken]);
-
-  function refresh(nextPage = page) {
-    setLoading(true);
-    setPage(nextPage);
-    setReloadToken((token) => token + 1);
   }
+
+  // Clear the deep-link query when detail load fails.
+  useEffect(() => {
+    if (!detailIsError || !orderIdFromQuery) return;
+    router.replace("/admin/orders");
+  }, [detailIsError, orderIdFromQuery, router]);
 
   function resetFilters() {
     setSearchInput("");
@@ -221,91 +219,34 @@ export default function AdminOrdersPage() {
   }
 
   function openCreate() {
-    setSelected(null);
     setFormError(null);
-    setDialogMode("create");
+    setManualDialog({ mode: "create", orderId: null });
   }
 
-  async function openDetail(order: Order) {
-    setSelected(null);
+  function openDetail(order: Order) {
     setFormError(null);
-    setDialogMode("detail");
-    setDetailLoading(true);
-    openedOrderQueryRef.current = order.id;
-
-    try {
-      setSelected(await getOrder(order.id));
-      router.replace(`/admin/orders?order=${encodeURIComponent(order.id)}`);
-    } catch (err) {
-      openedOrderQueryRef.current = null;
-      setDialogMode(null);
-      toast.error(getErrorMessage(err));
-      refresh(page);
-    } finally {
-      setDetailLoading(false);
-    }
-  }
-
-  function clearOrderQuery() {
-    if (!orderIdFromQuery) return;
-    openedOrderQueryRef.current = null;
-    router.replace("/admin/orders");
+    setDetailLoadFailedId(null);
+    setManualDialog({ mode: "detail", orderId: order.id });
+    router.replace(`/admin/orders?order=${encodeURIComponent(order.id)}`);
   }
 
   function closeDialog() {
     if (submitting) return;
-    setDialogMode(null);
-    setSelected(null);
+    setManualDialog({ mode: null, orderId: null });
     setFormError(null);
-    clearOrderQuery();
+    if (orderIdFromQuery) {
+      setDismissedUrlOrder(orderIdFromQuery);
+      router.replace("/admin/orders");
+    }
   }
-
-  // Deep-link from notifications: `/admin/orders?order=<id>`.
-  useEffect(() => {
-    if (!orderIdFromQuery) {
-      openedOrderQueryRef.current = null;
-      return;
-    }
-    if (openedOrderQueryRef.current === orderIdFromQuery) return;
-
-    const controller = new AbortController();
-    openedOrderQueryRef.current = orderIdFromQuery;
-
-    async function openFromQuery() {
-      setSelected(null);
-      setFormError(null);
-      setDialogMode("detail");
-      setDetailLoading(true);
-
-      try {
-        const order = await getOrder(orderIdFromQuery!);
-        if (controller.signal.aborted) return;
-        setSelected(order);
-      } catch (err) {
-        if (controller.signal.aborted) return;
-        openedOrderQueryRef.current = null;
-        setDialogMode(null);
-        toast.error(getErrorMessage(err));
-        router.replace("/admin/orders");
-      } finally {
-        if (!controller.signal.aborted) {
-          setDetailLoading(false);
-        }
-      }
-    }
-
-    void openFromQuery();
-    return () => controller.abort();
-  }, [orderIdFromQuery, router]);
 
   async function handleCreate(payload: OrderCreateRequest) {
     setFormError(null);
-    setSubmitting(true);
     try {
-      await createOrder(payload);
-      setDialogMode(null);
+      await createMutation.mutateAsync(payload);
+      setManualDialog({ mode: null, orderId: null });
       toast.success(copy.createdSuccess);
-      refresh(1);
+      setPage(1);
       // Orders move stock, which plant lists and detail pages show.
       void refreshStorefront({ entity: "plants" });
     } catch (err) {
@@ -314,33 +255,30 @@ export default function AdminOrdersPage() {
       setFormError(message);
       toast.error(message);
       if (staleCatalogMessage) {
-        setPlantsReloadToken((token) => token + 1);
+        void refetchPlants();
       }
-    } finally {
-      setSubmitting(false);
     }
   }
 
   async function handleStatusChange(status: OrderStatus) {
-    if (!selected) return;
+    if (!detailOrder) return;
 
-    setStatusPending(true);
     try {
       // Refresh the open detail from the response, then the list behind it.
-      setSelected(await updateOrderStatus(selected.id, { status }));
+      await updateStatusMutation.mutateAsync({
+        id: detailOrder.id,
+        data: { status },
+      });
       toast.success(copy.statusSuccess);
-      refresh(page);
       void refreshStorefront({ entity: "plants" });
     } catch (err) {
       toast.error(getErrorMessage(err));
       // Re-sync the control with the server's actual state.
       try {
-        setSelected(await getOrder(selected.id));
+        await refetchDetailOrder();
       } catch {
         // Keep the dialog usable; the list refresh below still reflects truth.
       }
-    } finally {
-      setStatusPending(false);
     }
   }
 
@@ -445,8 +383,8 @@ export default function AdminOrdersPage() {
           </p>
         ) : (
           <div
-            aria-busy={loading}
-            className={loading ? "opacity-60 transition-opacity" : undefined}
+            aria-busy={isFetching}
+            className={isFetching ? "opacity-60 transition-opacity" : undefined}
           >
             <Table>
               <TableHeader>
@@ -505,7 +443,7 @@ export default function AdminOrdersPage() {
                           <DropdownMenuItem
                             className="cursor-pointer"
                             onClick={() => {
-                              void openDetail(order);
+                              openDetail(order);
                             }}
                           >
                             {adminCopy.common.view}
@@ -530,8 +468,8 @@ export default function AdminOrdersPage() {
                 type="button"
                 variant="outline"
                 size="sm"
-                disabled={page <= 1 || loading}
-                onClick={() => refresh(page - 1)}
+                disabled={page <= 1 || isFetching}
+                onClick={() => setPage(page - 1)}
               >
                 {adminCopy.common.previous}
               </Button>
@@ -539,8 +477,8 @@ export default function AdminOrdersPage() {
                 type="button"
                 variant="outline"
                 size="sm"
-                disabled={page >= totalPages || loading}
-                onClick={() => refresh(page + 1)}
+                disabled={page >= totalPages || isFetching}
+                onClick={() => setPage(page + 1)}
               >
                 {adminCopy.common.next}
               </Button>
@@ -580,13 +518,14 @@ export default function AdminOrdersPage() {
           <DialogHeader>
             <DialogTitle>{copy.detailTitle}</DialogTitle>
           </DialogHeader>
-          {detailLoading || !selected ? (
+          {detailLoading || !detailOrder ? (
             <p className="text-sm text-muted-foreground">
               {adminCopy.common.loading}
             </p>
           ) : (
             <OrderDetail
-              order={selected}
+              key={detailOrder.id}
+              order={detailOrder}
               statusPending={statusPending}
               onStatusChange={handleStatusChange}
             />

@@ -38,8 +38,11 @@ export async function listOrders(
   });
 }
 
-export async function getOrder(id: string): Promise<Order> {
-  return api.get<Order>(`/orders/${id}`);
+export async function getOrder(
+  id: string,
+  options: { signal?: AbortSignal } = {}
+): Promise<Order> {
+  return api.get<Order>(`/orders/${id}`, { signal: options.signal });
 }
 
 /**

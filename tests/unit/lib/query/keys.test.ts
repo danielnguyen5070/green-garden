@@ -52,4 +52,78 @@ describe("queryKeys", () => {
       queryKeys.payment.status("ord-2")
     );
   });
+
+  it("distinguishes admin plant list filters and pagination", () => {
+    const base = {
+      page: 1,
+      search: "",
+      categoryId: null as string | null,
+      isActive: null as boolean | null,
+      isFeatured: null as boolean | null,
+      minPrice: "",
+      maxPrice: "",
+      sort: "created_at",
+      order: "desc",
+    };
+    const a = queryKeys.admin.plants.list(base);
+    const b = queryKeys.admin.plants.list({ ...base, page: 2 });
+    const c = queryKeys.admin.plants.list({ ...base, search: "lan" });
+    const d = queryKeys.admin.plants.list({ ...base, isActive: true });
+
+    expect(a).not.toEqual(b);
+    expect(a).not.toEqual(c);
+    expect(a).not.toEqual(d);
+  });
+
+  it("scopes admin plant and category detail by id", () => {
+    expect(queryKeys.admin.plants.detail("p1")).not.toEqual(
+      queryKeys.admin.plants.detail("p2")
+    );
+    expect(queryKeys.admin.categories.detail("c1")).not.toEqual(
+      queryKeys.admin.categories.detail("c2")
+    );
+  });
+
+  it("distinguishes admin order list date and status filters", () => {
+    const base = {
+      page: 1,
+      search: "",
+      status: null as string | null,
+      dateFrom: "",
+      dateTo: "",
+    };
+    expect(queryKeys.admin.orders.list(base)).not.toEqual(
+      queryKeys.admin.orders.list({ ...base, status: "pending" })
+    );
+    expect(queryKeys.admin.orders.list(base)).not.toEqual(
+      queryKeys.admin.orders.list({ ...base, dateFrom: "2026-01-01" })
+    );
+  });
+
+  it("scopes admin customer orders by customer id", () => {
+    expect(queryKeys.admin.orders.byCustomer("cust-1")).not.toEqual(
+      queryKeys.admin.orders.byCustomer("cust-2")
+    );
+  });
+
+  it("distinguishes admin review list status and scope", () => {
+    const base = {
+      page: 1,
+      search: "",
+      status: null as string | null,
+      scope: null as string | null,
+    };
+    expect(queryKeys.admin.reviews.list(base)).not.toEqual(
+      queryKeys.admin.reviews.list({ ...base, status: "pending" })
+    );
+    expect(queryKeys.admin.reviews.list(base)).not.toEqual(
+      queryKeys.admin.reviews.list({ ...base, scope: "plant" })
+    );
+  });
+
+  it("keys admin admins list by page", () => {
+    expect(queryKeys.admin.admins.list({ page: 1 })).not.toEqual(
+      queryKeys.admin.admins.list({ page: 2 })
+    );
+  });
 });

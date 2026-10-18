@@ -50,8 +50,11 @@ export async function listPlants(
   });
 }
 
-export async function getPlant(id: string): Promise<AdminPlant> {
-  return api.get<AdminPlant>(`/plants/${id}`);
+export async function getPlant(
+  id: string,
+  options: { signal?: AbortSignal } = {}
+): Promise<AdminPlant> {
+  return api.get<AdminPlant>(`/plants/${id}`, { signal: options.signal });
 }
 
 export async function createPlant(

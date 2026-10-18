@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type SubmitEvent } from "react";
+import { useCallback, useEffect, useMemo, useState, type SubmitEvent } from "react";
 import { MoreHorizontal, Plus, Search } from "lucide-react";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminSection } from "@/components/admin/admin-section";
@@ -39,12 +39,13 @@ import {
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  createCategory,
-  getCategory,
-  listCategories,
-  updateCategory,
-  updateCategoryStatus,
-} from "@/lib/api/categories";
+  useAdminCategoriesList,
+  useAdminCategoryDetail,
+  useCreateCategory,
+  useUpdateCategory,
+  useUpdateCategoryStatus,
+} from "@/hooks/use-admin-categories";
+import { useQueryErrorToast } from "@/hooks/use-query-error-toast";
 import { getErrorMessage } from "@/lib/api/errors";
 import { refreshStorefront } from "@/app/admin/actions/revalidate";
 import { adminCopy } from "@/lib/admin-copy";
@@ -126,20 +127,47 @@ function validateForm(values: CategoryFormValues): string | null {
 }
 
 export default function AdminCategoriesPage() {
-  const [categories, setCategories] = useState<Category[]>([]);
   const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
-  const [reloadToken, setReloadToken] = useState(0);
-  const [loading, setLoading] = useState(true);
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [dialogMode, setDialogMode] = useState<DialogMode>(null);
-  const [selected, setSelected] = useState<Category | null>(null);
-  const [detailLoading, setDetailLoading] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const [editId, setEditId] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
-  const [statusPendingId, setStatusPendingId] = useState<string | null>(null);
+
+  const onEmptyPage = useCallback((current: number) => {
+    setPage(Math.max(1, current - 1));
+  }, []);
+
+  const isActive =
+    statusFilter === "all" ? null : statusFilter === "active";
+
+  const {
+    items: categories,
+    total,
+    loading,
+    isFetching,
+  } = useAdminCategoriesList({
+    page,
+    search,
+    isActive,
+    onEmptyPage,
+  });
+
+  const detailQuery = useAdminCategoryDetail(
+    dialogMode === "edit" ? editId : null
+  );
+  const selected = detailQuery.data;
+
+  const createMutation = useCreateCategory();
+  const updateMutation = useUpdateCategory();
+  const statusMutation = useUpdateCategoryStatus();
+
+  const submitting = createMutation.isPending || updateMutation.isPending;
+  const statusPendingId =
+    statusMutation.isPending && statusMutation.variables
+      ? statusMutation.variables.id
+      : null;
 
   const totalPages = useMemo(
     () => Math.max(1, Math.ceil(total / PAGE_SIZE)),
@@ -151,7 +179,6 @@ export default function AdminCategoriesPage() {
     if (searchInput === search) return;
 
     const timeout = setTimeout(() => {
-      setLoading(true);
       setSearch(searchInput);
       setPage(1);
     }, SEARCH_DEBOUNCE_MS);
@@ -159,77 +186,35 @@ export default function AdminCategoriesPage() {
     return () => clearTimeout(timeout);
   }, [searchInput, search]);
 
-  useEffect(() => {
-    const controller = new AbortController();
+  useQueryErrorToast(
+    dialogMode === "edit" && detailQuery.isError ? detailQuery.error : null
+  );
+  // Close the edit dialog when the detail query fails (adjust during render).
+  if (dialogMode === "edit" && detailQuery.isError) {
+    setDialogMode(null);
+    setEditId(null);
+  }
 
-    async function fetchCategories() {
-      try {
-        const response = await listCategories(
-          {
-            page,
-            page_size: PAGE_SIZE,
-            search: search || undefined,
-            is_active:
-              statusFilter === "all" ? undefined : statusFilter === "active",
-          },
-          { signal: controller.signal }
-        );
-        if (controller.signal.aborted) return;
-        // A page can empty out after a status change or filter narrows results.
-        if (response.items.length === 0 && page > 1) {
-          setPage((current) => Math.max(1, current - 1));
-          return;
-        }
-        setCategories(response.items);
-        setTotal(response.total);
-      } catch (err) {
-        if (controller.signal.aborted) return;
-        toast.error(getErrorMessage(err));
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
-      }
-    }
-
-    void fetchCategories();
-    return () => controller.abort();
-  }, [page, search, statusFilter, reloadToken]);
-
-  function refresh(nextPage = page) {
-    setLoading(true);
+  function goToPage(nextPage: number) {
     setPage(nextPage);
-    setReloadToken((token) => token + 1);
   }
 
   function openCreate() {
-    setSelected(null);
+    setEditId(null);
     setFormError(null);
     setDialogMode("create");
   }
 
-  async function openEdit(category: Category) {
-    setSelected(null);
+  function openEdit(category: Category) {
     setFormError(null);
+    setEditId(category.id);
     setDialogMode("edit");
-    setDetailLoading(true);
-
-    try {
-      const detail = await getCategory(category.id);
-      setSelected(detail);
-    } catch (err) {
-      setDialogMode(null);
-      toast.error(getErrorMessage(err));
-      refresh(page);
-    } finally {
-      setDetailLoading(false);
-    }
   }
 
   function closeDialog() {
     if (submitting) return;
     setDialogMode(null);
-    setSelected(null);
+    setEditId(null);
     setFormError(null);
   }
 
@@ -254,18 +239,15 @@ export default function AdminCategoriesPage() {
     };
 
     setFormError(null);
-    setSubmitting(true);
     try {
-      await createCategory(payload);
+      await createMutation.mutateAsync(payload);
       setDialogMode(null);
-      setSelected(null);
+      setEditId(null);
       toast.success(adminCopy.categories.createdSuccess);
-      refresh(1);
+      goToPage(1);
       void refreshStorefront({ entity: "categories" });
     } catch (err) {
       setFormError(getErrorMessage(err));
-    } finally {
-      setSubmitting(false);
     }
   }
 
@@ -316,38 +298,31 @@ export default function AdminCategoriesPage() {
     }
 
     setFormError(null);
-    setSubmitting(true);
     try {
-      await updateCategory(selected.id, changes);
+      await updateMutation.mutateAsync({ id: selected.id, data: changes });
       setDialogMode(null);
-      setSelected(null);
+      setEditId(null);
       toast.success(adminCopy.categories.updatedSuccess);
-      refresh(page);
       void refreshStorefront({ entity: "categories" });
     } catch (err) {
       setFormError(getErrorMessage(err));
-    } finally {
-      setSubmitting(false);
     }
   }
 
   async function handleToggleStatus(category: Category) {
-    setStatusPendingId(category.id);
     try {
-      await updateCategoryStatus(category.id, {
-        is_active: !category.is_active,
+      await statusMutation.mutateAsync({
+        id: category.id,
+        data: { is_active: !category.is_active },
       });
       toast.success(
         category.is_active
           ? adminCopy.categories.deactivatedSuccess
           : adminCopy.categories.activatedSuccess
       );
-      refresh(page);
       void refreshStorefront({ entity: "categories" });
     } catch (err) {
       toast.error(getErrorMessage(err));
-    } finally {
-      setStatusPendingId(null);
     }
   }
 
@@ -386,7 +361,6 @@ export default function AdminCategoriesPage() {
             value={statusFilter}
             onValueChange={(value) => {
               if (value == null) return;
-              setLoading(true);
               setStatusFilter(value as StatusFilter);
               setPage(1);
             }}
@@ -425,8 +399,8 @@ export default function AdminCategoriesPage() {
           </p>
         ) : (
           <div
-            aria-busy={loading}
-            className={loading ? "opacity-60 transition-opacity" : undefined}
+            aria-busy={isFetching}
+            className={isFetching ? "opacity-60 transition-opacity" : undefined}
           >
             <Table>
               <TableHeader>
@@ -515,9 +489,7 @@ export default function AdminCategoriesPage() {
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem
                             className="cursor-pointer"
-                            onClick={() => {
-                              void openEdit(category);
-                            }}
+                            onClick={() => openEdit(category)}
                           >
                             {adminCopy.common.edit}
                           </DropdownMenuItem>
@@ -553,8 +525,8 @@ export default function AdminCategoriesPage() {
                 type="button"
                 variant="outline"
                 size="sm"
-                disabled={page <= 1 || loading}
-                onClick={() => refresh(page - 1)}
+                disabled={page <= 1 || isFetching}
+                onClick={() => goToPage(page - 1)}
               >
                 {adminCopy.common.previous}
               </Button>
@@ -562,8 +534,8 @@ export default function AdminCategoriesPage() {
                 type="button"
                 variant="outline"
                 size="sm"
-                disabled={page >= totalPages || loading}
-                onClick={() => refresh(page + 1)}
+                disabled={page >= totalPages || isFetching}
+                onClick={() => goToPage(page + 1)}
               >
                 {adminCopy.common.next}
               </Button>
@@ -602,7 +574,7 @@ export default function AdminCategoriesPage() {
           <DialogHeader>
             <DialogTitle>{adminCopy.categories.editTitle}</DialogTitle>
           </DialogHeader>
-          {detailLoading || !selected ? (
+          {detailQuery.loading || !selected ? (
             <p className="text-sm text-muted-foreground">
               {adminCopy.common.loading}
             </p>
