@@ -2,7 +2,7 @@
 
 import { lazy, Suspense, useEffect } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { ChatFab } from "@/components/chatbot/chat-fab";
+import { ChatFab } from "@/components/layout/chat/chat-fab";
 import { useChatbot } from "@/hooks/use-chatbot";
 import { cn } from "@/lib/utils";
 import type { ChatEngine, ChatSuggestion } from "@/types/chatbot";
@@ -11,7 +11,7 @@ import type { ChatEngine, ChatSuggestion } from "@/types/chatbot";
 // `React.lazy` rather than `next/dynamic`: the latter made Turbopack duplicate
 // shared modules into the checkout bundle. The panel only renders after a
 // click, so it never needs SSR.
-const loadChatPanel = () => import("@/components/chatbot/chat-panel");
+const loadChatPanel = () => import("@/components/layout/chat/chat-panel");
 
 const ChatPanel = lazy(() =>
   loadChatPanel().then((m) => ({ default: m.ChatPanel }))

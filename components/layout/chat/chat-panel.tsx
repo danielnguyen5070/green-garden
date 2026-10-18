@@ -2,13 +2,13 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { ChatHeader } from "@/components/chatbot/chat-header";
-import { ChatInput } from "@/components/chatbot/chat-input";
+import { ChatHeader } from "@/components/layout/chat/chat-header";
+import { ChatInput } from "@/components/layout/chat/chat-input";
 import {
   ChatMessageBubble,
   ChatTypingIndicator,
-} from "@/components/chatbot/chat-message-bubble";
-import { ChatQuickReplies } from "@/components/chatbot/chat-quick-replies";
+} from "@/components/layout/chat/chat-message-bubble";
+import { ChatQuickReplies } from "@/components/layout/chat/chat-quick-replies";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import type { ChatMessage, ChatSuggestion } from "@/types/chatbot";

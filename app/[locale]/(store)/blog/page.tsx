@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { BlogCard } from "@/components/blog/blog-card";
+import { BlogCard } from "@/components/cards/blog-card";
 import { Container } from "@/components/layout/container";
-import { JsonLd } from "@/components/seo/json-ld";
+import { JsonLd } from "@/components/system/json-ld";
 import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
 import { buildBlogIndexJsonLd } from "@/lib/seo/blog-index-json-ld";

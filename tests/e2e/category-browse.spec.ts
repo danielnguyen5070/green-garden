@@ -24,13 +24,13 @@ test.describe("Category browsing and pagination", () => {
       await expect(page.locator('[data-slot="plant-card"]').first()).toBeVisible({
         timeout: 30_000,
       });
-      await expect(page.locator('[data-slot="plant-filters"]')).toBeVisible();
+      await expect(page.locator('[data-slot="catalog-filters"]')).toBeVisible();
     });
 
     await test.step("2. Select a category chip", async () => {
       // Category chips use Button+Link; the a11y tree exposes them as buttons.
       await page
-        .locator('[data-slot="plant-filters"]')
+        .locator('[data-slot="catalog-filters"]')
         .getByRole("button", { name: category.label, exact: true })
         .click();
 

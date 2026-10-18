@@ -1,7 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowRightIcon } from "lucide-react";
 import { Container } from "@/components/layout/container";
-import { PlantCard } from "@/components/plant/plant-card";
+import { PlantCard } from "@/components/cards/plant-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "@/i18n/navigation";
 import { localizeOptionalText, localizeText } from "@/lib/storefront";

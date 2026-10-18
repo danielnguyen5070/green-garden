@@ -1,4 +1,4 @@
-import { StorefrontNotFound } from "@/components/storefront/storefront-not-found";
+import { StorefrontNotFound } from "@/components/feedback/storefront-not-found";
 
 export default function LocaleNotFound() {
   return <StorefrontNotFound />;

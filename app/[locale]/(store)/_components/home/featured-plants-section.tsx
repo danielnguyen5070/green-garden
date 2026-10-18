@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { ArrowRightIcon } from "lucide-react";
-import { PlantCard } from "@/components/plant/plant-card";
+import { PlantCard } from "@/components/cards/plant-card";
 import { Container } from "@/components/layout/container";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "@/i18n/navigation";

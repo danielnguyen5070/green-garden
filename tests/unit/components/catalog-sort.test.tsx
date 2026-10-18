@@ -2,7 +2,7 @@
 
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { PlantSort } from "@/components/plant/plant-sort";
+import { CatalogSort } from "@/app/[locale]/(store)/_components/catalog/catalog-sort";
 
 vi.mock("next-intl", () => ({
   useTranslations: () => {
@@ -20,11 +20,11 @@ vi.mock("next-intl", () => ({
   },
 }));
 
-describe("PlantSort", () => {
+describe("CatalogSort", () => {
   it("opens below the trigger without aligning the selected item under the pointer", async () => {
     const onChange = vi.fn();
 
-    render(<PlantSort value="featured" onChange={onChange} />);
+    render(<CatalogSort value="featured" onChange={onChange} />);
 
     fireEvent.click(screen.getByRole("combobox", { name: "Sort" }));
 

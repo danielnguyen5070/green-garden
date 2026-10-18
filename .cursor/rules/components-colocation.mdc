@@ -1,0 +1,29 @@
+---
+description: Root components/ is shared-only; route UI goes under app/**/_components
+alwaysApply: true
+---
+
+# Component colocation
+
+Root `components/` holds **only** UI shared across the application, grouped by role:
+
+| Folder | Purpose |
+|--------|---------|
+| `ui/` | Design-system primitives |
+| `layout/` | Shell + chrome used only by the store layout (header, footer, cart, chat, contact) |
+| `cards/` | Shared entity cards (plant, blog) |
+| `reviews/` | Shared review UI primitives |
+| `forms/` | Shared form helpers |
+| `system/` | App wiring (analytics, query provider, JSON-LD) |
+| `feedback/` | Global status / error / not-found views |
+
+If a module is only imported from `components/layout/**`, keep it under `components/layout/` (do not promote to a top-level folder).
+
+Name shared UI for its role, not a single route (`CatalogList` not `PlantList` when used by plants + categories).
+
+Route-specific or route-family UI belongs under that route’s private folder:
+
+- `app/<route>/_components/` for a single route
+- `app/[locale]/(store)/_components/<feature>/` when shared within the store group only (e.g. `catalog/`)
+
+Do **not** add new homepage-, detail-, admin-, or checkout-only sections to root `components/`.

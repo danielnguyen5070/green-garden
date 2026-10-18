@@ -4,7 +4,7 @@ import { OwnerHero } from "@/app/[locale]/(store)/about/_components/owner-hero";
 import { OwnerPhilosophy } from "@/app/[locale]/(store)/about/_components/owner-philosophy";
 import { OwnerStory } from "@/app/[locale]/(store)/about/_components/owner-story";
 import { VisitInfo } from "@/app/[locale]/(store)/about/_components/visit-info";
-import { JsonLd } from "@/components/seo/json-ld";
+import { JsonLd } from "@/components/system/json-ld";
 import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
 import { buildAboutJsonLd } from "@/lib/seo/about-json-ld";

@@ -5,10 +5,10 @@ import { useTranslations } from "next-intl";
 import { ArrowLeftIcon, SearchIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { PlantCard } from "@/components/plant/plant-card";
-import { PlantFilters } from "@/components/plant/plant-filters";
-import { PlantListFrame } from "@/components/plant/plant-list-frame";
-import { PlantSort } from "@/components/plant/plant-sort";
+import { PlantCard } from "@/components/cards/plant-card";
+import { CatalogFilters } from "./catalog-filters";
+import { CatalogListFrame } from "./catalog-list-frame";
+import { CatalogSort } from "./catalog-sort";
 import { useStorefrontPlants } from "@/hooks/use-storefront-plants";
 import { Link } from "@/i18n/navigation";
 import { getCatalogHref } from "@/lib/storefront/catalog";
@@ -28,7 +28,7 @@ function isPlainLeftClick(event: MouseEvent): boolean {
   );
 }
 
-function PlantList({
+function CatalogList({
   initial,
   categories,
   category = null,
@@ -89,7 +89,7 @@ function PlantList({
   }
 
   return (
-    <PlantListFrame
+    <CatalogListFrame
       title={title ?? t("title")}
       description={description}
       breadcrumb={breadcrumb}
@@ -113,11 +113,11 @@ function PlantList({
           />
         </div>
 
-        <PlantSort value={sortOption} onChange={setSortOption} />
+        <CatalogSort value={sortOption} onChange={setSortOption} />
       </div>
 
       <div className="mt-5">
-        <PlantFilters categories={categories} selected={categorySlug} />
+        <CatalogFilters categories={categories} selected={categorySlug} />
       </div>
 
       <div className="mt-12 flex flex-wrap items-center justify-between gap-3">
@@ -240,8 +240,8 @@ function PlantList({
           </>
         )}
       </div>
-    </PlantListFrame>
+    </CatalogListFrame>
   );
 }
 
-export { PlantList };
+export { CatalogList };

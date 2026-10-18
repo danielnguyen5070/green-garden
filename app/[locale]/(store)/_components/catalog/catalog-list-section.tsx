@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { PlantList } from "@/components/plant/plant-list";
-import { PlantListFrame } from "@/components/plant/plant-list-frame";
+import { CatalogList } from "./catalog-list";
+import { CatalogListFrame } from "./catalog-list-frame";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   STOREFRONT_PLANTS_PAGE_SIZE,
@@ -19,7 +19,7 @@ const SKELETON_CARDS = Array.from(
 
 const SKELETON_CHIPS = [4.5, 6, 5.5, 7] as const;
 
-async function PlantListSkeleton({
+async function CatalogListSkeleton({
   title,
   breadcrumb,
   headingAs = "h2",
@@ -35,7 +35,7 @@ async function PlantListSkeleton({
   const t = await getTranslations("home.products");
 
   return (
-    <PlantListFrame
+    <CatalogListFrame
       title={title ?? t("title")}
       breadcrumb={breadcrumb}
       headingAs={headingAs}
@@ -70,7 +70,7 @@ async function PlantListSkeleton({
           </div>
         ))}
       </div>
-    </PlantListFrame>
+    </CatalogListFrame>
   );
 }
 
@@ -79,7 +79,7 @@ async function PlantListSkeleton({
  * Renders the category and `/page/N` named in the URL so each page is
  * crawlable on its own.
  */
-async function PlantListSection({
+async function CatalogListSection({
   title,
   description,
   breadcrumb,
@@ -111,7 +111,7 @@ async function PlantListSection({
 
   if (!plants) {
     return (
-      <PlantListFrame
+      <CatalogListFrame
         title={sectionTitle}
         breadcrumb={breadcrumb}
         headingAs={headingAs}
@@ -123,12 +123,12 @@ async function PlantListSection({
             {t("loadError")}
           </p>
         </div>
-      </PlantListFrame>
+      </CatalogListFrame>
     );
   }
 
   return (
-    <PlantList
+    <CatalogList
       initial={plants}
       categories={categories?.items ?? []}
       category={category}
@@ -143,4 +143,4 @@ async function PlantListSection({
   );
 }
 
-export { PlantListSection, PlantListSkeleton };
+export { CatalogListSection, CatalogListSkeleton };

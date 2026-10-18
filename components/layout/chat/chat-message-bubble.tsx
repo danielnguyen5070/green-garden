@@ -1,6 +1,6 @@
 "use client";
 
-import { ChatMarkdown } from "@/components/chatbot/chat-markdown";
+import { ChatMarkdown } from "@/components/layout/chat/chat-markdown";
 import { cn } from "@/lib/utils";
 import type { ChatMessage } from "@/types/chatbot";
 

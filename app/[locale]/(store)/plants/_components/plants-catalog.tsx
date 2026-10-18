@@ -2,9 +2,9 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import {
-  PlantListSection,
-  PlantListSkeleton,
-} from "@/components/plant/plant-list-section";
+  CatalogListSection,
+  CatalogListSkeleton,
+} from "@/app/[locale]/(store)/_components/catalog/catalog-list-section";
 import { buildCatalogMetadata } from "@/lib/seo/catalog-metadata";
 
 /** Shared by `/plants` and `/plants/page/N`. */
@@ -33,7 +33,7 @@ async function PlantsCatalog({ page }: { page: number }) {
   return (
     <Suspense
       fallback={
-        <PlantListSkeleton
+        <CatalogListSkeleton
           title={t("title")}
           headingAs="h1"
           frameId="plants"
@@ -41,7 +41,7 @@ async function PlantsCatalog({ page }: { page: number }) {
         />
       }
     >
-      <PlantListSection
+      <CatalogListSection
         title={t("title")}
         page={page}
         headingAs="h1"

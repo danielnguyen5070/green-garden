@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { ABOUT_IMAGES } from "@/app/[locale]/(store)/about/_components/images";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
-import { Stack } from "@/components/layout/stack";
+import { Stack } from "./stack";
 import { cn } from "@/lib/utils";
 
 async function OwnerStory({ className }: { className?: string }) {

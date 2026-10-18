@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { PlantDetail } from "@/app/[locale]/plants/[slug]/_components/plant-detail";
 import { RelatedPlants } from "@/app/[locale]/plants/[slug]/_components/related-plants";
-import { JsonLd } from "@/components/seo/json-ld";
+import { JsonLd } from "@/components/system/json-ld";
 import { SITE_NAME } from "@/config/site";
 import { routing } from "@/i18n/routing";
 import { getStorefrontShippingPolicy } from "@/lib/api/storefront";

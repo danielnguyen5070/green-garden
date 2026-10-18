@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
-import { StatusView } from "@/components/storefront/status-view";
+import { StatusView } from "@/components/feedback/status-view";
 import { routing } from "@/i18n/routing";
 import { fontVariables } from "@/lib/fonts";
 import "./globals.css";

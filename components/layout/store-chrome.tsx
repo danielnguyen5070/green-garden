@@ -1,5 +1,5 @@
-import { ChatWidget } from "@/components/chatbot/chat-widget";
-import { FloatingContact } from "@/components/floating/floating-contact";
+import { ChatWidget } from "@/components/layout/chat/chat-widget";
+import { FloatingContact } from "@/components/layout/contact/floating-contact";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 

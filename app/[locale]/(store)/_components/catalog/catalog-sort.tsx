@@ -19,7 +19,7 @@ const SORT_OPTIONS: StorefrontPlantSortOption[] = [
   "price-desc",
 ];
 
-function PlantSort({
+function CatalogSort({
   value,
   onChange,
   className,
@@ -32,7 +32,7 @@ function PlantSort({
 
   return (
     <div
-      data-slot="plant-sort"
+      data-slot="catalog-sort"
       className={cn("flex items-center gap-2", className)}
     >
       <span className="font-sans text-small text-muted-foreground">
@@ -62,4 +62,4 @@ function PlantSort({
   );
 }
 
-export { PlantSort };
+export { CatalogSort };

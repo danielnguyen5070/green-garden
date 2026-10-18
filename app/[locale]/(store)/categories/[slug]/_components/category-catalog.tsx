@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import {
-  PlantListSection,
-  PlantListSkeleton,
-} from "@/components/plant/plant-list-section";
-import { JsonLd } from "@/components/seo/json-ld";
+  CatalogListSection,
+  CatalogListSkeleton,
+} from "@/app/[locale]/(store)/_components/catalog/catalog-list-section";
+import { JsonLd } from "@/components/system/json-ld";
 import { buildCatalogMetadata } from "@/lib/seo/catalog-metadata";
 import { buildCategoryJsonLd } from "@/lib/seo/category-json-ld";
 import { toMetaDescription } from "@/lib/seo/meta-text";
@@ -105,7 +105,7 @@ async function CategoryCatalog({
       <JsonLd data={jsonLd} />
       <Suspense
         fallback={
-          <PlantListSkeleton
+          <CatalogListSkeleton
             title={name}
             breadcrumb={breadcrumb}
             headingAs="h1"
@@ -114,7 +114,7 @@ async function CategoryCatalog({
           />
         }
       >
-        <PlantListSection
+        <CatalogListSection
           title={name}
           description={description}
           breadcrumb={breadcrumb}

@@ -10,9 +10,9 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { CartEmpty } from "@/components/cart/cart-empty";
-import { CartItem } from "@/components/cart/cart-item";
-import { CartSummary } from "@/components/cart/cart-summary";
+import { CartEmpty } from "@/components/layout/cart/cart-empty";
+import { CartItem } from "@/components/layout/cart/cart-item";
+import { CartSummary } from "@/components/layout/cart/cart-summary";
 import { useCartQuote } from "@/hooks/use-cart-quote";
 import { useCartStore } from "@/store/cart.store";
 

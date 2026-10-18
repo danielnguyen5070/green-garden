@@ -1,6 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowRightIcon } from "lucide-react";
-import { BlogCard } from "@/components/blog/blog-card";
+import { BlogCard } from "@/components/cards/blog-card";
 import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";

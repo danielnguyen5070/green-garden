@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { QueryProvider } from "@/components/providers/query-provider";
+import { QueryProvider } from "@/components/system/query-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { adminCopy } from "@/app/admin/_lib/admin-copy";
 import { fontVariables } from "@/lib/fonts";

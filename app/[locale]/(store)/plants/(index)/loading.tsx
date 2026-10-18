@@ -1,11 +1,11 @@
 import { getTranslations } from "next-intl/server";
-import { PlantListSkeleton } from "@/components/plant/plant-list-section";
+import { CatalogListSkeleton } from "@/app/[locale]/(store)/_components/catalog/catalog-list-section";
 
 export default async function PlantsLoading() {
   const t = await getTranslations("plants");
 
   return (
-    <PlantListSkeleton
+    <CatalogListSkeleton
       title={t("title")}
       headingAs="h1"
       frameId="plants"

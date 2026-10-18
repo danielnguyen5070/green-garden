@@ -6,14 +6,14 @@ import { cn } from "@/lib/utils";
  * Chrome shared by plant listing loading, error and loaded states so the
  * heading never shifts as data arrives.
  */
-function PlantListFrame({
+function CatalogListFrame({
   title,
   description,
   breadcrumb,
   children,
   className,
   id = "products",
-  headingId = "plant-list-heading",
+  headingId = "catalog-list-heading",
   headingAs = "h2",
 }: {
   title: string;
@@ -31,7 +31,7 @@ function PlantListFrame({
   return (
     <section
       id={id}
-      data-slot="plant-list"
+      data-slot="catalog-list"
       aria-labelledby={headingId}
       className={cn("bg-background py-8", className)}
     >
@@ -57,4 +57,4 @@ function PlantListFrame({
   );
 }
 
-export { PlantListFrame };
+export { CatalogListFrame };

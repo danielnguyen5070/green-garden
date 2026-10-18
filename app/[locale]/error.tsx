@@ -1,6 +1,6 @@
 "use client";
 
-import { StorefrontError } from "@/components/storefront/storefront-error";
+import { StorefrontError } from "@/components/feedback/storefront-error";
 
 export default function LocaleError({
   error,

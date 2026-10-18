@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
  * Category chips are links to `/plants` and `/categories/{slug}` so every
  * category page is discoverable without JavaScript.
  */
-function PlantFilters({
+function CatalogFilters({
   categories,
   selected,
   className,
@@ -35,7 +35,7 @@ function PlantFilters({
 
   return (
     <nav
-      data-slot="plant-filters"
+      data-slot="catalog-filters"
       className={cn("flex flex-wrap items-center gap-2", className)}
       aria-label={t("label")}
     >
@@ -63,4 +63,4 @@ function PlantFilters({
   );
 }
 
-export { PlantFilters };
+export { CatalogFilters };

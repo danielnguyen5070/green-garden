@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { BlogCard } from "@/components/blog/blog-card";
-import { PlantCard } from "@/components/plant/plant-card";
+import { BlogCard } from "@/components/cards/blog-card";
+import { PlantCard } from "@/components/cards/plant-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   STOREFRONT_PLANTS_SEARCH_LIMIT,

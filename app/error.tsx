@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { StatusView } from "@/components/storefront/status-view";
+import { StatusView } from "@/components/feedback/status-view";
 
 export default function RootError({
   error,
