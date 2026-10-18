@@ -12,6 +12,7 @@ import {
   createTestQueryClient,
 } from "@/tests/unit/hooks/test-utils";
 import type { AdminPlant, AdminPlantImage } from "@/types/admin-plant";
+import { ADMIN_LIST_PAGE_SIZE } from "@/lib/constants/pagination";
 
 const getPlant = vi.fn();
 const createPlantImage = vi.fn();
@@ -131,7 +132,7 @@ describe("useCreatePlantImage", () => {
     client.setQueryData(queryKeys.admin.admins.list({ page: 1 }), {
       items: [],
       page: 1,
-      page_size: 20,
+      page_size: ADMIN_LIST_PAGE_SIZE,
       total: 0,
     });
     const invalidateSpy = vi.spyOn(client, "invalidateQueries");

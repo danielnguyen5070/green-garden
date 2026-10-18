@@ -12,6 +12,7 @@ import {
   createTestQueryClient,
 } from "@/tests/unit/hooks/test-utils";
 import type { Review, ReviewListResponse } from "@/types/review";
+import { ADMIN_LIST_PAGE_SIZE } from "@/lib/constants/pagination";
 
 const listReviews = vi.fn();
 const updateReviewStatus = vi.fn();
@@ -45,7 +46,7 @@ function review(overrides: Partial<Review> = {}): Review {
 }
 
 function listResponse(items: Review[]): ReviewListResponse {
-  return { items, page: 1, page_size: 20, total: items.length };
+  return { items, page: 1, page_size: ADMIN_LIST_PAGE_SIZE, total: items.length };
 }
 
 describe("useUpdateReviewStatus", () => {
@@ -70,7 +71,7 @@ describe("useUpdateReviewStatus", () => {
     client.setQueryData(queryKeys.admin.admins.list({ page: 1 }), {
       items: [],
       page: 1,
-      page_size: 20,
+      page_size: ADMIN_LIST_PAGE_SIZE,
       total: 0,
     });
 

@@ -13,6 +13,7 @@ import {
 } from "@/tests/unit/hooks/test-utils";
 import type { Admin, AdminListResponse } from "@/types/admin";
 import { ApiError } from "@/lib/api/errors";
+import { ADMIN_LIST_PAGE_SIZE } from "@/lib/constants/pagination";
 
 const listAdmins = vi.fn();
 const createAdmin = vi.fn();
@@ -48,7 +49,7 @@ function listResponse(
   items: Admin[],
   total = items.length
 ): AdminListResponse {
-  return { items, page: 1, page_size: 20, total };
+  return { items, page: 1, page_size: ADMIN_LIST_PAGE_SIZE, total };
 }
 
 describe("useAdminAdminsList", () => {
@@ -73,7 +74,7 @@ describe("useAdminAdminsList", () => {
     expect(result.current.items[0]?.email).toBe("root@example.com");
     expect(result.current.total).toBe(1);
     expect(listAdmins).toHaveBeenCalledWith(
-      { page: 1, page_size: 20 },
+      { page: 1, page_size: ADMIN_LIST_PAGE_SIZE },
       expect.objectContaining({ signal: expect.any(AbortSignal) })
     );
   });

@@ -137,15 +137,11 @@ function ReviewsSection({
             >
               <SelectTrigger
                 aria-label={t("sortLabel")}
-                className="h-9 w-full rounded-xl border-border bg-card px-3.5 font-sans text-sm shadow-none sm:w-auto sm:min-w-[9.5rem]"
+                className="h-9 w-full rounded-full border-border bg-card px-3.5 font-sans text-sm shadow-none sm:w-auto sm:min-w-[9.5rem]"
               >
                 <SelectValue>{t(`sort.${sortOption}`)}</SelectValue>
               </SelectTrigger>
-              <SelectContent
-                align="end"
-                alignItemWithTrigger={false}
-                className="min-w-(--anchor-width) rounded-xl"
-              >
+              <SelectContent align="end" className="min-w-(--anchor-width)">
                 <SelectItem value="newest" className="font-sans">
                   {t("sort.newest")}
                 </SelectItem>

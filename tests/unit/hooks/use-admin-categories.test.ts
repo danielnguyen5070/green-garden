@@ -12,6 +12,7 @@ import {
   createTestQueryClient,
 } from "@/tests/unit/hooks/test-utils";
 import type { Category, CategoryListResponse } from "@/types/category";
+import { ADMIN_LIST_PAGE_SIZE } from "@/lib/constants/pagination";
 
 const listCategories = vi.fn();
 const createCategory = vi.fn();
@@ -52,7 +53,7 @@ function listResponse(
   items: Category[],
   total = items.length
 ): CategoryListResponse {
-  return { items, page: 1, page_size: 20, total };
+  return { items, page: 1, page_size: ADMIN_LIST_PAGE_SIZE, total };
 }
 
 describe("useAdminCategoriesList", () => {
@@ -78,7 +79,7 @@ describe("useAdminCategoriesList", () => {
     expect(listCategories).toHaveBeenCalledWith(
       {
         page: 1,
-        page_size: 20,
+        page_size: ADMIN_LIST_PAGE_SIZE,
         search: "lan",
         is_active: true,
       },

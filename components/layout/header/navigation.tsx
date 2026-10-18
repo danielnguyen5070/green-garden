@@ -12,7 +12,7 @@ const topLinkClassName =
   "rounded-md font-sans text-sm font-medium text-foreground/90 outline-none transition-colors hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 const panelLinkClassName =
-  "block rounded-md px-3 py-2 font-sans text-sm text-foreground outline-none transition-colors hover:bg-muted hover:text-primary focus-visible:bg-muted focus-visible:text-primary";
+  "block rounded-md px-1.5 py-1 font-sans text-sm text-foreground outline-none hover:bg-muted focus-visible:bg-muted";
 
 /**
  * Opens on hover/focus with CSS, so every category link ships in the server
@@ -44,10 +44,10 @@ function CategoriesMenu({
         />
       </Link>
 
-      <div className="invisible absolute top-full left-0 z-50 pt-3 opacity-0 transition-[opacity,visibility] duration-150 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100 group-data-closed:!invisible group-data-closed:!opacity-0">
+      <div className="invisible absolute top-full left-0 z-50 pt-3 group-focus-within:visible group-hover:visible group-data-closed:!invisible">
         <ul
           aria-label={listLabel}
-          className="min-w-56 rounded-xl bg-popover p-1.5 text-popover-foreground shadow-md ring-1 ring-foreground/10"
+          className="min-w-56 rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10"
         >
           <li>
             <Link
