@@ -5,6 +5,7 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import type { CartItem, CartPlantInput } from "@/types/cart";
 import { getCartLineId } from "@/types/cart";
 import { getCartTotalItems } from "@/lib/cart";
+import { CART_STORAGE_KEY } from "@/lib/constants/storage";
 
 type CartState = {
   items: CartItem[];
@@ -140,7 +141,7 @@ export const useCartStore = create<CartState>()(
       totalItems: () => getCartTotalItems(get().items),
     }),
     {
-      name: "green-garden-cart",
+      name: CART_STORAGE_KEY,
       version: CART_STORAGE_VERSION,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ items: state.items }),

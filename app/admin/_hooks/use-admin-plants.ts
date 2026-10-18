@@ -28,8 +28,8 @@ import type {
   AdminPlantStatusUpdateRequest,
   AdminPlantUpdateRequest,
 } from "@/types/admin-plant";
+import { ADMIN_LIST_PAGE_SIZE, API_MAX_PAGE_SIZE } from "@/lib/constants/pagination";
 
-const PAGE_SIZE = 20;
 
 export type UseAdminPlantsListParams = AdminPlantListKeyParams & {
   onEmptyPage?: (page: number) => void;
@@ -65,7 +65,7 @@ export function useAdminPlantsList({
       listPlants(
         {
           page,
-          page_size: PAGE_SIZE,
+          page_size: ADMIN_LIST_PAGE_SIZE,
           search: search || undefined,
           category_id: categoryId ?? undefined,
           is_active: isActive ?? undefined,
@@ -138,7 +138,7 @@ export function useAdminPlantPicker() {
       listPlants(
         {
           page: 1,
-          page_size: 100,
+          page_size: API_MAX_PAGE_SIZE,
           is_active: true,
           sort: "name",
           order: "asc",

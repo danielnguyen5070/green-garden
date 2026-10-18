@@ -22,9 +22,8 @@ import type {
   CustomerStatusUpdateRequest,
   CustomerUpdateRequest,
 } from "@/types/customer";
+import { ADMIN_LIST_PAGE_SIZE } from "@/lib/constants/pagination";
 
-const PAGE_SIZE = 20;
-const CUSTOMER_ORDERS_PAGE_SIZE = 20;
 
 export type UseAdminCustomersListParams = AdminCustomerListKeyParams & {
   onEmptyPage?: (page: number) => void;
@@ -44,7 +43,7 @@ export function useAdminCustomersList({
       listCustomers(
         {
           page,
-          page_size: PAGE_SIZE,
+          page_size: ADMIN_LIST_PAGE_SIZE,
           search: search || undefined,
           is_active: isActive ?? undefined,
         },
@@ -100,7 +99,7 @@ export function useAdminCustomerOrders(customerId: string | null) {
         {
           customer_id: customerId!,
           page: 1,
-          page_size: CUSTOMER_ORDERS_PAGE_SIZE,
+          page_size: ADMIN_LIST_PAGE_SIZE,
         },
         { signal }
       ),

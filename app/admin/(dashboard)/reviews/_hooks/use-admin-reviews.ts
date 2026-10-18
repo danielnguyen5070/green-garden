@@ -16,8 +16,8 @@ import type {
   ReviewStatus,
   ReviewStatusUpdateRequest,
 } from "@/types/review";
+import { ADMIN_LIST_PAGE_SIZE } from "@/lib/constants/pagination";
 
-const PAGE_SIZE = 20;
 
 export type UseAdminReviewsListParams = AdminReviewListKeyParams & {
   onEmptyPage?: (page: number) => void;
@@ -38,7 +38,7 @@ export function useAdminReviewsList({
       listReviews(
         {
           page,
-          page_size: PAGE_SIZE,
+          page_size: ADMIN_LIST_PAGE_SIZE,
           search: search || undefined,
           status: (status as ReviewStatus | null) ?? undefined,
           scope: (scope as ReviewScope | null) ?? undefined,

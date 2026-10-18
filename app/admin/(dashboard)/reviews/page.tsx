@@ -21,9 +21,9 @@ import { toast } from "@/lib/toast";
 import type { Review, ReviewScope, ReviewStatus } from "@/types/review";
 import { REVIEW_SCOPES, REVIEW_STATUSES } from "@/types/review";
 import { cn } from "@/lib/utils";
+import { ADMIN_LIST_PAGE_SIZE } from "@/lib/constants/pagination";
+import { SEARCH_DEBOUNCE_MS } from "@/lib/constants/timing";
 
-const PAGE_SIZE = 20;
-const SEARCH_DEBOUNCE_MS = 350;
 
 const copy = adminCopy.reviews;
 
@@ -152,7 +152,7 @@ export default function AdminReviewsPage() {
       : null;
 
   const totalPages = useMemo(
-    () => Math.max(1, Math.ceil(total / PAGE_SIZE)),
+    () => Math.max(1, Math.ceil(total / ADMIN_LIST_PAGE_SIZE)),
     [total]
   );
   const isFiltered =

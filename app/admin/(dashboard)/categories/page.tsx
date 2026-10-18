@@ -58,9 +58,9 @@ import type {
   CategoryCreateRequest,
   CategoryUpdateRequest,
 } from "@/types/category";
+import { ADMIN_LIST_PAGE_SIZE } from "@/lib/constants/pagination";
+import { SEARCH_DEBOUNCE_MS } from "@/lib/constants/timing";
 
-const PAGE_SIZE = 20;
-const SEARCH_DEBOUNCE_MS = 350;
 /** Caps the dialog to the viewport so the form body can scroll on short screens. */
 const FORM_DIALOG_CLASS =
   "sm:max-w-md max-h-[calc(100dvh-2rem)] grid-rows-[auto_minmax(0,1fr)]";
@@ -112,7 +112,7 @@ export default function AdminCategoriesPage() {
       : null;
 
   const totalPages = useMemo(
-    () => Math.max(1, Math.ceil(total / PAGE_SIZE)),
+    () => Math.max(1, Math.ceil(total / ADMIN_LIST_PAGE_SIZE)),
     [total]
   );
   const isFiltered = search !== "" || statusFilter !== "all";

@@ -1,8 +1,11 @@
 import type { Page } from "@playwright/test";
 
-/** Matches Zustand persist keys in cart.store / order.store. */
-export const CART_STORAGE_KEY = "green-garden-cart";
-export const LAST_ORDER_STORAGE_KEY = "green-garden-last-order";
+import {
+  CART_STORAGE_KEY,
+  LAST_ORDER_STORAGE_KEY,
+} from "@/lib/constants/storage";
+
+export { CART_STORAGE_KEY, LAST_ORDER_STORAGE_KEY };
 
 /** Clear cart (localStorage) and last order (sessionStorage) before each run. */
 export async function clearStorefrontStorage(page: Page) {

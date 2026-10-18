@@ -33,7 +33,6 @@ import {
   isPlantWatering,
 } from "@/types/plant-attributes";
 import {
-  UNSET_VALUE,
   careStateFromPlant,
   enumSelectValue,
   isValidHttpUrl,
@@ -44,6 +43,7 @@ import {
   type CareFormState,
   type PlantFormValues,
 } from "../_lib/plant-form";
+import { UNSET_VALUE } from "../_lib/plants-constants";
 
 const copy = adminCopy.plants;
 

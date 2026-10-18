@@ -2,17 +2,7 @@
 
 import { getAdminSession } from "@/lib/auth/get-admin-session";
 import { submitPlantToIndexNow } from "@/lib/indexnow";
-
-const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const MAX_SLUG_LENGTH = 200;
-
-function isValidSlug(value: unknown): value is string {
-  return (
-    typeof value === "string" &&
-    value.length <= MAX_SLUG_LENGTH &&
-    SLUG_PATTERN.test(value)
-  );
-}
+import { isStorefrontSlug } from "@/lib/storefront/slug";
 
 /**
  * Fire-and-forget ping after an admin plant mutation. Server Actions are
@@ -30,7 +20,7 @@ export async function notifyPlantToIndexNow(
   slug: unknown,
   previousSlug?: unknown
 ): Promise<void> {
-  if (!isValidSlug(slug)) {
+  if (!isStorefrontSlug(slug)) {
     console.warn("[IndexNow] rejected invalid plant slug");
     return;
   }
@@ -42,7 +32,7 @@ export async function notifyPlantToIndexNow(
   }
 
   const oldSlug =
-    isValidSlug(previousSlug) && previousSlug !== slug
+    isStorefrontSlug(previousSlug) && previousSlug !== slug
       ? previousSlug
       : undefined;
 

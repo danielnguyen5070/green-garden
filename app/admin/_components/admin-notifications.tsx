@@ -24,8 +24,8 @@ import { queryKeys } from "@/lib/query/keys";
 import { toast } from "@/lib/toast";
 import type { AdminNotification } from "@/types/notification";
 import { cn } from "@/lib/utils";
+import { ADMIN_LIST_PAGE_SIZE } from "@/lib/constants/pagination";
 
-const PAGE_SIZE = 20;
 const POLL_INTERVAL_MS = 60_000;
 
 const copy = adminCopy.topbar;
@@ -49,7 +49,7 @@ function AdminNotifications({ className }: { className?: string }) {
     queryKey: queryKeys.admin.notifications,
     queryFn: async ({ signal }) => {
       const response = await listNotifications(
-        { page: 1, page_size: PAGE_SIZE },
+        { page: 1, page_size: ADMIN_LIST_PAGE_SIZE },
         { signal }
       );
       return {

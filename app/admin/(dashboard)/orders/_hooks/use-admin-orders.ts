@@ -15,8 +15,8 @@ import type {
   OrderStatus,
   OrderStatusUpdateRequest,
 } from "@/types/order";
+import { ADMIN_LIST_PAGE_SIZE } from "@/lib/constants/pagination";
 
-const PAGE_SIZE = 20;
 
 export type UseAdminOrdersListParams = AdminOrderListKeyParams & {
   onEmptyPage?: (page: number) => void;
@@ -44,7 +44,7 @@ export function useAdminOrdersList({
       listOrders(
         {
           page,
-          page_size: PAGE_SIZE,
+          page_size: ADMIN_LIST_PAGE_SIZE,
           search: search || undefined,
           status: (status as OrderStatus | null) ?? undefined,
           date_from: dateFrom || undefined,

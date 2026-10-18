@@ -16,9 +16,7 @@ import {
   type PlantType,
   type PlantWatering,
 } from "@/types/plant-attributes";
-
-/** Select sentinel for optional enum / nullable boolean fields. */
-export const UNSET_VALUE = "__unset__";
+import { UNSET_VALUE } from "./plants-constants";
 
 const copy = adminCopy.plants;
 

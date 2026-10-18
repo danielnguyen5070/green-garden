@@ -3,6 +3,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { StorefrontOrderResponse } from "@/types/storefront";
+import { LAST_ORDER_STORAGE_KEY } from "@/lib/constants/storage";
 
 /** The backend confirmation is the only source of the amounts shown. */
 export type PlacedOrder = {
@@ -33,7 +34,7 @@ export const useLastOrderStore = create<LastOrderState>()(
       setHasHydrated: (value) => set({ hasHydrated: value }),
     }),
     {
-      name: "green-garden-last-order",
+      name: LAST_ORDER_STORAGE_KEY,
       // Version 0 carried a client-side total with no subtotal or shipping;
       // version 1 had no payment method or bank-transfer details.
       version: 2,

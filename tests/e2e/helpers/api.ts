@@ -1,7 +1,9 @@
 import { assertSafeE2eApiUrl, getE2eApiUrl } from "./env";
 
-/** Keep in sync with `STOREFRONT_PLANTS_PAGE_SIZE` in `lib/api/storefront.ts`. */
-export const E2E_PLANTS_PAGE_SIZE = 8;
+import { STOREFRONT_PLANTS_PAGE_SIZE } from "@/lib/constants/pagination";
+
+/** Alias for storefront plants page size (used by e2e specs). */
+export const E2E_PLANTS_PAGE_SIZE = STOREFRONT_PLANTS_PAGE_SIZE;
 
 type StorefrontPlantListItem = {
   slug: string;

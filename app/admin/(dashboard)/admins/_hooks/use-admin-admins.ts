@@ -22,8 +22,8 @@ import type {
   AdminStatusUpdateRequest,
   AdminUpdateRequest,
 } from "@/types/admin";
+import { ADMIN_LIST_PAGE_SIZE } from "@/lib/constants/pagination";
 
-const PAGE_SIZE = 20;
 
 export type UseAdminAdminsListParams = {
   page: number;
@@ -37,7 +37,7 @@ export function useAdminAdminsList({
   const query = useQuery({
     queryKey: queryKeys.admin.admins.list({ page }),
     queryFn: ({ signal }) =>
-      listAdmins({ page, page_size: PAGE_SIZE }, { signal }),
+      listAdmins({ page, page_size: ADMIN_LIST_PAGE_SIZE }, { signal }),
     placeholderData: keepPreviousData,
   });
 

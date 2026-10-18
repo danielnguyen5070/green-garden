@@ -12,6 +12,7 @@ import matter from "gray-matter";
 import { BUSINESS_HOURS, CONTACT_CONFIG } from "../config/contact";
 import { SITE_NAME, SITE_NAME_ASCII, SITE_URL } from "../config/site";
 import { getApiUrl } from "../lib/api/config";
+import { API_MAX_PAGE_SIZE } from "../lib/constants/pagination";
 
 type PlantListItem = {
   slug: string;
@@ -42,7 +43,6 @@ const ROOT = process.cwd();
 const PUBLIC_DIR = path.join(ROOT, "public");
 const BLOG_ROOT = path.join(ROOT, "content/blog");
 const LOCALES = ["vi", "en"] as const;
-const PLANT_PAGE_SIZE = 100;
 
 function plantDisplayName(plant: PlantListItem): string {
   return (plant.name_vi?.trim() || plant.name).trim();
@@ -63,10 +63,10 @@ async function fetchAllPlants(): Promise<PlantListItem[]> {
   let page = 1;
   let total = Number.POSITIVE_INFINITY;
 
-  while ((page - 1) * PLANT_PAGE_SIZE < total) {
+  while ((page - 1) * API_MAX_PAGE_SIZE < total) {
     const url = new URL(getApiUrl("/storefront/plants"));
     url.searchParams.set("page", String(page));
-    url.searchParams.set("page_size", String(PLANT_PAGE_SIZE));
+    url.searchParams.set("page_size", String(API_MAX_PAGE_SIZE));
 
     const response = await fetch(url);
     if (!response.ok) {

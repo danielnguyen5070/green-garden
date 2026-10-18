@@ -1,4 +1,5 @@
 import { CACHE_TAGS } from "@/lib/storefront/cache-tags";
+import { isStorefrontSlug } from "@/lib/storefront/slug";
 
 /**
  * A catalog change, as reported by the admin UI or a FastAPI webhook. Both
@@ -20,22 +21,12 @@ export const STOREFRONT_ENTITIES = [
 
 export type StorefrontEntity = (typeof STOREFRONT_ENTITIES)[number];
 
-const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const MAX_SLUG_LENGTH = 200;
 const MAX_SLUGS = 100;
 
 function isEntity(value: unknown): value is StorefrontEntity {
   return (
     typeof value === "string" &&
     (STOREFRONT_ENTITIES as readonly string[]).includes(value)
-  );
-}
-
-function isSlug(value: unknown): value is string {
-  return (
-    typeof value === "string" &&
-    value.length <= MAX_SLUG_LENGTH &&
-    SLUG_PATTERN.test(value)
   );
 }
 
@@ -48,7 +39,7 @@ export function parseStorefrontChange(value: unknown): StorefrontChange | null {
 
   if (slugs === undefined || slugs === null) return { entity };
   if (!Array.isArray(slugs) || slugs.length > MAX_SLUGS) return null;
-  if (!slugs.every(isSlug)) return null;
+  if (!slugs.every(isStorefrontSlug)) return null;
 
   return { entity, slugs: [...new Set(slugs)] };
 }

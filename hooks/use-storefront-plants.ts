@@ -21,8 +21,8 @@ import type {
   StorefrontPlantSortOption,
   StorefrontSortOrder,
 } from "@/types/storefront";
+import { SEARCH_DEBOUNCE_MS } from "@/lib/constants/timing";
 
-const SEARCH_DEBOUNCE_MS = 350;
 
 const DEFAULT_SORT: StorefrontPlantSortOption = "featured";
 

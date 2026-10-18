@@ -23,9 +23,8 @@ import type {
   CategoryUpdateRequest,
 } from "@/types/category";
 import type { Category } from "@/types/category";
+import { ADMIN_LIST_PAGE_SIZE, API_MAX_PAGE_SIZE } from "@/lib/constants/pagination";
 
-const PAGE_SIZE = 20;
-const OPTIONS_PAGE_SIZE = 100;
 const OPTIONS_MAX_PAGES = 10;
 
 export type UseAdminCategoriesListParams = AdminCategoryListKeyParams & {
@@ -46,7 +45,7 @@ export function useAdminCategoriesList({
       listCategories(
         {
           page,
-          page_size: PAGE_SIZE,
+          page_size: ADMIN_LIST_PAGE_SIZE,
           search: search || undefined,
           is_active: isActive ?? undefined,
         },
@@ -102,7 +101,7 @@ export function useAdminCategoryOptions() {
       const collected: Category[] = [];
       for (let current = 1; current <= OPTIONS_MAX_PAGES; current += 1) {
         const response = await listCategories(
-          { page: current, page_size: OPTIONS_PAGE_SIZE },
+          { page: current, page_size: API_MAX_PAGE_SIZE },
           { signal }
         );
         collected.push(...response.items);

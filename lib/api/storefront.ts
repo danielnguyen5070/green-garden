@@ -1,5 +1,13 @@
 import { api } from "@/lib/api/client";
 import { ApiError, INVALID_RESPONSE_MESSAGE } from "@/lib/api/errors";
+import {
+  STOREFRONT_PLANTS_MAX_PAGE_SIZE,
+  STOREFRONT_PLANTS_PAGE_SIZE,
+  STOREFRONT_PLANTS_SEARCH_LIMIT,
+  STOREFRONT_PLANT_REVIEWS_PAGE_SIZE,
+  STOREFRONT_REVIEWS_PAGE_SIZE,
+} from "@/lib/constants/pagination";
+import { CACHE_TAGS } from "@/lib/storefront/cache-tags";
 import { isStorefrontSlug } from "@/lib/storefront/slug";
 import type {
   CreateStorefrontOrderRequest,
@@ -21,7 +29,14 @@ import type {
   StorefrontReviewListResponse,
 } from "@/types/storefront-review";
 import type { AppLocale } from "@/i18n/routing";
-import { CACHE_TAGS } from "@/lib/storefront/cache-tags";
+
+export {
+  STOREFRONT_PLANTS_MAX_PAGE_SIZE,
+  STOREFRONT_PLANTS_PAGE_SIZE,
+  STOREFRONT_PLANTS_SEARCH_LIMIT,
+  STOREFRONT_PLANT_REVIEWS_PAGE_SIZE,
+  STOREFRONT_REVIEWS_PAGE_SIZE,
+} from "@/lib/constants/pagination";
 
 /**
  * Storefront endpoints are public. Opting out of the shared client's refresh
@@ -38,18 +53,6 @@ const PUBLIC_REQUEST = {
  * window is only a safety net for a missed notification.
  */
 const CATALOG_REVALIDATE_SECONDS = 6 * 60 * 60;
-
-/** Cards per Homepage page, and per "Load more" step. */
-export const STOREFRONT_PLANTS_PAGE_SIZE = 8;
-
-/** The API caps `page_size` at 100. */
-export const STOREFRONT_PLANTS_MAX_PAGE_SIZE = 100;
-
-/** Approved reviews per Reviews page load / "Load more" step. */
-export const STOREFRONT_REVIEWS_PAGE_SIZE = 8;
-
-/** Approved reviews per plant detail page load / "Load more" step. */
-export const STOREFRONT_PLANT_REVIEWS_PAGE_SIZE = 6;
 
 /** Moderation invalidates review tags on demand; same safety net as the catalog. */
 const REVIEWS_REVALIDATE_SECONDS = 6 * 60 * 60;
@@ -145,9 +148,6 @@ export async function getStorefrontPlants(
     },
   });
 }
-
-/** Default cap for keyword search results (API max is 100). */
-export const STOREFRONT_PLANTS_SEARCH_LIMIT = 20;
 
 export type StorefrontPlantSearchParams = {
   q: string;
