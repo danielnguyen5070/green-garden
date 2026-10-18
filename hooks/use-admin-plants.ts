@@ -124,6 +124,17 @@ export function useAdminPlantDetail(id: string | null) {
   };
 }
 
+/** Imperative detail fetch that shares the admin plant detail query key/cache. */
+export function fetchAdminPlantDetail(
+  queryClient: ReturnType<typeof useQueryClient>,
+  id: string
+) {
+  return queryClient.fetchQuery({
+    queryKey: queryKeys.admin.plants.detail(id),
+    queryFn: ({ signal }) => getPlant(id, { signal }),
+  });
+}
+
 /** Active plants for the order-create plant picker. */
 export function useAdminPlantPicker() {
   const query = useQuery({

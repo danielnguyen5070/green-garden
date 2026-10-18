@@ -12,12 +12,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { adminCopy } from "@/lib/admin-copy";
 import {
-  createPlantImage,
-  deletePlantImage,
-  updatePlantImage,
-} from "@/lib/api/plants";
+  useCreatePlantImage,
+  useDeletePlantImage,
+  useUpdatePlantImage,
+} from "@/hooks/use-admin-plants";
+import { adminCopy } from "@/lib/admin-copy";
 import { getErrorMessage } from "@/lib/api/errors";
 import { toast } from "@/lib/toast";
 import type { AdminPlantImage, PlantImageType } from "@/types/admin-plant";
@@ -56,6 +56,10 @@ export function PlantImagesSection({
   const [adding, setAdding] = useState(false);
   const [pendingId, setPendingId] = useState<string | null>(null);
 
+  const createMutation = useCreatePlantImage();
+  const updateMutation = useUpdatePlantImage();
+  const deleteMutation = useDeletePlantImage();
+
   const sorted = [...images].sort(bySortOrder);
   const busy = disabled || adding || pendingId !== null;
 
@@ -68,12 +72,15 @@ export function PlantImagesSection({
 
     setAdding(true);
     try {
-      const created = await createPlantImage(plantId, {
-        url: trimmedUrl,
-        type,
-        alt_text: altText.trim() || null,
-        // Append to the end of the current order.
-        sort_order: sorted.length,
+      const created = await createMutation.mutateAsync({
+        plantId,
+        data: {
+          url: trimmedUrl,
+          type,
+          alt_text: altText.trim() || null,
+          // Append to the end of the current order.
+          sort_order: sorted.length,
+        },
       });
       onChange([...images, created]);
       setUrl("");
@@ -90,7 +97,7 @@ export function PlantImagesSection({
   async function handleDelete(image: AdminPlantImage) {
     setPendingId(image.id);
     try {
-      await deletePlantImage(plantId, image.id);
+      await deleteMutation.mutateAsync({ plantId, imageId: image.id });
       onChange(images.filter((item) => item.id !== image.id));
       toast.success(copy.deletedSuccess);
     } catch (err) {
@@ -106,8 +113,10 @@ export function PlantImagesSection({
 
     setPendingId(image.id);
     try {
-      const updated = await updatePlantImage(plantId, image.id, {
-        alt_text: next,
+      const updated = await updateMutation.mutateAsync({
+        plantId,
+        imageId: image.id,
+        data: { alt_text: next },
       });
       onChange(images.map((item) => (item.id === image.id ? updated : item)));
       toast.success(copy.updatedSuccess);
@@ -127,11 +136,15 @@ export function PlantImagesSection({
     setPendingId(current.id);
     try {
       const [movedCurrent, movedNeighbour] = await Promise.all([
-        updatePlantImage(plantId, current.id, {
-          sort_order: neighbour.sort_order,
+        updateMutation.mutateAsync({
+          plantId,
+          imageId: current.id,
+          data: { sort_order: neighbour.sort_order },
         }),
-        updatePlantImage(plantId, neighbour.id, {
-          sort_order: current.sort_order,
+        updateMutation.mutateAsync({
+          plantId,
+          imageId: neighbour.id,
+          data: { sort_order: current.sort_order },
         }),
       ]);
       const updates = new Map([

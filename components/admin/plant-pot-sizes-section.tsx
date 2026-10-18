@@ -5,13 +5,13 @@ import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  useCreatePlantPotSize,
+  useDeletePlantPotSize,
+  useUpdatePlantPotSize,
+} from "@/hooks/use-admin-plants";
 import { adminCopy } from "@/lib/admin-copy";
 import { isSameDecimal } from "@/lib/admin-format";
-import {
-  createPlantPotSize,
-  deletePlantPotSize,
-  updatePlantPotSize,
-} from "@/lib/api/plants";
 import { getErrorMessage } from "@/lib/api/errors";
 import { toast } from "@/lib/toast";
 import type { AdminPlantPotSize } from "@/types/admin-plant";
@@ -49,6 +49,10 @@ export function PlantPotSizesSection({
   const [adding, setAdding] = useState(false);
   const [pendingId, setPendingId] = useState<string | null>(null);
 
+  const createMutation = useCreatePlantPotSize();
+  const updateMutation = useUpdatePlantPotSize();
+  const deleteMutation = useDeletePlantPotSize();
+
   const sorted = [...potSizes].sort(bySortOrder);
   const busy = disabled || adding || pendingId !== null;
 
@@ -72,13 +76,16 @@ export function PlantPotSizesSection({
 
     setAdding(true);
     try {
-      const created = await createPlantPotSize(plantId, {
-        name: trimmedName,
-        // Decimal strings go straight to the API, never through a float.
-        price_adjustment: adjustment.trim() || "0",
-        price_adjustment_vi: adjustmentVi.trim() || null,
-        sort_order: sorted.length,
-        is_active: true,
+      const created = await createMutation.mutateAsync({
+        plantId,
+        data: {
+          name: trimmedName,
+          // Decimal strings go straight to the API, never through a float.
+          price_adjustment: adjustment.trim() || "0",
+          price_adjustment_vi: adjustmentVi.trim() || null,
+          sort_order: sorted.length,
+          is_active: true,
+        },
       });
       onChange([...potSizes, created]);
       setName("");
@@ -95,7 +102,7 @@ export function PlantPotSizesSection({
   async function handleDelete(potSize: AdminPlantPotSize) {
     setPendingId(potSize.id);
     try {
-      await deletePlantPotSize(plantId, potSize.id);
+      await deleteMutation.mutateAsync({ plantId, sizeId: potSize.id });
       onChange(potSizes.filter((item) => item.id !== potSize.id));
       toast.success(copy.deletedSuccess);
     } catch (err) {
@@ -115,7 +122,13 @@ export function PlantPotSizesSection({
 
     setPendingId(potSize.id);
     try {
-      applyUpdate(await updatePlantPotSize(plantId, potSize.id, { name: next }));
+      applyUpdate(
+        await updateMutation.mutateAsync({
+          plantId,
+          sizeId: potSize.id,
+          data: { name: next },
+        })
+      );
       toast.success(copy.updatedSuccess);
     } catch (err) {
       toast.error(getErrorMessage(err));
@@ -141,7 +154,11 @@ export function PlantPotSizesSection({
     setPendingId(potSize.id);
     try {
       applyUpdate(
-        await updatePlantPotSize(plantId, potSize.id, { [field]: next })
+        await updateMutation.mutateAsync({
+          plantId,
+          sizeId: potSize.id,
+          data: { [field]: next },
+        })
       );
       toast.success(copy.updatedSuccess);
     } catch (err) {
@@ -155,8 +172,10 @@ export function PlantPotSizesSection({
     setPendingId(potSize.id);
     try {
       applyUpdate(
-        await updatePlantPotSize(plantId, potSize.id, {
-          is_active: !potSize.is_active,
+        await updateMutation.mutateAsync({
+          plantId,
+          sizeId: potSize.id,
+          data: { is_active: !potSize.is_active },
         })
       );
       toast.success(copy.updatedSuccess);
@@ -176,11 +195,15 @@ export function PlantPotSizesSection({
     setPendingId(current.id);
     try {
       const [movedCurrent, movedNeighbour] = await Promise.all([
-        updatePlantPotSize(plantId, current.id, {
-          sort_order: neighbour.sort_order,
+        updateMutation.mutateAsync({
+          plantId,
+          sizeId: current.id,
+          data: { sort_order: neighbour.sort_order },
         }),
-        updatePlantPotSize(plantId, neighbour.id, {
-          sort_order: current.sort_order,
+        updateMutation.mutateAsync({
+          plantId,
+          sizeId: neighbour.id,
+          data: { sort_order: current.sort_order },
         }),
       ]);
       const updates = new Map([

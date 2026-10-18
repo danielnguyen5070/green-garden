@@ -43,11 +43,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { notifyPlantToIndexNow } from "@/app/admin/actions/indexnow";
 import { refreshStorefront } from "@/app/admin/actions/revalidate";
 import { useAdminCategoryOptions } from "@/hooks/use-admin-categories";
+import { useQueryClient } from "@tanstack/react-query";
 import {
+  fetchAdminPlantDetail,
   useAdminPlantDetail,
   useAdminPlantsList,
   useCreatePlant,
-  useInvalidatePlantDetail,
   useUpdatePlant,
   useUpdatePlantStatus,
 } from "@/hooks/use-admin-plants";
@@ -59,7 +60,6 @@ import {
   isSameDecimal,
 } from "@/lib/admin-format";
 import { getErrorMessage } from "@/lib/api/errors";
-import { getPlant } from "@/lib/api/plants";
 import { toast } from "@/lib/toast";
 import type { Category } from "@/types/category";
 import type {
@@ -359,6 +359,7 @@ export default function AdminPlantsPage() {
   );
   const selected = detailQuery.data;
 
+  const queryClient = useQueryClient();
   const createMutation = useCreatePlant();
   const updateMutation = useUpdatePlant();
   const statusMutation = useUpdatePlantStatus();
@@ -624,7 +625,10 @@ export default function AdminPlantsPage() {
   async function handleToggleStatus(plant: AdminPlantListItem) {
     try {
       // List items omit descriptions, so activation checks the full record.
-      if (!plant.is_active && !hasVietnameseCopy(await getPlant(plant.id))) {
+      if (
+        !plant.is_active &&
+        !hasVietnameseCopy(await fetchAdminPlantDetail(queryClient, plant.id))
+      ) {
         toast.error(copy.vietnameseRequiredForActive);
         return;
       }
@@ -1096,7 +1100,6 @@ function PlantForm({
   onSubmit,
   onCancel,
 }: PlantFormProps) {
-  const invalidatePlantDetail = useInvalidatePlantDetail();
   const prefix = mode === "create" ? "create" : "edit";
   const [categoryId, setCategoryId] = useState(plant?.category_id ?? "");
   const [ogImageUrl, setOgImageUrl] = useState(plant?.og_image_url ?? "");
@@ -1591,7 +1594,6 @@ function PlantForm({
               disabled={submitting}
               onChange={(next) => {
                 setImages(next);
-                void invalidatePlantDetail(plant.id);
                 void refreshStorefront({
                   entity: "plants",
                   slugs: [plant.slug],
@@ -1614,7 +1616,6 @@ function PlantForm({
               disabled={submitting}
               onChange={(next) => {
                 setPotSizes(next);
-                void invalidatePlantDetail(plant.id);
                 void refreshStorefront({
                   entity: "plants",
                   slugs: [plant.slug],
