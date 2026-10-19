@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 import { Container } from "@/components/layout/container";
+import { fontVariables } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 
 const ILLUSTRATION = {
@@ -25,7 +26,8 @@ function StatusView({
     <section
       data-slot="status-view"
       className={cn(
-        "flex min-h-dvh items-center bg-background py-12 md:py-16",
+        fontVariables,
+        "flex min-h-dvh items-center bg-background py-12 md:py-16 font-sans",
         className
       )}
     >
