@@ -67,12 +67,3 @@ export type PlantCareAttributesInput = {
   pet_safe?: boolean | null;
   beginner_friendly?: boolean | null;
 };
-
-export {
-  isPlantDifficulty,
-  isPlantGrowthRate,
-  isPlantSpaceRequirement,
-  isPlantSunlight,
-  isPlantType,
-  isPlantWatering,
-} from "@/lib/validation/plant-attributes";

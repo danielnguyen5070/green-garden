@@ -19,18 +19,20 @@ import { Textarea } from "@/components/ui/textarea";
 import type { AdminPlant, AdminPlantImage } from "@/types/admin-plant";
 import type { Category } from "@/types/category";
 import {
-  PLANT_DIFFICULTIES,
-  PLANT_GROWTH_RATES,
-  PLANT_SPACE_REQUIREMENTS,
-  PLANT_SUNLIGHTS,
-  PLANT_TYPES,
-  PLANT_WATERINGS,
   isPlantDifficulty,
   isPlantGrowthRate,
   isPlantSpaceRequirement,
   isPlantSunlight,
   isPlantType,
   isPlantWatering,
+} from "@/lib/validation/plant-attributes";
+import {
+  PLANT_DIFFICULTIES,
+  PLANT_GROWTH_RATES,
+  PLANT_SPACE_REQUIREMENTS,
+  PLANT_SUNLIGHTS,
+  PLANT_TYPES,
+  PLANT_WATERINGS,
 } from "@/types/plant-attributes";
 import {
   careStateFromPlant,
