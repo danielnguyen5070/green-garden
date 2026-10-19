@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { api } from "@/lib/api/client";
 import { ApiError, INVALID_RESPONSE_MESSAGE } from "@/lib/api/errors";
 import {
@@ -8,7 +9,7 @@ import {
   STOREFRONT_REVIEWS_PAGE_SIZE,
 } from "@/lib/constants/pagination";
 import { CACHE_TAGS } from "@/lib/storefront/cache-tags";
-import { isStorefrontSlug } from "@/lib/storefront/slug";
+import { storefrontSlugSchema } from "@/lib/storefront/slug";
 import type {
   CreateStorefrontOrderRequest,
   StorefrontCategoryListResponse,
@@ -71,32 +72,30 @@ function invalidResponse(path: string): ApiError {
   return new ApiError(200, INVALID_RESPONSE_MESSAGE, { error: { path } });
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
+const recordSchema = z.record(z.string(), z.unknown());
 
-function isListResponse(
-  value: unknown
-): value is { items: Record<string, unknown>[]; total: number } {
-  return (
-    isRecord(value) &&
-    Array.isArray(value.items) &&
-    value.items.every(isRecord) &&
-    typeof value.total === "number" &&
-    Number.isInteger(value.total) &&
-    value.total >= 0
-  );
-}
+const listResponseSchema = z.object({
+  items: z.array(recordSchema),
+  total: z.number().int().nonnegative(),
+});
+
+const plantDetailSchema = recordSchema.and(
+  z.object({ slug: storefrontSlugSchema })
+);
 
 async function getList<T>(path: string, options: GetOptions): Promise<T> {
   const payload = await api.get<unknown>(path, options);
-  if (!isListResponse(payload)) throw invalidResponse(path);
+  if (!listResponseSchema.safeParse(payload).success) {
+    throw invalidResponse(path);
+  }
   return payload as T;
 }
 
 async function getRecord<T>(path: string, options: GetOptions): Promise<T> {
   const payload = await api.get<unknown>(path, options);
-  if (!isRecord(payload)) throw invalidResponse(path);
+  if (!recordSchema.safeParse(payload).success) {
+    throw invalidResponse(path);
+  }
   return payload as T;
 }
 
@@ -244,7 +243,7 @@ export async function getStorefrontPlantBySlug(
   });
 
   // The canonical-slug redirect and every plant URL are built from `slug`.
-  if (!isRecord(payload) || !isStorefrontSlug(payload.slug)) {
+  if (!plantDetailSchema.safeParse(payload).success) {
     throw invalidResponse(path);
   }
   return payload as StorefrontPlantDetail;

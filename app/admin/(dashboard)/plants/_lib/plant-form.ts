@@ -1,21 +1,26 @@
 "use client";
 
+import { z } from "zod";
 import { adminCopy } from "@/app/admin/_lib/admin-copy";
 import type { AdminPlant } from "@/types/admin-plant";
-import {
-  isPlantDifficulty,
-  isPlantGrowthRate,
-  isPlantSpaceRequirement,
-  isPlantSunlight,
-  isPlantType,
-  isPlantWatering,
-  type PlantDifficulty,
-  type PlantGrowthRate,
-  type PlantSpaceRequirement,
-  type PlantSunlight,
-  type PlantType,
-  type PlantWatering,
+import type {
+  PlantDifficulty,
+  PlantGrowthRate,
+  PlantSpaceRequirement,
+  PlantSunlight,
+  PlantType,
+  PlantWatering,
 } from "@/types/plant-attributes";
+import { firstIssueMessage } from "@/lib/validation/first-issue";
+import { isValidHttpUrl } from "@/lib/validation/primitives";
+import {
+  plantDifficultySchema,
+  plantGrowthRateSchema,
+  plantSpaceRequirementSchema,
+  plantSunlightSchema,
+  plantTypeSchema,
+  plantWateringSchema,
+} from "@/lib/validation/plant-attributes";
 import { UNSET_VALUE } from "./plants-constants";
 
 const copy = adminCopy.plants;
@@ -113,18 +118,11 @@ export function readForm(
   };
 }
 
+export { isValidHttpUrl };
+
 function isNonNegativeAmount(value: string): boolean {
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed >= 0;
-}
-
-export function isValidHttpUrl(value: string): boolean {
-  try {
-    const url = new URL(value);
-    return url.protocol === "http:" || url.protocol === "https:";
-  } catch {
-    return false;
-  }
 }
 
 /**
@@ -138,59 +136,88 @@ export function hasVietnameseCopy(plant: {
   return Boolean(plant.name_vi?.trim() && plant.description_vi?.trim());
 }
 
+function nullableCareEnum<T extends z.ZodType>(
+  schema: T,
+  invalidMessage: string
+) {
+  return z.union([schema, z.null()], {
+    error: invalidMessage,
+  });
+}
+
+function buildPlantFormSchema(willBeActive: boolean) {
+  return z
+    .object({
+      category_id: z.string().min(1, { error: copy.invalidCategory }),
+      name: z
+        .string()
+        .min(1, { error: copy.invalidName })
+        .max(255, { error: copy.invalidName }),
+      name_vi: z.string().max(255, { error: copy.invalidNameVi }),
+      description_vi: z.string(),
+      slug: z
+        .string()
+        .min(1, { error: copy.invalidSlug })
+        .max(255, { error: copy.invalidSlug }),
+      sku: z
+        .string()
+        .min(1, { error: copy.invalidSku })
+        .max(100, { error: copy.invalidSku }),
+      price: z
+        .string()
+        .min(1, { error: copy.invalidPrice })
+        .refine(isNonNegativeAmount, { error: copy.invalidPrice }),
+      price_vi: z.string().refine(
+        (value) => value === "" || isNonNegativeAmount(value),
+        { error: copy.invalidPriceVi }
+      ),
+      stock: z.string().refine(
+        (value) => {
+          if (!value) return false;
+          const stock = Number(value);
+          return Number.isInteger(stock) && stock >= 0;
+        },
+        { error: copy.invalidStock }
+      ),
+      og_image_url: z.string().refine(
+        (value) => value === "" || isValidHttpUrl(value),
+        { error: copy.invalidOgImageUrl }
+      ),
+      plant_type: nullableCareEnum(plantTypeSchema, copy.invalidPlantType),
+      difficulty: nullableCareEnum(
+        plantDifficultySchema,
+        copy.invalidDifficulty
+      ),
+      growth_rate: nullableCareEnum(
+        plantGrowthRateSchema,
+        copy.invalidGrowthRate
+      ),
+      sunlight: nullableCareEnum(plantSunlightSchema, copy.invalidSunlight),
+      watering: nullableCareEnum(plantWateringSchema, copy.invalidWatering),
+      space_requirement: nullableCareEnum(
+        plantSpaceRequirementSchema,
+        copy.invalidSpaceRequirement
+      ),
+    })
+    .superRefine((data, ctx) => {
+      if (willBeActive && !hasVietnameseCopy(data)) {
+        ctx.addIssue({
+          code: "custom",
+          message: copy.vietnameseRequiredForActive,
+          path: ["name_vi"],
+        });
+      }
+    });
+}
+
 /** Client-side guardrails; the backend stays the source of truth. */
 export function validateForm(
   values: PlantFormValues,
   willBeActive: boolean
 ): string | null {
-  if (!values.category_id) return copy.invalidCategory;
-  if (!values.name || values.name.length > 255) return copy.invalidName;
-  if (values.name_vi.length > 255) return copy.invalidNameVi;
-  if (willBeActive && !hasVietnameseCopy(values)) {
-    return copy.vietnameseRequiredForActive;
-  }
-  if (!values.slug || values.slug.length > 255) return copy.invalidSlug;
-  if (!values.sku || values.sku.length > 100) return copy.invalidSku;
-
-  if (!values.price || !isNonNegativeAmount(values.price)) {
-    return copy.invalidPrice;
-  }
-  if (values.price_vi && !isNonNegativeAmount(values.price_vi)) {
-    return copy.invalidPriceVi;
-  }
-
-  const stock = Number(values.stock);
-  if (!values.stock || !Number.isInteger(stock) || stock < 0) {
-    return copy.invalidStock;
-  }
-
-  if (values.og_image_url && !isValidHttpUrl(values.og_image_url)) {
-    return copy.invalidOgImageUrl;
-  }
-
-  if (values.plant_type != null && !isPlantType(values.plant_type)) {
-    return copy.invalidPlantType;
-  }
-  if (values.difficulty != null && !isPlantDifficulty(values.difficulty)) {
-    return copy.invalidDifficulty;
-  }
-  if (values.growth_rate != null && !isPlantGrowthRate(values.growth_rate)) {
-    return copy.invalidGrowthRate;
-  }
-  if (values.sunlight != null && !isPlantSunlight(values.sunlight)) {
-    return copy.invalidSunlight;
-  }
-  if (values.watering != null && !isPlantWatering(values.watering)) {
-    return copy.invalidWatering;
-  }
-  if (
-    values.space_requirement != null &&
-    !isPlantSpaceRequirement(values.space_requirement)
-  ) {
-    return copy.invalidSpaceRequirement;
-  }
-
-  return null;
+  const result = buildPlantFormSchema(willBeActive).safeParse(values);
+  if (result.success) return null;
+  return firstIssueMessage(result.error);
 }
 
 export function enumSelectValue<T extends string>(value: T | null): string {

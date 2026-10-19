@@ -16,7 +16,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { adminCopy } from "@/app/admin/_lib/admin-copy";
 import type { AdminPlantListItem } from "@/types/admin-plant";
-import type { OrderCreateRequest, OrderItemCreateRequest } from "@/types/order";
+import type { OrderCreateRequest } from "@/types/order";
+import { validateOrderCreateForm } from "../_lib/order-create-form";
 
 const copy = adminCopy.orders;
 
@@ -35,10 +36,6 @@ type OrderCreateFormProps = {
   onSubmit: (payload: OrderCreateRequest) => void | Promise<void>;
   onCancel: () => void;
 };
-
-function isValidEmail(value: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
 
 function createDraftItem(): DraftItem {
   return {
@@ -153,58 +150,23 @@ export function OrderCreateForm({
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const name = String(formData.get("customer_name") ?? "").trim();
-    const phone = String(formData.get("customer_phone") ?? "").trim();
-    const email = String(formData.get("customer_email") ?? "").trim();
-    const shippingAddress = String(
-      formData.get("shipping_address") ?? ""
-    ).trim();
-    const note = String(formData.get("note") ?? "").trim();
+    const result = validateOrderCreateForm({
+      name: String(formData.get("customer_name") ?? "").trim(),
+      phone: String(formData.get("customer_phone") ?? "").trim(),
+      email: String(formData.get("customer_email") ?? "").trim(),
+      shippingAddress: String(formData.get("shipping_address") ?? "").trim(),
+      note: String(formData.get("note") ?? "").trim(),
+      items: items.map(({ plant_id, quantity }) => ({ plant_id, quantity })),
+    });
 
-    if (!name || name.length > 255) {
-      onValidationError(copy.invalidCustomerName);
+    if ("error" in result) {
+      onValidationError(result.error);
       return;
-    }
-    if (!phone || phone.length > 32) {
-      onValidationError(copy.invalidCustomerPhone);
-      return;
-    }
-    if (email && !isValidEmail(email)) {
-      onValidationError(copy.invalidEmail);
-      return;
-    }
-    if (!shippingAddress) {
-      onValidationError(copy.invalidShippingAddress);
-      return;
-    }
-
-    const selected = items.filter((item) => item.plant_id !== "");
-    if (selected.length === 0) {
-      onValidationError(copy.items.required);
-      return;
-    }
-
-    const payloadItems: OrderItemCreateRequest[] = [];
-    for (const item of selected) {
-      const quantity = Number(item.quantity);
-      if (!Number.isInteger(quantity) || quantity < 1) {
-        onValidationError(copy.invalidQuantity);
-        return;
-      }
-      payloadItems.push({
-        plant_id: item.plant_id,
-        quantity,
-      });
     }
 
     onValidationError(null);
     // No prices or totals are sent; the backend computes them.
-    void onSubmit({
-      customer: { name, phone, email: email || null },
-      shipping_address: shippingAddress,
-      note: note || null,
-      items: payloadItems,
-    });
+    void onSubmit(result.payload);
   }
 
   return (

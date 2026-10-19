@@ -1,5 +1,6 @@
+import { z } from "zod";
 import { CACHE_TAGS } from "@/lib/storefront/cache-tags";
-import { isStorefrontSlug } from "@/lib/storefront/slug";
+import { storefrontSlugSchema } from "@/lib/storefront/slug";
 
 /**
  * A catalog change, as reported by the admin UI or a FastAPI webhook. Both
@@ -23,24 +24,18 @@ export type StorefrontEntity = (typeof STOREFRONT_ENTITIES)[number];
 
 const MAX_SLUGS = 100;
 
-function isEntity(value: unknown): value is StorefrontEntity {
-  return (
-    typeof value === "string" &&
-    (STOREFRONT_ENTITIES as readonly string[]).includes(value)
-  );
-}
+const storefrontChangeSchema = z.object({
+  entity: z.enum(STOREFRONT_ENTITIES),
+  slugs: z.array(storefrontSlugSchema).max(MAX_SLUGS).optional(),
+});
 
 /** Returns null when `value` is not a well-formed change. */
 export function parseStorefrontChange(value: unknown): StorefrontChange | null {
-  if (typeof value !== "object" || value === null) return null;
+  const result = storefrontChangeSchema.safeParse(value);
+  if (!result.success) return null;
 
-  const { entity, slugs } = value as Record<string, unknown>;
-  if (!isEntity(entity)) return null;
-
-  if (slugs === undefined || slugs === null) return { entity };
-  if (!Array.isArray(slugs) || slugs.length > MAX_SLUGS) return null;
-  if (!slugs.every(isStorefrontSlug)) return null;
-
+  const { entity, slugs } = result.data;
+  if (slugs === undefined) return { entity };
   return { entity, slugs: [...new Set(slugs)] };
 }
 

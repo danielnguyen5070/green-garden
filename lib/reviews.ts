@@ -1,3 +1,4 @@
+import { z } from "zod";
 import type {
   StorefrontRatingDistribution,
   StorefrontReview,
@@ -21,16 +22,29 @@ function emptySummary(total = 0): StorefrontReviewSummary {
   };
 }
 
-function isDistributionRecord(
-  value: unknown
-): value is StorefrontRatingDistribution {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
-  const record = value as Record<string, unknown>;
-  return [1, 2, 3, 4, 5].every((star) => {
-    const count = record[String(star)] ?? record[star as unknown as string];
-    return typeof count === "number" && Number.isFinite(count);
-  });
-}
+const finiteCount = z.number().finite();
+
+const ratingDistributionRecordSchema = z
+  .object({
+    1: finiteCount.optional(),
+    2: finiteCount.optional(),
+    3: finiteCount.optional(),
+    4: finiteCount.optional(),
+    5: finiteCount.optional(),
+  })
+  .passthrough()
+  .refine(
+    (record) =>
+      [1, 2, 3, 4, 5].every((star) => {
+        const count =
+          record[star as 1 | 2 | 3 | 4 | 5] ??
+          (record as Record<string, unknown>)[String(star)];
+        return typeof count === "number" && Number.isFinite(count);
+      }),
+    { error: "incomplete_distribution" }
+  );
+
+const ratingDistributionArraySchema = z.array(z.number()).length(5);
 
 /** Accepts a 5-length array `[count1, count2, …]` or a `{1..5}` map. */
 export function normalizeRatingDistribution(
@@ -39,24 +53,27 @@ export function normalizeRatingDistribution(
   if (!value) return null;
 
   if (Array.isArray(value)) {
-    if (value.length !== 5) return null;
+    const arrayResult = ratingDistributionArraySchema.safeParse(value);
+    if (!arrayResult.success) return null;
     return {
-      1: value[0] ?? 0,
-      2: value[1] ?? 0,
-      3: value[2] ?? 0,
-      4: value[3] ?? 0,
-      5: value[4] ?? 0,
+      1: arrayResult.data[0] ?? 0,
+      2: arrayResult.data[1] ?? 0,
+      3: arrayResult.data[2] ?? 0,
+      4: arrayResult.data[3] ?? 0,
+      5: arrayResult.data[4] ?? 0,
     };
   }
 
-  if (!isDistributionRecord(value)) return null;
+  const recordResult = ratingDistributionRecordSchema.safeParse(value);
+  if (!recordResult.success) return null;
 
+  const record = recordResult.data as Record<string, unknown>;
   return {
-    1: Number(value[1] ?? 0),
-    2: Number(value[2] ?? 0),
-    3: Number(value[3] ?? 0),
-    4: Number(value[4] ?? 0),
-    5: Number(value[5] ?? 0),
+    1: Number(record[1] ?? record["1"] ?? 0),
+    2: Number(record[2] ?? record["2"] ?? 0),
+    3: Number(record[3] ?? record["3"] ?? 0),
+    4: Number(record[4] ?? record["4"] ?? 0),
+    5: Number(record[5] ?? record["5"] ?? 0),
   };
 }
 

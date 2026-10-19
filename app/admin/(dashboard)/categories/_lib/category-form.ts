@@ -1,4 +1,7 @@
+import { z } from "zod";
 import { adminCopy } from "@/app/admin/_lib/admin-copy";
+import { firstIssueMessage } from "@/lib/validation/first-issue";
+import { isValidHttpUrl } from "@/lib/validation/primitives";
 
 export type CategoryFormValues = {
   name: string;
@@ -25,38 +28,36 @@ export function readForm(form: HTMLFormElement): CategoryFormValues {
   };
 }
 
+const copy = adminCopy.categories;
+
+const categoryFormSchema = z.object({
+  name: z
+    .string()
+    .min(1, { error: copy.invalidName })
+    .max(255, { error: copy.invalidName }),
+  name_vi: z.string().max(255, { error: copy.invalidNameVi }),
+  slug: z
+    .string()
+    .min(1, { error: copy.invalidSlug })
+    .max(255, { error: copy.invalidSlug }),
+  sort_order: z.string().refine(
+    (value) => {
+      const sortOrder = Number(value);
+      return (
+        value.length > 0 && Number.isInteger(sortOrder) && sortOrder >= 0
+      );
+    },
+    { error: copy.invalidSortOrder }
+  ),
+  image_url: z.string().refine(
+    (value) => value === "" || isValidHttpUrl(value),
+    { error: copy.invalidImageUrl }
+  ),
+});
+
 /** Client-side guardrails; the backend stays the source of truth. */
 export function validateForm(values: CategoryFormValues): string | null {
-  if (!values.name || values.name.length > 255) {
-    return adminCopy.categories.invalidName;
-  }
-  // Vietnamese name is optional; only its length is constrained.
-  if (values.name_vi.length > 255) {
-    return adminCopy.categories.invalidNameVi;
-  }
-  if (!values.slug || values.slug.length > 255) {
-    return adminCopy.categories.invalidSlug;
-  }
-
-  const sortOrder = Number(values.sort_order);
-  if (
-    !Number.isInteger(sortOrder) ||
-    sortOrder < 0 ||
-    values.sort_order.length === 0
-  ) {
-    return adminCopy.categories.invalidSortOrder;
-  }
-
-  if (values.image_url) {
-    try {
-      const url = new URL(values.image_url);
-      if (url.protocol !== "http:" && url.protocol !== "https:") {
-        return adminCopy.categories.invalidImageUrl;
-      }
-    } catch {
-      return adminCopy.categories.invalidImageUrl;
-    }
-  }
-
-  return null;
+  const result = categoryFormSchema.safeParse(values);
+  if (result.success) return null;
+  return firstIssueMessage(result.error);
 }

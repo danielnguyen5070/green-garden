@@ -20,6 +20,7 @@ import {
 import { adminCopy } from "@/app/admin/_lib/admin-copy";
 import { getErrorMessage } from "@/lib/api/errors";
 import { toast } from "@/lib/toast";
+import { isValidHttpUrl } from "@/lib/validation/primitives";
 import type { AdminPlantImage, PlantImageType } from "@/types/admin-plant";
 
 type PlantImagesSectionProps = {
@@ -30,15 +31,6 @@ type PlantImagesSectionProps = {
 };
 
 const copy = adminCopy.plants.images;
-
-function isValidHttpUrl(value: string): boolean {
-  try {
-    const url = new URL(value);
-    return url.protocol === "http:" || url.protocol === "https:";
-  } catch {
-    return false;
-  }
-}
 
 function bySortOrder(a: AdminPlantImage, b: AdminPlantImage): number {
   return a.sort_order - b.sort_order || a.created_at.localeCompare(b.created_at);

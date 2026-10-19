@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 /** `error_code` values sent by the API; mirrors `ErrorCode` in green-garden-api. */
 export const ErrorCode = {
   // 404
@@ -66,15 +68,24 @@ type ApiErrorOptions = {
   retryAfterSeconds?: number;
 };
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null;
-}
-
 /** A 2xx response that is not the JSON the caller expects, e.g. a proxy's HTML page. */
 export const INVALID_RESPONSE_MESSAGE = "Unexpected response from the server.";
 
 const GENERIC_MESSAGE = "Something went wrong. Please try again.";
 const SESSION_EXPIRED_MESSAGE = "Your session has expired. Please sign in again.";
+
+const apiErrorBodySchema = z.object({
+  error_code: z.number(),
+  message: z.string(),
+  status_code: z.number().optional(),
+  error: z.unknown().optional(),
+});
+
+const fieldErrorSchema = z.object({
+  field: z.string(),
+  message: z.string(),
+  type: z.string().optional(),
+});
 
 export class ApiError extends Error {
   readonly status: number;
@@ -98,11 +109,7 @@ export class ApiError extends Error {
 }
 
 export function isApiErrorBody(payload: unknown): payload is ApiErrorBody {
-  return (
-    isRecord(payload) &&
-    typeof payload.error_code === "number" &&
-    typeof payload.message === "string"
-  );
+  return apiErrorBodySchema.safeParse(payload).success;
 }
 
 /** `Retry-After` as whole seconds; HTTP-date values are not used by the API. */
@@ -172,12 +179,17 @@ function messageForBody(status: number, payload: ApiErrorBody): string {
 
 function toFieldErrors(error: unknown): FieldError[] {
   if (!Array.isArray(error)) return [];
-  return error.filter(
-    (item): item is FieldError =>
-      isRecord(item) &&
-      typeof item.field === "string" &&
-      typeof item.message === "string"
-  );
+  const fieldErrors: FieldError[] = [];
+  for (const item of error) {
+    const result = fieldErrorSchema.safeParse(item);
+    if (!result.success) continue;
+    fieldErrors.push({
+      field: result.data.field,
+      message: result.data.message,
+      type: result.data.type ?? "",
+    });
+  }
+  return fieldErrors;
 }
 
 /** `body.customer.phone` → `customer.phone`; `body` alone → `""`. */

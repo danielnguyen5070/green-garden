@@ -30,15 +30,14 @@ import { toast } from "@/lib/toast";
 import {
   STOREFRONT_REVIEW_CONTENT_MAX,
   STOREFRONT_REVIEW_NAME_MAX,
-  STOREFRONT_REVIEW_RATING_MAX,
-  STOREFRONT_REVIEW_RATING_MIN,
 } from "@/types/storefront-review";
+import {
+  validateReviewForm,
+  type ReviewFormErrorKey,
+  type ReviewFormField,
+} from "@/lib/review-form";
 
-type FormErrors = {
-  name?: string;
-  rating?: string;
-  content?: string;
-};
+type FormErrors = Partial<Record<ReviewFormField, string>>;
 
 function getSubmitErrorKey(error: unknown) {
   if (!(error instanceof ApiError)) return "generic";
@@ -149,30 +148,12 @@ function ReviewFormDialog({
   const submitting = submitMutation.isPending;
 
   function validate(): FormErrors {
+    const keys = validateReviewForm({ name, rating, content });
     const next: FormErrors = {};
-    const trimmedName = name.trim();
-    const trimmedContent = content.trim();
-
-    if (!trimmedName) {
-      next.name = tForm("errors.nameRequired");
-    } else if (trimmedName.length > STOREFRONT_REVIEW_NAME_MAX) {
-      next.name = tForm("errors.nameTooLong");
+    for (const field of Object.keys(keys) as ReviewFormField[]) {
+      const key = keys[field] as ReviewFormErrorKey | undefined;
+      if (key) next[field] = tForm(`errors.${key}`);
     }
-
-    if (
-      rating == null ||
-      rating < STOREFRONT_REVIEW_RATING_MIN ||
-      rating > STOREFRONT_REVIEW_RATING_MAX
-    ) {
-      next.rating = tForm("errors.ratingRequired");
-    }
-
-    if (!trimmedContent) {
-      next.content = tForm("errors.contentRequired");
-    } else if (trimmedContent.length > STOREFRONT_REVIEW_CONTENT_MAX) {
-      next.content = tForm("errors.contentTooLong");
-    }
-
     return next;
   }
 

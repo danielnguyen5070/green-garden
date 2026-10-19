@@ -1,7 +1,9 @@
+import { z } from "zod";
 import type { BotSignals } from "@/types/bot-signals";
 import type { CartItem } from "@/types/cart";
 import type { PaymentMethod } from "@/types/order";
 import type { CreateStorefrontOrderRequest } from "@/types/storefront";
+import { firstIssueMessage, issuesByField } from "@/lib/validation/first-issue";
 
 export type CheckoutFormField = "phone" | "name" | "address" | "note";
 
@@ -35,38 +37,51 @@ export function normalizePhone(value: string) {
   return value.replace(/[\s.()\-]/g, "");
 }
 
+const checkoutFormSchema = z.object({
+  phone: z
+    .string()
+    .trim()
+    .min(1, { error: "phoneRequired" })
+    .refine((value) => VN_PHONE_PATTERN.test(normalizePhone(value)), {
+      error: "phoneInvalid",
+    }),
+  name: z
+    .string()
+    .trim()
+    .min(1, { error: "nameRequired" })
+    .refine((value) => value.length >= MIN_NAME_LENGTH, {
+      error: "nameTooShort",
+    }),
+  address: z
+    .string()
+    .trim()
+    .min(1, { error: "addressRequired" })
+    .refine((value) => value.length >= MIN_ADDRESS_LENGTH, {
+      error: "addressTooShort",
+    }),
+  note: z.string(),
+});
+
+const checkoutFieldSchemas: Record<CheckoutFormField, z.ZodType> = {
+  phone: checkoutFormSchema.shape.phone,
+  name: checkoutFormSchema.shape.name,
+  address: checkoutFormSchema.shape.address,
+  note: checkoutFormSchema.shape.note,
+};
+
 export function validateCheckoutField(
   field: CheckoutFormField,
   values: CheckoutFormValues,
 ): string | undefined {
-  const value = values[field].trim();
-
-  switch (field) {
-    case "phone":
-      if (!value) return "phoneRequired";
-      return VN_PHONE_PATTERN.test(normalizePhone(value))
-        ? undefined
-        : "phoneInvalid";
-    case "name":
-      if (!value) return "nameRequired";
-      return value.length < MIN_NAME_LENGTH ? "nameTooShort" : undefined;
-    case "address":
-      if (!value) return "addressRequired";
-      return value.length < MIN_ADDRESS_LENGTH ? "addressTooShort" : undefined;
-    case "note":
-      return undefined;
-  }
+  const result = checkoutFieldSchemas[field].safeParse(values[field]);
+  if (result.success) return undefined;
+  return firstIssueMessage(result.error) ?? undefined;
 }
 
 export function validateCheckoutForm(values: CheckoutFormValues) {
-  const errors: CheckoutFormErrors = {};
-
-  for (const field of CHECKOUT_FORM_FIELDS) {
-    const error = validateCheckoutField(field, values);
-    if (error) errors[field] = error;
-  }
-
-  return errors;
+  const result = checkoutFormSchema.safeParse(values);
+  if (result.success) return {} as CheckoutFormErrors;
+  return issuesByField(result.error, CHECKOUT_FORM_FIELDS);
 }
 
 export function isCheckoutFormValid(values: CheckoutFormValues) {

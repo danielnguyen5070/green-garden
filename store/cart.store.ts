@@ -1,5 +1,6 @@
 "use client";
 
+import { z } from "zod";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { CartItem, CartPlantInput } from "@/types/cart";
@@ -25,23 +26,29 @@ type CartState = {
 
 const CART_STORAGE_VERSION = 2;
 
+const persistedCartItemSchema = z.object({
+  plantId: z.string().min(1),
+  quantity: z.unknown().optional(),
+});
+
+const persistedCartSchema = z.object({
+  items: z.array(z.unknown()).optional(),
+});
+
 /**
  * Migrates persisted cart items from any prior version. Lines that share the
  * same plantId are merged, and legacy `potSizeId` fields are dropped.
  */
 function migrateCartItems(persisted: unknown): CartItem[] {
-  const rawItems =
-    persisted && typeof persisted === "object" && "items" in persisted
-      ? (persisted as { items: unknown }).items
-      : [];
-  if (!Array.isArray(rawItems)) return [];
+  const bag = persistedCartSchema.safeParse(persisted);
+  const rawItems = bag.success ? (bag.data.items ?? []) : [];
 
   const merged = new Map<string, CartItem>();
   for (const raw of rawItems) {
-    if (!raw || typeof raw !== "object") continue;
-    const { plantId, quantity } = raw as Record<string, unknown>;
-    if (typeof plantId !== "string" || !plantId) continue;
+    const item = persistedCartItemSchema.safeParse(raw);
+    if (!item.success) continue;
 
+    const { plantId, quantity } = item.data;
     const id = getCartLineId({ plantId });
     const count = Math.max(1, Math.floor(Number(quantity) || 1));
     const existing = merged.get(id);

@@ -68,35 +68,11 @@ export type PlantCareAttributesInput = {
   beginner_friendly?: boolean | null;
 };
 
-const PLANT_TYPE_SET = new Set<string>(PLANT_TYPES);
-const PLANT_DIFFICULTY_SET = new Set<string>(PLANT_DIFFICULTIES);
-const PLANT_GROWTH_RATE_SET = new Set<string>(PLANT_GROWTH_RATES);
-const PLANT_SUNLIGHT_SET = new Set<string>(PLANT_SUNLIGHTS);
-const PLANT_WATERING_SET = new Set<string>(PLANT_WATERINGS);
-const PLANT_SPACE_REQUIREMENT_SET = new Set<string>(PLANT_SPACE_REQUIREMENTS);
-
-export function isPlantType(value: string): value is PlantType {
-  return PLANT_TYPE_SET.has(value);
-}
-
-export function isPlantDifficulty(value: string): value is PlantDifficulty {
-  return PLANT_DIFFICULTY_SET.has(value);
-}
-
-export function isPlantGrowthRate(value: string): value is PlantGrowthRate {
-  return PLANT_GROWTH_RATE_SET.has(value);
-}
-
-export function isPlantSunlight(value: string): value is PlantSunlight {
-  return PLANT_SUNLIGHT_SET.has(value);
-}
-
-export function isPlantWatering(value: string): value is PlantWatering {
-  return PLANT_WATERING_SET.has(value);
-}
-
-export function isPlantSpaceRequirement(
-  value: string
-): value is PlantSpaceRequirement {
-  return PLANT_SPACE_REQUIREMENT_SET.has(value);
-}
+export {
+  isPlantDifficulty,
+  isPlantGrowthRate,
+  isPlantSpaceRequirement,
+  isPlantSunlight,
+  isPlantType,
+  isPlantWatering,
+} from "@/lib/validation/plant-attributes";

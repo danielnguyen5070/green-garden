@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { getApiUrl } from "@/lib/api/config";
 import { parseApiError } from "@/lib/api/errors";
 import type {
@@ -71,37 +72,46 @@ export function createToolMarkupFilter() {
   };
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null;
-}
+const sseTokenSchema = z.object({
+  type: z.enum(["token", "chunk"]),
+  content: z.string().optional(),
+});
+
+const sseDoneSchema = z.object({
+  type: z.literal("done"),
+});
+
+const sseErrorSchema = z.object({
+  type: z.literal("error"),
+  message: z.string().optional(),
+  content: z.string().optional(),
+});
+
+const sseEventSchema = z.union([sseTokenSchema, sseDoneSchema, sseErrorSchema]);
 
 function parseSseEvent(raw: string): ChatStreamEvent | null {
   try {
     const parsed: unknown = JSON.parse(raw);
-    if (!isRecord(parsed) || typeof parsed.type !== "string") {
-      return null;
-    }
+    const result = sseEventSchema.safeParse(parsed);
+    if (!result.success) return null;
 
-    if (parsed.type === "token" || parsed.type === "chunk") {
-      const content = typeof parsed.content === "string" ? parsed.content : "";
-      return { type: parsed.type, content };
+    const event = result.data;
+    switch (event.type) {
+      case "token":
+      case "chunk":
+        return { type: event.type, content: event.content ?? "" };
+      case "done":
+        return { type: "done" };
+      case "error": {
+        const message =
+          typeof event.message === "string" && event.message.trim()
+            ? event.message
+            : typeof event.content === "string" && event.content.trim()
+              ? event.content
+              : "Chat request failed";
+        return { type: "error", message };
+      }
     }
-
-    if (parsed.type === "done") {
-      return { type: "done" };
-    }
-
-    if (parsed.type === "error") {
-      const message =
-        typeof parsed.message === "string" && parsed.message.trim()
-          ? parsed.message
-          : typeof parsed.content === "string" && parsed.content.trim()
-            ? parsed.content
-            : "Chat request failed";
-      return { type: "error", message };
-    }
-
-    return null;
   } catch {
     return null;
   }

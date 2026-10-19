@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { hasLocale } from "next-intl";
+import { z } from "zod";
 import { routing } from "@/i18n/routing";
 import type { BlogPost, BlogPostMeta } from "@/types/blog";
 
@@ -32,12 +33,30 @@ function toSlug(fileName: string) {
   return fileName.replace(/\.mdx$/, "");
 }
 
-function optionalString(value: unknown): string | undefined {
-  if (value === undefined || value === null || value === "") {
-    return undefined;
-  }
+const optionalFrontmatterString = z.preprocess((value) => {
+  if (value === undefined || value === null || value === "") return undefined;
   return String(value);
-}
+}, z.string().optional());
+
+const blogFrontmatterSchema = z.object({
+  title: z.preprocess((v) => (v == null ? undefined : String(v)), z.string().optional()),
+  description: z.preprocess(
+    (v) => (v == null ? undefined : String(v)),
+    z.string().optional()
+  ),
+  publishedAt: z.unknown().optional(),
+  date: z.unknown().optional(),
+  updatedAt: optionalFrontmatterString,
+  author: z.preprocess((v) => (v == null ? undefined : String(v)), z.string().optional()),
+  category: z.preprocess(
+    (v) => (v == null ? undefined : String(v)),
+    z.string().optional()
+  ),
+  tags: z.unknown().optional(),
+  ogImage: optionalFrontmatterString,
+  cover: optionalFrontmatterString,
+  ogImageAlt: optionalFrontmatterString,
+});
 
 function parsePost(locale: string, fileName: string): BlogPost | null {
   const dir = getBlogDir(locale);
@@ -51,22 +70,27 @@ function parsePost(locale: string, fileName: string): BlogPost | null {
 
   const raw = fs.readFileSync(fullPath, "utf8");
   const { data, content } = matter(raw);
+  const frontmatter = blogFrontmatterSchema.parse(data);
 
   const slug = toSlug(fileName);
-  const publishedAt = String(data.publishedAt ?? data.date ?? "");
-  const ogImage = optionalString(data.ogImage ?? data.cover);
+  const publishedAt = String(
+    frontmatter.publishedAt ?? frontmatter.date ?? ""
+  );
+  const ogImage = frontmatter.ogImage ?? frontmatter.cover;
 
   return {
     slug,
-    title: String(data.title ?? slug),
-    description: String(data.description ?? ""),
+    title: frontmatter.title ?? slug,
+    description: frontmatter.description ?? "",
     publishedAt,
-    updatedAt: optionalString(data.updatedAt),
-    author: String(data.author ?? ""),
-    category: String(data.category ?? ""),
-    tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
+    updatedAt: frontmatter.updatedAt,
+    author: frontmatter.author ?? "",
+    category: frontmatter.category ?? "",
+    tags: Array.isArray(frontmatter.tags)
+      ? frontmatter.tags.map(String)
+      : [],
     ogImage,
-    ogImageAlt: optionalString(data.ogImageAlt),
+    ogImageAlt: frontmatter.ogImageAlt,
     content,
   };
 }

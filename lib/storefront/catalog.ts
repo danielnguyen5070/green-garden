@@ -5,6 +5,13 @@
  * segments (not `?page=`) keep every catalog page statically renderable.
  */
 
+import { z } from "zod";
+
+const catalogPageSchema = z
+  .string()
+  .regex(/^[1-9]\d{0,5}$/)
+  .transform((value) => Number(value));
+
 /** Locale-less pathname for the catalog, or one of its categories. */
 export function getCatalogPathname(categorySlug?: string | null): string {
   return categorySlug ? `/categories/${categorySlug}` : "/plants";
@@ -42,8 +49,8 @@ export function getCatalogPath(
  * can redirect to the base path.
  */
 export function parseCatalogPageSegment(value: string): number | null {
-  if (!/^[1-9]\d{0,5}$/.test(value)) return null;
-  return Number(value);
+  const result = catalogPageSchema.safeParse(value);
+  return result.success ? result.data : null;
 }
 
 /**
@@ -51,6 +58,7 @@ export function parseCatalogPageSegment(value: string): number | null {
  * integer, otherwise null.
  */
 export function parseLegacyCatalogPage(value: string | null): number | null {
-  if (value === null || !/^[1-9]\d{0,5}$/.test(value)) return null;
-  return Number(value);
+  if (value === null) return null;
+  const result = catalogPageSchema.safeParse(value);
+  return result.success ? result.data : null;
 }
