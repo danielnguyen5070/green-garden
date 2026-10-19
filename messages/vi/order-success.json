@@ -1,0 +1,41 @@
+{
+  "orderSuccess": {
+    "title": "Đặt hàng thành công!",
+    "description": "Shop đã nhận được đơn hàng và sẽ liên hệ với bạn sớm nhất.",
+    "orderNumber": "Mã đơn hàng",
+    "status": "Trạng thái",
+    "subtotal": "Tạm tính",
+    "shipping": "Vận chuyển",
+    "free": "Miễn phí",
+    "total": "Tổng cộng",
+    "codNotice": "Bạn sẽ thanh toán khi nhận được cây. Không cần trả trước.",
+    "bankTransfer": {
+      "title": "Chuyển khoản để hoàn tất đơn hàng",
+      "description": "Mở ứng dụng ngân hàng và quét mã VietQR bên dưới, hoặc chuyển khoản theo thông tin sau.",
+      "qrAlt": "Mã VietQR thanh toán đơn hàng",
+      "bank": "Ngân hàng",
+      "accountHolder": "Chủ tài khoản",
+      "accountNumber": "Số tài khoản",
+      "amount": "Số tiền",
+      "reference": "Nội dung chuyển khoản",
+      "referenceWarning": "Vui lòng chuyển đúng số tiền và ghi đúng nội dung {reference} để đơn hàng được xác nhận tự động.",
+      "waiting": "Đang chờ xác nhận thanh toán...",
+      "paidTitle": "Đã nhận thanh toán",
+      "paidDescription": "Cảm ơn bạn! Shop đã nhận được tiền và sẽ chuẩn bị cây cho bạn.",
+      "copy": "Sao chép {field}",
+      "copied": "Đã sao chép",
+      "copyFailed": "Không thể sao chép. Vui lòng chép thủ công."
+    },
+    "continueShopping": "Tiếp tục mua cây",
+    "missingTitle": "Không tìm thấy đơn hàng",
+    "missingDescription": "Chúng tôi không tìm thấy thông tin đơn hàng gần đây. Nếu bạn vừa đặt hàng, shop sẽ liên hệ với bạn qua số điện thoại đã cung cấp.",
+    "statuses": {
+      "pending": "Chờ xác nhận",
+      "confirmed": "Đã xác nhận",
+      "processing": "Đang chuẩn bị",
+      "shipping": "Đang giao",
+      "completed": "Hoàn tất",
+      "cancelled": "Đã hủy"
+    }
+  }
+}

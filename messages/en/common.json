@@ -1,0 +1,16 @@
+{
+  "common": {
+    "search": "Search plants...",
+    "searchLabel": "Search plants",
+    "cart": "Cart",
+    "account": "Account",
+    "language": "Language",
+    "openMenu": "Open menu",
+    "menu": "Menu",
+    "viewAll": "View all",
+    "addToCart": "Add to cart",
+    "contactForPrice": "Contact for price",
+    "cartWithCount": "Cart, {count, plural, =0 {empty} one {# item} other {# items}}",
+    "errorReference": "Error reference: {id}"
+  }
+}

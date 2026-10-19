@@ -1,0 +1,46 @@
+{
+  "about": {
+    "metadata": {
+      "title": "Giới thiệu nhà vườn cây giống Cái Mơn",
+      "description": "Ngọc Ngân Bến Tre — nhà vườn cây giống Bến Tre, mang cây khỏe và kinh nghiệm trồng đến người yêu cây.",
+      "ogImageAlt": "Đội ngũ Ngọc Ngân Bến Tre chăm sóc cây giống trong nhà vườn",
+      "keywords": "Ngọc Ngân Bến Tre, giới thiệu, nhà vườn cây giống, Bến Tre, cây giống Cái Mơn"
+    },
+    "ownerHero": {
+      "eyebrow": "Tiểu sử Ngọc Ngân Bến Tre",
+      "title": "Cây giống từ Bến Tre, đến tay người trồng.",
+      "description": "Ngọc Ngân Bến Tre gắn bó với nghề bán và cung cấp cây giống — chọn cây khỏe, đúng chủng loại, và chia sẻ kinh nghiệm trồng chăm từ chính mảnh vườn quê hương.",
+      "primaryCta": "Khám phá cây giống",
+      "secondaryCta": "Đọc hướng dẫn chăm sóc",
+      "imageAlt": "Người sáng lập Ngoc Ngan Ben Tre cười bên nhau trước cây hoa vàng"
+    },
+    "ownerStory": {
+      "introTitle": "Từ vùng đất Bến Tre xanh tốt.",
+      "introDescription": "Ngọc Ngân Bến Tre là người kinh doanh cây giống đến từ vùng đất Bến Tre — nơi nổi tiếng với những vườn cây xanh tốt và nghề nông truyền thống. Với tình yêu dành cho cây cối và mong muốn mang đến những giống cây chất lượng cho người trồng, Ngọc Ngân đã gắn bó với công việc bán và cung cấp cây giống cho khách hàng ở nhiều nơi.",
+      "introImageAlt": "Cây giống Cái Mơn Bến Tre cùng ổi và sầu riêng",
+      "journeyTitle": "Kiên trì chọn giống, tận tâm chia sẻ.",
+      "journeyParagraph1": "Từ những cây giống nhỏ bé, Ngọc Ngân luôn cố gắng lựa chọn những cây khỏe mạnh, đúng chủng loại và phù hợp với nhu cầu của khách hàng. Bởi như ông cha ta vẫn thường nói: “Có công mài sắt, có ngày nên kim.” Công việc kinh doanh cũng cần sự kiên trì, chăm chỉ và uy tín mới có thể phát triển lâu dài.",
+      "journeyParagraph2": "Không chỉ bán cây giống, Ngọc Ngân còn chia sẻ kinh nghiệm trồng và chăm sóc cây để khách hàng có thêm kiến thức trong quá trình canh tác. Đối với người làm vườn, câu tục ngữ “Nhất nước, nhì phân, tam cần, tứ giống” luôn là kinh nghiệm quý giá, nhắc nhở người trồng phải quan tâm đến nhiều yếu tố để cây phát triển tốt.",
+      "journeyParagraph3": "Thông qua việc bán hàng trực tiếp và mạng xã hội, Ngọc Ngân từng bước đưa những cây giống từ Bến Tre đến với nhiều người yêu cây và người làm vườn. Với sự tận tâm và tinh thần học hỏi, Ngọc Ngân mong muốn tiếp tục xây dựng uy tín, nâng cao chất lượng cây giống và góp phần tạo nên những khu vườn xanh tốt.",
+      "journeyImageAlt": "Ngọc Ngân Bến Tre đóng gói cây giống khỏe mạnh để giao khách"
+    },
+    "ownerPhilosophy": {
+      "title": "Trân trọng đất đai, yêu cây trồng.",
+      "verseLabel": "Ca dao Việt Nam",
+      "verse": "Ai ơi, đừng bỏ ruộng hoang,\nBao nhiêu tấc đất, tấc vàng bấy nhiêu.",
+      "description": "Đó cũng là tinh thần mà Ngọc Ngân muốn lan tỏa: trân trọng đất đai, yêu cây trồng và cùng người nông dân tạo nên những giá trị bền vững từ chính mảnh vườn quê hương."
+    },
+    "visitInfo": {
+      "title": "Ghé thăm nhà vườn",
+      "description": "Bạn có thể đến tận vườn để xem và chọn cây. Nhắn tin trước để Ngọc Ngân chuẩn bị cây sẵn cho bạn.",
+      "addressTitle": "Địa chỉ",
+      "mapLink": "Xem trên Google Maps",
+      "hoursTitle": "Giờ mở cửa",
+      "everyDay": "Mỗi ngày",
+      "contactTitle": "Liên hệ",
+      "contactNote": "Nhắn Zalo hoặc SMS đến {phone}. Số này chỉ nhận tin nhắn, không nhận cuộc gọi.",
+      "zaloLink": "Nhắn Zalo",
+      "mapTitle": "Bản đồ đường đến nhà vườn Ngọc Ngân Bến Tre"
+    }
+  }
+}

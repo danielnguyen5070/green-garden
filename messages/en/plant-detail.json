@@ -1,0 +1,89 @@
+{
+  "plantDetail": {
+    "home": "Home",
+    "breadcrumb": "Breadcrumb",
+    "metadataTitle": "{plant} – Nationwide Delivery",
+    "metadataDescription": "{plant} – {category}. Healthy nursery stock from Cai Mon – Ben Tre, carefully packed and delivered nationwide.",
+    "metadataDescriptionNoCategory": "{plant} from a Cai Mon – Ben Tre nursery. Healthy stock, carefully packed and delivered nationwide.",
+    "featured": "Featured",
+    "quantity": "Quantity",
+    "increaseQuantity": "Increase quantity",
+    "decreaseQuantity": "Decrease quantity",
+    "addToCart": "Add to Cart — {price}",
+    "outOfStock": "Out of stock",
+    "favorite": "Save plant",
+    "unfavorite": "Remove from saved",
+    "selectImage": "View image {index} of {name}",
+    "selectVideo": "View video preview of {name}",
+    "videoPreview": "Video preview",
+    "pageViews": "{count, plural, one {# view} other {# views}}",
+    "pageViewsPeriod": "Views of this page in English since Web Analytics was enabled",
+    "care": {
+      "title": "Care & specifications",
+      "plantType": "Plant type",
+      "difficulty": "Difficulty",
+      "growthRate": "Growth rate",
+      "sunlight": "Sunlight",
+      "watering": "Watering",
+      "spaceRequirement": "Space",
+      "indoorSuitable": "Suitable for indoors",
+      "outdoorSuitable": "Suitable for outdoors",
+      "petSafe": "Pet safe",
+      "notPetSafe": "Not pet safe",
+      "beginnerFriendly": "Beginner friendly",
+      "plantTypeValues": {
+        "foliage": "Foliage",
+        "flowering": "Flowering",
+        "succulent": "Succulent",
+        "cactus": "Cactus",
+        "herb": "Herb",
+        "fern": "Fern",
+        "vine": "Vine",
+        "tree": "Tree",
+        "palm": "Palm",
+        "bamboo": "Bamboo",
+        "aquatic": "Aquatic",
+        "other": "Other"
+      },
+      "difficultyValues": {
+        "easy": "Easy",
+        "moderate": "Moderate",
+        "hard": "Hard"
+      },
+      "growthRateValues": {
+        "slow": "Slow",
+        "moderate": "Moderate",
+        "fast": "Fast"
+      },
+      "sunlightValues": {
+        "full_sun": "Full sun",
+        "partial_sun": "Partial sun",
+        "partial_shade": "Partial shade",
+        "shade": "Shade",
+        "low_light": "Low light"
+      },
+      "wateringValues": {
+        "low": "Low",
+        "moderate": "Moderate",
+        "high": "High"
+      },
+      "spaceRequirementValues": {
+        "small": "Small",
+        "medium": "Medium",
+        "large": "Large"
+      }
+    },
+    "related": {
+      "title": "You Might Also Like",
+      "viewAll": "View all"
+    },
+    "reviews": {
+      "title": "Customer reviews",
+      "empty": "No reviews for this plant yet. Be the first to share your experience.",
+      "count": "({count, plural, one {# review} other {# reviews}})",
+      "ratingLinkLabel": "Rated {rating} out of 5 from {count, plural, one {# review} other {# reviews}}. See reviews",
+      "formTitle": "Review {name}",
+      "formDescription": "Share how your {name} is doing. No account needed."
+    }
+  }
+}

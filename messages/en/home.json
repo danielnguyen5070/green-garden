@@ -1,0 +1,72 @@
+{
+  "home": {
+    "metadata": {
+      "title": "Ngọc Ngân Bến Tre | Cai Mon seedlings",
+      "description": "Seedlings, fruit trees, and ornamental plants from Cai Mon – Cho Lach. Healthy stock, careful packing, nationwide delivery.",
+      "ogImageAlt": "Ngoc Ngan Ben Tre — browse Cai Mon seedlings, woman among yellow blossoms in a Ben Tre garden",
+      "keywords": "Cai Mon seedlings, Ben Tre nursery, fruit tree seedlings, ornamental plants, Ngoc Ngan"
+    },
+    "hero": {
+      "badge": "Cai Mon seedlings · Ships nationwide",
+      "titleLine1": "Seedlings from Cai Mon,",
+      "titleAccent": "greener",
+      "titleSuffix": " gardens everywhere.",
+      "description": "Seedlings, fruit trees, and ornamental plants selected from the Cai Mon – Cho Lach region. Healthy, easy to grow, carefully packed, and delivered to your door.",
+      "primaryCta": "Browse seedlings",
+      "secondaryCta": "Learn about us",
+      "socialProof": "{rating}/5 · {count, plural, one {# customer review} other {# customer reviews}}",
+      "imageAlt": "A woman in an áo dài beside potted yellow mai bonsai in a garden",
+      "contactCta": {
+        "title": "Need advice or to order?",
+        "description": "Message us on Zalo or SMS {phone}, and the shop will get back to you as soon as possible."
+      }
+    },
+    "categories": {
+      "title": "Fruit Trees",
+      "description": "Grafted fruit tree seedlings from Cai Mon nurseries.",
+      "viewAll": "View all fruit trees"
+    },
+    "about": {
+      "title": "About Ngọc Ngân Bến Tre",
+      "description": "Ngọc Ngân Bến Tre sources Cai Mon seedlings from trusted growers in Cho Lach, a region with a long tradition of plant nurseries. From fruit trees like durian and guava to ornamentals, every plant is picked for health and true-to-variety stock, with planting and care advice so you can grow with confidence.",
+      "highlights": {
+        "origin": {
+          "title": "From Cai Mon – Cho Lach",
+          "description": "Sourced directly from trusted nurseries in Ben Tre's best-known seedling region."
+        },
+        "grafted": {
+          "title": "Grafted, true to variety",
+          "description": "Mostly grafted stock that keeps the parent tree's fruit and bearing time."
+        },
+        "shipping": {
+          "title": "Careful packing, nationwide delivery",
+          "description": "Root balls wrapped tight and boxed with airflow, shipped to every province."
+        },
+        "cod": {
+          "title": "Cash on delivery",
+          "description": "You only pay when your plants arrive. No prepayment needed."
+        }
+      },
+      "aboutCta": "Learn about us",
+      "faqCta": "FAQ",
+      "imageAlt": "Cai Mon, Ben Tre seedling nursery with guava and durian"
+    },
+    "guides": {
+      "title": "Planting & care guides",
+      "description": "Tips on choosing, planting and caring for seedlings from the Ngọc Ngân nursery.",
+      "viewAll": "View all articles"
+    },
+    "newsletter": {
+      "title": "Join the Zalo community",
+      "description": "Connect with fellow lovers of ornamental plants, seedlings, and the Cai Mon nurseries. Get updates on new arrivals, plus care tips and beautiful varieties.",
+      "cta": "Join the Zalo group",
+      "note": "A community for plant and flower lovers"
+    },
+    "reviews": {
+      "title": "Customer Reviews",
+      "description": "What our customers say about their plants and shopping experience.",
+      "ratingValue": "{rating} / 5",
+      "cta": "View all reviews"
+    }
+  }
+}

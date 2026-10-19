@@ -1,0 +1,30 @@
+{
+  "home": {
+    "products": {
+      "title": "Sản phẩm",
+      "search": "Tìm cây...",
+      "sortLabel": "Sắp xếp",
+      "resultsCount": "{count, plural, =0 {0 cây} other {# cây}}",
+      "loadMore": "Xem thêm",
+      "previousPage": "Xem các cây trước",
+      "viewAllPlants": "Xem tất cả cây",
+      "empty": "Không tìm thấy cây nào.",
+      "clearFilters": "Xóa bộ lọc",
+      "loadError": "Hiện chưa tải được danh sách cây.",
+      "retry": "Thử lại",
+      "featured": "Nổi bật",
+      "outOfStock": "Hết hàng",
+      "favorite": "Lưu cây",
+      "sort": {
+        "featured": "Nổi bật",
+        "newest": "Mới nhất",
+        "price-asc": "Giá: Thấp đến cao",
+        "price-desc": "Giá: Cao đến thấp"
+      },
+      "categories": {
+        "label": "Danh mục",
+        "all": "Tất cả"
+      }
+    }
+  }
+}

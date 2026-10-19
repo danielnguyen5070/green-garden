@@ -1,0 +1,10 @@
+{
+  "nav": {
+    "plants": "Plants",
+    "allPlants": "All plants",
+    "categoriesLabel": "Plant categories",
+    "careGuide": "Care Guide",
+    "about": "About",
+    "reviews": "Reviews"
+  }
+}

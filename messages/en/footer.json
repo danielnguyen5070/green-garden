@@ -1,0 +1,29 @@
+{
+  "footer": {
+    "brand": {
+      "name": "NGỌC NGÂN",
+      "description": "Swap growing tips and keep up with the newest seedlings from Cái Mơn – Bến Tre."
+    },
+    "shop": {
+      "title": "Shop",
+      "allPlants": "All plants"
+    },
+    "support": {
+      "title": "Support",
+      "careGuide": "Care Guide",
+      "faq": "FAQ",
+      "reviews": "Reviews",
+      "shipping": "Shipping & Returns",
+      "contact": "Contact Us"
+    },
+    "social": {
+      "title": "Follow Us",
+      "facebook": "Facebook",
+      "tiktok": "TikTok",
+      "youtube": "YouTube"
+    },
+    "pageViews": "{count, number} page views",
+    "pageViewsPeriod": "Total production page views since Web Analytics was enabled",
+    "copyright": "© {year} Ngọc Ngân Bến Tre. All rights reserved."
+  }
+}

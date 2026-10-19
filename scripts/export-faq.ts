@@ -12,8 +12,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { FAQ_ITEMS } from "../config/faq";
-import en from "../messages/en.json";
-import vi from "../messages/vi.json";
+import en from "../messages/en/faq.json";
+import vi from "../messages/vi/faq.json";
 
 type FaqCopy = Record<string, { question?: string; answer?: string }>;
 

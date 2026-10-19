@@ -1,0 +1,90 @@
+{
+  "checkout": {
+    "title": "Checkout",
+    "description": "Complete your order to bring home your new plants.",
+    "progress": {
+      "label": "Checkout progress",
+      "shipping": "Shipping",
+      "payment": "Payment",
+      "review": "Review"
+    },
+    "shippingDetails": {
+      "title": "Delivery details",
+      "phone": "Phone number",
+      "name": "Full name",
+      "address": "Address",
+      "note": "Note (optional)",
+      "notePlaceholder": "e.g. deliver during office hours, call before arriving...",
+      "errors": {
+        "phoneRequired": "Please enter your phone number.",
+        "phoneInvalid": "That phone number is not valid. Example: 0386569374.",
+        "nameRequired": "Please enter your full name.",
+        "nameTooShort": "That name is too short.",
+        "addressRequired": "Please enter your delivery address.",
+        "addressTooShort": "That address is too short. Include street, ward, district and province.",
+        "nameInvalid": "Please check your full name.",
+        "addressInvalid": "Please check your delivery address.",
+        "noteInvalid": "Please shorten or edit your note."
+      }
+    },
+    "shippingMethod": {
+      "title": "Shipping Method",
+      "standard": "Standard Delivery",
+      "carrier": "Vietnam Post or J&T Express",
+      "eta": "Estimated delivery: 3–5 business days",
+      "free": "Free shipping",
+      "freeShippingHint": "Add {amount} more to get free shipping."
+    },
+    "paymentMethod": {
+      "title": "Payment method",
+      "cod": {
+        "title": "Cash on delivery (COD)",
+        "description": "Pay the courier in cash when your plants arrive."
+      },
+      "bankTransfer": {
+        "title": "Bank transfer",
+        "description": "Scan a VietQR code in the next step. Payment is confirmed automatically."
+      }
+    },
+    "orderSummary": {
+      "title": "Order Summary",
+      "qty": "Qty: {count}",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "free": "Free",
+      "total": "Total",
+      "empty": "Your cart is empty",
+      "shopPlants": "Shop plants →",
+      "secureNotice": "You only pay when your plants arrive. No payment up front.",
+      "bankTransferNotice": "Click Continue to payment to get a VietQR code with the exact amount and transfer reference."
+    },
+    "secure": {
+      "title": "Cash on delivery",
+      "description": "You only pay when your plants arrive."
+    },
+    "footer": {
+      "navLabel": "Checkout legal",
+      "help": "Help Center",
+      "copyright": "Ngọc Ngân Bến Tre"
+    },
+    "placeOrder": "Complete checkout",
+    "placingOrder": "Placing order...",
+    "continuePayment": "Continue to payment",
+    "preparingPayment": "Preparing payment...",
+    "bankTransferStep": {
+      "title": "Scan to pay",
+      "description": "Order {orderNumber} is confirmed as soon as we receive your payment."
+    },
+    "errors": {
+      "emptyCart": "Your cart is empty.",
+      "outOfStock": "Some plants in your cart are no longer in stock.",
+      "unavailable": "Some plants in your cart are no longer available.",
+      "invalidDetails": "Please check your order details.",
+      "rejected": "We could not verify your order. Please wait a few seconds and try again.",
+      "rateLimited": "This phone number has placed too many orders recently. Please try again in {minutes} minutes.",
+      "rateLimitedLater": "This phone number has placed too many orders recently. Please try again later.",
+      "bankTransferUnavailable": "Bank transfer is temporarily unavailable. Please choose cash on delivery.",
+      "generic": "We could not place your order. Please try again."
+    }
+  }
+}

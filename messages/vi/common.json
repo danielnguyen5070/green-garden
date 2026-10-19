@@ -1,0 +1,16 @@
+{
+  "common": {
+    "search": "Tìm cây...",
+    "searchLabel": "Tìm kiếm cây",
+    "cart": "Giỏ hàng",
+    "account": "Tài khoản",
+    "language": "Ngôn ngữ",
+    "openMenu": "Mở menu",
+    "menu": "Menu",
+    "viewAll": "Xem tất cả",
+    "addToCart": "Thêm vào giỏ",
+    "contactForPrice": "Liên hệ báo giá",
+    "cartWithCount": "Giỏ hàng, {count, plural, =0 {trống} other {# sản phẩm}}",
+    "errorReference": "Mã tham chiếu lỗi: {id}"
+  }
+}

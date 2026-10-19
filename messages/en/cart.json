@@ -1,0 +1,31 @@
+{
+  "cart": {
+    "title": "Your Cart",
+    "description": "Review the plants in your cart and continue to checkout.",
+    "items": "{count, plural, =0 {0 Items} one {# Item} other {# Items}}",
+    "close": "Close cart",
+    "empty": "Your cart is empty",
+    "emptyDescription": "Explore our plants and bring a little more green into your space.",
+    "shopPlants": "Shop Plants",
+    "remove": "Remove {name} from cart",
+    "quantity": "Quantity",
+    "increaseQuantity": "Increase quantity of {name}",
+    "decreaseQuantity": "Decrease quantity of {name}",
+    "freeShipping": "Almost there",
+    "freeShippingUnlocked": "Free shipping unlocked!",
+    "freeShippingDescription": "Your order qualifies for free local delivery.",
+    "addMoreForFreeShipping": "Add {amount} more for free shipping.",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "free": "Free",
+    "total": "Total",
+    "checkout": "Checkout Now →",
+    "secureCheckout": "Cash on delivery",
+    "unavailablePlant": "Unavailable plant",
+    "lineUnavailable": "No longer available — please remove it.",
+    "lineLimitedStock": "Only {count} left in stock.",
+    "priceError": "We couldn't load current prices.",
+    "retry": "Try again",
+    "reviewCart": "Some plants can't be ordered as they are. Please update your cart."
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "orderSuccess": {
+    "title": "Order placed successfully",
+    "description": "We have received your order and will contact you shortly.",
+    "orderNumber": "Order number",
+    "status": "Status",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "free": "Free",
+    "total": "Total",
+    "codNotice": "You pay when your plants arrive. No payment up front.",
+    "bankTransfer": {
+      "title": "Transfer to complete your order",
+      "description": "Open your banking app and scan the VietQR code below, or transfer using these details.",
+      "qrAlt": "VietQR code to pay for this order",
+      "bank": "Bank",
+      "accountHolder": "Account holder",
+      "accountNumber": "Account number",
+      "amount": "Amount",
+      "reference": "Transfer reference",
+      "referenceWarning": "Please transfer the exact amount and use {reference} as the transfer content so your order is confirmed automatically.",
+      "waiting": "Waiting for payment confirmation...",
+      "paidTitle": "Payment received",
+      "paidDescription": "Thank you! We've received your payment and will prepare your plants.",
+      "copy": "Copy {field}",
+      "copied": "Copied",
+      "copyFailed": "Could not copy. Please copy it manually."
+    },
+    "continueShopping": "Continue shopping",
+    "missingTitle": "No recent order found",
+    "missingDescription": "We could not find a recent order on this device. If you just placed one, we will call you on the number you gave us.",
+    "statuses": {
+      "pending": "Pending confirmation",
+      "confirmed": "Confirmed",
+      "processing": "Preparing",
+      "shipping": "On the way",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    }
+  }
+}

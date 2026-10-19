@@ -1,0 +1,9 @@
+{
+  "blog": {
+    "title": "Garden Notes",
+    "description": "Care tips, product stories, and notes from the Ngoc Ngan Ben Tre team.",
+    "readMore": "Read article",
+    "backToBlog": "Back to blog",
+    "empty": "No posts yet."
+  }
+}

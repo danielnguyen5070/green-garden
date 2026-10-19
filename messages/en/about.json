@@ -1,0 +1,46 @@
+{
+  "about": {
+    "metadata": {
+      "title": "About Our Cai Mon Seedling Nursery",
+      "description": "Ngoc Ngan Ben Tre — healthy Ben Tre seedlings and practical growing know-how for gardeners.",
+      "ogImageAlt": "Ngoc Ngan Ben Tre nursery staff tending young saplings in a Ben Tre greenhouse",
+      "keywords": "Ngoc Ngan Ben Tre, about, seedling nursery, Ben Tre growers, Cai Mon seedlings"
+    },
+    "ownerHero": {
+      "eyebrow": "About Ngoc Ngan Ben Tre",
+      "title": "Seedlings from Ben Tre, grown for growers.",
+      "description": "Ngoc Ngan Ben Tre supplies quality seedlings — selecting healthy, true-to-type plants and sharing planting know-how rooted in Ben Tre’s farming tradition.",
+      "primaryCta": "Explore Our Seedlings",
+      "secondaryCta": "Read Our Care Guide",
+      "imageAlt": "Ngoc Ngan Ben Tre founders smiling together in front of a yellow flowering tree"
+    },
+    "ownerStory": {
+      "introTitle": "From the green gardens of Ben Tre.",
+      "introDescription": "Ngoc Ngan Ben Tre is a seedling business from Ben Tre — a land known for lush gardens and traditional farming. Driven by a love of plants and a wish to bring quality varieties to growers, Ngoc Ngan has dedicated the work to selling and supplying seedlings to customers near and far.",
+      "introImageAlt": "Cai Mon Ben Tre seedlings with guava and durian",
+      "journeyTitle": "Patient selection, shared know-how.",
+      "journeyParagraph1": "From the smallest seedlings, Ngoc Ngan carefully chooses plants that are healthy, true to variety, and suited to each customer’s needs. As the old saying goes: “With enough work grinding iron, one day it becomes a needle.” Building a lasting business likewise takes persistence, diligence, and trust.",
+      "journeyParagraph2": "Beyond selling seedlings, Ngoc Ngan shares planting and care experience so customers gain practical knowledge for their gardens. For growers, the proverb “First water, second fertilizer, third diligence, fourth variety” remains valuable wisdom — a reminder that many factors must work together for plants to thrive.",
+      "journeyParagraph3": "Through direct sales and social media, Ngoc Ngan gradually brings Ben Tre seedlings to plant lovers and gardeners. With dedication and a spirit of continuous learning, Ngoc Ngan aims to keep building reputation, raising seedling quality, and helping create greener gardens.",
+      "journeyImageAlt": "Ngoc Ngan Ben Tre packing healthy seedlings for delivery"
+    },
+    "ownerPhilosophy": {
+      "title": "Honor the land, love what you grow.",
+      "verseLabel": "Vietnamese folk verse",
+      "verse": "Dear friend, do not leave fields fallow —\nevery inch of land is an inch of gold.",
+      "description": "That is the spirit Ngoc Ngan wants to share: respect the land, love the crops, and work with farmers to create lasting value from the gardens of home."
+    },
+    "visitInfo": {
+      "title": "Visit the nursery",
+      "description": "You are welcome to come to the garden to see and pick your plants. Send a message first so Ngoc Ngan can have them ready for you.",
+      "addressTitle": "Address",
+      "mapLink": "View on Google Maps",
+      "hoursTitle": "Opening hours",
+      "everyDay": "Every day",
+      "contactTitle": "Contact",
+      "contactNote": "Message us on Zalo or SMS at {phone}. This number takes messages only, not voice calls.",
+      "zaloLink": "Chat on Zalo",
+      "mapTitle": "Map to the Ngoc Ngan Ben Tre nursery"
+    }
+  }
+}

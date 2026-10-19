@@ -31,7 +31,7 @@ Auth uses HttpOnly cookies (`gg_access_token`, `gg_refresh_token`) set by the ba
 
 The FAQ page and the chatbot use the same questions and answers. The page reads them from this repo; the chatbot reads a copy (`green-garden-api/app/data/faqs.json`) that you regenerate after every FAQ change.
 
-1. **Edit the text** in both `messages/vi.json` and `messages/en.json`, under `faq.items.<id>`.
+1. **Edit the text** in both `messages/vi/faq.json` and `messages/en/faq.json`, under `faq.items.<id>`.
    - To add a question, add its `id` and category to `FAQ_ITEMS` in `config/faq.ts`, then add `question` and `answer` for that `id` in both message files.
    - To remove or reorder questions, change `FAQ_ITEMS`; delete unused entries from both message files.
 2. **Check it locally:** `npm run dev`, then open `/vi/faq` and `/en/faq`.

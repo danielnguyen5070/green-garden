@@ -1,0 +1,89 @@
+{
+  "plantDetail": {
+    "home": "Trang chủ",
+    "breadcrumb": "Đường dẫn",
+    "metadataTitle": "{plant} – Giao toàn quốc",
+    "metadataDescription": "{plant} – {category}. Cây khỏe từ nhà vườn Cái Mơn – Bến Tre, đóng gói cẩn thận, giao hàng toàn quốc.",
+    "metadataDescriptionNoCategory": "{plant} từ nhà vườn Cái Mơn – Bến Tre. Cây khỏe, đóng gói cẩn thận, giao hàng toàn quốc.",
+    "featured": "Nổi bật",
+    "quantity": "Số lượng",
+    "increaseQuantity": "Tăng số lượng",
+    "decreaseQuantity": "Giảm số lượng",
+    "addToCart": "Thêm vào giỏ — {price}",
+    "outOfStock": "Hết hàng",
+    "favorite": "Lưu cây",
+    "unfavorite": "Bỏ lưu cây",
+    "selectImage": "Xem ảnh {index} của {name}",
+    "selectVideo": "Xem xem trước video của {name}",
+    "videoPreview": "Xem trước video",
+    "pageViews": "{count, number} lượt xem",
+    "pageViewsPeriod": "Lượt xem trang tiếng Việt này kể từ khi bật Web Analytics",
+    "care": {
+      "title": "Chăm sóc & thông số",
+      "plantType": "Loại cây",
+      "difficulty": "Độ khó",
+      "growthRate": "Tốc độ tăng trưởng",
+      "sunlight": "Ánh sáng",
+      "watering": "Tưới nước",
+      "spaceRequirement": "Không gian",
+      "indoorSuitable": "Phù hợp trồng trong nhà",
+      "outdoorSuitable": "Phù hợp trồng ngoài trời",
+      "petSafe": "An toàn với thú cưng",
+      "notPetSafe": "Không an toàn với thú cưng",
+      "beginnerFriendly": "Phù hợp người mới trồng",
+      "plantTypeValues": {
+        "foliage": "Cây lá",
+        "flowering": "Cây hoa",
+        "succulent": "Sen đá",
+        "cactus": "Xương rồng",
+        "herb": "Thảo mộc",
+        "fern": "Dương xỉ",
+        "vine": "Cây leo",
+        "tree": "Cây gỗ",
+        "palm": "Cọ",
+        "bamboo": "Tre",
+        "aquatic": "Thủy sinh",
+        "other": "Khác"
+      },
+      "difficultyValues": {
+        "easy": "Dễ",
+        "moderate": "Trung bình",
+        "hard": "Khó"
+      },
+      "growthRateValues": {
+        "slow": "Chậm",
+        "moderate": "Trung bình",
+        "fast": "Nhanh"
+      },
+      "sunlightValues": {
+        "full_sun": "Nắng đầy đủ",
+        "partial_sun": "Nắng một phần",
+        "partial_shade": "Bóng râm một phần",
+        "shade": "Bóng râm",
+        "low_light": "Ít ánh sáng"
+      },
+      "wateringValues": {
+        "low": "Ít",
+        "moderate": "Vừa phải",
+        "high": "Nhiều"
+      },
+      "spaceRequirementValues": {
+        "small": "Nhỏ",
+        "medium": "Trung bình",
+        "large": "Lớn"
+      }
+    },
+    "related": {
+      "title": "Bạn có thể cũng thích",
+      "viewAll": "Xem tất cả"
+    },
+    "reviews": {
+      "title": "Đánh giá của khách hàng",
+      "empty": "Chưa có đánh giá nào cho cây này. Hãy là người đầu tiên chia sẻ trải nghiệm.",
+      "count": "({count} đánh giá)",
+      "ratingLinkLabel": "Được đánh giá {rating}/5 từ {count} lượt. Xem đánh giá",
+      "formTitle": "Đánh giá {name}",
+      "formDescription": "Chia sẻ cảm nhận của bạn về {name}. Không cần tài khoản."
+    }
+  }
+}

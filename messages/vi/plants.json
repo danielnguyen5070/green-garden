@@ -1,0 +1,21 @@
+{
+  "plants": {
+    "title": "Cây giống",
+    "metadata": {
+      "title": "Cây giống Cái Mơn – Cây ăn trái, hoa kiểng",
+      "description": "Xem cây giống Cái Mơn, cây ăn trái và hoa kiểng từ Ngọc Ngân Bến Tre. Tìm kiếm, lọc theo danh mục và sắp xếp toàn bộ danh mục.",
+      "ogImageAlt": "Danh mục cây Ngọc Ngân Bến Tre — cây giống Cái Mơn và cây nhà vườn",
+      "keywords": "cây giống Cái Mơn, danh mục cây, vườn ươm Bến Tre, cây ăn trái, hoa kiểng"
+    },
+    "pageTitle": "{title} – Trang {page}",
+    "category": {
+      "metadataTitle": "{category} – Cây giống Cái Mơn",
+      "metadataDescription": "Xem {category} tại Ngọc Ngân Bến Tre — cây giống Cái Mơn khỏe mạnh, đóng gói cẩn thận, giao hàng toàn quốc."
+    },
+    "featured": {
+      "title": "Cây giống nổi bật",
+      "viewAll": "Xem tất cả cây",
+      "loadError": "Hiện chưa tải được danh sách cây."
+    }
+  }
+}

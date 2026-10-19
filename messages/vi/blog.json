@@ -1,0 +1,9 @@
+{
+  "blog": {
+    "title": "Ghi chú vườn",
+    "description": "Mẹo chăm cây, câu chuyện sản phẩm và chia sẻ từ đội ngũ Ngoc Ngan Ben Tre.",
+    "readMore": "Đọc bài viết",
+    "backToBlog": "Quay lại blog",
+    "empty": "Chưa có bài viết nào."
+  }
+}

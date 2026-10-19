@@ -1,0 +1,20 @@
+{
+  "chatbot": {
+    "title": "Ngọc Ngân Bến Tre AI",
+    "online": "We're online",
+    "open": "Open plant assistant chat",
+    "close": "Close chat",
+    "minimize": "Minimize chat",
+    "refresh": "Start a new conversation",
+    "placeholder": "Ask about plants, care, or shipping…",
+    "send": "Send message",
+    "typing": "Assistant is typing",
+    "emojiSoon": "Emoji picker coming soon",
+    "attachSoon": "Attachments coming soon",
+    "errors": {
+      "emptyReply": "Sorry, I could not generate a reply. Please try again.",
+      "generic": "Something went wrong. Please try again.",
+      "unreachable": "Unable to reach the chat service. Please try again."
+    }
+  }
+}
